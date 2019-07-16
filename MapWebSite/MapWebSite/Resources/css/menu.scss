@@ -1,0 +1,160 @@
+﻿
+.fixed-menu {
+    z-index: 9999;
+
+    .main-select-menu {
+        position: absolute;
+        display: flex;
+        bottom: 0;
+        height: 140px;
+        padding: 35px 25px 30px 10px;
+        background: #010b3c69;
+        transition: 0.3s;
+        border-top: solid;
+        border-right: solid;
+        border-radius: 80px 15px 70px 0px;
+        border-color: white;
+
+        .main-select-menu-arrows {
+            position: relative;
+            display: block;
+            width: 30px;
+            display: inline-block;
+
+            .main-select-menu-arrow-up {
+                margin-top: 10px;
+                border-radius: 5px;
+                background: none;
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 0 10px 16px 10px;
+                padding: 0;
+                transition: 0.3s;
+                border-color: transparent transparent #FFF transparent;
+            }
+
+            .main-select-menu-arrow-up:hover {
+                border-color: transparent transparent orange transparent;
+            }
+
+            .main-select-menu-arrow-down {
+                margin-top: 10px;
+                border-radius: 5px;
+                background: none;
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 16px 10px 0 10px;
+                padding: 0;
+                transition: 0.3s;
+                border-color: #FFF transparent transparent transparent;
+            }
+
+            .main-select-menu-arrow-down:hover {
+                border-color: orange transparent transparent transparent;
+            }
+        }
+
+        .main-select-menu-icon {
+            position: relative;
+            margin-left: -5px;
+            margin-top: -12px;
+
+            object {
+                display: none;
+                padding: 7px;
+            }
+
+            .current_displayed_icon {
+                display: block;
+            }
+        }
+    }
+
+
+    .secondary-menu {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        transition: 0.3s;
+
+        .current_displayed_menu {
+            display: block;
+        }
+
+        ul:hover {
+            margin-left: 0;
+        }
+
+        ul {
+            display: none;
+            padding: 0;
+            list-style: none;
+            margin: 0;
+            margin-left: -30px;
+            transition: 0.3s;
+
+            .secondary-menu-item {
+                text-align: left;
+                display: flex;
+
+                object {
+                    background-color: #010b3c69;
+                    padding: 10px;
+                    margin: 0;
+                    margin-left: -5px;
+                    border-right: solid white;
+                }
+
+                a {
+                    margin: 0;
+                    padding-right: 10px;
+                    padding-left: 4px;
+                    display: flex;
+                    align-items: center;
+                    text-decoration: none;
+                    color: white;
+                    width: 0px;
+                    visibility: hidden;
+                    opacity: 0;
+                    transition: width 0.2s ease-in-out, opacity 0.1s linear, background 0.3s;
+                    border-radius: 0px 3px 3px 0;
+                }
+
+                object:hover + a {
+                    background: #010b3ca3;
+                    opacity: 1;
+                    width: 100px;
+                    visibility: visible;
+                }
+
+                a:hover {
+                    background: orange;
+                    opacity: 1;
+                    width: 100px;
+                    visibility: visible;
+                }
+            }
+        }
+    }
+}
+
+.fixed-menu:hover {
+
+    .secondary-menu {
+        ul {
+            margin-left: 0;
+
+            .secondary-menu-item {
+                object {
+                    background: #010b3ca3;
+                }
+            }
+        }
+    }
+
+    .main-select-menu {
+        background: #010b3ca3;
+    }
+}

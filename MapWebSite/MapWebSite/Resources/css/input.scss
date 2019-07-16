@@ -1,0 +1,65 @@
+
+.default-input{
+    background: rgba(255,255,255,0.05);
+    margin: 20px; 
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 0;
+    border: none; 
+    border-color: white;
+    color: white;
+    padding: 10px 10px 0px 10px;
+    font-size: 14px;
+    text-align: center;
+    width: 250px;
+    transition: 0.3s;
+
+    
+}
+
+.default-input:hover, .default-input:hover{
+    background-color: rgba(255,255,255,0.2);
+}
+
+.default-input:focus, .default-input:focus{
+    background-color: rgba(255,255,255,0.3);
+}
+
+.default-input:focus+.input-border{
+    width: 250px;
+    background-color: white;
+}
+
+input[type=submit]{
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.input-border{ 
+    height: 2px;
+    width: 0px; 
+    margin-right: auto;
+    margin-left: auto;
+
+    transition: .3s width ease-in-out;
+    position: relative;
+    top: -21px;
+} 
+
+ 
+
+
+.default-button{
+    background: rgba(255,255,255,0.5);
+    border-radius: 10px;
+    border: none;
+    padding: 5px 20px 5px 20px;
+    transition: 0.3s;
+    color: white;
+}
+
+.default-button:hover{
+    background-color: orange;
+}

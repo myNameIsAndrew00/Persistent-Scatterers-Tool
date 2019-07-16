@@ -1,0 +1,44 @@
+@import 'input'; 
+
+body, html{
+    height: 100%;
+    color: white;
+}
+
+body{
+    background-image: url("../resources/background.jpg"); 
+    background-repeat: no-repeat;
+    background-size: cover; 
+     
+}
+
+.main-column{
+    margin-top: 5%;
+}
+
+.main-logo{
+    height: 380px;
+    width: 450px;
+    opacity: 0.9;
+    display: block;
+    margin: 0 auto; 
+    padding-left: 15px;
+}
+
+.main-title{
+    text-align: center;   
+    color: white;
+}
+
+
+
+p{
+    text-align: center;
+    color: white;
+}
+ 
+
+
+#canvas{ 
+    position: absolute;
+}

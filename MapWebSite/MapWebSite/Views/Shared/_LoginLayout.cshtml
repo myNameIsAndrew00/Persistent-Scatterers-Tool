@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login</title>
+    @Styles.Render("~/Content/login_sass")
+    @Styles.Render("~/FrameworkContent/css")
+   
+</head>
+<body>
+
+    <canvas id="canvas"></canvas>
+    <!--Main container-->
+    <div class="container h-100">
+        <div class="row justify-content-md-center">
+
+
+            <div class="col-xs-6 col-md-12 main-column">
+                <img class="main-logo" src="../Resources/resources/WebDisasterLogo.png">
+
+                @RenderBody()
+                <!--TODO: content bellow will be inside a view-->
+                <h1 class="main-title">Login</h1>
+
+                <p>
+                    Please enter your credentials in the texboxes bellow to use the app <br>
+                    More text can be added here :D
+                </p>
+
+                <input class="default-input" placeholder="username" type="text">
+                <div class="input-border"></div>
+
+
+                <input class="default-input" placeholder="password" type="password">
+                <div class="input-border"></div>
+
+                <input class="default-button" type="submit">
+            </div>
+
+        </div>
+    </div>
+
+    @Scripts.Render("~/scripts/login") 
+</body>
+</html>
