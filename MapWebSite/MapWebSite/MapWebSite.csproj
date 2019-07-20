@@ -185,11 +185,11 @@
     <Content Include="Resources\js\home.js" />
     <Content Include="Resources\js\login.js" />
     <Content Include="Resources\js\map.js" />
+    <Content Include="Resources\js\menu.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
     <Content Include="Resources\resources\icons\logout_icon.svg" />
     <Content Include="Resources\resources\icons\settings_icon.svg" />
-    <Content Include="Resources\resources\icons\user_details_icon.png" />
     <Content Include="Resources\resources\icons\user_details_icon.svg" />
     <Content Include="Resources\resources\WebDisasterLogo.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -245,6 +245,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Resources\css\map.scss" />
     <Content Include="Resources\css\menu.scss" />
+    <Content Include="Views\Shared\HomeMenu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -263,6 +264,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MapWebSite.Model\MapWebSite.Model.csproj">
+      <Project>{921645e7-a83e-408a-b4c8-f7cd21db3329}</Project>
+      <Name>MapWebSite.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

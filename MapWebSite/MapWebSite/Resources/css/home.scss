@@ -1,8 +1,53 @@
 @import 'map.scss';
 @import 'menu.scss';
+@import 'colors.scss';
 
 body, html {
     height: 100%;
     color: white;
 }
-  
+
+
+.point-info {
+    position: absolute;
+    height: 100%;
+    width: 45%;
+    right: 0;
+    top: 0;
+    background: linear-gradient(-90deg,get_color(blue),transparent);
+    opacity: 0;
+    transition: 0.3s;
+
+    .close-button {
+        float: right;
+        margin: 20px;
+
+        button {
+            background: none;
+            border: none;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: orange;
+            padding: 4px 8px 0px 9px;
+            border-radius: 10px;
+        }
+
+        object {
+            pointer-events: none;
+        }
+    }
+
+    .info {
+        width: 50%;
+        margin: 0 auto;
+        margin-top: 50px;
+        margin-bottom: 50px;
+        color: white;
+
+        h3 {
+            margin: 0;
+        }
+    }
+}

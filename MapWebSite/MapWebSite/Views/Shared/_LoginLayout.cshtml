@@ -21,22 +21,25 @@
                 <img class="main-logo" src="../Resources/resources/WebDisasterLogo.png">
 
                 @RenderBody()
-                <!--TODO: content bellow will be inside a view-->
-                <h1 class="main-title">Login</h1>
 
-                <p>
-                    Please enter your credentials in the texboxes bellow to use the app <br>
-                    More text can be added here :D
-                </p>
+                @Html.BeginForm("Index", "Home")
+                { 
+                    <!--TODO: content bellow will be inside a view-->
+                    <h1 class="main-title">Login</h1>
 
-                <input class="default-input" placeholder="username" type="text">
-                <div class="input-border"></div>
+                    <p>
+                        Please enter your credentials in the texboxes bellow to use the app <br>
+                        More text can be added here :D
+                    </p>
 
+                    <input class="default-input" placeholder="username" type="text">
+                    <div class="input-border"></div>
 
-                <input class="default-input" placeholder="password" type="password">
-                <div class="input-border"></div>
+                    <input class="default-input" placeholder="password" type="password">
+                    <div class="input-border"></div>
 
-                <input class="default-button" type="submit">
+                    <input class="default-button" type="submit">
+                }
             </div>
 
         </div>

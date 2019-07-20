@@ -67,6 +67,9 @@ namespace MapWebSite
             bundles.Add(new ScriptBundle("~/scripts/home").Include(
                 "~/Resources/js/home.js",
                 "~/Resources/js/map.js"));
+
+            bundles.Add(new ScriptBundle("~/scripts/menu").Include(
+                "~/Resources/js/menu.js"));
         }
 
         private static void loadOpenLayersBundles(BundleCollection bundles)
