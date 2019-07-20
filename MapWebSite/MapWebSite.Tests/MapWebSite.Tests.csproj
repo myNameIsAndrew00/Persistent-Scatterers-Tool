@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework">
@@ -89,6 +92,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\CheckTest.cs" />
+    <Compile Include="Database\InsertTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>
@@ -99,10 +104,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MapWebSite.Interaction\MapWebSite.Interaction.csproj">
+      <Project>{a0e0898d-dd00-4ba7-803a-dcc9586b2836}</Project>
+      <Name>MapWebSite.Interaction</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.Model\MapWebSite.Model.csproj">
+      <Project>{921645E7-A83E-408A-B4C8-F7CD21DB3329}</Project>
+      <Name>MapWebSite.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MapWebSite\MapWebSite.csproj">
       <Project>{9C03B843-A076-4150-A7C6-68DFF8AF7393}</Project>
       <Name>MapWebSite</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

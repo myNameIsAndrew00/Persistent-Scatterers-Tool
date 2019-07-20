@@ -5,7 +5,7 @@ using System;
 namespace MapWebSite.Repository.Entities
 {
     [UserDefinedType]
-    public class PointDisplacementType 
+    internal class PointDisplacementType 
     {
         public int point_number { get; set; }
 

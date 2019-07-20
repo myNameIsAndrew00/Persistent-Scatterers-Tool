@@ -1,11 +1,9 @@
-﻿
-
-using MapWebSite.Core;
+﻿using MapWebSite.Core;
 
 namespace MapWebSite.Repository.Entities 
 {
     [UserDefinedType]
-    public class PointType 
+    internal class PointType 
     {
         public int point_number { get; set; }
 

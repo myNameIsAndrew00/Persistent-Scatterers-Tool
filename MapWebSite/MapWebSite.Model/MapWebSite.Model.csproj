@@ -39,7 +39,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\MapPoint.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\PointsDataSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Runtime.Serialization" />

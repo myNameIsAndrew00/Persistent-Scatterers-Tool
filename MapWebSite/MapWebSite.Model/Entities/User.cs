@@ -1,8 +1,8 @@
 ﻿ 
 
-namespace MapWebSite.Repository.Entities
+namespace MapWebSite.Model
 {
-    public class DBUser
+    public class User
     {
         public string Username { get; set; }
 

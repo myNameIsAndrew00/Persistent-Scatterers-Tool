@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MapWebSite.Repository
 {
-    public class BaseRepository
+    public class SQLBaseRepository
     {
         protected string connectionString = null;
 
-        public BaseRepository()
+        public SQLBaseRepository()
         {
             this.connectionString = ConfigurationManager.ConnectionStrings["PersistantScatterersDatabase"].ToString();
         }

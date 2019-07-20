@@ -1,5 +1,4 @@
-﻿using MapWebSite.Model.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,6 +11,13 @@ namespace MapWebSite.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public class MapPoint
+        {
+            public double Longitude { get; set; }
+
+            public double Latitude { get; set; }
         }
 
         [HttpGet]

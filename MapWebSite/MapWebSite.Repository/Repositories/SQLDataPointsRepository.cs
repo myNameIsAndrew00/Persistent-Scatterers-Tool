@@ -1,5 +1,7 @@
 ﻿
 using MapWebSite.Core;
+using MapWebSite.Core.Database;
+using MapWebSite.Model;
 using MapWebSite.Repository.Entities;
 using MapWebSite.SQLAccess;
 using System;
@@ -9,16 +11,18 @@ using System.Threading.Tasks;
 
 namespace MapWebSite.Repository
 {
-    public class DataPointsRepository : BaseRepository
+    public class SQLDataPointsRepository : SQLBaseRepository, IDataPointsRepository
     {
-        public bool InsertPointsDataset(DBPointsDataSet pointsDataset, string username)
+        public bool InsertPointsDataset(PointsDataSet pointsDataset, string username)
         {
             try
             {
+                DBPointsDataSet dataBasePointsDataset = (DBPointsDataSet)pointsDataset;
+
                 DataTable pointsTable = new PointType().GetDataTableFromProperties();
                 DataTable pointsDisplacementsTable = new PointDisplacementType().GetDataTableFromProperties();
 
-                Parallel.ForEach(pointsDataset.Points, (point) =>
+                Parallel.ForEach(dataBasePointsDataset.Points, (point) =>
                 {
                     pointsTable.Rows.Add(new {
                         point.point_number,
@@ -35,7 +39,7 @@ namespace MapWebSite.Repository
                     });
                 });
 
-                Parallel.ForEach(pointsDataset.PointsDisplacements, (pointDisplacement) =>
+                Parallel.ForEach(dataBasePointsDataset.PointsDisplacements, (pointDisplacement) =>
                 {
                     pointsDisplacementsTable.Rows.Add(new {
                         pointDisplacement.point_number,

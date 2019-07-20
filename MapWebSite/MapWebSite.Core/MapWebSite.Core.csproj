@@ -41,9 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\IDataPointsRepository.cs" />
+    <Compile Include="Database\IUserRepository.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Attributes\UserDefinedTypeAttribute.cs" />
+    <Compile Include="DataPoints\Interfaces\IDataPointsSource.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MapWebSite.Model\MapWebSite.Model.csproj">
+      <Project>{921645e7-a83e-408a-b4c8-f7cd21db3329}</Project>
+      <Name>MapWebSite.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

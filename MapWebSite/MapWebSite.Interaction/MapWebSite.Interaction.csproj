@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0886D345-5858-4711-A80C-A08BBFEE1E27}</ProjectGuid>
+    <ProjectGuid>{A0E0898D-DD00-4BA7-803A-DCC9586B2836}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MapWebSite.Repository</RootNamespace>
-    <AssemblyName>MapWebSite.Repository</AssemblyName>
+    <RootNamespace>MapWebSite.Interaction</RootNamespace>
+    <AssemblyName>MapWebSite.Interaction</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,13 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\DBPointsDataSet.cs" />
-    <Compile Include="Entities\User Defined Types\PointDisplacementType.cs" />
-    <Compile Include="Entities\User Defined Types\PointType.cs" />
-    <Compile Include="Repositories\SQLBaseRepository.cs" />
+    <Compile Include="DatabaseInteraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\SQLDataPointsRepository.cs" />
-    <Compile Include="Repositories\SQLUserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MapWebSite.Core\MapWebSite.Core.csproj">
@@ -59,9 +53,9 @@
       <Project>{921645E7-A83E-408A-B4C8-F7CD21DB3329}</Project>
       <Name>MapWebSite.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MapWebSite.SQLAccess\MapWebSite.SQLAccess.csproj">
-      <Project>{a5caf727-b169-4ea1-8d41-910ab7bd0ed7}</Project>
-      <Name>MapWebSite.SQLAccess</Name>
+    <ProjectReference Include="..\MapWebSite.Repository\MapWebSite.Repository.csproj">
+      <Project>{0886d345-5858-4711-a80c-a08bbfee1e27}</Project>
+      <Name>MapWebSite.Repository</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
