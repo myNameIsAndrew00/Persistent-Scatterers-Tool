@@ -10,7 +10,7 @@ namespace MapWebSite.Model
     {
         public string Name { get; set; }
 
-        public List<Point> Points { get; set; }
+        public IEnumerable<Point> Points { get; set; }
 
     }
 

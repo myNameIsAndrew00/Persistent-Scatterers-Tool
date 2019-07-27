@@ -1,7 +1,29 @@
 ﻿@import 'colors.scss';
 
+.fixed-menu:hover {
+
+    .secondary-menu {
+        ul {
+            margin-left: 0;
+
+            .secondary-menu-item {
+                object {
+                    background: get_color(strongTransparentBlue);
+                }
+            }
+        }
+    }
+
+    .main-select-menu {
+        background: get_color(strongTransparentBlue);
+    }
+}
+
+
+
 .fixed-menu {
     z-index: 9999;
+
 
     .main-select-menu {
         position: absolute;
@@ -64,7 +86,7 @@
 
             object {
                 display: none;
-                padding: 7px;
+                padding: 12px;
             }
 
             .current_displayed_icon {
@@ -73,6 +95,10 @@
         }
     }
 
+
+    .main-select-menu-nontransparent {
+        background: get_color(strongTransparentBlue);
+    }
 
     .secondary-menu {
         position: absolute;
@@ -108,54 +134,57 @@
                     border-right: solid white;
                 }
 
+                button {
+                    border: none;
+                    text-align: left;
+                    white-space: nowrap;
+                }
+
                 a {
-                    margin: 0;
-                    padding-right: 10px;
-                    padding-left: 4px;
                     display: flex;
                     align-items: center;
                     text-decoration: none;
+                }
+
+                a, button {
+                    margin: 0;
+                    padding-right: 10px;
+                    padding-left: 4px;
                     color: white;
-                    width: 0px;
-                    visibility: hidden;
+                    width: 0;
                     opacity: 0;
+                    visibility: hidden;
                     transition: width 0.2s ease-in-out, opacity 0.1s linear, background 0.3s;
                     border-radius: 0px 3px 3px 0;
                 }
 
-                object:hover + a {
+                object:hover + a, object:hover + button {
                     background: get_color(strongTransparentBlue);
                     opacity: 1;
                     width: 100px;
                     visibility: visible;
                 }
 
-                a:hover {
+                a:hover, button:hover {
                     background: orange;
                     opacity: 1;
-                    width: 100px;
+                    width: 120px;
                     visibility: visible;
                 }
             }
         }
     }
-}
 
-.fixed-menu:hover {
 
-    .secondary-menu {
+    .secondary-menu-nontransparent {
+
         ul {
             margin-left: 0;
+        }
 
-            .secondary-menu-item {
-                object {
-                    background: get_color(strongTransparentBlue);
-                }
-            }
+        object {
+            background: get_color(strongTransparentBlue) !important;
         }
     }
-
-    .main-select-menu {
-        background: get_color(strongTransparentBlue);
-    }
 }
+

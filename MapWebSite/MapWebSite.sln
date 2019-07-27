@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{AF515D10-8
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.Interaction", "MapWebSite.Interaction\MapWebSite.Interaction.csproj", "{A0E0898D-DD00-4BA7-803A-DCC9586B2836}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.CassandraAccess", "MapWebSite.CassandraAccess\MapWebSite.CassandraAccess.csproj", "{9F148B28-5981-40DA-B669-505872475C2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{A0E0898D-DD00-4BA7-803A-DCC9586B2836}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0E0898D-DD00-4BA7-803A-DCC9586B2836}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0E0898D-DD00-4BA7-803A-DCC9586B2836}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F148B28-5981-40DA-B669-505872475C2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F148B28-5981-40DA-B669-505872475C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F148B28-5981-40DA-B669-505872475C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F148B28-5981-40DA-B669-505872475C2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +74,7 @@ Global
 		{A5CAF727-B169-4EA1-8D41-910AB7BD0ED7} = {BAE94EBA-9E64-4C6B-B499-6A561FBE3844}
 		{15A19BAF-8E36-41A7-96EC-3AC2F427FCFB} = {AF515D10-8D01-41BE-B32A-8ADEDC446B56}
 		{A0E0898D-DD00-4BA7-803A-DCC9586B2836} = {1A315415-A01E-4EF3-BD54-F4D6DA454AC3}
+		{9F148B28-5981-40DA-B669-505872475C2A} = {BAE94EBA-9E64-4C6B-B499-6A561FBE3844}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F3952599-A9CA-4084-99B8-BFC5CFA3833A}

@@ -1,11 +1,12 @@
 ﻿
 using MapWebSite.Model;
+using System.IO;
 
-namespace MapWebSite.Core.Interfaces
+namespace MapWebSite.Core.DataPoints
 {
     public interface IDataPointsSource
     {
-        PointsDataSet CreateDataSet();
-
+        PointsDataSet CreateDataSet(string datasetName);
+        
     }
 }

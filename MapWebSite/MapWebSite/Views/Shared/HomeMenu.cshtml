@@ -6,8 +6,8 @@
 
         </div>
         <div id="main-select-menu-icon" class="main-select-menu-icon">
-            <object class="current_displayed_icon" id="main-menu-icon-0" width="120px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg" )></object>
-            <object id="main-menu-icon-1" width="120px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg" )></object>
+            <object class="current_displayed_icon" id="main-menu-icon-0" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg" )></object>
+            <object id="main-menu-icon-1" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg" )></object>
         </div>
     </div>
 
@@ -24,24 +24,16 @@
         </ul>
         <ul id="secondary-menu-items-1">
             <li class="secondary-menu-item">
-                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
-                <a href="">Settings</a>
+                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/upload_points_icon.svg"></object>
+                <button onclick="requestSettingsPage('upload-points')">Upload points</button>
             </li>
             <li class="secondary-menu-item">
-                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
-                <a href="">Logout</a>
-            <li class="secondary-menu-item">
-                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
-                <a href="">Settings</a>
-            </li>
-            <li class="secondary-menu-item">
-                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
-                <a href="">Logout</a>
+                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/palette_icon.svg"></object>
+                <button onclick="requestSettingsPage('create-palette-color')">Create palette</button>
             </li>
         </ul>
     </nav>
 </div>
 
 
-@Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/scripts/menu")

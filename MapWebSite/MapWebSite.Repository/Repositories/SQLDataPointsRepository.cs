@@ -1,4 +1,5 @@
 ﻿
+using FastMember;
 using MapWebSite.Core;
 using MapWebSite.Core.Database;
 using MapWebSite.Model;
@@ -19,37 +20,11 @@ namespace MapWebSite.Repository
             {
                 DBPointsDataSet dataBasePointsDataset = (DBPointsDataSet)pointsDataset;
 
-                DataTable pointsTable = new PointType().GetDataTableFromProperties();
+                DataTable pointsTable = new PointType().GetDataTableFromProperties();             
                 DataTable pointsDisplacementsTable = new PointDisplacementType().GetDataTableFromProperties();
 
-                Parallel.ForEach(dataBasePointsDataset.Points, (point) =>
-                {
-                    pointsTable.Rows.Add(new {
-                        point.point_number,
-                        point.reference_image_x,
-                        point.reference_image_y,
-                        point.easting_projection_coordinate,
-                        point.northing_projection_coordinate,
-                        point.height,
-                        point.deformation_rate,
-                        point.standard_deviation,
-                        point.estimated_height,
-                        point.estimated_deformation_rate,
-                        point.observations
-                    });
-                });
-
-                Parallel.ForEach(dataBasePointsDataset.PointsDisplacements, (pointDisplacement) =>
-                {
-                    pointsDisplacementsTable.Rows.Add(new {
-                        pointDisplacement.point_number,
-                        pointDisplacement.displacement_date,
-                        pointDisplacement.displacement_JD,
-                        pointDisplacement.days_from_reference,
-                        pointDisplacement.displacement_value
-                    });
-                });
-
+                loadTables(pointsTable, pointsDisplacementsTable, dataBasePointsDataset);
+             
                 SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("InsertPointsDataset")
                                                     {
                                                         CommandType = CommandType.StoredProcedure
@@ -70,5 +45,34 @@ namespace MapWebSite.Repository
 
             return true;
         }
+
+
+
+        #region Private
+
+        private void loadTables(DataTable pointsTable, DataTable pointsDisplacementsTable, DBPointsDataSet dataBasePointsDataset)
+        {
+            Task[] populateTableTasks = new Task[2];
+
+            populateTableTasks[0] = Task.Run(() =>
+            {
+                using (var objectReader = ObjectReader.Create(dataBasePointsDataset.Points))
+                {
+                    pointsTable.Load(objectReader);
+                }
+            });
+
+            populateTableTasks[1] = Task.Run(() =>
+            {
+                using (var objectReader = ObjectReader.Create(dataBasePointsDataset.PointsDisplacements))
+                {
+                    pointsDisplacementsTable.Load(objectReader);
+                }
+            });
+
+            Task.WaitAll(populateTableTasks);
+        }
+
+        #endregion
     }
 }

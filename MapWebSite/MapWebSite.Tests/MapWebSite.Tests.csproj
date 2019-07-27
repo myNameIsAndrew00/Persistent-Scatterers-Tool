@@ -104,6 +104,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MapWebSite.Core\MapWebSite.Core.csproj">
+      <Project>{15A19BAF-8E36-41A7-96EC-3AC2F427FCFB}</Project>
+      <Name>MapWebSite.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MapWebSite.Interaction\MapWebSite.Interaction.csproj">
       <Project>{a0e0898d-dd00-4ba7-803a-dcc9586b2836}</Project>
       <Name>MapWebSite.Interaction</Name>

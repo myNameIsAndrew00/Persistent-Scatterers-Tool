@@ -31,5 +31,12 @@ namespace MapWebSite.Interaction
 
             return userRepository.CheckUser(username, password);
         }
+
+        public bool InsertDataSet(PointsDataSet pointsDataSet, string username)
+        {
+            IDataPointsRepository dataPointsRepository = new SQLDataPointsRepository();
+
+            return dataPointsRepository.InsertPointsDataset(pointsDataSet, username);
+        }
     }
 }

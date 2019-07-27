@@ -69,9 +69,31 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
         currentMenuList.style = "";
 
         /*animation for main menu*/
-        innerImage.style.transform = 'translate(0, 0) rotate(0)'
+        innerImage.style.transform = 'translate(0, 0) rotate(0)';
         innerImage.style.opacity = '1';
         innerText.style.opacity = '1';
     }, 200);
 
+}
+
+/*****************************************************************************************/
+
+/*functions used for setting overlay*/
+
+async function requestSettingsPage(pageName) {
+    await requestSettingsPageData();
+    displayPage();
+}
+
+
+function displayPage() {    
+    $('#settings-layer').removeClass('settings-layer-hide');
+    $('#main-menu').addClass('main-select-menu-nontransparent');
+    $('#secondary-menu').addClass('secondary-menu-nontransparent');
+}
+
+async function requestSettingsPageData() {
+    await $.get("/Login/Index", await function (data) {
+       // alert(data);
+    });
 }

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{15A19BAF-8E36-41A7-96EC-3AC2F427FCFB}</ProjectGuid>
+    <ProjectGuid>{9F148B28-5981-40DA-B669-505872475C2A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MapWebSite.Core</RootNamespace>
-    <AssemblyName>MapWebSite.Core</AssemblyName>
+    <RootNamespace>MapWebSite.CassandraAccess</RootNamespace>
+    <AssemblyName>MapWebSite.CassandraAccess</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,20 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\IDataPointsRepository.cs" />
-    <Compile Include="Database\IUserRepository.cs" />
-    <Compile Include="DataPoints\TxtDataPointsSource.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="Attributes\UserDefinedTypeAttribute.cs" />
-    <Compile Include="DataPoints\Interfaces\IDataPointsSource.cs" />
-    <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MapWebSite.Model\MapWebSite.Model.csproj">
-      <Project>{921645e7-a83e-408a-b4c8-f7cd21db3329}</Project>
-      <Name>MapWebSite.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

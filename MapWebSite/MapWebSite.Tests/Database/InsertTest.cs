@@ -1,4 +1,5 @@
-﻿using MapWebSite.Interaction;
+﻿using MapWebSite.Core.DataPoints;
+using MapWebSite.Interaction;
 using MapWebSite.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -17,10 +18,26 @@ namespace MapWebSite.Tests.Database
         {
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
 
-            bool response = handler.RegisterUser("woofwoof", "andrei", "andrei", "andrei1234");
+            bool response = handler.RegisterUser("woofwoofr", "andrei", "andrei", "andrei1234");
 
             Assert.IsTrue(response);
 
+        }
+        
+        [TestMethod]
+        public void InsertDataPoints()
+        {
+            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            IDataPointsSource pointsSource = new TxtDataPointsSource();
+
+            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\header.txt";
+            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\displacements.txt";
+
+            PointsDataSet dataset = pointsSource.CreateDataSet("rada45687");
+
+            bool response = handler.InsertDataSet(dataset, "woofwoof");
+
+            Assert.IsTrue(response);
         }
     }
 }

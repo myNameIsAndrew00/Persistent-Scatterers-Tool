@@ -8,10 +8,13 @@
     @Styles.Render("~/Content/home_sass")
     @Styles.Render("~/FrameworkContent/css")
     @Styles.Render("~/css/openlayers")
-     
+    @Scripts.Render("~/bundles/jquery")
+
 </head>
 <body>
     @RenderBody()
+
+    @{ Html.RenderPartial("~/Views/Home/SettingsLayer.cshtml");}
 
     @{ Html.RenderPartial("HomeMenu"); }
    
