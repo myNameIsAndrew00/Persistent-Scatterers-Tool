@@ -8,5 +8,7 @@ namespace MapWebSite.Core.Database
         bool InsertUser(User user);
 
         bool CheckUser(string username, string password);
+
+        int CreateUserPointsDataset(string username, string datasetName);
     }
 }

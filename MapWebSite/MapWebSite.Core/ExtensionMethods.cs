@@ -1,13 +1,16 @@
-﻿using System; 
+﻿using Newtonsoft.Json;
+using System; 
 using System.Data;
- 
+using System.IO;
+using System.Reflection;
+
 namespace MapWebSite.Core
 {
     public static class ExtensionMethods
     {
         /// <summary>
-        /// Use this extension method to map an object with a DataTable.
-        /// DataTable columns will be the properties of the object
+        /// Use this extension method to map an object with a DataTable. <br></br>
+        /// DataTable columns will be the properties of the object which are decorated with UserDefinedTypeColumn attribute
         /// </summary>
         /// <param name="Object"></param>
         /// <returns></returns>
@@ -19,10 +22,34 @@ namespace MapWebSite.Core
             DataTable dt = new DataTable();
             var properties = Object.GetType().GetProperties();
 
+          
             foreach (var property in properties)
-                dt.Columns.Add(property.Name, property.PropertyType);
+            {
+                UserDefinedTypeColumnAttribute attribute =
+                     property.GetCustomAttribute(typeof(UserDefinedTypeColumnAttribute)) as UserDefinedTypeColumnAttribute;
+
+                if (attribute != null)  dt.Columns.Add(property.Name, property.PropertyType);
+            }
+         
 
             return dt;
         }
+
+        public static string JSONSerialize(this object ObjectToBeSerialized, bool UseQuotesForColumns = true)
+        {
+            if (UseQuotesForColumns)  return JsonConvert.SerializeObject(ObjectToBeSerialized);
+
+            JsonSerializer serializer = new JsonSerializer();
+            var stringWriter = new StringWriter();
+            using (var writer = new JsonTextWriter(stringWriter))
+            {
+                writer.QuoteName = false;
+                writer.QuoteChar = '\'';
+                serializer.Serialize(writer,ObjectToBeSerialized);
+            }
+
+            return stringWriter.ToString();
+        }
+
     }
 }

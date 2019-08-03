@@ -30,7 +30,7 @@ var styles = {
  */
 var mapView = new ol.View({
     center: ol.proj.fromLonLat([26.102538390000063, 44.4267674], 'EPSG:3857'),
-    zoom: 10
+    zoom: 1
 })
 
 

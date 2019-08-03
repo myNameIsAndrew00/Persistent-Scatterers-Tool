@@ -33,6 +33,27 @@ namespace MapWebSite.Repository
             return storedHash.SequenceEqual(userTrialPassword);
         }
 
+        public int CreateUserPointsDataset(string username, string datasetName)
+        {
+            try
+            {
+                return Convert.ToInt32(SqlExecutionInstance.ExecuteScalar(new SqlCommand("InsertPointsDataset")
+                                                    {
+                                                        CommandType = System.Data.CommandType.StoredProcedure
+                                                    },
+                                                    new SqlParameter[]{
+                                                         new SqlParameter("username", username),
+                                                         new SqlParameter("dataset_name", datasetName) },
+                                                    new SqlConnection(this.connectionString)));
+                                              
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return -1;
+            } 
+        }
+
         public bool InsertUser(User user)
         {
             try

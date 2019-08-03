@@ -31,8 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AsyncEnumerable, Version=2.2.2.0, Culture=neutral, PublicKeyToken=0426b068161bd1d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\AsyncEnumerator.2.2.2\lib\net45\AsyncEnumerable.dll</HintPath>
+    </Reference>
+    <Reference Include="Cassandra, Version=3.99.0.0, Culture=neutral, PublicKeyToken=10b231fbfc8c4b4d" />
     <Reference Include="FastMember, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FastMember.1.5.0\lib\net461\FastMember.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -45,15 +52,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\DBPointsDataSet.cs" />
     <Compile Include="Entities\User Defined Types\PointDisplacementType.cs" />
     <Compile Include="Entities\User Defined Types\PointType.cs" />
-    <Compile Include="Repositories\SQLBase.cs" />
+    <Compile Include="Repositories\Base\CassandraBase.cs" />
+    <Compile Include="Repositories\Base\SQLBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\SQLDataPointsRepository.cs" />
+    <Compile Include="Repositories\CassandraDataPointsRepository.cs" />
     <Compile Include="Repositories\SQLUserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MapWebSite.CassandraAccess\MapWebSite.CassandraAccess.csproj">
+      <Project>{9F148B28-5981-40DA-B669-505872475C2A}</Project>
+      <Name>MapWebSite.CassandraAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MapWebSite.Core\MapWebSite.Core.csproj">
       <Project>{15a19baf-8e36-41a7-96ec-3ac2f427fcfb}</Project>
       <Name>MapWebSite.Core</Name>

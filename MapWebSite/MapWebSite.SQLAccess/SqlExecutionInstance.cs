@@ -5,65 +5,88 @@ using System.Data.SqlClient;
 
 namespace MapWebSite.SQLAccess
 {
-        public static class SqlExecutionInstance
-        {
-                       
-            public static void ExecuteNonQuery(SqlCommand Command, SqlParameter[] Parameters, SqlConnection Connection)
-            {
-                
-                Command.Connection = Connection;
-                Command.Parameters.AddRange(Parameters);
+    public static class SqlExecutionInstance
+    {
 
-                try
+        public static void ExecuteNonQuery(SqlCommand Command, SqlParameter[] Parameters, SqlConnection Connection)
+        {
+
+            Command.Connection = Connection;
+            Command.Parameters.AddRange(Parameters);
+
+            try
+            {
+                using (Connection)
+                using (Command)
                 {
-                    using (Connection)
-                    using (Command)
-                    {
-                        Connection.Open();
-                        Command.ExecuteNonQuery();
-                    }
-                }
-                catch (SqlException Exception)
-                {
-                    throw Exception; 
-                }
-                finally
-                {
-                    Connection.Close();                   
+                    Connection.Open();
+                    Command.ExecuteNonQuery();
                 }
             }
-
-            public static DataSet ExecuteQuery(SqlCommand Command, SqlParameter[] Parameters, SqlConnection Connection)
+            catch (SqlException Exception)
             {
-                DataSet dataSet = new DataSet();
+                throw Exception;
+            }
+            finally
+            {
+                Connection.Close();
+            }
+        }
 
-                Command.Connection = Connection;
-                if (Parameters != null) Command.Parameters.AddRange(Parameters);
+        public static DataSet ExecuteQuery(SqlCommand Command, SqlParameter[] Parameters, SqlConnection Connection)
+        {
+            DataSet dataSet = new DataSet();
 
-                try
-                {
-                    using (Connection)
-                    using (Command)
-                    {
-                        Connection.Open();                        
-                        using (SqlDataAdapter dataAdapter = new SqlDataAdapter(Command))
-                            dataAdapter.Fill(dataSet);
-                    }
-                }
-                catch (Exception Exception)
-                {
-                    throw Exception;
-                }
-                finally
-                {
-                    Connection.Close();
-                }
+            Command.Connection = Connection;
+            if (Parameters != null) Command.Parameters.AddRange(Parameters);
 
-                return dataSet;
+            try
+            {
+                using (Connection)
+                using (Command)
+                {
+                    Connection.Open();
+                    using (SqlDataAdapter dataAdapter = new SqlDataAdapter(Command))
+                        dataAdapter.Fill(dataSet);
+                }
+            }
+            catch (Exception Exception)
+            {
+                throw Exception;
+            }
+            finally
+            {
+                Connection.Close();
+            }
+
+            return dataSet;
+        }
+
+        public static object ExecuteScalar(SqlCommand Command, SqlParameter[] Parameters, SqlConnection Connection)
+        {
+            Command.Connection = Connection;
+            Command.Parameters.AddRange(Parameters);
+
+            try
+            {
+                using (Connection)
+                using (Command)
+                {
+                    Connection.Open();
+                    return Command.ExecuteScalar();
+                }
+            }
+            catch (SqlException Exception)
+            {
+                throw Exception;
+            }
+            finally
+            {
+                Connection.Close();
             }
         }
 
 
-
+    }
      
 }

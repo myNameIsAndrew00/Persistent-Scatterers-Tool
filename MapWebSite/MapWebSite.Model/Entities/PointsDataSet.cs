@@ -8,6 +8,8 @@ namespace MapWebSite.Model
 {
     public class PointsDataSet
     {
+        public int ID { get; set; }
+
         public string Name { get; set; }
 
         public IEnumerable<Point> Points { get; set; }
@@ -18,23 +20,23 @@ namespace MapWebSite.Model
     {
         public int Number { get; set; }
 
-        public float ReferenceImageX { get; set; }
+        public decimal ReferenceImageX { get; set; }
 
-        public float ReferenceImageY { get; set; }
+        public decimal ReferenceImageY { get; set; }
 
-        public float EastingProjectionCoordinate { get; set; }
+        public decimal Longitude { get; set; }
 
-        public float NorthingProjectionCoordinate { get; set; }
+        public decimal Latitude { get; set; }
 
-        public float Height { get; set; }
+        public decimal Height { get; set; }
 
-        public float DeformationRate { get; set; }
+        public decimal DeformationRate { get; set; }
 
-        public float StandardDeviation { get; set; }
+        public decimal StandardDeviation { get; set; }
 
-        public float EstimatedHeight { get; set; }
+        public decimal EstimatedHeight { get; set; }
 
-        public float EstimatedDeformationRate { get; set; }
+        public decimal EstimatedDeformationRate { get; set; }
 
         public string Observations { get; set; }
 
@@ -45,11 +47,11 @@ namespace MapWebSite.Model
     {
         public DateTime Date { get; set; }
 
-        public float JD { get; set; }
+        public decimal JD { get; set; }
 
-        public float DaysFromReference { get; set; }
+        public decimal DaysFromReference { get; set; }
 
-        public float Value { get; set; }
+        public decimal Value { get; set; }
     }
 
 }

@@ -45,6 +45,9 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions">
       <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -60,9 +63,6 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.WebRequest" />
@@ -92,6 +92,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\CassandraTest.cs" />
     <Compile Include="Database\CheckTest.cs" />
     <Compile Include="Database\InsertTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +105,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MapWebSite.CassandraAccess\MapWebSite.CassandraAccess.csproj">
+      <Project>{9f148b28-5981-40da-b669-505872475c2a}</Project>
+      <Name>MapWebSite.CassandraAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MapWebSite.Core\MapWebSite.Core.csproj">
       <Project>{15A19BAF-8E36-41A7-96EC-3AC2F427FCFB}</Project>
       <Name>MapWebSite.Core</Name>
@@ -115,6 +120,10 @@
     <ProjectReference Include="..\MapWebSite.Model\MapWebSite.Model.csproj">
       <Project>{921645E7-A83E-408A-B4C8-F7CD21DB3329}</Project>
       <Name>MapWebSite.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.Repository\MapWebSite.Repository.csproj">
+      <Project>{0886D345-5858-4711-A80C-A08BBFEE1E27}</Project>
+      <Name>MapWebSite.Repository</Name>
     </ProjectReference>
     <ProjectReference Include="..\MapWebSite\MapWebSite.csproj">
       <Project>{9C03B843-A076-4150-A7C6-68DFF8AF7393}</Project>

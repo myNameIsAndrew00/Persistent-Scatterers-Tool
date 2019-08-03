@@ -1,6 +1,7 @@
 ﻿using MapWebSite.Core.DataPoints;
 using MapWebSite.Interaction;
 using MapWebSite.Model;
+using MapWebSite.Repository.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,10 @@ namespace MapWebSite.Tests.Database
 
             PointsDataSet dataset = pointsSource.CreateDataSet("Test");
 
+            IEnumerable<PointType> points = PointType.GetPoints(dataset);
+
             Assert.IsNotNull(dataset);
+            Assert.IsNotNull(points);
         }
     }
 }

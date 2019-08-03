@@ -1,6 +1,7 @@
 ﻿using MapWebSite.Core.DataPoints;
 using MapWebSite.Interaction;
 using MapWebSite.Model;
+using MapWebSite.Repository;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace MapWebSite.Tests.Database
         }
         
         [TestMethod]
-        public void InsertDataPoints()
+        public async Task InsertDataPoints()
         {
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
             IDataPointsSource pointsSource = new TxtDataPointsSource();
@@ -35,9 +36,36 @@ namespace MapWebSite.Tests.Database
 
             PointsDataSet dataset = pointsSource.CreateDataSet("rada45687");
 
-            bool response = handler.InsertDataSet(dataset, "woofwoof");
+            Task<bool> result = handler.InsertDataSet(dataset, "woofwoof");
 
-            Assert.IsTrue(response);
+            result.Wait();
+
+            Assert.IsTrue(result.Result);
+        }
+
+        [TestMethod]
+        public async Task InsertCassandraDataPoints()
+        {
+            PointsDataSet dataSet = new PointsDataSet()
+            {
+                ID = 1,
+                Name = "test",
+                Points = new List<Point>()
+                {
+                    new Point()
+                    {
+                        Number = 4,
+                        Displacements = new List<Displacement>()
+                        {
+                            new Displacement() { Date = DateTime.Now },
+                            new Displacement() { Date = DateTime.Now }
+                        }
+                    }
+                }
+            };
+
+            CassandraDataPointsRepository repository = new CassandraDataPointsRepository();
+            await repository.InsertPointsDataset(dataSet);
         }
     }
 }

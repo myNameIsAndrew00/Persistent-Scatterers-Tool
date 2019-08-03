@@ -10,7 +10,7 @@ using MapWebSite.Model;
 
 namespace MapWebSite.Core.DataPoints
 {
-    using HeaderData = Tuple<DateTime, float, float>;
+    using HeaderData = Tuple<DateTime, decimal, decimal>;
     
 
     public class TxtDataPointsSource : IDataPointsSource
@@ -24,9 +24,7 @@ namespace MapWebSite.Core.DataPoints
         public PointsDataSet CreateDataSet(string datasetName)
         {
             if (HeaderFile == null || DisplacementsFile == null) return null;
-
-            //List<Point> points = new List<Point>(0);
-
+             
             ConcurrentBag<Point> points = new ConcurrentBag<Point>();
             PointsDataSet pointsDataSet = new PointsDataSet() { Name = datasetName, Points = points };
 
@@ -37,7 +35,7 @@ namespace MapWebSite.Core.DataPoints
  
                 Parallel.ForEach(displacementsTextLines, (dataLine) =>
                 {
-                    IDictionary<string, float> lineInfo = generateDictionary(dataLine, out float[] lineDisplacements);
+                    IDictionary<string, decimal> lineInfo = generateDictionary(dataLine, out decimal[] lineDisplacements);
                     points.Add(generatePoint(lineInfo, lineDisplacements, headerData));
                 });
                                  
@@ -55,18 +53,18 @@ namespace MapWebSite.Core.DataPoints
 
         #region Private
 
-        private Point generatePoint(IDictionary<string, float> lineInfo, float[] lineDisplacements, HeaderData[] headerData)
+        private Point generatePoint(IDictionary<string, decimal> lineInfo, decimal[] lineDisplacements, HeaderData[] headerData)
         {
             Point point = new Point()
             {
                 Displacements = new List<Displacement>(),
                 Number       = Convert.ToInt32(lineInfo["PointNumber"]),
                 DeformationRate              = lineInfo["DeformationRate"],
-                EastingProjectionCoordinate  = lineInfo["EastingProjection"],
+                Longitude                    = lineInfo["EastingProjection"],
                 EstimatedDeformationRate     = lineInfo["EstimatedDeformation"],
                 EstimatedHeight              = lineInfo["EstimatedHeight"],
                 Height                       = lineInfo["Height"],
-                NorthingProjectionCoordinate = lineInfo["NorthingProjection"],
+                Latitude                     = lineInfo["NorthingProjection"],
                 ReferenceImageX              = lineInfo["ReferenceImageX"],
                 ReferenceImageY              = lineInfo["ReferenceImageY"],
                 StandardDeviation            = lineInfo["StandardDeviation"],
@@ -85,30 +83,30 @@ namespace MapWebSite.Core.DataPoints
             return point;
         }
 
-        private IDictionary<string, float> generateDictionary(string dataLine, out float[] displacements)
+        private IDictionary<string, decimal> generateDictionary(string dataLine, out decimal[] displacements)
         {
 
-            IDictionary<string, float> result = new ConcurrentDictionary<string, float>();
+            IDictionary<string, decimal> result = new ConcurrentDictionary<string, decimal>();
           
             var tokens = dataLine.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            float[] localDisplacements = new float[tokens.Length - headerUnusedLinesCount];
+            decimal[] localDisplacements = new decimal[tokens.Length - headerUnusedLinesCount];
 
             Task[] tasks = new Task[11];
             //define assignments tasks to be realised in parallel
-            tasks[0] = Task.Run(() => result["PointNumber"] = float.Parse(tokens[0]));
-            tasks[1] = Task.Run(() => result["ReferenceImageX"] = float.Parse(tokens[1]));
-            tasks[2] = Task.Run(() => result["ReferenceImageY"] = float.Parse(tokens[2]));
-            tasks[3] = Task.Run(() => result["EastingProjection"] = float.Parse(tokens[3]));
-            tasks[4] = Task.Run(() => result["NorthingProjection"] = float.Parse(tokens[4]));
-            tasks[5] = Task.Run(() => result["Height"] = float.Parse(tokens[5]));
-            tasks[6] = Task.Run(() => result["DeformationRate"] = float.Parse(tokens[6]));
-            tasks[7] = Task.Run(() => result["StandardDeviation"] = float.Parse(tokens[7]));
-            tasks[8] = Task.Run(() => result["EstimatedHeight"] = float.Parse(tokens[8]));
-            tasks[9] = Task.Run(() => result["EstimatedDeformation"] = float.Parse(tokens[9]));
+            tasks[0] = Task.Run(() => result["PointNumber"] = decimal.Parse(tokens[0]));
+            tasks[1] = Task.Run(() => result["ReferenceImageX"] = decimal.Parse(tokens[1]));
+            tasks[2] = Task.Run(() => result["ReferenceImageY"] = decimal.Parse(tokens[2]));
+            tasks[3] = Task.Run(() => result["EastingProjection"] = decimal.Parse(tokens[3]));
+            tasks[4] = Task.Run(() => result["NorthingProjection"] = decimal.Parse(tokens[4]));
+            tasks[5] = Task.Run(() => result["Height"] = decimal.Parse(tokens[5]));
+            tasks[6] = Task.Run(() => result["DeformationRate"] = decimal.Parse(tokens[6]));
+            tasks[7] = Task.Run(() => result["StandardDeviation"] = decimal.Parse(tokens[7]));
+            tasks[8] = Task.Run(() => result["EstimatedHeight"] = decimal.Parse(tokens[8]));
+            tasks[9] = Task.Run(() => result["EstimatedDeformation"] = decimal.Parse(tokens[9]));
 
             tasks[10] = Task.Run(() =>{
                                 for (int index = headerUnusedLinesCount; index < tokens.Length; index++)
-                                          localDisplacements[index - headerUnusedLinesCount] = float.Parse(tokens[index]);
+                                          localDisplacements[index - headerUnusedLinesCount] = decimal.Parse(tokens[index]);
                                 });
             Task.WaitAll(tasks);
 
@@ -139,8 +137,8 @@ namespace MapWebSite.Core.DataPoints
 
                     result.Add(new HeaderData(
                         new DateTime(Convert.ToInt32(dateInfo[0]), Convert.ToInt32(dateInfo[1]), Convert.ToInt32(dateInfo[2])),
-                        float.Parse(jDInfo[0]),
-                        float.Parse(dayReferenceInfo)
+                        decimal.Parse(jDInfo[0]),
+                        decimal.Parse(dayReferenceInfo)
                         ));
 
                     dataLine = streamReader.ReadLine();

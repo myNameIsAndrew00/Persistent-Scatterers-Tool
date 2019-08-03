@@ -3,6 +3,7 @@ using MapWebSite.Core.Database;
 using MapWebSite.Model;
 using MapWebSite.Repository;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MapWebSite.Interaction
 {
@@ -32,11 +33,15 @@ namespace MapWebSite.Interaction
             return userRepository.CheckUser(username, password);
         }
 
-        public bool InsertDataSet(PointsDataSet pointsDataSet, string username)
-        {
-            IDataPointsRepository dataPointsRepository = new SQLDataPointsRepository();
+        public async Task<bool> InsertDataSet(PointsDataSet pointsDataSet, string username)
+        { 
+            IDataPointsRepository dataPointsRepository = new CassandraDataPointsRepository();
 
-            return dataPointsRepository.InsertPointsDataset(pointsDataSet, username);
+            IUserRepository userRepository = new SQLUserRepository();
+
+            pointsDataSet.ID = userRepository.CreateUserPointsDataset(username, pointsDataSet.Name);
+ 
+            return await dataPointsRepository.InsertPointsDataset(pointsDataSet);
         }
     }
 }

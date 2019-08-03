@@ -1,9 +1,10 @@
 ﻿using MapWebSite.Model;
- 
+using System.Threading.Tasks;
+
 namespace MapWebSite.Core.Database
 {
     public interface IDataPointsRepository
     {
-        bool InsertPointsDataset(PointsDataSet pointsDataset, string username);
+        Task<bool> InsertPointsDataset(PointsDataSet pointsDataset);
     }
 }
