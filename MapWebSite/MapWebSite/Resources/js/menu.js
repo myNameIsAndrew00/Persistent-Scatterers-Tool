@@ -87,6 +87,7 @@ async function requestSettingsPage(pageName) {
 
 
 function displayPage() {    
+    $('#color-picker-container').removeClass('color-picker-container-hide');
     $('#settings-layer').removeClass('settings-layer-hide');
     $('#main-menu').addClass('main-select-menu-nontransparent');
     $('#secondary-menu').addClass('secondary-menu-nontransparent');

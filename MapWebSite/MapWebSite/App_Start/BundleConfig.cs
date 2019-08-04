@@ -29,7 +29,9 @@ namespace MapWebSite
             loginStyleBundle.Orderer = new NullOrderer();
             
             var homeStyleBundle = new CustomStyleBundle("~/Content/home_sass").Include(
-                "~/Resources/css/home.scss");
+                "~/Resources/css/home.scss",
+                "~/Resources/css/color_picker.scss");
+
             homeStyleBundle.Orderer = new NullOrderer();
 
             bundles.Add(loginStyleBundle);
@@ -70,6 +72,10 @@ namespace MapWebSite
 
             bundles.Add(new ScriptBundle("~/scripts/menu").Include(
                 "~/Resources/js/menu.js"));
+
+            bundles.Add(new ScriptBundle("~/scripts/color_picker").Include(
+                "~/Resources/js/color_picker_color_list.js",
+                "~/Resources/js/color_picker.js"));
         }
 
         private static void loadOpenLayersBundles(BundleCollection bundles)

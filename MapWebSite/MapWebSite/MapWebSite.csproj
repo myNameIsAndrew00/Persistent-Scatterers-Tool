@@ -182,7 +182,10 @@
     <Content Include="FrameworkContent\Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="FrameworkContent\Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="FrameworkContent\Scripts\modernizr-2.8.3.js" />
+    <Content Include="Resources\css\color_picker.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
+    <Content Include="Resources\js\color_picker.js" />
+    <Content Include="Resources\js\color_picker_color_list.js" />
     <Content Include="Resources\js\home.js" />
     <Content Include="Resources\js\login.js" />
     <Content Include="Resources\js\map.js" />
@@ -249,6 +252,7 @@
     <Content Include="Views\Shared\HomeMenu.cshtml" />
     <Content Include="Resources\css\home_point_info_layer.scss" />
     <Content Include="Views\Home\SettingsLayer.cshtml" />
+    <Content Include="Views\Home\Settings Content\ColorPicker.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

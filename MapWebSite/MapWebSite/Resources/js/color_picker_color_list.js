@@ -1,0 +1,144 @@
+
+class ColorNode{
+    constructor(pointKey){
+        this.pointKey = pointKey;
+
+        this.nextColor = null;
+        this.prevColor = null;
+    }
+}
+
+/*use this class to modelate the slider
+*  Internals components: a list -> which manages the order of the hashmap
+*                        a hashmap -> which manages the points and their valid positions 
+*/
+class ColorList{
+    constructor(firstColorNode, firstPointLeftMargin, firstPointRightMargin, firstColor){
+        this.root = firstColorNode; 
+        this.leftMargin = firstPointLeftMargin;
+        this.rightMargin = firstPointRightMargin;
+        
+        /*initialise the dictionary*/
+        this.pointsDictionary = {};
+        this.pointsDictionary[ firstColorNode.pointKey ] = { 
+                                                 color : firstColor,
+                                                 position:firstPointLeftMargin, 
+                                                 leftPointID: null,
+                                                 rightPointID : null};
+    }
+
+    /*
+    * private region
+    */
+
+
+    getPointPercentage(pointKey){
+        return 100 * (this.pointsDictionary[pointKey].position - this.leftMargin) / (this.rightMargin - this.leftMargin);
+    }
+
+    findPreviousRoot(percent){
+        var currentNode = this.root;
+        var nextNode = currentNode.nextColor;
+
+        var leftPercent = this.getPointPercentage(currentNode.pointKey);
+        var rightPercent = nextNode == null ? 100 : this.getPointPercentage(nextNode.pointKey); 
+
+        while(leftPercent > percent || rightPercent < percent){
+            currentNode = nextNode;
+            nextNode = currentNode.nextColor;
+            
+            leftPercent = this.getPointPercentage(currentNode.pointKey);
+            rightPercent = nextNode == null ? 100 : this.getPointPercentage(nextNode.pointKey);
+
+            if(currentNode == null) return null; 
+        }
+
+        return currentNode;
+    }
+
+    addPointToHashMap(pointKey, pointPosition, leftPointIDParam, rightPointIDParam, pointColor){
+        this.pointsDictionary[pointKey] = { 
+                                        position : pointPosition, 
+                                        leftPointID : leftPointIDParam,
+                                        rightPointID : rightPointIDParam,
+                                        color : pointColor
+                                    };
+    }
+
+    /*
+    * public region
+    */
+
+    AddNode(pointPositionOnSlider, color, pointID){
+        /*calculate the percent*/
+        var percent = this.GetPercentage(pointPositionOnSlider);
+
+        /*get node neighbours*/
+        var previousColor = this.findPreviousRoot(percent);
+        var nextColor = previousColor.nextColor;
+
+        if(previousColor == null) return;
+
+        var colorNode = new ColorNode(pointID);
+        
+        this.addPointToHashMap(
+            pointID,
+            pointPositionOnSlider,
+            previousColor.pointKey,
+            nextColor == null ? null : nextColor.pointKey,
+            color
+        );
+
+        this.pointsDictionary[previousColor.pointKey].rightPointID = pointID;
+        if(nextColor != null) this.pointsDictionary[nextColor.pointKey].leftPointID = pointID;
+
+        colorNode.nextColor = previousColor.nextColor;
+        colorNode.prevColor = previousColor;
+        previousColor.nextColor = colorNode; 
+
+    }
+
+
+    BuildGradientString(){
+        var result = 'linear-gradient(to right';
+        var currentNode = this.root;
+        var nextNode = this.root.nextColor;
+
+        while (currentNode != null){
+            nextNode = currentNode.nextColor; 
+
+            var leftPercentage = this.getPointPercentage(currentNode.pointKey);
+            var rightPercent = nextNode == null ? 100 : this.getPointPercentage(nextNode.pointKey);
+            var color =  this.pointsDictionary[currentNode.pointKey].color;
+
+            result = result + ',' + color + ' ' + leftPercentage + '%' +
+                              ',' + color + ' ' + rightPercent + '%';
+            
+            currentNode = nextNode;                 
+        }
+
+        result += ')';
+        return result;
+    }
+
+    GetPointMargins(pointID){
+        var leftPointID = this.pointsDictionary[pointID].leftPointID;
+        var rightPointID = this.pointsDictionary[pointID].rightPointID;
+        return {
+            left: leftPointID == null ? this.leftMargin : this.pointsDictionary[leftPointID].position,
+            right: rightPointID == null ? this.rightMargin : this.pointsDictionary[rightPointID].position
+        };
+    }
+
+    SetPointPosition(pointID, newPosition){
+        this.pointsDictionary[pointID].position = newPosition;      
+    }
+
+    SetPointColor(pointID, newColor){
+        this.pointsDictionary[pointID].color = newColor;  
+    }
+ 
+    GetPercentage(position){
+        return 100 * (position - this.leftMargin) / (this.rightMargin - this.leftMargin);
+    }
+}

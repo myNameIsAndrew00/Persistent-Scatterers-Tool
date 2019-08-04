@@ -23,38 +23,39 @@ namespace MapWebSite.Repository
             queryBuilder.Type = typeof(PointType);
             queryBuilder.QueryType = CassandraQueryBuilder.QueryTypes.InsertFromType;
 
-            CassandraExecutionInstance executionInstance = new CassandraExecutionInstance(this.server,
-                                                                                this.keyspace);
-            executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
-
-            executionInstance.PrepareQuery(queryBuilder);
-
-
-            try
+            using (CassandraExecutionInstance executionInstance = new CassandraExecutionInstance(this.server,
+                                                                                this.keyspace))
             {
-                await pointTypes.ParallelForEachAsync(async pointType =>
+                executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
+
+                executionInstance.PrepareQuery(queryBuilder);
+
+                try
                 {
-                    await executionInstance.ExecuteNonQuery(new
+                    await pointTypes.ParallelForEachAsync(async pointType =>
                     {
-                        pointType.dataset_id,
-                        number = pointType.point_number,
-                        pointType.longitude,
-                        pointType.latitude,
-                        pointType.height,
-                        pointType.deformation_rate,
-                        pointType.standard_deviation,
-                        pointType.estimated_height,
-                        pointType.estimated_deformation_rate,
-                        pointType.observations,
-                        pointType.displacements
+                        await executionInstance.ExecuteNonQuery(new
+                        {
+                            pointType.dataset_id,
+                            number = pointType.point_number,
+                            pointType.longitude,
+                            pointType.latitude,
+                            pointType.height,
+                            pointType.deformation_rate,
+                            pointType.standard_deviation,
+                            pointType.estimated_height,
+                            pointType.estimated_deformation_rate,
+                            pointType.observations,
+                            pointType.displacements
+                        });
                     });
-                });
+                }
+                catch (Exception exception)
+                {
+                    //TODO: log exception
+                }
             }
-            catch(Exception exception)
-            {
-                //TODO: log exception
-            }
-           
+
             return true;
         }
     }

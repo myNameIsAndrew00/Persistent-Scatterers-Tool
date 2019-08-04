@@ -1,0 +1,131 @@
+ .color-picker-container-hide{
+     display: none;
+ }
+
+.color-picker-container {
+    font-family: Arial, Helvetica, sans-serif;
+    height: 65px;
+    width: 870px;
+    position: absolute;
+    margin-left: 10px;
+    user-select: none;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.1);
+
+    label {
+        position: absolute;
+        top: 38px;
+        background: #fff;
+        border-radius: 9px;
+        font-size: 11px;
+        text-align: center;
+        padding: 3px;
+    }
+
+    .bar {
+        position: absolute;
+        top: 21px;
+        left: 30px;
+        width: 800px;
+        border: none;
+        height: 4px;
+        background: rgb(54, 31, 156);
+        user-select: none;
+    }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: rgb(54, 31, 156);
+        border-radius: 50%;
+        display: inline-block;
+        user-select: none;
+        position: absolute;
+        left: 30px;
+        top: 10px;
+        z-index: 999;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+
+    .dot:hover {
+        height: 27px;
+        width: 27px;
+        top: 9px;
+    }
+}
+
+
+
+.color-picker{
+      position: absolute;
+      background: rgb(220,220,220);
+      z-index: 1000;
+      border-radius: 4px;
+
+      top: 85px; 
+      
+      .color-picker-tumb{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 19px;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 16px solid;
+
+        border-bottom-color: rgb(220,220,220);
+       
+        margin-top: -15px;
+      }
+
+      .color-container{
+        height: 120px;
+        width: 170px;
+      }
+   
+      table{
+          border-collapse: collapse;
+          margin: 7px; 
+          padding-top: 17px;
+      }
+
+      table, td, th{ 
+  
+        border-spacing: 6px;
+        border-collapse: separate;
+      }
+
+      th{
+          cursor: pointer;
+          margin: 2px;
+          height: 12px;
+          width: 12px; 
+      }
+
+      button{
+          background: #fff;
+          color: rgb(100,100,100);
+          
+          border: none;
+          border-radius: 2px;
+          position: absolute;
+          right: 10px;
+          bottom: 10px;
+          padding: 2px 10px 2px 10px;
+          transition: 0.3s;
+          cursor: pointer;
+      }
+
+      button:hover{
+          color: white;
+          background: orange;
+      }
+  }
+
+  .color-picker-hidden{
+        display: none;
+  }
