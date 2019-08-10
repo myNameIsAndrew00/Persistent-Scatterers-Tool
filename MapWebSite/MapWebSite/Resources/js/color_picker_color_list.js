@@ -13,16 +13,15 @@ class ColorNode{
 *                        a hashmap -> which manages the points and their valid positions 
 */
 class ColorList{
-    constructor(firstColorNode, firstPointLeftMargin, firstPointRightMargin, firstColor){
+    constructor(firstColorNode, barWidth, firstColor){
         this.root = firstColorNode; 
-        this.leftMargin = firstPointLeftMargin;
-        this.rightMargin = firstPointRightMargin;
+        this.barWidth = barWidth; 
         
         /*initialise the dictionary*/
         this.pointsDictionary = {};
         this.pointsDictionary[ firstColorNode.pointKey ] = { 
                                                  color : firstColor,
-                                                 position:firstPointLeftMargin, 
+                                                 position: 0, 
                                                  leftPointID: null,
                                                  rightPointID : null};
     }
@@ -33,7 +32,7 @@ class ColorList{
 
 
     getPointPercentage(pointKey){
-        return 100 * (this.pointsDictionary[pointKey].position - this.leftMargin) / (this.rightMargin - this.leftMargin);
+        return 100 * (this.pointsDictionary[pointKey].position) / this.barWidth;
     }
 
     findPreviousRoot(percent){
@@ -72,7 +71,7 @@ class ColorList{
     AddNode(pointPositionOnSlider, color, pointID){
         /*calculate the percent*/
         var percent = this.GetPercentage(pointPositionOnSlider);
-
+       
         /*get node neighbours*/
         var previousColor = this.findPreviousRoot(percent);
         var nextColor = previousColor.nextColor;
@@ -125,8 +124,8 @@ class ColorList{
         var leftPointID = this.pointsDictionary[pointID].leftPointID;
         var rightPointID = this.pointsDictionary[pointID].rightPointID;
         return {
-            left: leftPointID == null ? this.leftMargin : this.pointsDictionary[leftPointID].position,
-            right: rightPointID == null ? this.rightMargin : this.pointsDictionary[rightPointID].position
+            left: this.pointsDictionary[leftPointID].position,
+            right: rightPointID == null ? this.barWidth : this.pointsDictionary[rightPointID].position
         };
     }
 
@@ -139,6 +138,6 @@ class ColorList{
     }
  
     GetPercentage(position){
-        return 100 * (position - this.leftMargin) / (this.rightMargin - this.leftMargin);
+        return 100 * (position) / this.barWidth;
     }
 }

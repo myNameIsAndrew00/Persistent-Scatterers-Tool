@@ -80,21 +80,43 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
 
 /*functions used for setting overlay*/
 
-async function requestSettingsPage(pageName) {
-    await requestSettingsPageData();
-    displayPage();
+async function requestSettingsPage(pageName, cssServerPath) {
+
+    displayPage(); 
+     
+
+    await requestPage(pageName, cssServerPath);
+             
 }
 
 
-function displayPage() {    
-    $('#color-picker-container').removeClass('color-picker-container-hide');
+function displayPage() {     
     $('#settings-layer').removeClass('settings-layer-hide');
     $('#main-menu').addClass('main-select-menu-nontransparent');
     $('#secondary-menu').addClass('secondary-menu-nontransparent');
 }
 
-async function requestSettingsPageData() {
-    await $.get("/Login/Index", await function (data) {
-       // alert(data);
+async function requestPage(pageName, cssServerPath) {
+
+
+    if(cssServerPath != null) requestCss(cssServerPath);
+    await $.get("/Home/RequestSettingsLayerContent", { settingsPageName: pageName }, await function (data) {
+        //TODO: check if the page was already loaded and do not request resources again. It generates errors
+        setTimeout(function () {
+            $('#settings-layer').html(data);  
+        }, 1000);
+               
     });
+}
+
+function requestCss(cssServerPath) {
+    var head = document.getElementsByTagName('head')[0];
+    for (var i = 0; i < head.children.length; i++)
+        if (head.children[ i ].localName == 'link' && head.children[i].href.includes(cssServerPath)) return;
+
+    var style = document.createElement('link');
+    style.href = cssServerPath;
+    style.type = 'text/css';
+    style.rel = 'stylesheet';
+    head.append(style);
 }

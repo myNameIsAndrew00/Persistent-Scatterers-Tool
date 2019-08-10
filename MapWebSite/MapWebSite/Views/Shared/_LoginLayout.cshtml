@@ -22,7 +22,7 @@
 
                 @RenderBody()
 
-                @Html.BeginForm("Index", "Home")
+                @Html.BeginForm("Login", "Login")
                 { 
                     <!--TODO: content bellow will be inside a view-->
                     <h1 class="main-title">Login</h1>
@@ -32,10 +32,10 @@
                         More text can be added here :D
                     </p>
 
-                    <input class="default-input" placeholder="username" type="text">
+                    <input class="default-input" placeholder="username" name="username" type="text">
                     <div class="input-border"></div>
 
-                    <input class="default-input" placeholder="password" type="password">
+                    <input class="default-input" placeholder="password" name="password" type="password">
                     <div class="input-border"></div>
 
                     <input class="default-button" type="submit">

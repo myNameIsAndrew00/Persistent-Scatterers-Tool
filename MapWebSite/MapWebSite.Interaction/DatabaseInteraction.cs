@@ -40,7 +40,9 @@ namespace MapWebSite.Interaction
             IUserRepository userRepository = new SQLUserRepository();
 
             pointsDataSet.ID = userRepository.CreateUserPointsDataset(username, pointsDataSet.Name);
- 
+
+            if (pointsDataSet.ID == -1) return false;
+
             return await dataPointsRepository.InsertPointsDataset(pointsDataSet);
         }
     }

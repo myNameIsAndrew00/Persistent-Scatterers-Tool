@@ -13,6 +13,8 @@ namespace MapWebSite.Repository
     {
         public bool CheckUser(string username, string password)
         {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return false;
+
             byte[] storedHash = new byte[32];
             byte[] storedSalt = new byte[32];
             using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUserPasswordInfo") { CommandType = System.Data.CommandType.StoredProcedure },

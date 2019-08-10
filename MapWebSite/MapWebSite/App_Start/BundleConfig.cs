@@ -29,13 +29,16 @@ namespace MapWebSite
             loginStyleBundle.Orderer = new NullOrderer();
             
             var homeStyleBundle = new CustomStyleBundle("~/Content/home_sass").Include(
-                "~/Resources/css/home.scss",
-                "~/Resources/css/color_picker.scss");
-
+                "~/Resources/css/home.scss");
             homeStyleBundle.Orderer = new NullOrderer();
+
+            var colorPickerBundle = new CustomStyleBundle("~/Content/color_picker").Include(
+               "~/Resources/css/color_picker.scss");
+            colorPickerBundle.Orderer = new NullOrderer();
 
             bundles.Add(loginStyleBundle);
             bundles.Add(homeStyleBundle);
+            bundles.Add(colorPickerBundle);
         }
 
         private static void loadBootstrapBundles(BundleCollection bundles)

@@ -19,7 +19,7 @@ namespace MapWebSite.Tests.Database
         {
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
 
-            bool response = handler.ValidateUser("woofwoof", "andrei1234");
+            bool response = handler.ValidateUser("woofwoofa", "andrei1234");
 
             Assert.IsTrue(response);
 

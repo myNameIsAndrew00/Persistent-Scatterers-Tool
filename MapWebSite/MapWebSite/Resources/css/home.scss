@@ -3,6 +3,11 @@
 @import 'home_point_info_layer.scss';
 @import 'home_settings_layer.scss';
 
+::selection {
+    background: none;
+    cursor: initial;
+}
+
 body, html {
     height: 100%;
     color: white;

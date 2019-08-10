@@ -4,11 +4,12 @@ var dotsCount = 1;
 var currentDot = 1;
 
 /*the limits of the slider*/
-var LeftMargin = 30;
-var RightMargin = 810;
+var LeftMargin = 0.21 * screen.width + 40;
+var SliderWidth = 800;
+var SliderLeft = 30;
 
 /*color mapping */
-var colorList = new ColorList(new ColorNode('dot-1'), LeftMargin, RightMargin, '#361f9c');
+var colorList = new ColorList(new ColorNode('dot-1'), SliderWidth , '#361f9c');
 
  
 
@@ -19,15 +20,15 @@ function changePosition(){
         var dot = document.getElementById('dot-' + currentDot);
         var dotLabel = document.getElementById('dot-' + currentDot + '-label');
         var margins = colorList.GetPointMargins('dot-' + currentDot);
-    
-        if(dotPosition < margins.left || dotPosition > margins.right ) return;
+     
+        if(dotPosition < margins.left  || dotPosition > margins.right ) return;
 
         //change the label content
         dotLabel.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
-        dotLabel.style.left = dotPosition - 7 + 'px';
+        dotLabel.style.left = dotPosition + 'px';
 
         //change the point
-        dot.style.left = dotPosition +'px';
+        dot.style.left = dotPosition + SliderLeft + 'px';
        
         colorList.SetPointPosition('dot-' + currentDot, dotPosition);       
         $('#slider').css({ background: colorList.BuildGradientString() }); 
@@ -53,15 +54,25 @@ function changeSelectedDot(){
 function addDot(){
 
     var dotColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-    var dotPosition = event.clientX - 20;      
+    var dotPosition = event.clientX - LeftMargin;     
+ 
+   // showColorPicker(event.clientX);
+    var spanID = createSpan(dotPosition + SliderLeft, dotColor);
+    createLabel(dotPosition);
 
-    showColorPicker(event.clientX);
-    var spanID = createSpan(dotPosition, dotColor);
-  
     colorList.AddNode( dotPosition, dotColor, spanID);
      
     $('#slider').css({ background: colorList.BuildGradientString() });
  
+}
+
+function createLabel(dotPosition){
+    var label = document.createElement('label');
+    label.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
+    label.style.left = dotPosition + 'px';
+    label.id = 'dot-' + dotsCount + '-label';
+
+    $('#dots-container').append(label);
 }
 
 function createSpan(dotPosition, dotColor){
@@ -70,8 +81,7 @@ function createSpan(dotPosition, dotColor){
     currentDot = dotsCount;
     
     var dot = document.createElement('span');
-    var label = document.createElement('label');
-
+   
     dot.classList.add('dot');
     dot.id = 'dot-' + dotsCount;
     dot.style.left = dotPosition +'px';   
@@ -79,12 +89,7 @@ function createSpan(dotPosition, dotColor){
     dot.draggable = false;
     dot.addEventListener('mousedown',changeSelectedDot);
  
-    label.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
-    label.style.left = dotPosition - 7 + 'px';
-    label.id = 'dot-' + dotsCount + '-label';
-
     $('#dots-container').append(dot);
-    $('#dots-container').append(label);
 
     return dot.id;
 }
