@@ -12,6 +12,7 @@ namespace MapWebSite.Controllers
     { 
         public ActionResult Index()
         {
+
             return View();
         }
 
@@ -22,12 +23,13 @@ namespace MapWebSite.Controllers
             {
                 case "create-palette-color":
                     return View((string)"Settings Content/ColorPicker");
+                case "upload-points":
+                    return View((string)"Settings Content/UploadPoints");
                 default:
                     return View((string)"Settings Content/ColorPicker");
             }
         }
-         
-        //TODO:require authentification
+          
         public ActionResult SaveColorsPalette(ColorMap colorMap)
         {
             //TODO: save the color map to the database

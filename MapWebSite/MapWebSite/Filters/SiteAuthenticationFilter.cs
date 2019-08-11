@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using System;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
+using System.Web.Script.Serialization;
+using System.Web.Security;
 
 namespace MapWebSite.Filters
 {
@@ -10,17 +13,32 @@ namespace MapWebSite.Filters
     /// </summary>
     public class SiteAuthenticationFilter : ActionFilterAttribute, IAuthenticationFilter
     {
+        public const string authenticationCookieName = "authentication";
+
         public void OnAuthentication(AuthenticationContext filterContext)
         {
-            if (string.IsNullOrEmpty(Convert.ToString(filterContext.HttpContext.Session["username"])))
+            try{
+                HttpCookie cookie = filterContext.RequestContext.HttpContext.Request.Cookies[authenticationCookieName];
+
+                if (cookie == null) throw new Exception();
+                if (cookie.Expires > DateTime.Now) throw new Exception();
+
+                FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+                 
+
+                if (new JavaScriptSerializer().Deserialize(ticket.UserData, typeof(Interaction.SiteUser)) == null)
+                    throw new Exception();
+             }
+            catch{
                 filterContext.Result = new HttpUnauthorizedResult();
+            }
         }
 
         public void OnAuthenticationChallenge(AuthenticationChallengeContext filterContext)
         {
             //check if an unauthorized access was raised
             if (filterContext.Result == null || filterContext.Result is HttpUnauthorizedResult)
-                //TODO: send the user to a special where he will be redirected to login
+                //TODO: send the user to a special page from where he will be redirected to login
                 filterContext.Result = new RedirectToRouteResult(new System.Web.Routing.RouteValueDictionary()
                 {
                     { "controller", "Login" },
@@ -28,15 +46,55 @@ namespace MapWebSite.Filters
                 });
         }
 
-        public static void AuthenticateUser(string username, HttpSessionStateBase session)
+        public static void AuthenticateUser(string username)
         {
             //any authentication changes are made here
-            session["username"] = username;
+            if (string.IsNullOrEmpty(username)) return;
+
+            var userData = new JavaScriptSerializer().Serialize(new Interaction.SiteUser() { Username = username });
+
+            FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
+                                                                            username,
+                                                                            DateTime.Now,
+                                                                            DateTime.Now.AddDays(7),
+                                                                            true,
+                                                                            userData);
+
+            string cookieData = FormsAuthentication.Encrypt(ticket);
+
+            HttpCookie cookie = new HttpCookie(authenticationCookieName, cookieData)
+            {
+                Expires = ticket.Expiration,
+                HttpOnly = true,
+                Secure = true               
+            };
+
+            HttpContext.Current.Response.Cookies.Add(cookie); 
         }
 
-        public static void LogoutUser(HttpSessionStateBase session)
+        public static void LogoutUser()
         {
-            session["username"] = null;
+            var cookie = HttpContext.Current.Request.Cookies[authenticationCookieName];
+
+            if (cookie != null)
+                HttpContext.Current.Response.Cookies.Add(new HttpCookie(authenticationCookieName)
+                {
+                    Expires = DateTime.Now.AddDays(-1)
+                });
+            
+                 
         }
+
+        public static Interaction.SiteUser GetCurrentUser()
+        {
+            HttpCookie cookie = HttpContext.Current.Request.Cookies[authenticationCookieName];
+  
+            FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
+
+            return new JavaScriptSerializer().Deserialize(ticket.UserData, typeof(Interaction.SiteUser))
+                as Interaction.SiteUser;
+              
+        }
+
     }
 }

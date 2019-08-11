@@ -2,6 +2,7 @@
 
 var currentMenuIconIndex = 0;
 var menuIconsCount = 0;
+var rotateSpinner = false;
 
 window.onload = function () {
     menuIconsCount = $('#main-select-menu-icon').find('object').length;
@@ -81,12 +82,11 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
 /*functions used for setting overlay*/
 
 async function requestSettingsPage(pageName, cssServerPath) {
-
+    ChangeSpinnerVisibility(true);
     displayPage(); 
      
-
     await requestPage(pageName, cssServerPath);
-             
+     
 }
 
 
@@ -103,6 +103,7 @@ async function requestPage(pageName, cssServerPath) {
     await $.get("/Home/RequestSettingsLayerContent", { settingsPageName: pageName }, await function (data) {
         //TODO: check if the page was already loaded and do not request resources again. It generates errors
         setTimeout(function () {
+            ChangeSpinnerVisibility(false);
             $('#settings-layer').html(data);  
         }, 1000);
                
@@ -119,4 +120,61 @@ function requestCss(cssServerPath) {
     style.type = 'text/css';
     style.rel = 'stylesheet';
     head.append(style);
+}
+
+
+/*****************************************************************************************/
+
+/*functions used for spinner */
+
+/*this functions rotate the settings page loading spinner */
+function startSpinner() {
+    if (rotateSpinner == false) return;
+
+    var spinnerIcon = document.getElementById('loading-icon');
+    var inner_spin = spinnerIcon.contentDocument.getElementById('inner_circle');
+    var middle_spin = spinnerIcon.contentDocument.getElementById('middle_circle');
+    var outer_circle = spinnerIcon.contentDocument.getElementById('outer_circle');
+    var globe = spinnerIcon.contentDocument.getElementById('Globe');
+
+    var degrees = 0;
+    var scaleValue = 0.801;
+    var scaleDirection = 1;
+
+    rotateSpinner.onChn
+    function spin() {
+
+        inner_spin.style.transform = 'rotate(' + degrees * 2.4 + 'deg)';
+        inner_spin.style.transformOrigin = 'center';
+        middle_spin.style.transform = 'rotate(' + degrees * 1.8 + 'deg)';
+        middle_spin.style.transformOrigin = 'center';
+        outer_circle.style.transform = 'rotate(' + degrees * 1.2 + 'deg)';
+        outer_circle.style.transformOrigin = 'center';
+
+        globe.style.transform = 'scale(' + scaleValue + ')';
+
+        globe.style.transformOrigin = 'center';
+
+        scaleValue += scaleDirection * 0.0015;
+        if (scaleValue >= 1 || scaleValue <= 0.8) scaleDirection = scaleDirection * -1;
+        degrees = (degrees + 1) % 600;
+
+        if (rotateSpinner)
+            setTimeout(spin, 1);
+
+    }
+
+    spin();
+
+}
+
+
+function ChangeSpinnerVisibility(visible) {
+
+    if (visible)
+        document.getElementById('loading-icon').classList.remove('loading-icon-hide');
+    else document.getElementById('loading-icon').classList.add('loading-icon-hide');
+
+    rotateSpinner = visible;
+    startSpinner();
 }

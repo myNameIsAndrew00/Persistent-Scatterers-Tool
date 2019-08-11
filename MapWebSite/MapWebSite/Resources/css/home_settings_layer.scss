@@ -1,6 +1,19 @@
 ﻿@import 'colors.scss';
 
-.settings-layer{
+.loading-icon {
+    position: absolute;
+    top: 43%;
+    left: 47%;
+    z-index: 1001;
+    transition: 0.3s;
+}
+
+.loading-icon-hide {
+    width: 95px;
+    height: 0; 
+}
+
+.settings-layer {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -9,6 +22,6 @@
     transition: 0.4s;
 }
 
-.settings-layer-hide{
+.settings-layer-hide {
     width: 0;
 }
