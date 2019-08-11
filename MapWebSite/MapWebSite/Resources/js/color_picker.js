@@ -4,16 +4,16 @@ var dotsCount = 1;
 var currentDot = 1;
 
 /*the limits of the slider*/
-var LeftMargin = 0.21 * screen.width + 40;
+var LeftMargin = 40 + Number(window.getComputedStyle(document.getElementById('color-picker-container'), null).marginLeft.replace(/[a-zA-Z]/g, ""));
 var SliderWidth = 800;
 var SliderLeft = 30;
 
 /*color mapping */
 var colorList = new ColorList(new ColorNode('dot-1'), SliderWidth , '#361f9c');
 
- 
 
-function changePosition(){
+
+function changePosition() { 
     if(currentDot == 1) return;
     if(isMouseDown){
         var dotPosition = event.clientX - LeftMargin;
@@ -51,12 +51,12 @@ function changeSelectedDot(){
 }
 
 /*function which handles the points addition to the slider*/  
-function addDot(){
-
+function addDot() { 
+    
     var dotColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
     var dotPosition = event.clientX - LeftMargin;     
  
-   // showColorPicker(event.clientX);
+    showColorPicker(event.clientX);
     var spanID = createSpan(dotPosition + SliderLeft, dotColor);
     createLabel(dotPosition);
 
@@ -102,7 +102,7 @@ function changeSpanColor(newColor){
      
 }
 
-function showColorPicker(horizontalPosition){
+function showColorPicker(horizontalPosition) { 
    changeColorPickerVisibility(true);
 
    $('#color-picker').css('left', horizontalPosition - 25 + 'px');

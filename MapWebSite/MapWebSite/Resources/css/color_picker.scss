@@ -6,13 +6,15 @@ html, body {
 .color-picker-container {
     height: 65px;
     width: 870px;
-    position: absolute;
-    margin-left: 10px;
+    position: relative;
     user-select: none;
     border-radius: 4px;
     background: rgba(0,0,0,0.1);
-    left: 21%;
     top: 115px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
 
     label {
         position: absolute;
@@ -56,8 +58,22 @@ html, body {
         width: 27px;
         top: 9px;
     }
+
+   
 }
 
+.color-picker-info-container {
+    position: relative;
+    top: 205px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+
+    h1{
+        text-align: center;
+    }
+}
 
 
 .color-picker {

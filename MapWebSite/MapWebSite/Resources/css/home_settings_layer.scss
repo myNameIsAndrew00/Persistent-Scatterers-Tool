@@ -1,27 +1,56 @@
 ﻿@import 'colors.scss';
 
-.loading-icon {
-    position: absolute;
-    top: 43%;
-    left: 47%;
-    z-index: 1001;
-    transition: 0.3s;
+#settings-layer-container {
+    transition: visibility 0s, opacity 0.5s linear;
+    opacity: 1;
+
+    .loading-icon {
+        position: absolute;
+        top: 43%;
+        left: 47%;
+        z-index: 1001;
+        transition: 0.3s;
+    }
+
+    .loading-icon-hide {
+        width: 94px;
+        height: 0px;
+    }
+
+    .settings-layer {
+        position: absolute;
+        background-color: #FFF;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        transition: 0.7s;
+    }
+
+    .settings-layer-hide {
+        width: 0;
+    }
+
+    .close_setting_layer_button {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background: none;
+        border: none;
+        transition: 0.3s;
+        padding: 4px 8px 0 8px;
+        border-radius: 7px;
+
+        object {
+            pointer-events: none;
+        }
+    }
+
+    .close_setting_layer_button:hover {
+        background: #ffa740;
+    }
 }
 
-.loading-icon-hide {
-    width: 95px;
-    height: 0; 
-}
-
-.settings-layer {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    background-color: #FFF;
-    transition: 0.4s;
-}
-
-.settings-layer-hide {
-    width: 0;
+.settings-layer-container-hide {
+    visibility: hidden ;
+    opacity: 0;
 }

@@ -83,17 +83,26 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
 
 async function requestSettingsPage(pageName, cssServerPath) {
     ChangeSpinnerVisibility(true);
-    displayPage(); 
+    
+
+    setTimeout( displayPage, 50, true); 
      
     await requestPage(pageName, cssServerPath);
      
 }
 
 
-function displayPage() {     
-    $('#settings-layer').removeClass('settings-layer-hide');
-    $('#main-menu').addClass('main-select-menu-nontransparent');
-    $('#secondary-menu').addClass('secondary-menu-nontransparent');
+function displayPage(display) {    
+    $('#settings-layer').html('');
+
+    function doAction(remove, id, className) {
+        remove ? $(id).removeClass(className) : $(id).addClass(className);
+    }
+    doAction(display, '#settings-layer-container', 'settings-layer-container-hide');
+    doAction(display, '#settings-layer', 'settings-layer-hide');
+    doAction(!display, '#main-menu', 'main-select-menu-nontransparent');
+    doAction(!display, '#secondary-menu', 'secondary-menu-nontransparent');
+
 }
 
 async function requestPage(pageName, cssServerPath) {
@@ -105,7 +114,7 @@ async function requestPage(pageName, cssServerPath) {
         setTimeout(function () {
             ChangeSpinnerVisibility(false);
             $('#settings-layer').html(data);  
-        }, 1000);
+        }, 1200);
                
     });
 }
@@ -130,7 +139,7 @@ function requestCss(cssServerPath) {
 /*this functions rotate the settings page loading spinner */
 function startSpinner() {
     if (rotateSpinner == false) return;
-
+    //TODO: refactorize this code
     var spinnerIcon = document.getElementById('loading-icon');
     var inner_spin = spinnerIcon.contentDocument.getElementById('inner_circle');
     var middle_spin = spinnerIcon.contentDocument.getElementById('middle_circle');
@@ -140,32 +149,29 @@ function startSpinner() {
     var degrees = 0;
     var scaleValue = 0.801;
     var scaleDirection = 1;
-
-    rotateSpinner.onChn
+     
     function spin() {
 
         inner_spin.style.transform = 'rotate(' + degrees * 2.4 + 'deg)';
         inner_spin.style.transformOrigin = 'center';
+
         middle_spin.style.transform = 'rotate(' + degrees * 1.8 + 'deg)';
         middle_spin.style.transformOrigin = 'center';
+
         outer_circle.style.transform = 'rotate(' + degrees * 1.2 + 'deg)';
         outer_circle.style.transformOrigin = 'center';
 
         globe.style.transform = 'scale(' + scaleValue + ')';
-
         globe.style.transformOrigin = 'center';
 
         scaleValue += scaleDirection * 0.0015;
         if (scaleValue >= 1 || scaleValue <= 0.8) scaleDirection = scaleDirection * -1;
         degrees = (degrees + 1) % 600;
 
-        if (rotateSpinner)
-            setTimeout(spin, 1);
+        if (rotateSpinner) setTimeout(spin, 1);
 
     }
-
     spin();
-
 }
 
 
