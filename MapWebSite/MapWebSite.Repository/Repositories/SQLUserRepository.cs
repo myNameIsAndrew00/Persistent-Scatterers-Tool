@@ -35,6 +35,12 @@ namespace MapWebSite.Repository
             return storedHash.SequenceEqual(userTrialPassword);
         }
 
+        public bool CreateColorMap(string username, ColorMap colorMap)
+        {
+            //TODO: implement
+            throw new NotImplementedException();
+        }
+
         public int CreateUserPointsDataset(string username, string datasetName)
         {
             try

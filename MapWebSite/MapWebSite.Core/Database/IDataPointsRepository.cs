@@ -6,5 +6,7 @@ namespace MapWebSite.Core.Database
     public interface IDataPointsRepository
     {
         Task<bool> InsertPointsDataset(PointsDataSet pointsDataset);
+
+
     }
 }
