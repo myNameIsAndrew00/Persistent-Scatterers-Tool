@@ -1,7 +1,7 @@
 ﻿/*Shortcut for map and ol*/
 var $map = ol.Map;
 var $feature = ol.Feature;
-
+var $control = ol.Control;
 var points = []; 
 var vector = null;
 
@@ -35,6 +35,11 @@ var mapView = new ol.View({
     maxZoom: 20
 })
 
+/*
+ * TODO: Define the navigation for map (zoom on double click must be disabled)
+ */
+
+ 
 
 /**
  * Here the map is rendered 
@@ -51,7 +56,7 @@ var map = new $map({
     controls: [],
     renderer: 'webgl'
 });
-
+ 
 
 /*follow section handle the click on items*/
 /**
@@ -125,8 +130,8 @@ function onMoveEnd(evt) {
 
 function loadData() {
 
-    $.get('/home/RequestDataPoints', function (requestedPoints) {
-
+    $.get('/home/RequestDataPoints', function (receivedInfo) {
+        var requestedPoints = JSON.parse(receivedInfo.data);
         for (var i = 0; i < requestedPoints.length ; i++) {
             points[i] = new $feature({
                 'geometry': new ol.geom.Point(

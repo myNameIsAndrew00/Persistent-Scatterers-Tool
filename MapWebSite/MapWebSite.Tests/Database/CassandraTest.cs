@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MapWebSite.Tests.Database
 {
+    using Builder = CassandraAccess.CassandraQueryBuilder;
     [TestClass]
     public class CassandraTest
     {
@@ -17,21 +18,16 @@ namespace MapWebSite.Tests.Database
         {
             CassandraAccess.CassandraQueryBuilder builder = new CassandraAccess.CassandraQueryBuilder();
             builder.TableName = "points_by_dataset";
-            builder.Type = typeof(PointType);
+            builder.ClausesList.Add(new Tuple<string, string, Builder.Clauses>
+                ("top_latitude", "latitude", Builder.Clauses.LessOrEqual));                   
 
-            PointDisplacementType type = new PointDisplacementType()
-            {
-                days_from_reference = 1,
-                date = DateTime.Now,
-                jd = 23.3m,
-                value = 23.4m
-            };
-
-            var jsonString = type.JSONSerialize(false);
-
-            string result = builder.BuildInsertQueryFromType();
+            string result = builder.BuildSelectQuery();
 
             Assert.IsNotNull(result);
         }
+
+
+
+
     }
 }

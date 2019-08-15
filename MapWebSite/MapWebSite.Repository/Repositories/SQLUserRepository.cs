@@ -62,6 +62,11 @@ namespace MapWebSite.Repository
             } 
         }
 
+        public int GetDatasetID(string username, string datasetName)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool InsertUser(User user)
         {
             try

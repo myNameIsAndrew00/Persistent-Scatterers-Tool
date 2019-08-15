@@ -86,6 +86,8 @@ namespace MapWebSite.Repository.Entities
                 };
 
                 ConcurrentBag<PointDisplacementType> displacements = point.displacements as ConcurrentBag<PointDisplacementType>;
+
+                if (pointModel.Displacements != null)
                 Parallel.ForEach(pointModel.Displacements, (displacement) =>
                 {
                     displacements.Add(new PointDisplacementType()
@@ -96,8 +98,7 @@ namespace MapWebSite.Repository.Entities
                         value = displacement.Value,
                     });
                 });
-
-                List<PointDisplacementType> pointsDisplacements = new List<PointDisplacementType>();
+                 
 
                 result.Add(point);
             });
@@ -106,4 +107,5 @@ namespace MapWebSite.Repository.Entities
         }
          
     }
+
 }

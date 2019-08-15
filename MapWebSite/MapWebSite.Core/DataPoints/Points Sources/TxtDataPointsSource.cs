@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MapWebSite.Model;
 
@@ -26,7 +23,7 @@ namespace MapWebSite.Core.DataPoints
             if (HeaderFile == null || DisplacementsFile == null) return null;
              
             ConcurrentBag<Point> points = new ConcurrentBag<Point>();
-            PointsDataSet pointsDataSet = new PointsDataSet() { Name = datasetName, Points = points };
+            PointsDataSet pointsDataSet = new PointsDataSet() { Name = datasetName, Points = points, ZoomLevel = 0 };
 
             try
             {
@@ -57,14 +54,14 @@ namespace MapWebSite.Core.DataPoints
         {
             Point point = new Point()
             {
-                Displacements = new List<Displacement>(),
+                Displacements = new List<Point.Displacement>(),
                 Number       = Convert.ToInt32(lineInfo["PointNumber"]),
                 DeformationRate              = lineInfo["DeformationRate"],
-                Longitude                    = lineInfo["EastingProjection"],
+                Longitude                    = lineInfo["NorthingProjection"],
                 EstimatedDeformationRate     = lineInfo["EstimatedDeformation"],
                 EstimatedHeight              = lineInfo["EstimatedHeight"],
                 Height                       = lineInfo["Height"],
-                Latitude                     = lineInfo["NorthingProjection"],
+                Latitude                     = lineInfo["EastingProjection"],
                 ReferenceImageX              = lineInfo["ReferenceImageX"],
                 ReferenceImageY              = lineInfo["ReferenceImageY"],
                 StandardDeviation            = lineInfo["StandardDeviation"],
@@ -72,7 +69,7 @@ namespace MapWebSite.Core.DataPoints
             };
 
             for (int index = 0; index < lineDisplacements.Length; index++)
-                point.Displacements.Add(new Displacement()
+                point.Displacements.Add(new Point.Displacement()
                 {   
                     Date = headerData[ index ].Item1,
                     JD = headerData[ index].Item2,
@@ -148,6 +145,7 @@ namespace MapWebSite.Core.DataPoints
             return result.ToArray();
         }
 
+     
 
         #endregion
     }

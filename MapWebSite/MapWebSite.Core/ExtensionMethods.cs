@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using ServiceStack.Serialization;
 using System; 
 using System.Data;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace MapWebSite.Core
 {
@@ -49,6 +51,13 @@ namespace MapWebSite.Core
             }
 
             return stringWriter.ToString();
+        }
+   
+
+        public static string DataContractJSONSerialize<T>(this T ObjectToBeSerialized)
+        {
+            JsonDataContractSerializer serializer = new JsonDataContractSerializer();
+            return serializer.SerializeToString<T>(ObjectToBeSerialized);
         }
 
     }

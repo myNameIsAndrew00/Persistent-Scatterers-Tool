@@ -12,5 +12,7 @@ namespace MapWebSite.Core.Database
         int CreateUserPointsDataset(string username, string datasetName);
 
         bool CreateColorMap(string username, ColorMap colorMap);
+
+        int GetDatasetID(string username, string datasetName);
     }
 }

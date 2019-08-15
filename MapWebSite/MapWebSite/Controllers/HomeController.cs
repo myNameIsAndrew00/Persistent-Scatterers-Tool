@@ -1,4 +1,6 @@
-﻿using MapWebSite.Model;
+﻿using MapWebSite.Core;
+using MapWebSite.Model;
+using ServiceStack.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,13 +38,6 @@ namespace MapWebSite.Controllers
             return View();
         }
 
-        /*this class is for testing purpose*/
-        public class MapPoint
-        {
-            public double Longitude { get; set; }
-
-            public double Latitude { get; set; }
-        }
 
         [HttpGet] 
         public JsonResult RequestDataPoints()
@@ -50,24 +45,36 @@ namespace MapWebSite.Controllers
             Random randomSource = new Random();
 
             //mock data
-            List<MapPoint> pointsData = new List<MapPoint>()
+            List<Point> pointsData = new List<Point>()
             {
-                new MapPoint() {
-                    Longitude = 26.102538390000063,
-                    Latitude = 44.4267674
+                new Point() { //zoom 20
+                    Longitude = 26.102538390000063m,
+                    Latitude = 44.4267674m
                 },
+                new Point()
+                {
+                    Longitude = 26.102538390000063m - 0.961m,
+                    Latitude = 44.4267674m - 0.961m
+                }
             };
 
-
-            for (int i = 0; i < 1000; i++)
-                pointsData.Add(new MapPoint()
+            for (int i = 2; i < 18; i++)
+                pointsData.Add(new Point()
                 {
-                    Longitude = 26.102538390000063 + randomSource.NextDouble() * 10,
-                    Latitude = 44.4267674 + randomSource.NextDouble() * 10
+                    Latitude = pointsData[0].Latitude + 0.0001m * i * i,
+                    Longitude = pointsData[0].Longitude + 0.0001m * i * i,
+
                 });
 
 
-            return Json(pointsData, JsonRequestBehavior.AllowGet);
+            for (int i = 0; i < 1000; i++)
+                pointsData.Add(new Point()
+                {
+                    Longitude = 26.102538390000063m + (decimal)randomSource.NextDouble() * 10,
+                    Latitude = 44.4267674m + (decimal)randomSource.NextDouble() * 10
+                });
+
+            return Json(new { data = pointsData.DataContractJSONSerialize() }, JsonRequestBehavior.AllowGet);
         }
 
     }

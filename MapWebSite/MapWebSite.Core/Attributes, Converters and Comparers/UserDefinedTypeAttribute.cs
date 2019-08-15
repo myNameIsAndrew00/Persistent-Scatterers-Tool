@@ -15,11 +15,14 @@ namespace MapWebSite.Core
     ///This decoration can be used to generate queries, code or database objects
     public class UserDefinedTypeColumnAttribute : Attribute
     {
-        public string NameInDatabase { get; set; }
+        public string NameInDatabase { get; } = null;
 
-        public UserDefinedTypeColumnAttribute(string nameInDatabase)
+        public bool UseIfNull { get; } = true;
+
+        public UserDefinedTypeColumnAttribute(string nameInDatabase, bool useIfNull = true)
         {
             this.NameInDatabase = nameInDatabase;
+            this.UseIfNull = useIfNull;
         }
     }
 

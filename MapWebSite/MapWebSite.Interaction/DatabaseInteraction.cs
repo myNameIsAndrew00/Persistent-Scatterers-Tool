@@ -1,14 +1,29 @@
 ﻿using MapWebSite.Core;
 using MapWebSite.Core.Database;
+using MapWebSite.Core.DataPoints;
 using MapWebSite.Model;
 using MapWebSite.Repository;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MapWebSite.Interaction
 {
+    using Pair = Tuple<decimal, decimal>;
     public class DatabaseInteractionHandler
     {
+
+        private readonly IUserRepository userRepository;
+
+        private readonly IDataPointsRepository dataPointsRepository;
+
+        public DatabaseInteractionHandler()
+        {
+            userRepository = new SQLUserRepository();
+            dataPointsRepository = new CassandraDataPointsRepository();
+        }
+
         public bool RegisterUser(string username, string firstName, string lastName, string password)
         {
             IUserRepository userRepository = new SQLUserRepository();
@@ -23,27 +38,48 @@ namespace MapWebSite.Interaction
                 PasswordSalt = passwordSalt,
                 Username = username
             });
-             
+
         }
 
         public bool ValidateUser(string username, string password)
-        {
-            IUserRepository userRepository = new SQLUserRepository();
-
-            return userRepository.CheckUser(username, password);
+        { 
+            return this.userRepository.CheckUser(username, password);
         }
 
+        /// <summary>
+        /// Insert a dataset for a user. Inserted data will contain zoomed versions of points
+        /// </summary>
+        /// <param name="pointsDataSet"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public async Task<bool> InsertDataSet(PointsDataSet pointsDataSet, string username)
-        { 
-            IDataPointsRepository dataPointsRepository = new CassandraDataPointsRepository();
-
-            IUserRepository userRepository = new SQLUserRepository();
-
-            pointsDataSet.ID = userRepository.CreateUserPointsDataset(username, pointsDataSet.Name);
+        {
+   
+            pointsDataSet.ID = this.userRepository.CreateUserPointsDataset(username, pointsDataSet.Name);
 
             if (pointsDataSet.ID == -1) return false;
 
-            return await dataPointsRepository.InsertPointsDataset(pointsDataSet);
+            IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
+
+            PointsDataSet[] zoomedDataSets = zoomGenerator.CreateDataSetsZoomSets(pointsDataSet, 3, 19);
+
+            return await this.dataPointsRepository.InsertPointsDatasets(pointsDataSet, zoomedDataSets);
+        }
+
+        /// <summary>
+        /// Returns data points which are inside a specific area of screen for a zoom level. Limits unit of measure is latitude/longitude.
+        /// </summary>
+        /// <param name="leftMargin"></param>
+        /// <param name="rightMargin"></param>
+        /// <param name="username"></param>
+        /// <param name="dataSet"></param>
+        /// <param name="zoomLevel"></param>
+        /// <returns></returns>
+        public IEnumerable<Point> RequestPoints(Pair leftMargin, Pair rightMargin, string username, string dataSet, int zoomLevel)
+        {
+            int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
+
+            return this.dataPointsRepository.GetDataPoints(dataSetID, zoomLevel, leftMargin, rightMargin);
         }
     }
 }

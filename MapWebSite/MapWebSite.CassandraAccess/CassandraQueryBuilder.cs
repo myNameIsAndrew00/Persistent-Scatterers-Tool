@@ -15,13 +15,32 @@ namespace MapWebSite.CassandraAccess
             Select
         }
 
+        public enum Clauses
+        {
+            Equals = '=',
+            Less = '<',
+            LessOrEqual = '|',
+            Greater = '>',
+            GreaterOrEqual = ';'
+        }
+
+
         public QueryTypes QueryType { get; set; } = CassandraQueryBuilder.QueryTypes.Insert;
 
         public string TableName { get; set; }
 
+        public List<string> IgnoredColumnNames { get; set; } = null;
+
         public string[] Parameters { get; set; }
 
         public Type Type { get; set; }
+
+        /// <summary>
+        /// Item1: parameter name
+        /// Item2: name in the table
+        /// Item3: relationship
+        /// </summary>
+        public List<Tuple<string, string, Clauses>> ClausesList { get; set; } = new List<Tuple<string, string, Clauses>>();
 
         /// <summary>
         /// Use this method to call Build methods acording to QueryType property
@@ -36,15 +55,30 @@ namespace MapWebSite.CassandraAccess
                 case QueryTypes.InsertFromType:
                     return BuildInsertQueryFromType();
                 case QueryTypes.Select:
-                    //TO DO: throw exception
-                    throw new NotImplementedException();
+                    return BuildSelectQuery();
             }
 
             return null;
         }
+        
+        /// <summary>
+        /// Use this method to generate a select query string.<br></br>
+        /// Properties used: TableName, ClausesList
+        /// </summary>
+        /// <returns></returns>
+        public string BuildSelectQuery()
+        {
+            if (string.IsNullOrEmpty(TableName)) throw new ArgumentNullException("Table name is not set");
+
+
+            return buildSelectQuery(this.TableName, this.ClausesList);
+
+        }
+
+       
 
         /// <summary>
-        /// Use this method to generate a query string.<br></br>
+        /// Use this method to generate a insert query string.<br></br>
         /// Properties used: TableName, Parameters
         /// </summary>
         /// <returns></returns>
@@ -81,7 +115,12 @@ namespace MapWebSite.CassandraAccess
                 UserDefinedTypeColumnAttribute attribute =
                     properties[index].GetCustomAttribute(typeof(UserDefinedTypeColumnAttribute)) as UserDefinedTypeColumnAttribute;
 
-                if (attribute != null) columns.Add(attribute.NameInDatabase);
+                if (attribute != null)
+                {
+                    if (IgnoredColumnNames != null && IgnoredColumnNames.Exists(item => item == attribute.NameInDatabase))
+                        continue;
+                    columns.Add(attribute.NameInDatabase);
+                }
             }
 
             return buildInsertQuery(this.TableName, columns.ToArray());
@@ -108,6 +147,41 @@ namespace MapWebSite.CassandraAccess
 
             return queryBuilder.ToString();
         }
+
+
+        private string buildSelectQuery(string tableName, List<Tuple<string,string, Clauses>> clausesList)
+        {
+            StringBuilder queryBuilder = new StringBuilder();
+
+            Action<Tuple<string, string, Clauses>> appendClause = delegate (Tuple<string, string, Clauses> clause)
+            {
+                queryBuilder.Append(clause.Item2);
+                string symbol = Convert.ToString((char)clause.Item3);
+                if (symbol == "|") symbol = "<=";
+                if (symbol == ";") symbol = ">=";
+
+                queryBuilder.AppendFormat(" {0} ",symbol);
+                queryBuilder.AppendFormat(":{0} ", clause.Item1);
+            };
+
+            queryBuilder.AppendFormat("select * from {0} ", tableName);
+
+            if (clausesList.Count > 0) queryBuilder.Append("where ");
+
+            for (int index = 0; index < clausesList.Count - 1; index++)
+            {
+                appendClause(clausesList[index]);
+                queryBuilder.Append(" and ");
+            }
+
+            if (clausesList.Count > 0) appendClause(clausesList[clausesList.Count - 1]);
+
+            queryBuilder.Append(" allow filtering");
+
+            return queryBuilder.ToString();
+        }
+
+
 
         #endregion
     }

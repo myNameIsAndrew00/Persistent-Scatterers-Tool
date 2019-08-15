@@ -30,12 +30,16 @@ namespace MapWebSite.Tests.Database
         {
             IDataPointsSource pointsSource = new TxtDataPointsSource();
 
-            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\header.txt";
-            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\displacements.txt";
+            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondHeader.txt";
+            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondDisplacements.txt";
 
             PointsDataSet dataset = pointsSource.CreateDataSet("Test");
 
             IEnumerable<PointType> points = PointType.GetPoints(dataset);
+
+            IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
+
+            PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 4, 20);
 
             Assert.IsNotNull(dataset);
             Assert.IsNotNull(points);

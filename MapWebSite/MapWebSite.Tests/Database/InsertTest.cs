@@ -2,12 +2,14 @@
 using MapWebSite.Interaction;
 using MapWebSite.Model;
 using MapWebSite.Repository;
+using MapWebSite.Repository.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MapWebSite.Model.Point;
 
 namespace MapWebSite.Tests.Database
 {
@@ -31,10 +33,10 @@ namespace MapWebSite.Tests.Database
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
             IDataPointsSource pointsSource = new TxtDataPointsSource();
 
-            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\header.txt";
-            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\displacements.txt";
+            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondHeader.txt";
+            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondDisplacements.txt";
 
-            PointsDataSet dataset = pointsSource.CreateDataSet("rada45687");
+            PointsDataSet dataset = pointsSource.CreateDataSet("rada456879");
 
             Task<bool> result = handler.InsertDataSet(dataset, "woofwoof");
 
@@ -44,28 +46,24 @@ namespace MapWebSite.Tests.Database
         }
 
         [TestMethod]
-        public async Task InsertCassandraDataPoints()
+        public void InsertCassandraDataPoints()
         {
-            PointsDataSet dataSet = new PointsDataSet()
-            {
-                ID = 1,
-                Name = "test",
-                Points = new List<Point>()
-                {
-                    new Point()
-                    {
-                        Number = 4,
-                        Displacements = new List<Displacement>()
-                        {
-                            new Displacement() { Date = DateTime.Now },
-                            new Displacement() { Date = DateTime.Now }
-                        }
-                    }
-                }
-            };
+            IDataPointsSource pointsSource = new TxtDataPointsSource();
+
+            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondHeader.txt";
+            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondDisplacements.txt";
+
+            PointsDataSet dataset = pointsSource.CreateDataSet("Test");
+             
+
+            IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
+
+            PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
 
             CassandraDataPointsRepository repository = new CassandraDataPointsRepository();
-            await repository.InsertPointsDataset(dataSet);
+            Task<bool> result = repository.InsertPointsDatasets(dataset, set);
+
+            result.Wait();
         }
     }
 }

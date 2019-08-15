@@ -95,6 +95,7 @@
     <Compile Include="Database\CassandraTest.cs" />
     <Compile Include="Database\CheckTest.cs" />
     <Compile Include="Database\InsertTest.cs" />
+    <Compile Include="Database\SelectTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
   </ItemGroup>

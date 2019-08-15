@@ -1,22 +1,27 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace MapWebSite.Model
 {
+
+
     public class PointsDataSet
     {
         public int ID { get; set; }
 
         public string Name { get; set; }
 
+        public long ZoomLevel { get; set; }
+
         public IEnumerable<Point> Points { get; set; }
 
     }
 
-    public class Point
+    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
+    public class Point  
     {
         public int Number { get; set; }
 
@@ -24,8 +29,12 @@ namespace MapWebSite.Model
 
         public decimal ReferenceImageY { get; set; }
 
+        [DataMember]
+        [JsonProperty]
         public decimal Longitude { get; set; }
 
+        [DataMember]
+        [JsonProperty]
         public decimal Latitude { get; set; }
 
         public decimal Height { get; set; }
@@ -41,17 +50,22 @@ namespace MapWebSite.Model
         public string Observations { get; set; }
 
         public List<Displacement> Displacements { get; set; }
+
+   
+
+
+        public class Displacement
+        {
+            public DateTime Date { get; set; }
+
+            public decimal JD { get; set; }
+
+            public decimal DaysFromReference { get; set; }
+
+            public decimal Value { get; set; }
+        }
     }
 
-    public class Displacement
-    {
-        public DateTime Date { get; set; }
-
-        public decimal JD { get; set; }
-
-        public decimal DaysFromReference { get; set; }
-
-        public decimal Value { get; set; }
-    }
+   
 
 }
