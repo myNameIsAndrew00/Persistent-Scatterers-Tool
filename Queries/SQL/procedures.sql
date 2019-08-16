@@ -51,6 +51,23 @@ end
 
 go
 
+if object_id('GetUserPointsDataset','P') is not null
+	drop procedure GetUserPointsDataset
+go
+create procedure GetUserPointsDataset
+	@username as varchar(100),
+	@dataset_name as varchar(100)
+as
+begin
+	select data_set_id 
+	from DataSets as DS
+		inner join Users as U
+		on DS.user_id = U.user_id and U.username = @username
+	where DS.dataset_name = @dataset_name
+
+end
+
+go
 
 if object_id('InsertPointsDataset', 'P') is not null
 	drop procedure InsertPointsDataset

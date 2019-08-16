@@ -58,8 +58,14 @@
     <Reference Include="BundleTransformer.SassAndScss, Version=1.10.4.0, Culture=neutral, PublicKeyToken=973c344c93aac60d, processorArchitecture=MSIL">
       <HintPath>..\packages\BundleTransformer.SassAndScss.1.10.4\lib\net40\BundleTransformer.SassAndScss.dll</HintPath>
     </Reference>
+    <Reference Include="Cassandra, Version=3.99.0.0, Culture=neutral, PublicKeyToken=10b231fbfc8c4b4d, processorArchitecture=MSIL">
+      <HintPath>..\packages\CassandraCSharpDriver.3.11.0\lib\net45\Cassandra.dll</HintPath>
+    </Reference>
     <Reference Include="LibSassHost, Version=1.2.5.0, Culture=neutral, PublicKeyToken=3e24e88796a38e46, processorArchitecture=MSIL">
       <HintPath>..\packages\LibSassHost.1.2.5\lib\net471\LibSassHost.dll</HintPath>
+    </Reference>
+    <Reference Include="LZ4, Version=1.0.10.93, Culture=neutral, PublicKeyToken=62e1b5ec1eec9bdd, processorArchitecture=MSIL">
+      <HintPath>..\packages\lz4net.1.0.10.93\lib\net4-client\LZ4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNetCore.Authentication.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.Authentication.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.Abstractions.dll</HintPath>
@@ -73,6 +79,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.1.0.0\lib\netstandard1.1\Microsoft.Extensions.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
@@ -117,6 +126,9 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Text.Encodings.Web, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.4.5.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Dataflow.4.6.0\lib\netstandard1.1\System.Threading.Tasks.Dataflow.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -247,6 +259,7 @@
     <Content Include="Resources\js\login.js" />
     <Content Include="Resources\js\map.js" />
     <Content Include="Resources\js\menu.js" />
+    <Content Include="Resources\js\point_info.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
     <Content Include="Resources\resources\icons\logout_icon.svg" />
@@ -312,6 +325,7 @@
     <Content Include="Views\Home\Settings Content\ColorPicker.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Home\Settings Content\UploadPoints.cshtml" />
+    <Content Include="Views\Home\PointInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

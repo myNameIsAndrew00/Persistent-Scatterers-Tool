@@ -36,7 +36,7 @@ namespace MapWebSite.Tests.Database
             (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondHeader.txt";
             (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondDisplacements.txt";
 
-            PointsDataSet dataset = pointsSource.CreateDataSet("rada456879");
+            PointsDataSet dataset = pointsSource.CreateDataSet("mainTest");
 
             Task<bool> result = handler.InsertDataSet(dataset, "woofwoof");
 

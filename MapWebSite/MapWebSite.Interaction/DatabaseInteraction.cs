@@ -78,6 +78,7 @@ namespace MapWebSite.Interaction
         public IEnumerable<Point> RequestPoints(Pair leftMargin, Pair rightMargin, string username, string dataSet, int zoomLevel)
         {
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
+            if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
             return this.dataPointsRepository.GetDataPoints(dataSetID, zoomLevel, leftMargin, rightMargin);
         }

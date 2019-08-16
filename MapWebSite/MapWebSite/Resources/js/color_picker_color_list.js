@@ -1,4 +1,4 @@
-
+ 
 class ColorNode{
     constructor(pointKey){
         this.pointKey = pointKey;

@@ -64,7 +64,23 @@ namespace MapWebSite.Repository
 
         public int GetDatasetID(string username, string datasetName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Convert.ToInt32(SqlExecutionInstance.ExecuteScalar(new SqlCommand("GetUserPointsDataset")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                    new SqlParameter[]{
+                                                         new SqlParameter("username", username),
+                                                         new SqlParameter("dataset_name", datasetName) },
+                                                    new SqlConnection(this.connectionString)));
+
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return -1;
+            }
         }
 
         public bool InsertUser(User user)

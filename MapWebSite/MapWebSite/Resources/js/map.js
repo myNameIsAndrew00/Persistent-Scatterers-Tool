@@ -40,7 +40,6 @@ var mapView = new ol.View({
  */
 
  
-
 /**
  * Here the map is rendered 
  */ 
@@ -64,12 +63,12 @@ var map = new $map({
  */
 
 function handleClickFunction(e) {
-    selectedPointIndex = e.selected[0].index;
 
+    diplayPointInfo();
+    selectedPointIndex = e.selected[0].index;
     document.getElementById("longitude").innerHTML = e.selected[0].longitude;
     document.getElementById("latitude").innerHTML = e.selected[0].latitude;
 
-    diplayPointInfo();
    
     /*change the point style*/
     /*e.selected[0].setStyle(new ol.style.Style({
@@ -82,89 +81,81 @@ function handleClickFunction(e) {
     }));*/
 }
 
-function diplayPointInfo() {
-    document.getElementById("point-info").style = ""; setTimeout(function () {
-        document.getElementById("point-info").style.opacity = 1;
-        document.getElementById("point-info").style.width = '60%';
-    }, 150);
-}
-
-function hidePointInfo() {
-    document.getElementById("point-info").style.opacity = 0;
-    document.getElementById("point-info").style.width = "40%";
-    setTimeout(function () {
-        document.getElementById("point-info").style.display = "none";
-    }, 200);
-}
 
 var select = new ol.interaction.Select();
 map.addInteraction(select);
 select.on('select', handleClickFunction);
-
-
-
-/**
- * Function on map move
- * THIS IS A EXAMPLE
- */
-var layerAdded = false;
-function onMoveEnd(evt) {
-    if (mapView.getZoom() >= 6) {
-        if (!layerAdded) {
-            map.addLayer(vector);
-            layerAdded = true;
-        }
-    }
-    else if (layerAdded) {
-        map.removeLayer(vector);
-        layerAdded = false;
-    }
-}
-//map.on('moveend', onMoveEnd); 
-
  
 
 /**
- * Here are created the points in the array
+ * Section bellow contain the points request
  */
 
-function loadData() {
+function loadData(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
+    $.ajax({
+        type: "GET",
+        data: {
+            zoomLevel: pZoomLevel,
+            latitudeFrom: pLatitudeFrom,
+            longitudeFrom: pLongitudeFrom,
+            latitudeTo: pLatitudeTo,
+            longitudeTo: pLongitudeTo
+        },
+        url: '/home/RequestDataPoints',
+        success: function (receivedInfo) {
+            points.splice(0, points.length);
 
-    $.get('/home/RequestDataPoints', function (receivedInfo) {
-        var requestedPoints = JSON.parse(receivedInfo.data);
-        for (var i = 0; i < requestedPoints.length ; i++) {
-            points[i] = new $feature({
-                'geometry': new ol.geom.Point(
-                    ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
-                'i': i,
-                'size': i % 2 ? 3 : 4
-            });
-            points[i].index = i;
-            points[i].longitude = requestedPoints[i].Longitude;
-            points[i].latitude = requestedPoints[i].Latitude;
-        }
-
-        /**
-        * Fill the vector source for layer
-        * TO DO: do a hash to get the coordonates function!!!!!
-        */
-
-        var vectorSource = new ol.source.Vector({
-            features: points,
-            wrapX: false
-        });
-
-
-        /*represents the layer which contains the points*/
-        vector = new ol.layer.Vector({
-            source: vectorSource,
-            style: function (feature) {
-                return styles[feature.get('size')];
+            var requestedPoints = JSON.parse(receivedInfo.data);
+            for (var i = 0; i < requestedPoints.length; i++) {
+                points[i] = new $feature({
+                    'geometry': new ol.geom.Point(
+                        ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
+                    'i': i,
+                    'size': i % 2 ? 3 : 4
+                });
+                points[i].index = i;
+                points[i].longitude = requestedPoints[i].Longitude;
+                points[i].latitude = requestedPoints[i].Latitude;
             }
-        });
-        map.addLayer(vector);
+
+            requestedPoints.splice(0, requestedPoints.length);
+ 
+            map.removeLayer(vector);
+
+            if(vector != null) delete vector.vectorSource;
+            delete vector;
+
+            var vectorSource = new ol.source.Vector({
+                features: points,
+                wrapX: false
+            });
+          
+            /*represents the layer which contains the points*/
+            vector = new ol.layer.Vector({
+                source: vectorSource,
+                style: function (feature) {
+                    return styles[feature.get('size')];
+                }
+            });
+            map.addLayer(vector);           
+        }
     });
 }
 
-loadData();
 
+
+
+function onMapPositionChanged(evt) {
+    var viewBox = map.getView().calculateExtent(map.getSize());  
+    var cornerCoordinates = ol.proj.transformExtent(viewBox, 'EPSG:3857', 'EPSG:4326');
+    
+    loadData(map.getView().getZoom(),
+        cornerCoordinates[1],
+        cornerCoordinates[0],
+        cornerCoordinates[3],
+        cornerCoordinates[2]
+    )
+}
+map.on('moveend', onMapPositionChanged);
+
+onMapPositionChanged(null);

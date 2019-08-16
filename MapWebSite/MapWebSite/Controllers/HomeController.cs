@@ -1,4 +1,5 @@
 ﻿using MapWebSite.Core;
+using MapWebSite.Interaction;
 using MapWebSite.Model;
 using ServiceStack.Serialization;
 using System;
@@ -40,39 +41,15 @@ namespace MapWebSite.Controllers
 
 
         [HttpGet] 
-        public JsonResult RequestDataPoints()
+        public JsonResult RequestDataPoints(decimal latitudeFrom, decimal longitudeFrom, decimal latitudeTo, decimal longitudeTo, int zoomLevel)
         {
-            Random randomSource = new Random();
+            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
 
-            //mock data
-            List<Point> pointsData = new List<Point>()
-            {
-                new Point() { //zoom 20
-                    Longitude = 26.102538390000063m,
-                    Latitude = 44.4267674m
-                },
-                new Point()
-                {
-                    Longitude = 26.102538390000063m - 0.961m,
-                    Latitude = 44.4267674m - 0.961m
-                }
-            };
-
-            for (int i = 2; i < 18; i++)
-                pointsData.Add(new Point()
-                {
-                    Latitude = pointsData[0].Latitude + 0.0001m * i * i,
-                    Longitude = pointsData[0].Longitude + 0.0001m * i * i,
-
-                });
-
-
-            for (int i = 0; i < 1000; i++)
-                pointsData.Add(new Point()
-                {
-                    Longitude = 26.102538390000063m + (decimal)randomSource.NextDouble() * 10,
-                    Latitude = 44.4267674m + (decimal)randomSource.NextDouble() * 10
-                });
+            var pointsData = databaseInteractionHandler.RequestPoints(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
+                                      new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
+                                      "woofwoof",
+                                      "mainTest",
+                                      zoomLevel % 20);
 
             return Json(new { data = pointsData.DataContractJSONSerialize() }, JsonRequestBehavior.AllowGet);
         }
