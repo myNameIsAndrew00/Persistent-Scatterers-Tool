@@ -1,11 +1,12 @@
 .plot_container {
-
+    /*remainder: add point-event if another items are added inside*/
     .plot {
         width: 500px;
         height: 340px;
 
         .graphPoint {
-            transition: 0.3s;
+            pointer-events: initial;
+            transition: 0.15s;
         }
 
         .graphPoint:hover {
@@ -19,6 +20,7 @@
     }
 
     .plot-popup {
+        pointer-events: initial;
         position: fixed;
         margin: 5px;
         top: 500px;
@@ -31,7 +33,7 @@
 
         label {
             color: black;
-            vertical-align: middle; 
+            vertical-align: middle;
             font-weight: 100;
             font-size: 11px;
         }

@@ -11,21 +11,24 @@
     opacity: 0;
     transition: 0.2s;
     overflow-x: hidden;
+    overflow-y: hidden;
+    visibility: hidden;
 
     .close-button {
         float: right;
         margin: 20px;
-        pointer-events: initial;
+        pointer-events: initial; 
+        background: transparent;
 
         button {
             background: none;
             border: none;
             transition: 0.3s;
+            padding: 5px 8px 0px 9px;
         }
 
         button:hover {
             background: orange;
-            padding: 4px 8px 0px 9px;
             border-radius: 10px;
         }
 
@@ -35,17 +38,62 @@
     }
 
     .info {
+        pointer-events: none;
+
+        hr {
+            border: solid;
+            margin-top: -10px;
+            border-color: white;
+            border-width: 1px;
+        }
+
+        .text {
+            display: grid;
+            grid-template-columns: 1fr 5fr;
+            grid-template-areas: "left right";
+
+
+            .left-area {
+                grid-area: left;
+
+                h3 {
+                    margin: 0;
+                }
+            }
+        }
+
         width: 50%;
         margin: 0 auto;
         margin-top: 50px;
         margin-bottom: 50px;
         color: white;
         cursor: default;
-        pointer-events: initial;
 
 
-        h3 {
-            margin: 0;
+        ul {
+            grid-area: right;
+            list-style: none;
+
+            li {
+                border-bottom: solid;
+                border-width: 1px;
+                padding-bottom: 5px;
+                height: 30px;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+
+                .value {
+                    float: right;
+                    font-weight: 700;
+                    font-weight: 100;
+                }
+
+                label {
+                    overflow: hidden;
+                }
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ namespace MapWebSite.Core
             return dt;
         }
 
-        public static string JSONSerialize(this object ObjectToBeSerialized, bool UseQuotesForColumns = true)
+        public static string JSONSerialize<T>(this T ObjectToBeSerialized, bool UseQuotesForColumns = true)
         {
             if (UseQuotesForColumns)  return JsonConvert.SerializeObject(ObjectToBeSerialized);
 

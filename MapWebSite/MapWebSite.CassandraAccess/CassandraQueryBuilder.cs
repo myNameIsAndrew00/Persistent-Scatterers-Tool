@@ -31,6 +31,8 @@ namespace MapWebSite.CassandraAccess
 
         public List<string> IgnoredColumnNames { get; set; } = null;
 
+        public List<string> SelectColumnNames { get; set; } = null;
+
         public string[] Parameters { get; set; }
 
         public Type Type { get; set; }
@@ -75,11 +77,11 @@ namespace MapWebSite.CassandraAccess
 
         }
 
-       
+
 
         /// <summary>
         /// Use this method to generate a insert query string.<br></br>
-        /// Properties used: TableName, Parameters
+        /// Properties used: TableName, Parameters, SelectColumnNames
         /// </summary>
         /// <returns></returns>
         public string BuildInsertQuery()
@@ -95,7 +97,7 @@ namespace MapWebSite.CassandraAccess
 
         /// <summary>
         /// Use this method to build an insert query based on a class decorated with UserDefinedType Attribute.<br></br>
-        /// Properties used: TableName, Type
+        /// Properties used: TableName, Type, IgnoredColumnNames
         /// </summary>
         /// <returns></returns>
         public string BuildInsertQueryFromType()
@@ -164,7 +166,20 @@ namespace MapWebSite.CassandraAccess
                 queryBuilder.AppendFormat(":{0} ", clause.Item1);
             };
 
-            queryBuilder.AppendFormat("select * from {0} ", tableName);
+            Action apendSelectColumns = delegate ()
+            {
+                queryBuilder.Append("select ");
+                if (SelectColumnNames == null){
+                    queryBuilder.Append('*');
+                    return;
+                }
+                SelectColumnNames.ForEach(column =>
+                    queryBuilder.AppendFormat(" {0},", column)); 
+                queryBuilder.Remove(queryBuilder.Length - 1, 1);
+            };
+
+            apendSelectColumns();
+            queryBuilder.AppendFormat(" from {0} ", tableName);
 
             if (clausesList.Count > 0) queryBuilder.Append("where ");
 

@@ -92,6 +92,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Serialization.cs" />
     <Compile Include="Database\CassandraTest.cs" />
     <Compile Include="Database\CheckTest.cs" />
     <Compile Include="Database\InsertTest.cs" />
@@ -131,9 +132,7 @@
       <Name>MapWebSite</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

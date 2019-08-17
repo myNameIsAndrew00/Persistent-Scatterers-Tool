@@ -1,9 +1,44 @@
-﻿<div class="info">
-    <h3>Longitude:</h3>
-    <p id="longitude"></p>
-    <h3>Latitude:</h3>
-    <p id="latitude"></p>
+﻿<div class="info" id="_point-info">
 
+    <h1>Coordinate info</h1>
+    <hr />
+    <div class="text">
+        <div class="left-area">
+            
+            <h3>Longitude:</h3>
+            <p id="longitude"></p>
+            <h3>Latitude:</h3>
+            <p id="latitude"></p>
+        </div>
+
+        <ul>
+            <li>
+                <label>ID</label>
+                
+                <label id="ID" class="value">N/A</label>
+            </li>
+            <li>
+                <label>Height</label>
+                <label id="height" class="value">N/A</label>
+            </li>
+            <li>
+                <label>Deformation rate</label>
+                <label id="def_rate" class="value">N/A</label>
+            </li>
+            <li>
+                <label>Standard deviation</label>
+                <label id="std_dev" class="value">N/A</label>
+            </li>
+            <li>
+                <label>Estimated height</label>
+                <label id="est_height" class="value">N/A</label>
+            </li>
+            <li>
+                <label>Estimated def. rate</label>
+                <label id="est_def_rate" class="value">N/A</label>
+            </li>
+        </ul>
+    </div>
     <div class="plot_container">
         <svg class="plot" id="plot" version="1.1" width="1000" height="1000">
 

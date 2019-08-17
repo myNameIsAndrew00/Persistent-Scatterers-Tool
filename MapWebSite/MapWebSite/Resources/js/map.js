@@ -63,12 +63,24 @@ var map = new $map({
  */
 
 function handleClickFunction(e) {
+    if (e.selected.length == 0) return;
+    var point = e.selected[0];
+    $.ajax({
+        type: "GET",
+        data: {
+            zoomLevel: map.getView().getZoom(),
+            latitude: point.latitude,
+            longitude: point.longitude,
+            identifier: point.ID,
+        },
+        url: '/home/RequestPointDetails',
+        success: function (receivedInfo) {
+            var point = JSON.parse(receivedInfo.data);
+            setPointInfoData(point);         
+        }           
+    });
 
-    selectedPointIndex = e.selected[0].index;
-    document.getElementById("longitude").innerHTML = e.selected[0].longitude;
-    document.getElementById("latitude").innerHTML = e.selected[0].latitude;
     diplayPointInfo();
-
    
     /*change the point style*/
     /*e.selected[0].setStyle(new ol.style.Style({
@@ -113,7 +125,7 @@ function loadData(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongi
                     'i': i,
                     'size': i % 2 ? 3 : 4
                 });
-                points[i].index = i;
+                points[i].ID = requestedPoints[i].Number;
                 points[i].longitude = requestedPoints[i].Longitude;
                 points[i].latitude = requestedPoints[i].Latitude;
             }
