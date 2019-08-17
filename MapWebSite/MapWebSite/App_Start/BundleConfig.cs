@@ -29,6 +29,7 @@ namespace MapWebSite
             loginStyleBundle.Orderer = new NullOrderer();
             
             var homeStyleBundle = new CustomStyleBundle("~/Content/home_sass").Include(
+                "~/Resources/css/plot.scss",
                 "~/Resources/css/home.scss");
             homeStyleBundle.Orderer = new NullOrderer();
 
@@ -72,6 +73,7 @@ namespace MapWebSite
             bundles.Add(new ScriptBundle("~/scripts/home").Include(
                 "~/Resources/js/home.js",
                 "~/Resources/js/point_info.js",
+                "~/Resources/js/plot.js",
                 "~/Resources/js/map.js"));
 
             bundles.Add(new ScriptBundle("~/scripts/menu").Include(

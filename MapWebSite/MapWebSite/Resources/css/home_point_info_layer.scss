@@ -1,6 +1,7 @@
 ﻿@import 'colors.scss';
 
 .point-info-layer {
+    pointer-events: none;
     position: absolute;
     height: 100%;
     width: 45%;
@@ -9,10 +10,12 @@
     background: linear-gradient(-90deg,get_color(blue),transparent);
     opacity: 0;
     transition: 0.2s;
+    overflow-x: hidden;
 
     .close-button {
         float: right;
         margin: 20px;
+        pointer-events: initial;
 
         button {
             background: none;
@@ -38,6 +41,7 @@
         margin-bottom: 50px;
         color: white;
         cursor: default;
+        pointer-events: initial;
 
 
         h3 {

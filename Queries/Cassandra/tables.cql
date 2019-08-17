@@ -12,7 +12,7 @@ create table points_by_dataset(
 	displacements list<FROZEN<points_displacements>>,
 	
 	PRIMARY KEY((dataset_id, number), longitude, latitude)
-) WITH CLUSTERING ORDER BY(longitude desc, latitude desc)
+) WITH CLUSTERING ORDER BY(longitude desc, latitude desc);
 
 
 
@@ -28,7 +28,7 @@ create table points_by_dataset_zoom_3(
 	estimated_deformation_rate decimal,
 	observations text,
 	PRIMARY KEY((dataset_id, number), longitude, latitude)
-) WITH CLUSTERING ORDER BY(longitude desc, latitude desc)
+) WITH CLUSTERING ORDER BY(longitude desc, latitude desc);
 
 
 create table points_by_dataset_zoom_4(

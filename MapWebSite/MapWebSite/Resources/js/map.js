@@ -64,10 +64,10 @@ var map = new $map({
 
 function handleClickFunction(e) {
 
-    diplayPointInfo();
     selectedPointIndex = e.selected[0].index;
     document.getElementById("longitude").innerHTML = e.selected[0].longitude;
     document.getElementById("latitude").innerHTML = e.selected[0].latitude;
+    diplayPointInfo();
 
    
     /*change the point style*/

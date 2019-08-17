@@ -259,6 +259,7 @@
     <Content Include="Resources\js\login.js" />
     <Content Include="Resources\js\map.js" />
     <Content Include="Resources\js\menu.js" />
+    <Content Include="Resources\js\plot.js" />
     <Content Include="Resources\js\point_info.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
@@ -326,6 +327,7 @@
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Home\Settings Content\UploadPoints.cshtml" />
     <Content Include="Views\Home\PointInfo.cshtml" />
+    <Content Include="Resources\css\plot.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
