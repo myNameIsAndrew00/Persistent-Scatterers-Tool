@@ -1,9 +1,7 @@
 ﻿using Cassandra;
 using MapWebSite.CassandraAccess;
-using MapWebSite.Core;
 using MapWebSite.Core.Database;
-using MapWebSite.Model;
-using MapWebSite.Repository;
+using MapWebSite.Model; 
 using MapWebSite.Repository.Entities;
 using System;
 using System.Collections.Async;
@@ -178,6 +176,7 @@ namespace MapWebSite.Repository
 
         private IEnumerable<Point> convertRowSetToPointList(List<Row> rowSet)
         {
+        
             ConcurrentBag<Point> result = new ConcurrentBag<Point>();
             Parallel.ForEach(rowSet, row =>
             {
@@ -192,9 +191,24 @@ namespace MapWebSite.Repository
                     Number = Convert.ToInt32(row["number"]),
                     Observations = row["observations"]?.ToString(),
                     StandardDeviation = Convert.ToDecimal(row["standard_deviation"]),
-                    Displacements = null
+                    Displacements = row.GetColumn("displacements") == null ? null : convertDisplacements(row["displacements"] as PointDisplacementType[])
                 });
             });
+
+            return result;
+        }
+
+        private List<Point.Displacement> convertDisplacements(PointDisplacementType[] displacements)
+        {
+            List<Point.Displacement> result = new List<Point.Displacement>();
+            foreach (var displacement in displacements)
+                result.Add(new Point.Displacement()
+                {
+                    Date = displacement.date.DateTime,
+                    DaysFromReference = displacement.days_from_reference,
+                    JD = displacement.jd,
+                    Value = displacement.value
+                });
 
             return result;
         }

@@ -6,7 +6,7 @@
 
         .graphPoint {
             pointer-events: initial;
-            transition: 0.15s;
+            transition: 0.15s; 
         }
 
         .graphPoint:hover {
@@ -57,5 +57,10 @@
 
     .plot-popup-hidden {
         visibility: hidden;
+    }
+
+    h3 {
+        text-align: center;
+        margin-top: 150px;
     }
 }

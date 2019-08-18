@@ -8,7 +8,7 @@ function attrValue(node,attributeName){
 }
 
 class PlotDrawer{
-    constructor(containerID, popupID, oXLength, oYLength, oXInterval, oYInterval){
+    constructor(containerID, popupID, oXLength, oYLength, oXInterval, oYInterval, oxLabel, oyLabel){
         this.containerID = containerID;
         this.popupID = popupID;
 
@@ -16,7 +16,9 @@ class PlotDrawer{
         this.length = { oX: oXLength, oY: oYLength };
         this.originAxesValue = { oX: oXInterval.Left, oY: oYInterval.Bottom };
         this.endAxesValue = { oX: oXInterval.Right, oY: oYInterval.Top };
-        
+        this.oxLabel = oxLabel;
+        this.oyLabel = oyLabel;
+
         this.DrawAxis();     
         this.DrawReferences();  
         
@@ -69,15 +71,19 @@ class PlotDrawer{
         } 
     }
 
-    DrawPoints(points){
-        drawer.deleteGraphPoints();
+    DrawPoints(points, graphType) {
+
+        //this is the 'bars' graphType.. cand be changed
+        this.deleteGraphPoints();
         var origin = { X: this.origin.X, Y: this.origin.Y };
+        var width = (this.length.oX / points.length) / 2;
+
         for(var index = 0;  index < points.length; index++){
-            origin.X = this.transformToXAxisValue(points[index].X);
+            origin.X = this.origin.X + this.transformToXAxisValue(points[index].X);
             this.drawLine(origin, 
                           false, 
                           -(this.transformToYAxisValue(points[index].Y)), 
-                          '8', 
+                          width, 
                           [ { key: 'graphPoint', value: '{ "oY": ' + points[index].Y + ', "oX": ' + points[index].X + '}' },
                             { key: 'class', value: 'graphPoint '}]);
         }
@@ -85,10 +91,13 @@ class PlotDrawer{
 
     DrawAxisLabels(){
         this.drawText({ X:this.origin.X - 10, Y:this.origin.Y + 20 }, this.originAxesValue.oX);
-         this.drawText({ X:this.origin.X + this.length.oX, Y:this.origin.Y + 20 }, this.endAxesValue.oX);
+        this.drawText({ X:this.origin.X + this.length.oX, Y:this.origin.Y + 20 }, this.endAxesValue.oX);
 
-        this.drawText({ X:this.origin.X - 20, Y:this.origin.Y - this.length.oY - 5 }, this.endAxesValue.oY);
-        this.drawText({ X:this.origin.X - 20, Y:this.origin.Y - 5 }, this.originAxesValue.oY);
+        this.drawText({ X:this.origin.X - 20, Y:this.origin.Y - this.length.oY + 5 }, this.endAxesValue.oY);
+        this.drawText({ X: this.origin.X - 20, Y: this.origin.Y }, this.originAxesValue.oY);
+
+        this.drawText({ X: this.origin.X + this.length.oX / 2 - 20, Y: this.origin.Y + 20 }, this.oxLabel);
+        this.drawText({ X: this.origin.X, Y: this.origin.Y - this.length.oY - 10 }, this.oyLabel);
     }
     /*
     *   Private methods 
@@ -145,18 +154,3 @@ class PlotDrawer{
     
 }
  
-
-//sample of use
-var drawer = new PlotDrawer('#plot', '#plot-popup', 400, 200, { Left: -100, Right: 1000 }, { Bottom: -5, Top:10 });
-var points = [
-    { X: 500, Y: 10},
-    { X: 700, Y: 5},
-    { X: 300, Y: 4},
-    { X: 150, Y: -1},
-    { X: 900, Y: 7},
-    { X: 350, Y: 6}
-];
-
-drawer.DrawPoints(points);
-
- //TODO: popup

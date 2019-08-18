@@ -76,7 +76,7 @@ namespace MapWebSite.Core.DataPoints
                     DaysFromReference = headerData[ index ].Item3,
                     Value = lineDisplacements[ index ]
                 });
-
+           
             return point;
         }
 

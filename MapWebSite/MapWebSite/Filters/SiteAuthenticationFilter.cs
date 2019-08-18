@@ -26,8 +26,9 @@ namespace MapWebSite.Filters
                 FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
                  
 
-                if (new JavaScriptSerializer().Deserialize(ticket.UserData, typeof(Interaction.SiteUser)) == null)
-                    throw new Exception();
+                filterContext.HttpContext.User = new JavaScriptSerializer().Deserialize(ticket.UserData, typeof(Interaction.SiteUser))  
+                                                        as Interaction.SiteUser;
+                if(filterContext.HttpContext.User == null)  throw new Exception();
              }
             catch{
                 filterContext.Result = new HttpUnauthorizedResult();
@@ -51,7 +52,7 @@ namespace MapWebSite.Filters
             //any authentication changes are made here
             if (string.IsNullOrEmpty(username)) return;
 
-            var userData = new JavaScriptSerializer().Serialize(new Interaction.SiteUser() { Username = username });
+            var userData = new JavaScriptSerializer().Serialize(new Interaction.SiteUser(new Interaction.SiteIdentity() { Name = username }));
 
             FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1,
                                                                             username,
@@ -84,17 +85,7 @@ namespace MapWebSite.Filters
             
                  
         }
-
-        public static Interaction.SiteUser GetCurrentUser()
-        {
-            HttpCookie cookie = HttpContext.Current.Request.Cookies[authenticationCookieName];
-  
-            FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-
-            return new JavaScriptSerializer().Deserialize(ticket.UserData, typeof(Interaction.SiteUser))
-                as Interaction.SiteUser;
-              
-        }
+ 
 
     }
 }
