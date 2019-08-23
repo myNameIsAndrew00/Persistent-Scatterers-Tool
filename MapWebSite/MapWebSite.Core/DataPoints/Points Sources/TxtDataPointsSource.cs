@@ -9,7 +9,7 @@ namespace MapWebSite.Core.DataPoints
 {
     using HeaderData = Tuple<DateTime, decimal, decimal>;
     
-
+    [Obsolete("This class will be replaced by one writen in C++")]
     public class TxtDataPointsSource : IDataPointsSource
     {
         readonly int headerUnusedLinesCount  = 10;

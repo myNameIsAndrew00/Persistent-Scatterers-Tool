@@ -16,10 +16,6 @@
 
 </div>
 
-<div id="color-picker-info-container"
-     class="color-picker-info-container">
-    <h1>Build your own color palette</h1>
-</div>
 
 <div id="color-picker" class="color-picker color-picker-hidden">
     <div class="color-picker-tumb"></div>
@@ -50,6 +46,19 @@
         <button onclick="changeColorPickerVisibility(false)">done</button>
         <button class="close-button" onclick="">X</button>
     </div>
+
 </div>
+
+<div id="color-picker-info-container"
+     class="color-picker-info-container">
+    <h1>Build your own color palette</h1>
+
+    <section class="instructions-container" id="instructions-container">
+        <article id="picker-info-card"></article>
+        <article id="name-info-card"></article>
+        <article id="finish-info-card"></article>
+    </section>
+</div>
+
 
 @Scripts.Render("~/scripts/color_picker")

@@ -52,6 +52,7 @@ namespace MapWebSite.Controllers
             return Json(new { data = pointsData.DataContractJSONSerialize() }, JsonRequestBehavior.AllowGet);
         }
             
+        [HttpGet]
         public JsonResult RequestPointDetails(decimal latitude, decimal longitude, int identifier, int zoomLevel)
         {
             //TODO: change the user and the dataset name

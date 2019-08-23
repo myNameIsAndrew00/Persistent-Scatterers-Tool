@@ -16,7 +16,7 @@ namespace MapWebSite.Controllers
 
         [HttpPost]
         public ActionResult Login(string username, string password)
-        {
+        { 
             //TODO: modify string with SecureString       
             Filters.SiteAuthenticationFilter.LogoutUser();
 

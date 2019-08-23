@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{e254057b-c0cf-46bc-8d5d-1016cfa982d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interfaces">
+      <UniqueIdentifier>{2076db97-3bd5-4049-bccc-180e29994d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{cdee7cbd-90b5-459e-84a8-9c009ed92f99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Points Sources">
+      <UniqueIdentifier>{dd537497-8f9b-4518-b1dc-54bb978b7114}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Points Zoom">
+      <UniqueIdentifier>{82ef9add-ecc2-4a4a-93d3-3e9db0b98008}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\Model">
+      <UniqueIdentifier>{305d1285-d7b9-486d-89d7-e12e8d4728ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Model">
+      <UniqueIdentifier>{4dad49c2-6c93-4cb4-9641-60638d2e37af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Points Zoom">
+      <UniqueIdentifier>{66c6d8b3-00c5-47ea-b674-4c877c110309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\Points Sources">
+      <UniqueIdentifier>{e7b6644c-20e6-4f3f-a28c-5fce8bc28a70}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Interfaces\IDataPointsSource.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\IDataPointsZoomLevelsGenerator.h">
+      <Filter>Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\TxtDataPointsSource.h">
+      <Filter>Headers\Points Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\SquareMeanPZGenerator.h">
+      <Filter>Headers\Points Zoom</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\PointsDataSet.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Point.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Headers\Displacement.h">
+      <Filter>Headers\Model</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sources\Displacement.cpp">
+      <Filter>Sources\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Point.cpp">
+      <Filter>Sources\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\PointsDataSet.cpp">
+      <Filter>Sources\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\TxtDataPointsSource.cpp">
+      <Filter>Sources\Points Sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

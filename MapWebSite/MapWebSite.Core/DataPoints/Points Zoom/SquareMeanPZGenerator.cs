@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace MapWebSite.Core.DataPoints
 {
+
+    [Obsolete("This class will be replaced by one writen in C++")]
     /// <summary>
     /// Use this class to generate zoom levels points for a certain DataSet of Points
     /// This class create points dividing provided points in certains squares of fixed dimension

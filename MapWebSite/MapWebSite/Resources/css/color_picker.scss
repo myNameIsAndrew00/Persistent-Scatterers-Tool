@@ -9,7 +9,7 @@ html, body {
     position: relative;
     user-select: none;
     border-radius: 4px;
-    background: rgba(0,0,0,0.1);
+    background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
     top: 115px;
     margin-left: auto;
     margin-right: auto;
@@ -33,14 +33,14 @@ html, body {
         width: 800px;
         border: none;
         height: 4px;
-        background: rgb(54, 31, 156);
+        background: rgb(54, 31, 156); //TODO: make color to be accesed via variable
         user-select: none;
     }
 
     .dot {
         height: 25px;
         width: 25px;
-        background-color: rgb(54, 31, 156);
+        background-color: rgb(54, 31, 156); //TODO: make color to be accesed via variable
         border-radius: 50%;
         display: inline-block;
         user-select: none;
@@ -58,27 +58,40 @@ html, body {
         width: 27px;
         top: 9px;
     }
-
-   
 }
 
 .color-picker-info-container {
     position: relative;
-    top: 205px;
+    top: 160px;
     margin-left: auto;
     margin-right: auto;
     left: 0;
     right: 0;
 
-    h1{
+    h1 {
         text-align: center;
+    }
+
+    .instructions-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+
+        article {
+            color: black;
+            padding: 170px;
+            margin: 25px;
+            background-color: rgb(227, 227, 227); //TODO: make color to be accesed via variable
+            border-radius: 10px;
+        }
     }
 }
 
 
 .color-picker {
     position: absolute;
-    background: rgb(220,220,220);
+    background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
     z-index: 1000;
     border-radius: 4px;
     top: 200px;
@@ -93,7 +106,7 @@ html, body {
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-bottom: 16px solid;
-        border-bottom-color: rgb(220,220,220);
+        border-bottom-color: rgb(227, 227, 227); //TODO: make color to be accesed via variable
         margin-top: -15px;
     }
 
@@ -143,7 +156,7 @@ html, body {
         left: 10px;
     }
 
-    .close-button:hover{
+    .close-button:hover {
         background: red;
     }
 }

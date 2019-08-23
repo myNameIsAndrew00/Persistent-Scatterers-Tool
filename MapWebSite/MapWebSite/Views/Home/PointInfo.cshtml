@@ -4,7 +4,7 @@
     <hr />
     <div class="text">
         <div class="left-area">
-            
+
             <h3>Longitude:</h3>
             <p id="longitude"></p>
             <h3>Latitude:</h3>
@@ -14,7 +14,7 @@
         <ul>
             <li>
                 <label>ID</label>
-                
+
                 <label id="ID" class="value">N/A</label>
             </li>
             <li>
@@ -42,7 +42,18 @@
     <div class="plot_container">
         <svg class="plot" id="plot" version="1.1" width="1000" height="1000">
 
+            
         </svg>
+
+        <ul id="plot-menu" class="plot-menu">
+            <li>
+                <object type="image/svg+xml" data="/Resources/resources/icons/bar_plot_icon.svg" width="25x" height="20px"></object>
+            </li>
+            <li>
+                <object type="image/svg+xml" data="/Resources/resources/icons/points_plot_icon.svg" width="25x" height="20px"></object>
+            </li>
+        </ul>
+
         <div class="plot-popup plot-popup-hidden" id="plot-popup">
             <button class="plot-popup-close">X</button>
             <label class="plot-plopup-text"></label>

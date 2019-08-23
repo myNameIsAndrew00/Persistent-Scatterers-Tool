@@ -28,6 +28,7 @@ function setPointInfoData(point) {
     if (plotUnavailable) {
         pointLayer.find("#no-plot-text").css("display", "block");
         pointLayer.find("#plot").css("display", "none");
+        pointLayer.find("#plot-menu").css("display", "none");
     }
     else { 
         var points = [];
@@ -58,7 +59,9 @@ function setPointInfoData(point) {
       
         pointLayer.find("#no-plot-text").css("display", "none");
         pointLayer.find("#plot").css("display", "block");
+        pointLayer.find("#plot-menu").css("display", "block");
     }
+
     pointLayer.find("#ID").html(point.Number);
     pointLayer.find("#longitude").html(point.Longitude);
     pointLayer.find("#latitude").html(point.Latitude);
@@ -72,7 +75,7 @@ function setPointInfoData(point) {
 
 function drawPlot(values, oXLeft, oXRight, oYBottom, oYTop) {
    
-    var drawer = new PlotDrawer('#plot', '#plot-popup', 400, 200,
+    var drawer = new PlotDrawer('#plot', '#plot-popup', 450, 270,
         {
             Left: Math.round(oXLeft),
             Right: Math.round(oXRight)
@@ -84,6 +87,6 @@ function drawPlot(values, oXLeft, oXRight, oYBottom, oYTop) {
         'reference (days)',
         'value');
 
-    drawer.DrawPoints(values);
+    drawer.DrawPoints(values,'line');
 
 }

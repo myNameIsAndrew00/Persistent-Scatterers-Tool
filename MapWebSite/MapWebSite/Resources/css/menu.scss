@@ -26,7 +26,7 @@
 
 
     .main-select-menu {
-        position: absolute;
+        position: fixed;
         display: flex;
         bottom: 0;
         height: 140px;
@@ -101,7 +101,7 @@
     }
 
     .secondary-menu {
-        position: absolute;
+        position: fixed;
         top: 10px;
         left: 0;
         transition: 0.3s;
