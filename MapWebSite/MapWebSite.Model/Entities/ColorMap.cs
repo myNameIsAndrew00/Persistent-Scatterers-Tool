@@ -11,9 +11,9 @@ namespace MapWebSite.Model
     {
         public string Color { get; set; }
 
-        public int Left { get; set; }
+        public decimal Left { get; set; }
 
-        public int Right { get; set; }
+        public decimal Right { get; set; }
 
     }
 

@@ -14,14 +14,21 @@ namespace MapWebSite.Core.DataPoints
     {
         readonly int headerUnusedLinesCount  = 10;
 
+        readonly Helper.UTMConverter utmConverter = new Helper.UTMConverter();
+
         public string HeaderFile { get; set; } = null;
 
         public string DisplacementsFile { get; set; } = null;
 
+        public int Zone { get; set; } = int.MinValue;
+
+        public char LatitudeZone { get; set; } = '0';
+
         public PointsDataSet CreateDataSet(string datasetName)
         {
             if (HeaderFile == null || DisplacementsFile == null) return null;
-             
+            if (Zone == int.MinValue || LatitudeZone == '0') throw new ArgumentException("Zone and Latitude properties must be set");
+
             ConcurrentBag<Point> points = new ConcurrentBag<Point>();
             PointsDataSet pointsDataSet = new PointsDataSet() { Name = datasetName, Points = points, ZoomLevel = 0 };
 
@@ -56,17 +63,20 @@ namespace MapWebSite.Core.DataPoints
             {
                 Displacements = new List<Point.Displacement>(),
                 Number       = Convert.ToInt32(lineInfo["PointNumber"]),
-                DeformationRate              = lineInfo["DeformationRate"],
-                Longitude                    = lineInfo["NorthingProjection"],
+                DeformationRate              = lineInfo["DeformationRate"],              
                 EstimatedDeformationRate     = lineInfo["EstimatedDeformation"],
                 EstimatedHeight              = lineInfo["EstimatedHeight"],
-                Height                       = lineInfo["Height"],
-                Latitude                     = lineInfo["EastingProjection"],
+                Height                       = lineInfo["Height"],                  
                 ReferenceImageX              = lineInfo["ReferenceImageX"],
                 ReferenceImageY              = lineInfo["ReferenceImageY"],
                 StandardDeviation            = lineInfo["StandardDeviation"],
                 Observations = null // TODO:add information to observations                
             };
+            Tuple<decimal, decimal> coordinatesPair = utmConverter.ToLatLong(this.Zone, this.LatitudeZone, 
+                                                                            (double)lineInfo["EastingProjection"], 
+                                                                            (double)lineInfo["NorthingProjection"]);
+            point.Latitude = coordinatesPair.Item1;
+            point.Longitude = coordinatesPair.Item2;
 
             for (int index = 0; index < lineDisplacements.Length; index++)
                 point.Displacements.Add(new Point.Displacement()

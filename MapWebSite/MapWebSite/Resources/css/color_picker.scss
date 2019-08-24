@@ -10,7 +10,7 @@ html, body {
     user-select: none;
     border-radius: 4px;
     background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
-    top: 115px;
+    top: 105px;
     margin-left: auto;
     margin-right: auto;
     left: 0;
@@ -62,7 +62,7 @@ html, body {
 
 .color-picker-info-container {
     position: relative;
-    top: 160px;
+    top: 140px;
     margin-left: auto;
     margin-right: auto;
     left: 0;
@@ -80,13 +80,43 @@ html, body {
 
         article {
             color: black;
-            padding: 170px;
-            margin: 25px;
+            padding: 50px;
+            margin: 35px;
+            text-align: center;
             background-color: rgb(227, 227, 227); //TODO: make color to be accesed via variable
             border-radius: 10px;
+            max-width: 300px;
+            height: 400px;
+
+            input, button {
+                margin: 10px;
+                background: #c6a66c; //TODO: make color to be accesed via variable
+                transition: 0.3s;
+                padding: 5px 15px 5px 15px;
+                border: none;
+                border-radius: 8px;
+                color: white;
+            }
+
+            input[type="text"]{
+                margin-top: 32px;
+            }
+
+            button:disabled{
+                background-color: gray;
+            }
+
+            button:disabled:hover{
+                background-color: gray;
+            }
+
+            input:hover, button:hover {
+                background: orange;
+            }
         }
     }
 }
+
 
 
 .color-picker {

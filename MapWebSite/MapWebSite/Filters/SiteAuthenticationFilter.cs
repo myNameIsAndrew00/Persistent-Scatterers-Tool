@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Newtonsoft.Json;
 using System;
 using System.Web;
 using System.Web.Mvc;
@@ -24,10 +25,10 @@ namespace MapWebSite.Filters
                 if (cookie.Expires > DateTime.Now) throw new Exception();
 
                 FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-                 
 
-                filterContext.HttpContext.User = new JavaScriptSerializer().Deserialize(ticket.UserData, typeof(Interaction.SiteUser))  
-                                                        as Interaction.SiteUser;
+
+                filterContext.HttpContext.User = JsonConvert.DeserializeObject<Interaction.SiteUser>(ticket.UserData);
+                                                         
                 if(filterContext.HttpContext.User == null)  throw new Exception();
              }
             catch{

@@ -38,3 +38,15 @@ create table DataSets(
 	primary key (data_set_id),
 	foreign key (user_id) references Users(user_id) on delete cascade
 )
+
+
+create table ColorPalettes(
+	color_palette_id int identity(1,1),
+	palette_name varchar(255) not null unique,
+	palette_serialization text not null,
+	user_id int not null,
+
+	primary key(color_palette_id),
+	foreign key (user_id) references Users(user_id)
+)
+ 

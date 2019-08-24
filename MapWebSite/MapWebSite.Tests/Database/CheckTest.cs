@@ -1,4 +1,5 @@
-﻿using MapWebSite.Core.DataPoints;
+﻿using MapWebSite.Core;
+using MapWebSite.Core.DataPoints;
 using MapWebSite.Interaction;
 using MapWebSite.Model;
 using MapWebSite.Repository.Entities;
@@ -30,19 +31,28 @@ namespace MapWebSite.Tests.Database
         {
             IDataPointsSource pointsSource = new TxtDataPointsSource();
 
-            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondHeader.txt";
-            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondDisplacements.txt";
-
+            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\header.txt";
+            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\displacements.txt";
+            (pointsSource as TxtDataPointsSource).LatitudeZone = 'T';
+            (pointsSource as TxtDataPointsSource).Zone = 35;
             PointsDataSet dataset = pointsSource.CreateDataSet("Test");
 
             IEnumerable<PointType> points = PointType.GetPoints(dataset);
 
             IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
 
-            PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 4, 20);
+            PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
 
             Assert.IsNotNull(dataset);
             Assert.IsNotNull(points);
+        }
+
+
+        [TestMethod]
+        public void UTMConverterTest()
+        {
+            Helper.UTMConverter converter = new Helper.UTMConverter();
+            var result = converter.ToLatLong(35, 'T', (double)632353.875m, (double)4919262.500m);
         }
     }
 }

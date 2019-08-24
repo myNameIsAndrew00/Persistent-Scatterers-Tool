@@ -91,5 +91,10 @@ namespace MapWebSite.Interaction
             return this.dataPointsRepository.GetPointDetails(dataSetID, zoomLevel, basicPoint);
         }
 
+        public bool InsertColorPalette(string username, ColorMap colorMap)
+        {
+            return userRepository.CreateColorMap(username, colorMap);
+        }
+
     }
 }

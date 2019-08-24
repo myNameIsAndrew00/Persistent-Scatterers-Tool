@@ -33,9 +33,10 @@ namespace MapWebSite.Tests.Database
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
             IDataPointsSource pointsSource = new TxtDataPointsSource();
 
-            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondHeader.txt";
-            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondDisplacements.txt";
-
+            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\header.txt";
+            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\displacements.txt";
+            (pointsSource as TxtDataPointsSource).LatitudeZone = 'T';
+            (pointsSource as TxtDataPointsSource).Zone = 35;
             PointsDataSet dataset = pointsSource.CreateDataSet("mainTest");
 
             Task<bool> result = handler.InsertDataSet(dataset, "woofwoof");

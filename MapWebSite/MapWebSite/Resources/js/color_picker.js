@@ -111,3 +111,26 @@ function showColorPicker(horizontalPosition) {
 function changeColorPickerVisibility(isVisible){
     isVisible ? $('#color-picker').removeClass('color-picker-hidden') :  $('#color-picker').addClass('color-picker-hidden');
 }
+
+function enableSubmit() {    
+    $('#finish-info-card').children('#send-palette-button').prop('disabled',
+        $('#name-info-card').children('#color-palette-name').val() === '');
+}
+
+function sendColorPalette() {
+    var paletteName = $('#name-info-card').children('#color-palette-name').val();
+
+    if (paletteName === '') return; //TODO: display overlay
+
+    $.ajax({
+        type: "POST",
+        data: {
+            Intervals: colorList.GetColorMap(),
+            Name: paletteName,
+        },
+        url: '/home/SaveColorsPalette',
+        success: function (receivedInfo) {
+            alert('success');
+        }
+    });;
+}

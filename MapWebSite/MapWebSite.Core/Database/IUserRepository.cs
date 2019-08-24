@@ -1,5 +1,5 @@
 ﻿using MapWebSite.Model;
- 
+using System.Collections.Generic;
 
 namespace MapWebSite.Core.Database
 {
@@ -12,6 +12,8 @@ namespace MapWebSite.Core.Database
         int CreateUserPointsDataset(string username, string datasetName);
 
         bool CreateColorMap(string username, ColorMap colorMap);
+
+        IEnumerable<string> GetColorMaps(string username);
 
         int GetDatasetID(string username, string datasetName);
     }

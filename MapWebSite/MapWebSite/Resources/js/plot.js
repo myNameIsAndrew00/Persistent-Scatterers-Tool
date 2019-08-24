@@ -71,7 +71,7 @@ class PlotDrawer {
             this.drawLine(origin, true, this.length.oX - 10, '0.2', null);
         }
     }
- 
+
     DrawPoints(points, graphType) {
         this.deleteGraphPoints();
 
@@ -84,30 +84,41 @@ class PlotDrawer {
                 break;
 
         }
-     
+
     }
 
     DrawAxisLabels() {
-        this.drawText({ X: this.origin.X - 10, Y: this.origin.Y + 20 }, this.originAxesValue.oX);
-        this.drawText({ X: this.origin.X + this.length.oX, Y: this.origin.Y + 20 }, this.endAxesValue.oX);
+        this.deleteLabels();
+        this.drawText({ X: this.origin.X - 10, Y: this.origin.Y + 20 },
+            this.originAxesValue.oX,
+            [{ key: 'label', value: 'axis' }]);
+        this.drawText({ X: this.origin.X + this.length.oX, Y: this.origin.Y + 20 }, this.endAxesValue.oX,
+            [{ key: 'label', value: 'axis' }]);
 
-        this.drawText({ X: this.origin.X - 20, Y: this.origin.Y - this.length.oY + 5 }, this.endAxesValue.oY);
-        this.drawText({ X: this.origin.X - 20, Y: this.origin.Y }, this.originAxesValue.oY);
+        this.drawText({ X: this.origin.X - 20, Y: this.origin.Y - this.length.oY + 5 }, this.endAxesValue.oY,
+            [{ key: 'label', value: 'axis' }]);
+        this.drawText({ X: this.origin.X - 20, Y: this.origin.Y }, this.originAxesValue.oY,
+            [{ key: 'label', value: 'axis' }]);
 
-        this.drawText({ X: this.origin.X + this.length.oX / 2 - 20, Y: this.origin.Y + 20 }, this.oxLabel);
-        this.drawText({ X: this.origin.X, Y: this.origin.Y - this.length.oY - 10 }, this.oyLabel);
+        this.drawText({ X: this.origin.X + this.length.oX / 2 - 20, Y: this.origin.Y + 20 }, this.oxLabel, null);
+        this.drawText({ X: this.origin.X, Y: this.origin.Y - this.length.oY - 10 }, this.oyLabel, null);
     }
 
     /*
     *   Private methods 
     */
 
-    drawText(origin, toWrite) {
+    drawText(origin, toWrite, optionalAttributes) {
         var text = document.createElementNS('http://www.w3.org/2000/svg', "text");
         text.textContent = toWrite;
         text.setAttribute('x', origin.X);
         text.setAttribute('y', origin.Y);
         text.setAttribute('fill', 'white');
+
+        if (optionalAttributes !== null)
+            for (var index = 0; index < optionalAttributes.length; index++)
+                text.setAttribute(optionalAttributes[index].key, optionalAttributes[index].value);
+
         $(this.containerID).append(text);
     }
 
@@ -167,7 +178,7 @@ class PlotDrawer {
 
         drawLine(this);
         drawCircles(this);
-         
+
     }
 
     drawLine(origin, isHorizontaly, length, width, optionalAttributes) {
@@ -208,6 +219,13 @@ class PlotDrawer {
         var nodes = $(this.containerID).children();
         for (var i = 0; i < nodes.length; i++)
             if (hasAttribute(nodes[i], 'graphPoint'))
+        nodes[i].remove();
+    }
+
+    deleteLabels() {
+        var nodes = $(this.containerID).children();
+        for (var i = 0; i < nodes.length; i++)
+            if (hasAttribute(nodes[i], 'label'))
                 nodes[i].remove();
     }
 

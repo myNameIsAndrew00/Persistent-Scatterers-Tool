@@ -140,4 +140,23 @@ class ColorList{
     GetPercentage(position){
         return 100 * (position) / this.barWidth;
     }
+
+    GetColorMap() {
+        
+        var index = 0;
+        var colorMap = [];
+        var currentNodeKey = this.root.pointKey;
+        
+        while (currentNodeKey != null) {
+            var rightNodeKey = this.pointsDictionary[currentNodeKey].rightPointID;
+            colorMap[index++] = {
+                Color: this.pointsDictionary[currentNodeKey].color,
+                Left: this.GetPercentage(this.pointsDictionary[currentNodeKey].position),
+                Right: rightNodeKey == null ? 100 : this.GetPercentage(this.pointsDictionary[rightNodeKey].position)
+            }
+            currentNodeKey = rightNodeKey;
+        }
+
+        return colorMap;
+    }
 }

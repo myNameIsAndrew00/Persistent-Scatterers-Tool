@@ -49,16 +49,54 @@
 
 </div>
 
-<div id="color-picker-info-container"
-     class="color-picker-info-container">
-    <h1>Build your own color palette</h1>
+<!--TODO: puth a form here-->
+ 
+    <div id="color-picker-info-container"
+         class="color-picker-info-container">
+        <h1>Build your own color palette</h1>
 
-    <section class="instructions-container" id="instructions-container">
-        <article id="picker-info-card"></article>
-        <article id="name-info-card"></article>
-        <article id="finish-info-card"></article>
-    </section>
-</div>
-
+        <section class="instructions-container" id="instructions-container">
+            <article id="picker-info-card">
+                <object class="current_displayed_icon"
+                        id="main-menu-icon-0"
+                        width="190px"
+                        height="160px"
+                        type="image/svg+xml"
+                        data="~/Resources/resources/icons/first_gliph.svg" )></object>
+                <h4>Chose colors</h4>
+                <small>
+                    Use the tool above to create a collor palete.<br />
+                    Click the bar if you want to create a new color
+                    and drag dots left or right to set the intervals
+                </small>
+            </article>
+            <article id="name-info-card">
+                <object class="current_displayed_icon"
+                        id="main-menu-icon-0"
+                        width="190px"
+                        height="160px"
+                        type="image/svg+xml"
+                        data="~/Resources/resources/icons/second_gliph.svg" )></object>
+                <h4>Chose a name</h4>
+                <small>Your creation need a name :) chose it carefully, it must be <b>unique</b>.</small>
+                <br />
+                <input onkeyup="enableSubmit()"  id="color-palette-name" type="text" placeholder="enter a name..." >
+            </article>
+            <article id="finish-info-card">
+                <object class="current_displayed_icon"
+                        id="main-menu-icon-0"
+                        width="190px"
+                        height="160px"
+                        type="image/svg+xml"
+                        data="~/Resources/resources/icons/third_gliph.svg" )></object>
+                <h4>Upload</h4>
+                <small>
+                    You are almost done if you look here :) just press the button below if you're done.
+                </small><br />
+                <button id="send-palette-button" onclick="sendColorPalette()" disabled>Finish</button>
+            </article>
+        </section>
+    </div>
+ 
 
 @Scripts.Render("~/scripts/color_picker")

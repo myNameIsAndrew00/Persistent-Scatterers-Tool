@@ -10,7 +10,30 @@ namespace MapWebSite.Controllers
 {
     [Filters.SiteAuthenticationFilter]
     public class HomeController : Controller
-    { 
+    {
+
+        Func<int, int> choseZoomLevel = delegate (int zoomLevel)
+        {
+            switch (zoomLevel)
+            {
+                case 20:
+                case 19:
+                case 18:
+                case 17:
+                    return 0;
+                case 16:
+                case 15:
+                case 14:
+                    return 16;
+                case 13:
+                case 12:
+                case 11:
+                    return 14;
+                default:
+                    return zoomLevel;
+            }
+        };
+
         public ActionResult Index()
         {
 
@@ -31,10 +54,14 @@ namespace MapWebSite.Controllers
             }
         }
           
-        public ActionResult SaveColorsPalette(ColorMap colorMap)
+        [HttpPost]
+        public JsonResult SaveColorsPalette(ColorMap colorMap)
         {
             //TODO: save the color map to the database
-            return View();
+            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            bool result = handler.InsertColorPalette(User.Identity.Name, colorMap);
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -43,11 +70,13 @@ namespace MapWebSite.Controllers
         {
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
             //TODO: change the usern and the dataset name
+
+
             IEnumerable<BasicPoint> pointsData = databaseInteractionHandler.RequestPoints(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
                                       new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
                                       "woofwoof", //this will be changed and customized for current user
                                       "mainTest", //this will be changed and customized for current user
-                                      zoomLevel % 20);
+                                      choseZoomLevel(zoomLevel));
 
             return Json(new { data = pointsData.DataContractJSONSerialize() }, JsonRequestBehavior.AllowGet);
         }
@@ -60,7 +89,7 @@ namespace MapWebSite.Controllers
             
             var point = databaseInteractionHandler.RequestPointDetails("mainTest",//this will be changed and customized for current user
                                                                        "woofwoof",//this will be changed and customized for current user
-                                                                       zoomLevel% 20,
+                                                                       choseZoomLevel(zoomLevel),
                                                                        new BasicPoint()
                                                                        {
                                                                            Latitude = latitude,

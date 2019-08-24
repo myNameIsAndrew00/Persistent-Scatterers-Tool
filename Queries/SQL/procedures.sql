@@ -69,6 +69,38 @@ end
 
 go
 
+if object_id('GetColorPalette', 'P') is not null
+	drop procedure GetColorPalette
+go
+create procedure GetColorPalette 
+	@username as varchar(100),
+	@palette_name as varchar(255)
+as 
+begin
+	select CP.palette_name,
+		   CP.palette_serialization from ColorPalettes as CP
+		inner join Users as U
+		on U.username = @username
+		   and CP.user_id = U.user_id
+		where CP.palette_name = @palette_name
+end
+
+if object_id('GetUserColorPalettes', 'P') is not null
+	drop procedure GetUserColorPalettes
+go
+create procedure GetUserColorPalettes 
+	@username as varchar(100) 
+as 
+begin
+	select CP.palette_name from ColorPalettes as CP
+		inner join Users as U
+		on U.username = @username
+		   and CP.user_id = U.user_id 
+end
+
+
+go
+
 if object_id('InsertPointsDataset', 'P') is not null
 	drop procedure InsertPointsDataset
 go
@@ -102,3 +134,40 @@ begin
 	end catch
 
 end
+
+
+go
+
+if object_id('InsertColorPalette', 'P') is not null
+	drop procedure InsertColorPalette
+go
+create procedure InsertColorPalette
+	@username as varchar(100),
+	@palette_name as varchar(255),
+	@palette_serialization as text
+as 
+begin
+	begin try
+		begin transaction
+			declare @user_id as int = -1; 
+			
+			--Get the user id
+			select @user_id = U.user_id
+			from Users as U where U.username = @username
+
+			--Insert data into the color palettes 
+			insert into ColorPalettes(palette_name, palette_serialization, user_id)
+			values (@palette_name, @palette_serialization, @user_id)
+			
+			select SCOPE_IDENTITY() as ID;
+		commit
+
+		select SCOPE_IDENTITY();
+	end try
+	begin catch
+		rollback;
+		throw;
+	end catch
+
+end
+

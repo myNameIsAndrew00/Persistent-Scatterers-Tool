@@ -3,7 +3,10 @@ using MapWebSite.Core.Database;
 using MapWebSite.Model;
 using MapWebSite.SQLAccess;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 
@@ -36,10 +39,46 @@ namespace MapWebSite.Repository
         }
 
         public bool CreateColorMap(string username, ColorMap colorMap)
-        {
-            //TODO: implement
-            throw new NotImplementedException();
+        { 
+            try
+            {
+                SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("InsertColorPalette")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                    new SqlParameter[]{
+                                                    new SqlParameter("username", username),
+                                                    new SqlParameter("palette_name", colorMap.Name),
+                                                    new SqlParameter("palette_serialization", colorMap.Intervals.JSONSerialize())
+                                                    },                                                  
+                                                    new SqlConnection(this.connectionString));
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return false;
+            }
+            return true;
         }
+
+        public IEnumerable<string> GetColorMaps(string username)
+        {
+            List<string> result = new List<string>();
+
+            using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUserColorPalettes") { CommandType = System.Data.CommandType.StoredProcedure },
+                                               new SqlParameter[]
+                                               {
+                                                    new SqlParameter("username",username)
+                                               },
+                                               new SqlConnection(this.connectionString)))
+            {
+                foreach (DataRow row in colorMapsResult.Tables[0].Rows)
+                    result.Add((string)row["palette_name"]);
+            }
+
+            return result;
+        }
+
 
         public int CreateUserPointsDataset(string username, string datasetName)
         {
@@ -62,6 +101,7 @@ namespace MapWebSite.Repository
             } 
         }
 
+    
         public int GetDatasetID(string username, string datasetName)
         {
             try
