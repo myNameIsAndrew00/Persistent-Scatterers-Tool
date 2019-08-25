@@ -28,6 +28,7 @@ html, body {
 
     .bar {
         position: absolute;
+        padding: 0;
         top: 21px;
         left: 30px;
         width: 800px;
@@ -89,29 +90,15 @@ html, body {
             height: 400px;
 
             input, button {
-                margin: 10px;
-                background: #c6a66c; //TODO: make color to be accesed via variable
-                transition: 0.3s;
-                padding: 5px 15px 5px 15px;
-                border: none;
-                border-radius: 8px;
                 color: white;
             }
 
-            input[type="text"]{
+            input[type="text"] {
                 margin-top: 32px;
             }
 
-            button:disabled{
-                background-color: gray;
-            }
-
-            button:disabled:hover{
-                background-color: gray;
-            }
-
-            input:hover, button:hover {
-                background: orange;
+            button {
+                margin-top: 11px;
             }
         }
     }

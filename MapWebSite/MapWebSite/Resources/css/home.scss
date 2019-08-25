@@ -13,3 +13,25 @@ body, html {
     color: white;
 }
 
+input, button {
+    margin: 10px;
+    background: #c6a66c; //TODO: make color to be accesed via variable  
+    transition: 0.3s;
+    padding: 5px 15px 5px 15px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+}
+
+
+button:disabled {
+    background-color: gray;
+}
+
+button:disabled:hover {
+    background-color: gray;
+}
+
+input:hover, button:hover {
+    background: orange;
+}

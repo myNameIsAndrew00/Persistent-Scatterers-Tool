@@ -130,7 +130,17 @@ function sendColorPalette() {
         },
         url: '/home/SaveColorsPalette',
         success: function (receivedInfo) {
-            alert('success');
+            $('#settings-layer-container').children('#settings-layer-overlay').removeClass('message-overlay-hidden');
+            $('#settings-layer-container').children('#settings-layer-overlay').html(receivedInfo);
+        },
+        error: function (receivedInfo) {
+            $('#settings-layer-container').children('#settings-layer-overlay').removeClass('message-overlay-hidden');
+            $('#settings-layer-container').children('#settings-layer-overlay').html(receivedInfo);
         }
     });;
+}
+
+function hideOverlay() {
+    $('#settings-layer-container').children('#settings-layer-overlay').addClass('message-overlay-hidden');
+    $('#settings-layer-container').children('#settings-layer-overlay').empty();
 }

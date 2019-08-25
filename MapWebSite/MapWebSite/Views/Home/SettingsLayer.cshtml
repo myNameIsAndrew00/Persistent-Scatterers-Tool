@@ -1,12 +1,18 @@
 ﻿<!--this represents the layer when a settings page is requested-->
     <div id="settings-layer-container" class="settings-layer-container-hide ">
-         
+
         <object class="loading-icon loading-icon-hide" id="loading-icon" width="100px" height="100px" type="image/svg+xml" data="~/Resources/resources/icons/loading_icon.svg"></object>
-     
+
+
         <div id="settings-layer" class="settings-layer settings-layer-hide">
         </div>
 
         <button class="close_setting_layer_button" id="close_setting_layer_button" onclick="displayPage(false)">
             <object width="20px" height="30px" type="image/svg+xml" data="~/Resources/resources/icons/close_icon.svg" )></object>
         </button>
+
+
+        <div id="settings-layer-overlay" class="message-overlay message-overlay-hidden">           
+        </div>
+
     </div>

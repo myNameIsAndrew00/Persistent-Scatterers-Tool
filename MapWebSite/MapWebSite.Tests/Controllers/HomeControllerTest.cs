@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MapWebSite;
 using MapWebSite.Controllers;
+using MapWebSite.HtmlHelpers;
 
 namespace MapWebSite.Tests.Controllers
 {
@@ -25,6 +26,11 @@ namespace MapWebSite.Tests.Controllers
             Assert.IsNotNull(result);
         }
 
+        [TestMethod]
+        public void MessageBox()
+        {
+            var result = MessageBoxBuilder.Create("titlu", "mesaj");
+        }
        
  
     }

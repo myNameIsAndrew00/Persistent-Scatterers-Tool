@@ -1,4 +1,5 @@
 ﻿using MapWebSite.Core;
+using MapWebSite.HtmlHelpers;
 using MapWebSite.Interaction;
 using MapWebSite.Model; 
 using System;
@@ -55,13 +56,15 @@ namespace MapWebSite.Controllers
         }
           
         [HttpPost]
-        public JsonResult SaveColorsPalette(ColorMap colorMap)
+        public ActionResult SaveColorsPalette(ColorMap colorMap)
         {
             //TODO: save the color map to the database
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
             bool result = handler.InsertColorPalette(User.Identity.Name, colorMap);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+            return Content(MessageBoxBuilder.Create(result ? "Success" : "Failed", result ? "You succesfully upload your color palette" 
+                                                                                                : "Something went wrong. Try to change your palette name or check the connection"), "text/html");
+       
         }
 
 
