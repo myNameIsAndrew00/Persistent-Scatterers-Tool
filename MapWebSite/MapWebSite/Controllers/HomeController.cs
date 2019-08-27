@@ -69,7 +69,7 @@ namespace MapWebSite.Controllers
 
 
         [HttpGet] 
-        public JsonResult RequestDataPoints(decimal latitudeFrom, decimal longitudeFrom, decimal latitudeTo, decimal longitudeTo, int zoomLevel)
+        public JsonResult RequestDataPoints(decimal latitudeFrom, decimal longitudeFrom, decimal latitudeTo, decimal longitudeTo, int zoomLevel, string optionalField)
         {
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
             //TODO: change the usern and the dataset name
@@ -79,7 +79,8 @@ namespace MapWebSite.Controllers
                                       new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
                                       "woofwoof", //this will be changed and customized for current user
                                       "mainTest", //this will be changed and customized for current user
-                                      choseZoomLevel(zoomLevel));
+                                      choseZoomLevel(zoomLevel),
+                                      (BasicPoint.BasicInfoOptionalField)Enum.Parse(typeof(BasicPoint.BasicInfoOptionalField),optionalField));
 
             return Json(new { data = pointsData.DataContractJSONSerialize() }, JsonRequestBehavior.AllowGet);
         }

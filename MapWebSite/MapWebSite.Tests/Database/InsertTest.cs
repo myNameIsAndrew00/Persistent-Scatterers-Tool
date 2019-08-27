@@ -28,7 +28,7 @@ namespace MapWebSite.Tests.Database
         }
         
         [TestMethod]
-        public async Task InsertDataPoints()
+        public void InsertDataPoints()
         {
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
             IDataPointsSource pointsSource = new TxtDataPointsSource();
@@ -61,7 +61,7 @@ namespace MapWebSite.Tests.Database
 
             PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
 
-            CassandraDataPointsRepository repository = new CassandraDataPointsRepository();
+            CassandraDataPointsRepository repository = CassandraDataPointsRepository.Instance;
             Task<bool> result = repository.InsertPointsDatasets(dataset, set);
 
             result.Wait();

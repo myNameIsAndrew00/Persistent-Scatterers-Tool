@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MapWebSite.Core
+namespace MapWebSite.Types
 {
     ///Decorate with this attribute every class which is a user defined type in database <br></br>
     ///This decoration can be used to generate queries, code or database objects

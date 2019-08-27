@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MapWebSite.Types; 
 
 namespace MapWebSite.Tests.Core
 {
@@ -19,6 +20,14 @@ namespace MapWebSite.Tests.Core
             Point point = new Point();
 
             var data = point.JSONSerialize<Point>();
+        }
+
+        [TestMethod]
+        public void EnumStrings()
+        {
+            BasicPoint.BasicInfoOptionalField field = BasicPoint.BasicInfoOptionalField.Height;
+
+            string data = field.GetEnumString();
         }
     }
 }

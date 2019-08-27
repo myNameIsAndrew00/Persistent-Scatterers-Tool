@@ -1,5 +1,5 @@
-﻿using MapWebSite.Core;
-using MapWebSite.Model;
+﻿using MapWebSite.Model;
+using MapWebSite.Types;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

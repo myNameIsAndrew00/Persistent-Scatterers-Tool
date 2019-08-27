@@ -8,8 +8,7 @@ using MapWebSite.Model;
 namespace MapWebSite.Core.DataPoints
 {
     using HeaderData = Tuple<DateTime, decimal, decimal>;
-    
-    [Obsolete("This class will be replaced by one writen in C++")]
+     
     public class TxtDataPointsSource : IDataPointsSource
     {
         readonly int headerUnusedLinesCount  = 10;
@@ -70,7 +69,7 @@ namespace MapWebSite.Core.DataPoints
                 ReferenceImageX              = lineInfo["ReferenceImageX"],
                 ReferenceImageY              = lineInfo["ReferenceImageY"],
                 StandardDeviation            = lineInfo["StandardDeviation"],
-                Observations = null // TODO:add information to observations                
+                Observations = "Generated from file" // TODO:add information to observations                
             };
             Tuple<decimal, decimal> coordinatesPair = utmConverter.ToLatLong(this.Zone, this.LatitudeZone, 
                                                                             (double)lineInfo["EastingProjection"], 

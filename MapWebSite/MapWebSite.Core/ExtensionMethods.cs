@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MapWebSite.Types;
+using Newtonsoft.Json;
 using ServiceStack.Serialization;
 using System; 
 using System.Data;
@@ -59,6 +60,17 @@ namespace MapWebSite.Core
             JsonDataContractSerializer serializer = new JsonDataContractSerializer();
             return serializer.SerializeToString<T>(ObjectToBeSerialized);
         }
+
+        public static string GetEnumString(this Enum enumValue)
+        {
+            var type = enumValue.GetType();
+            var info = type.GetMember(enumValue.ToString());
+
+            var enumStringAttribute = info[0].GetCustomAttribute(typeof(EnumStringAttribute), false);
+
+            return (enumStringAttribute as EnumStringAttribute)?.String;
+        }
+
 
     }
 }

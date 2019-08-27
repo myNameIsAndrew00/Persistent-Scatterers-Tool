@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MapWebSite.Types;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
@@ -22,6 +23,21 @@ namespace MapWebSite.Model
     [DataContract] 
     public class BasicPoint
     {
+        /// <summary>
+        /// An enum which describes the meaning of OptionalField
+        /// </summary>
+        public enum BasicInfoOptionalField
+        {
+            [EnumString("Height")]
+            Height,
+
+            [EnumString("DeformationRate")]
+            DeformationRate,
+
+            [EnumString("StandardDeviation")]
+            StandardDeviation
+        }
+
         [DataMember] 
         [JsonProperty]
         public int Number { get; set; }
@@ -33,6 +49,10 @@ namespace MapWebSite.Model
         [DataMember]
         [JsonProperty]
         public decimal Latitude { get; set; }
+
+        [DataMember]
+        [JsonProperty]
+        public decimal OptionalField { get; set; }
 
     }
     [JsonObject(MemberSerialization.OptIn)]

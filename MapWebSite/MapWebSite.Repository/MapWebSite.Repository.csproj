@@ -77,6 +77,10 @@
       <Project>{a5caf727-b169-4ea1-8d41-910ab7bd0ed7}</Project>
       <Name>MapWebSite.SQLAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.Types\MapWebSite.Types.csproj">
+      <Project>{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056}</Project>
+      <Name>MapWebSite.Types</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

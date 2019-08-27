@@ -17,6 +17,12 @@
     .main-select-menu {
         background: get_color(strongTransparentBlue);
     }
+
+    .top-menu {
+        background: get_color(strongTransparentBlue);
+    }
+
+    
 }
 
 
@@ -186,5 +192,26 @@
             background: get_color(strongTransparentBlue) !important;
         }
     }
+
+    .top-menu {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        width: 300px;
+        border-radius: 0 0 10px 10px;
+        margin-left: -150px;
+        border-bottom: solid 2px;
+        border-color: white;
+        height: 30px;
+        background: get_color(transparentBlue);
+        transition: 0.3s;
+    }
+
+    .top-menu-hiden {
+        height: 0;
+        opacity: 0;
+        visibility: hidden;
+    }
+
 }
 

@@ -102,7 +102,7 @@ function displayPage(display) {
     doAction(display, '#settings-layer', 'settings-layer-hide');
     doAction(!display, '#main-menu', 'main-select-menu-nontransparent');
     doAction(!display, '#secondary-menu', 'secondary-menu-nontransparent');
-
+    doAction(!display, '#top-menu', 'top-menu-hiden');
 }
 
 async function requestPage(pageName, cssServerPath) {

@@ -2,27 +2,102 @@
 var $map = ol.Map;
 var $feature = ol.Feature;
 var $control = ol.Control;
-var points = []; 
+var points = [];
 var vector = null;
+
+var colorPalette = [{
+    Color: '#33ff00',
+    Left: 0.0,
+    Right: 10.0
+},
+{
+    Color: '#33cc00',
+    Left: 10.0,
+    Right: 20.0
+},
+{
+    Color: '#339900',
+    Left: 20.0,
+    Right: 30.0
+},
+{
+    Color: '#ffff00',
+    Left: 30.0,
+    Right: 40.0
+    },
+    {
+        Color: '#ffcc00',
+        Left: 40.0,
+        Right: 50.0
+    },
+    {
+        Color: '#ff9900',
+        Left: 50.0,
+        Right: 60.0
+    },
+    {
+        Color: '#ff6600',
+        Left: 60.0,
+        Right: 70.0
+    },
+    {
+        Color: '#ff3300',
+        Left: 70.0,
+        Right: 80.0
+    },
+    {
+        Color: '#ff0000',
+        Left: 80.0,
+        Right: 90.0
+    },
+    {
+        Color: '#660000',
+        Left: 90.0,
+        Right: 100.0
+    }
+];
 
 /**
  * According to size, change the aspect of points
  * THIS IS A EXAMPLE
  */
-var styles = {
-    '3': new ol.style.Style({
+
+function binarySearch(value, left, right) {
+    if (left == right) return colorPalette[right].Color;
+
+    if (left == right - 1) {
+        if (value < colorPalette[right].Left)
+            return colorPalette[left].Color;
+        return colorPalette[right].Color;
+    }
+
+    var middle = Math.floor((right + left) / 2);
+
+    if (value < colorPalette[middle].Left)
+        return binarySearch(value, left, middle);
+    if (value > colorPalette[middle].Right)
+        return binarySearch(value, middle, right);
+
+    return colorPalette[middle].Color;
+}
+
+function buildStyleFromPalette(featureValue) {
+    var rangeMin = -2;
+    var rangeMax = 80;
+
+    var paletteColor = binarySearch(
+        ((featureValue + Math.abs(rangeMin)) * 100) / (rangeMax + Math.abs(rangeMin)),
+        0,
+        9   
+    );
+
+    return new ol.style.Style({
         image: new ol.style.Circle({
             radius: 3,
-            fill: new ol.style.Fill({ color: '#FF0000' }),
-        })
-    }),
-    '4': new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: 3,
-            fill: new ol.style.Fill({ color: '#00FF00' }),
+            fill: new ol.style.Fill({ color: paletteColor }),
         })
     })
-};
+}
 
 
 /**
@@ -39,11 +114,11 @@ var mapView = new ol.View({
  * TODO: Define the navigation for map (zoom on double click must be disabled)
  */
 
- 
+
 /**
  * Here the map is rendered 
- */ 
- 
+ */
+
 var map = new $map({
     target: 'map',
     layers: [
@@ -55,7 +130,7 @@ var map = new $map({
     controls: [],
     renderer: 'webgl'
 });
- 
+
 
 /*follow section handle the click on items*/
 /**
@@ -76,12 +151,12 @@ function handleClickFunction(e) {
         url: '/home/RequestPointDetails',
         success: function (receivedInfo) {
             var point = JSON.parse(receivedInfo.data);
-            setPointInfoData(point);         
-        }           
+            setPointInfoData(point);
+        }
     });
 
     diplayPointInfo();
-   
+
     /*change the point style*/
     /*e.selected[0].setStyle(new ol.style.Style({
         image: new ol.style.Circle(
@@ -97,7 +172,7 @@ function handleClickFunction(e) {
 var select = new ol.interaction.Select();
 map.addInteraction(select);
 select.on('select', handleClickFunction);
- 
+
 
 /**
  * Section bellow contain the points request
@@ -111,7 +186,8 @@ function loadData(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongi
             latitudeFrom: pLatitudeFrom,
             longitudeFrom: pLongitudeFrom,
             latitudeTo: pLatitudeTo,
-            longitudeTo: pLongitudeTo
+            longitudeTo: pLongitudeTo,
+            optionalField: 'Height'
         },
         url: '/home/RequestDataPoints',
         success: function (receivedInfo) {
@@ -122,8 +198,7 @@ function loadData(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongi
                 points[i] = new $feature({
                     'geometry': new ol.geom.Point(
                         ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
-                    'i': i,
-                    'size': i % 2 ? 3 : 4
+                    'colorCriteria': requestedPoints[i].OptionalField
                 });
                 points[i].ID = requestedPoints[i].Number;
                 points[i].longitude = requestedPoints[i].Longitude;
@@ -131,25 +206,42 @@ function loadData(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongi
             }
 
             requestedPoints.splice(0, requestedPoints.length);
- 
-            map.removeLayer(vector);
-
-            if(vector != null) delete vector.vectorSource;
-            delete vector;
 
             var vectorSource = new ol.source.Vector({
                 features: points,
                 wrapX: false
             });
-          
-            /*represents the layer which contains the points*/
-            vector = new ol.layer.Vector({
-                source: vectorSource,
-                style: function (feature) {
-                    return styles[feature.get('size')];
+
+
+            if (vector != null) {
+                vector.setOpacity(0);
+                vector.setSource(vectorSource)
+            }
+            else {
+                vector = new ol.layer.Vector({
+                    source: vectorSource,
+                    style: function (feature) {
+                        return buildStyleFromPalette(feature.get('colorCriteria'));
+                    },
+                    opacity: 0
+                });
+                map.addLayer(vector);
+            }
+
+            var animationFrames = 0;
+            var opacity = 0.1;
+            setTimeout(function () {
+                function change() {
+                    if (animationFrames == 10) return;
+                    animationFrames++;
+                    opacity = animationFrames / 10;
+                    vector.setOpacity(opacity);
+                    setTimeout(function () { change() }, 30)
                 }
-            });
-            map.addLayer(vector);           
+                change();
+            }, 50);
+
+
         }
     });
 }
@@ -158,9 +250,9 @@ function loadData(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongi
 
 
 function onMapPositionChanged(evt) {
-    var viewBox = map.getView().calculateExtent(map.getSize());  
+    var viewBox = map.getView().calculateExtent(map.getSize());
     var cornerCoordinates = ol.proj.transformExtent(viewBox, 'EPSG:3857', 'EPSG:4326');
-    
+
     loadData(map.getView().getZoom(),
         cornerCoordinates[1],
         cornerCoordinates[0],

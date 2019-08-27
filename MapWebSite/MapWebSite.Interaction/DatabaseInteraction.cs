@@ -21,7 +21,7 @@ namespace MapWebSite.Interaction
         public DatabaseInteractionHandler()
         {
             userRepository = new SQLUserRepository();
-            dataPointsRepository = new CassandraDataPointsRepository();
+            dataPointsRepository = CassandraDataPointsRepository.Instance;
         }
 
         public bool RegisterUser(string username, string firstName, string lastName, string password)
@@ -75,12 +75,17 @@ namespace MapWebSite.Interaction
         /// <param name="dataSet"></param>
         /// <param name="zoomLevel"></param>
         /// <returns></returns>
-        public IEnumerable<BasicPoint> RequestPoints(Pair leftMargin, Pair rightMargin, string username, string dataSet, int zoomLevel)
+        public IEnumerable<BasicPoint> RequestPoints(Pair leftMargin, 
+                                                     Pair rightMargin, 
+                                                     string username, 
+                                                     string dataSet, 
+                                                     int zoomLevel,
+                                                     BasicPoint.BasicInfoOptionalField optionalField)
         {
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
             if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
-            return this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, zoomLevel, leftMargin, rightMargin);
+            return this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, zoomLevel, leftMargin, rightMargin, optionalField);
         }
 
         public Point RequestPointDetails(string dataSet, string username, int zoomLevel, BasicPoint basicPoint)

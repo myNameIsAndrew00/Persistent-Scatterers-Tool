@@ -1,4 +1,5 @@
 ﻿using MapWebSite.Core;
+using MapWebSite.Types;
 using System;
 using System.Collections.Generic; 
 using System.Reflection;

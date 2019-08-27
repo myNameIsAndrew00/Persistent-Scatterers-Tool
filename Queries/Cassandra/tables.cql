@@ -14,7 +14,7 @@ create table points_by_dataset(
 	PRIMARY KEY((dataset_id, number), longitude, latitude)
 ) WITH CLUSTERING ORDER BY(longitude desc, latitude desc);
 
-
+ 
 
 create table points_by_dataset_zoom_3(
 	dataset_id int,

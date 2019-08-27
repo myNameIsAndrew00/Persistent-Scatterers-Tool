@@ -104,6 +104,10 @@
       <Project>{15A19BAF-8E36-41A7-96EC-3AC2F427FCFB}</Project>
       <Name>MapWebSite.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.Types\MapWebSite.Types.csproj">
+      <Project>{efe17cce-7d2b-4fdd-b4a8-bf395fd34056}</Project>
+      <Name>MapWebSite.Types</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

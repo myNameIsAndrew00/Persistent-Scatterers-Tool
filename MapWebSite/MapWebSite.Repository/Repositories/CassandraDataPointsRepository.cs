@@ -1,7 +1,7 @@
 ﻿using Cassandra;
 using MapWebSite.CassandraAccess;
 using MapWebSite.Core.Database;
-using MapWebSite.Model; 
+using MapWebSite.Model;
 using MapWebSite.Repository.Entities;
 using System;
 using System.Collections.Async;
@@ -16,6 +16,16 @@ namespace MapWebSite.Repository
 
     public class CassandraDataPointsRepository : CassandraBaseRepository, IDataPointsRepository
     {
+        private CassandraExecutionInstance executionInstance = null;
+
+        public static CassandraDataPointsRepository Instance { get; } = new CassandraDataPointsRepository();
+
+        private CassandraDataPointsRepository()
+        {
+            this.executionInstance = new CassandraExecutionInstance(this.server, this.keyspace);
+            executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
+        }
+
         public async Task<bool> InsertPointsDatasets(PointsDataSet originalDataSet, PointsDataSet[] zoomedDatasets)
         {
             bool success = await this.insertPointsDataset(originalDataSet);
@@ -32,11 +42,13 @@ namespace MapWebSite.Repository
             return true;
         }
 
-        public IEnumerable<BasicPoint> GetDataPointsBasicInfo(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to)
+        public IEnumerable<BasicPoint> GetDataPointsBasicInfo(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, BasicPoint.BasicInfoOptionalField optionalField)
         {
-            var dataRows = selectBasicPointsDataset(dataSetID, zoomLevel, from, to);
+            string optionalFieldString = getCassandraFieldName(optionalField);
 
-            return convertRowSetToBasicPointList(dataRows);            
+            var dataRows = selectBasicPointsDataset(dataSetID, zoomLevel, from, to, optionalFieldString);
+
+            return convertRowSetToBasicPointList(dataRows, optionalFieldString);
         }
 
 
@@ -47,9 +59,10 @@ namespace MapWebSite.Repository
             return convertRowSetToPointList(dataRows).FirstOrDefault();
         }
 
-     
+
 
         #region Private
+
 
         private async Task<bool> insertPointsDataset(PointsDataSet pointsDataset)
         {
@@ -61,72 +74,66 @@ namespace MapWebSite.Repository
             queryBuilder.QueryType = CassandraQueryBuilder.QueryTypes.InsertFromType;
             if (pointsDataset.ZoomLevel != 0) queryBuilder.IgnoredColumnNames = new List<string>() { "displacements" };
 
-            using (CassandraExecutionInstance executionInstance = new CassandraExecutionInstance(this.server,
-                                                                                this.keyspace))
+
+
+            this.executionInstance.PrepareQuery(queryBuilder);
+
+            try
             {
-                executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
-
-                executionInstance.PrepareQuery(queryBuilder);
-
-                try
+                await pointTypes.ParallelForEachAsync(async pointType =>
                 {
-                    await pointTypes.ParallelForEachAsync(async pointType =>
+                    await executionInstance.ExecuteNonQuery(new
                     {
-                        await executionInstance.ExecuteNonQuery(new
-                        {
-                            pointType.dataset_id,
-                            number = pointType.point_number,
-                            pointType.longitude,
-                            pointType.latitude,
-                            pointType.height,
-                            pointType.deformation_rate,
-                            pointType.standard_deviation,
-                            pointType.estimated_height,
-                            pointType.estimated_deformation_rate,
-                            pointType.observations,
-                            pointType.displacements
-                        });
+                        pointType.dataset_id,
+                        number = pointType.point_number,
+                        pointType.longitude,
+                        pointType.latitude,
+                        pointType.height,
+                        pointType.deformation_rate,
+                        pointType.standard_deviation,
+                        pointType.estimated_height,
+                        pointType.estimated_deformation_rate,
+                        pointType.observations,
+                        pointType.displacements
                     });
-                }
-                catch (Exception exception)
-                {
-                    //TODO: log exception
-                }
+                });
             }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+            }
+
 
             return true;
         }
 
-        private List<Row> selectBasicPointsDataset(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to)
+        private List<Row> selectBasicPointsDataset(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, string optionalField)
         {
             CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder()
             {
                 QueryType = CassandraQueryBuilder.QueryTypes.Select
             };
             queryBuilder.TableName = zoomLevel == 0 ? "points_by_dataset" : $"points_by_dataset_zoom_{zoomLevel}";
-            queryBuilder.SelectColumnNames = new List<string>() { "latitude", "longitude", "number" };
+            queryBuilder.SelectColumnNames = new List<string>() { "latitude", "longitude", "number", optionalField };
             queryBuilder.ClausesList.Add(new BuilderTuple("dataSetID", "dataset_id", CassandraQueryBuilder.Clauses.Equals));
             queryBuilder.ClausesList.Add(new BuilderTuple("leftLatitude", "latitude", CassandraQueryBuilder.Clauses.GreaterOrEqual));
             queryBuilder.ClausesList.Add(new BuilderTuple("leftLongitude", "longitude", CassandraQueryBuilder.Clauses.GreaterOrEqual));
             queryBuilder.ClausesList.Add(new BuilderTuple("rightLatitude", "latitude", CassandraQueryBuilder.Clauses.Less));
             queryBuilder.ClausesList.Add(new BuilderTuple("rightLongitude", "longitude", CassandraQueryBuilder.Clauses.Less));
 
-            using (CassandraExecutionInstance executionInstance = new CassandraExecutionInstance(this.server,
-                                                                                 this.keyspace))
+
+
+            executionInstance.PrepareQuery(queryBuilder);
+
+            return executionInstance.ExecuteQuery(new
             {
-                executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
+                dataSetID,
+                leftLatitude = from.Item1,
+                leftLongitude = from.Item2,
+                rightLatitude = to.Item1,
+                rightLongitude = to.Item2
+            });
 
-                executionInstance.PrepareQuery(queryBuilder);
-
-                return executionInstance.ExecuteQuery(new
-                {
-                    dataSetID,
-                    leftLatitude = from.Item1,
-                    leftLongitude = from.Item2,
-                    rightLatitude = to.Item1,
-                    rightLongitude = to.Item2
-                });
-            }
         }
 
         private List<Row> selectPointDetails(int dataSetID, int zoomLevel, BasicPoint basicPoint)
@@ -140,34 +147,33 @@ namespace MapWebSite.Repository
             queryBuilder.ClausesList.Add(new BuilderTuple("latitude", "latitude", CassandraQueryBuilder.Clauses.Equals));
             queryBuilder.ClausesList.Add(new BuilderTuple("longitude", "longitude", CassandraQueryBuilder.Clauses.Equals));
             queryBuilder.ClausesList.Add(new BuilderTuple("number", "number", CassandraQueryBuilder.Clauses.Equals));
-            using (CassandraExecutionInstance executionInstance = new CassandraExecutionInstance(this.server,
-                                                                                 this.keyspace))
+
+            executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
+
+            executionInstance.PrepareQuery(queryBuilder);
+
+            return executionInstance.ExecuteQuery(new
             {
-                executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
+                dataSetID,
+                latitude = basicPoint.Latitude,
+                longitude = basicPoint.Longitude,
+                number = basicPoint.Number
+            });
 
-                executionInstance.PrepareQuery(queryBuilder);
-
-                return executionInstance.ExecuteQuery(new
-                {
-                    dataSetID,
-                    latitude = basicPoint.Latitude,
-                    longitude = basicPoint.Longitude,
-                    number = basicPoint.Number 
-                });
-            }
         }
 
 
-        private IEnumerable<BasicPoint> convertRowSetToBasicPointList(List<Row> rowSet)
+        private IEnumerable<BasicPoint> convertRowSetToBasicPointList(List<Row> rowSet, string optionalField)
         {
             ConcurrentBag<BasicPoint> result = new ConcurrentBag<BasicPoint>();
             Parallel.ForEach(rowSet, row =>
             {
                 result.Add(new BasicPoint()
-                {                  
+                {
                     Latitude = Convert.ToDecimal(row["latitude"]),
                     Longitude = Convert.ToDecimal(row["longitude"]),
-                    Number = Convert.ToInt32(row["number"])            
+                    Number = Convert.ToInt32(row["number"]),
+                    OptionalField = Convert.ToDecimal(row[optionalField])
                 });
             });
 
@@ -176,7 +182,7 @@ namespace MapWebSite.Repository
 
         private IEnumerable<Point> convertRowSetToPointList(List<Row> rowSet)
         {
-        
+
             ConcurrentBag<Point> result = new ConcurrentBag<Point>();
             Parallel.ForEach(rowSet, row =>
             {
@@ -211,6 +217,18 @@ namespace MapWebSite.Repository
                 });
 
             return result;
+        }
+
+
+        private string getCassandraFieldName(BasicPoint.BasicInfoOptionalField optionalField)
+        {
+            switch (optionalField)
+            {
+                case BasicPoint.BasicInfoOptionalField.DeformationRate: return "deformation_rate";
+                case BasicPoint.BasicInfoOptionalField.Height: return "height";
+                case BasicPoint.BasicInfoOptionalField.StandardDeviation: return "standard_deviation";
+            }
+            return null;
         }
 
         #endregion

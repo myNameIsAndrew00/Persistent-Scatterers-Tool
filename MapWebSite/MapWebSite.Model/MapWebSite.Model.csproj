@@ -50,5 +50,11 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MapWebSite.Types\MapWebSite.Types.csproj">
+      <Project>{efe17cce-7d2b-4fdd-b4a8-bf395fd34056}</Project>
+      <Name>MapWebSite.Types</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

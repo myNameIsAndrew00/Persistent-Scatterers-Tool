@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace MapWebSite.Core.DataPoints
 {
-
-    [Obsolete("This class will be replaced by one writen in C++")]
+     
     /// <summary>
     /// Use this class to generate zoom levels points for a certain DataSet of Points
     /// This class create points dividing provided points in certains squares of fixed dimension
@@ -113,7 +112,7 @@ namespace MapWebSite.Core.DataPoints
                             Longitude = longitudeIndex + squareSide / 2,
                             Number = number++,
                             StandardDeviation = areaPoints.Average(item => item.Value.StandardDeviation),
-                            Observations = null
+                            Observations = "Generated with mean square algorithm"
                         });
                     int areaPointsCount = areaPoints?.Count() ?? 0;
                     for(int deleteCounter = 0; deleteCounter < areaPointsCount; deleteCounter++)

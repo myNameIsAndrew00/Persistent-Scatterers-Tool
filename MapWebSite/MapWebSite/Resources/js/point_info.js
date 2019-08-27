@@ -6,16 +6,19 @@ function diplayPointInfo() {
         $("#point-info").css("opacity", 1);
         $("#point-info").css("width", "60%");
         $("#point-info").css("visibility", "initial");    
+        $("#top-menu").addClass('top-menu-hiden');
     }
     if (document.getElementById("point-info").style.visibility == "initial") {
-        hidePointInfo();
+        hidePointInfo(false);
         setTimeout(function () { display() }, 200);
     }
     else display();
   
 }
 
-function hidePointInfo() {
+function hidePointInfo(showTopMenu) {
+    if (showTopMenu) $("#top-menu").removeClass('top-menu-hiden');
+
     $("#point-info").css("opacity", 0);
     $("#point-info").css("width", "40%"); 
     $("#point-info").css("visibility", "hidden");    
