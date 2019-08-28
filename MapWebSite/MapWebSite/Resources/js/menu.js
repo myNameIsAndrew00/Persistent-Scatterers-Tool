@@ -83,16 +83,16 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
 
 async function requestSettingsPage(pageName, cssServerPath) {
     ChangeSpinnerVisibility(true);
-    
 
-    setTimeout( displayPage, 50, true); 
-     
+
+    setTimeout(displayPage, 50, true);
+
     await requestPage(pageName, cssServerPath);
-     
+
 }
 
 
-function displayPage(display) {    
+function displayPage(display) {
     $('#settings-layer').html('');
 
     function doAction(remove, id, className) {
@@ -108,21 +108,21 @@ function displayPage(display) {
 async function requestPage(pageName, cssServerPath) {
 
 
-    if(cssServerPath != null) requestCss(cssServerPath);
+    if (cssServerPath != null) requestCss(cssServerPath);
     await $.get("/Home/RequestSettingsLayerContent", { settingsPageName: pageName }, await function (data) {
         //TODO: check if the page was already loaded and do not request resources again. It generates errors
         setTimeout(function () {
             ChangeSpinnerVisibility(false);
-            $('#settings-layer').html(data);  
+            $('#settings-layer').html(data);
         }, 1200);
-               
+
     });
 }
 
 function requestCss(cssServerPath) {
     var head = document.getElementsByTagName('head')[0];
     for (var i = 0; i < head.children.length; i++)
-        if (head.children[ i ].localName == 'link' && head.children[i].href.includes(cssServerPath)) return;
+        if (head.children[i].localName == 'link' && head.children[i].href.includes(cssServerPath)) return;
 
     var style = document.createElement('link');
     style.href = cssServerPath;
@@ -149,7 +149,7 @@ function startSpinner() {
     var degrees = 0;
     var scaleValue = 0.801;
     var scaleDirection = 1;
-     
+
     function spin() {
 
         inner_spin.style.transform = 'rotate(' + degrees * 2.4 + 'deg)';
@@ -183,4 +183,17 @@ function ChangeSpinnerVisibility(visible) {
 
     rotateSpinner = visible;
     startSpinner();
+}
+
+
+/*****************************************************************************************/
+
+/*functions used for points setting overlay*/
+
+function displayPointsLayerPage(display) {
+    var container = $('#points-settings-layer-container');
+    display ? container.removeClass('points-settings-layer-container-hidden') : container.addClass('points-settings-layer-container-hidden');
+    display ? container.addClass('points-settings-layer-sizes') : container.removeClass('points-settings-layer-sizes');
+     
+
 }

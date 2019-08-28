@@ -20,9 +20,16 @@
 
     .top-menu {
         background: get_color(strongTransparentBlue);
-    }
 
-    
+        button {
+            opacity: 1;
+            background: rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            background: #c6a66c; //TODO: make color to be accesed via variable
+        }
+    }
 }
 
 
@@ -39,10 +46,8 @@
         padding: 35px 25px 30px 10px;
         background: get_color(transparentBlue);
         transition: 0.3s;
-        border-top: solid;
-        border-right: solid;
         border-radius: 80px 15px 70px 0px;
-        border-color: white;
+
 
         .main-select-menu-arrows {
             position: relative;
@@ -93,6 +98,7 @@
             object {
                 display: none;
                 padding: 12px;
+                
             }
 
             .current_displayed_icon {
@@ -200,11 +206,40 @@
         width: 300px;
         border-radius: 0 0 10px 10px;
         margin-left: -150px;
-        border-bottom: solid 2px;
-        border-color: white;
         height: 30px;
         background: get_color(transparentBlue);
         transition: 0.3s;
+        color: white;
+
+        div {
+            height: auto;
+            width: 220px;
+            vertical-align: top;
+            text-align: center;
+        }
+
+        button {
+            padding: 0;
+            height: 27px;
+            width: 30px;
+            margin-top: 1px;
+            background: none;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        button-selected{
+            background: orange;
+        }
+
+        object{
+            pointer-events: none;
+        }
+
+        .top-menu-item {
+            display: inline-block;
+            padding: 5px;
+        }
     }
 
     .top-menu-hiden {
@@ -212,6 +247,4 @@
         opacity: 0;
         visibility: hidden;
     }
-
 }
-

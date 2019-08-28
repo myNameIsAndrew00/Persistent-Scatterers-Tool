@@ -14,10 +14,14 @@
 <body>
     @RenderBody()
 
+    @{ Html.RenderPartial("~/Views/Home/PointsSettingsLayer.cshtml");}
+
+
     @{ Html.RenderPartial("~/Views/Home/SettingsLayer.cshtml");}
 
+
     @{ Html.RenderPartial("HomeMenu"); }
-   
+
 
 </body>
 </html>

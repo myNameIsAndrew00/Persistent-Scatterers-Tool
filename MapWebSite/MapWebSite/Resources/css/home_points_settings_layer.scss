@@ -1,0 +1,49 @@
+﻿#points-settings-layer-container {
+    position: absolute;
+    background: white;
+    padding: 20px;
+    margin: 0;
+    border-radius: 2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 300ms ease-in-out 0.2s, height 0.3s, opacity 0.3s;
+
+    .close_points_setting_layer_button {
+        position: fixed;
+        right: 10px;
+        top: 10px;
+        background: none;
+        border: none;
+        transition: 0.2s;
+        padding: 4px 8px 0 8px;
+        border-radius: 7px;
+
+        object {
+            pointer-events: none;
+        }
+    }
+
+    .close_points_setting_layer_button:hover {
+        background: #ffa740;
+    }
+}
+
+
+.points-settings-layer-container-hidden {
+     
+    opacity: 0;
+    width: 10px;
+    height: 10px;
+
+    .close_points_setting_layer_button{
+        opacity: 0;
+    }
+}
+
+.points-settings-layer-sizes {
+    height: 400px;
+    width: 600px;
+}
+
+ 

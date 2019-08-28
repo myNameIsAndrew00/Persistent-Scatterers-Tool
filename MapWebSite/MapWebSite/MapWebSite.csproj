@@ -253,6 +253,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Resources\css\home_points_settings_layer.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
     <Content Include="Resources\js\color_picker.js" />
     <Content Include="Resources\js\color_picker_color_list.js" />
@@ -338,6 +339,7 @@
     <Content Include="Views\Home\Settings Content\UploadPoints.cshtml" />
     <Content Include="Views\Home\PointInfo.cshtml" />
     <Content Include="Resources\css\plot.scss" />
+    <Content Include="Views\Home\PointsSettingsLayer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

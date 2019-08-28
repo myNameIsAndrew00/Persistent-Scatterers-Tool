@@ -22,8 +22,14 @@ namespace MapWebSite.Repository
 
         private CassandraDataPointsRepository()
         {
-            this.executionInstance = new CassandraExecutionInstance(this.server, this.keyspace);
-            executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
+            try
+            {
+                this.executionInstance = new CassandraExecutionInstance(this.server, this.keyspace);
+                executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
+            }
+            catch {
+                //TODO: log exception
+            }
         }
 
         public async Task<bool> InsertPointsDatasets(PointsDataSet originalDataSet, PointsDataSet[] zoomedDatasets)
