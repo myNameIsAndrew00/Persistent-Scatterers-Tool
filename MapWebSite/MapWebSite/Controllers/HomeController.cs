@@ -54,18 +54,7 @@ namespace MapWebSite.Controllers
                     return View((string)"Settings Content/ColorPicker");
             }
         }
-          
-        [HttpPost]
-        public ActionResult SaveColorsPalette(ColorMap colorMap)
-        {
-            //TODO: save the color map to the database
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
-            bool result = handler.InsertColorPalette(User.Identity.Name, colorMap);
-
-            return Content(MessageBoxBuilder.Create(result ? "Success" : "Failed", result ? "You succesfully upload your color palette" 
-                                                                                                : "Something went wrong. Try to change your palette name or check the connection"), "text/html");
-       
-        }
+     
 
 
         [HttpGet] 

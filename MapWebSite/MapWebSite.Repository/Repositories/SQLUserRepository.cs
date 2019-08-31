@@ -146,5 +146,33 @@ namespace MapWebSite.Repository
             }
             return true;
         }
+
+        public IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(ColorMapFilters filter, string filterValue, int pageIndex, int itemsPerPage)
+        {
+            List<Tuple<string, ColorMap>> result = new List<Tuple<string, ColorMap>>();
+
+            using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetColorPalettesFiltered")
+                                                                                { CommandType = System.Data.CommandType.StoredProcedure },
+                                               new SqlParameter[]
+                                               {
+                                                    new SqlParameter("@filter_id",(int)filter),
+                                                    new SqlParameter("@filter_value",filterValue),
+                                                    new SqlParameter("@page_index",pageIndex),
+                                                    new SqlParameter("@items_per_page",itemsPerPage)
+                                               },
+                                               new SqlConnection(this.connectionString)))
+            {
+                foreach (DataRow row in colorMapsResult.Tables[0].Rows)
+                    result.Add(new Tuple<string, ColorMap>(
+                        (string)row["username"],
+                        new ColorMap()
+                        {
+                            Name = (string)row["palette_name"],
+                            Intervals = new List<Interval>().JSONDeserialize((string)row["palette_serialization"])
+                        }));                    
+            }
+
+            return result;
+        }
     }
 }

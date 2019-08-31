@@ -43,17 +43,30 @@ namespace MapWebSite.Core
             if (UseQuotesForColumns)  return JsonConvert.SerializeObject(ObjectToBeSerialized);
 
             JsonSerializer serializer = new JsonSerializer();
-            var stringWriter = new StringWriter();
-            using (var writer = new JsonTextWriter(stringWriter))
+            using (var stringWriter = new StringWriter())
             {
-                writer.QuoteName = false;
-                writer.QuoteChar = '\'';
-                serializer.Serialize(writer,ObjectToBeSerialized);
-            }
+                using (var writer = new JsonTextWriter(stringWriter))
+                {
+                    writer.QuoteName = false;
+                    writer.QuoteChar = '\'';
+                    serializer.Serialize(writer, ObjectToBeSerialized);
+                }
 
-            return stringWriter.ToString();
+                return stringWriter.ToString();
+            }
         }
    
+        public static T JSONDeserialize<T>(this T reference, string JSONstring)
+        {
+            JsonSerializer serializer = new JsonSerializer();
+
+            using (var stringReader = new StringReader(JSONstring))
+            using (var reader = new JsonTextReader(stringReader))
+            {
+                return serializer.Deserialize<T>(reader);
+            }
+        }
+
 
         public static string DataContractJSONSerialize<T>(this T ObjectToBeSerialized)
         {

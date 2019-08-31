@@ -1,4 +1,5 @@
 /*use this variables for dots controll*/ 
+
 var isMouseDown = false;
 var dotsCount = 1;
 var currentDot = 1;
@@ -8,10 +9,8 @@ var LeftMargin = 40 + Number(window.getComputedStyle(document.getElementById('co
 var SliderWidth = 800;
 var SliderLeft = 30;
 
-/*color mapping */
-var colorList = new ColorList(new ColorNode('dot-1'), SliderWidth , '#361f9c');
-
-
+/*color mapping. this variable is loaded when the script is loaded first time (see cshtml code) */
+var colorList = null;
 
 function changePosition() { 
     if(currentDot == 1) return;
@@ -128,7 +127,7 @@ function sendColorPalette() {
             Intervals: colorList.GetColorMap(),
             Name: paletteName,
         },
-        url: '/home/SaveColorsPalette',
+        url: 'api/settings/SaveColorsPalette',
         success: function (receivedInfo) {
             $('#settings-layer-container').children('#settings-layer-overlay').removeClass('message-overlay-hidden');
             $('#settings-layer-container').children('#settings-layer-overlay').html(receivedInfo);

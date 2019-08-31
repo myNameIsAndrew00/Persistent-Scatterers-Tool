@@ -3,6 +3,7 @@
 @import 'home_point_info_layer.scss';
 @import 'home_settings_layer.scss';
 @import 'home_points_settings_layer.scss';
+@import 'scrollbar.scss';
 
 ::selection {
     background: none;
@@ -36,3 +37,4 @@ button:disabled:hover {
 input:hover, button:hover {
     background: orange;
 }
+

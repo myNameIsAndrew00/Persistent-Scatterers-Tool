@@ -1,0 +1,46 @@
+﻿@model  MapWebSite.Interaction.ViewModel.ChosePaletteModel
+
+@{
+    Layout = null;
+}
+
+<div class="points-settings-layer-container-palette-content points-settings-layer-container-content">
+    <h4 class="ps_header">Chose palette</h4>
+    <div class="ps_left">
+        <table>
+            <tr>
+                <th><object width="14px" height="35px" type="image/svg+xml" data="~/Resources/resources/icons/user_palette_icon.svg"></object></th>
+                <th>Palette name</th>
+                <th>Colors</th>
+            </tr>
+            @foreach (var item in Model.UsersColorMaps)
+            {
+                <tr>
+                    <td>@item.Item1</td>
+                    <td>@item.Item2.Name</td>
+                    <td>
+                        <table class="palette">
+                            @{
+                                var intervals = item.Item2.Intervals;
+                                int rowsCount = intervals.Count / Model.colorsPerRow,
+                                    intervalsIndex = 0;
+                            }
+                            @for (int index = 0; index <= rowsCount; index++)
+                            {
+                                <tr>
+                                    @for (int rowIndex = 0; rowIndex < Model.colorsPerRow && intervalsIndex < item.Item2.Intervals.Count; rowIndex++, intervalsIndex++)
+                                    {
+                                    <td style="background:@intervals[intervalsIndex].Color"></td>
+                                    }
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                    <td><button class="use">Use</button><button class="preview">Preview</button></td>
+                </tr>
+            }
+           
+        </table>
+    </div>
+    <aside class="ps_right"></aside>
+</div>

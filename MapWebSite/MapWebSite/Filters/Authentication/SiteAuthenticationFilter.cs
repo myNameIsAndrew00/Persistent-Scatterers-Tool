@@ -14,21 +14,17 @@ namespace MapWebSite.Filters
     /// </summary>
     public class SiteAuthenticationFilter : ActionFilterAttribute, IAuthenticationFilter
     {
-        public const string authenticationCookieName = "authentication";
 
         public void OnAuthentication(AuthenticationContext filterContext)
         {
             try{
-                HttpCookie cookie = filterContext.RequestContext.HttpContext.Request.Cookies[authenticationCookieName];
+                HttpCookie cookie = filterContext.RequestContext.HttpContext.Request.Cookies[AuthenticationHandler.authenticationCookieName];
 
                 if (cookie == null) throw new Exception();
                 if (cookie.Expires > DateTime.Now) throw new Exception();
 
-                FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
-
-
-                filterContext.HttpContext.User = JsonConvert.DeserializeObject<Interaction.SiteUser>(ticket.UserData);
-                                                         
+                filterContext.HttpContext.User = AuthenticationHandler.CheckCookie(cookie.Value);
+                                                        
                 if(filterContext.HttpContext.User == null)  throw new Exception();
              }
             catch{
@@ -64,7 +60,7 @@ namespace MapWebSite.Filters
 
             string cookieData = FormsAuthentication.Encrypt(ticket);
 
-            HttpCookie cookie = new HttpCookie(authenticationCookieName, cookieData)
+            HttpCookie cookie = new HttpCookie(AuthenticationHandler.authenticationCookieName, cookieData)
             {
                 Expires = ticket.Expiration,
                 HttpOnly = true,
@@ -76,10 +72,10 @@ namespace MapWebSite.Filters
 
         public static void LogoutUser()
         {
-            var cookie = HttpContext.Current.Request.Cookies[authenticationCookieName];
+            var cookie = HttpContext.Current.Request.Cookies[AuthenticationHandler.authenticationCookieName];
 
             if (cookie != null)
-                HttpContext.Current.Response.Cookies.Add(new HttpCookie(authenticationCookieName)
+                HttpContext.Current.Response.Cookies.Add(new HttpCookie(AuthenticationHandler.authenticationCookieName)
                 {
                     Expires = DateTime.Now.AddDays(-1)
                 });

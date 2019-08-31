@@ -190,10 +190,25 @@ function ChangeSpinnerVisibility(visible) {
 
 /*functions used for points setting overlay*/
 
-function displayPointsLayerPage(display) {
-    var container = $('#points-settings-layer-container');
-    display ? container.removeClass('points-settings-layer-container-hidden') : container.addClass('points-settings-layer-container-hidden');
-    display ? container.addClass('points-settings-layer-sizes') : container.removeClass('points-settings-layer-sizes');
-     
+async function displayPointsLayerPage(display, requestMethodName) {
 
+    function displayPage(display,serverData) {
+        var container = $('#points-settings-layer-container');
+        var innerContainer = $('#points-settings-layer-container').children("#points-settings-layer-container-content");
+
+        innerContainer.html(serverData);
+
+        setTimeout(function () {
+            display ? container.removeClass('points-settings-layer-container-hidden') : container.addClass('points-settings-layer-container-hidden');
+            display ? container.addClass('points-settings-layer-sizes') : container.removeClass('points-settings-layer-sizes');
+        }, 10);
+    }
+
+    if (!display)
+        displayPage(display,'');
+    else
+    await $.get("/PointsSettings/" + requestMethodName, await function (data) {
+        displayPage(false,'');
+        setTimeout(function () { displayPage(true,data) }, 150);
+    });
 }

@@ -45,7 +45,8 @@ create table ColorPalettes(
 	palette_name varchar(255) not null,
 	palette_serialization text not null,
 	user_id int not null,
-
+	creation_date datetime not null default(GETDATE()),
+	
 	unique nonclustered(palette_name,user_id),
 	primary key(color_palette_id),
 	foreign key (user_id) references Users(user_id)

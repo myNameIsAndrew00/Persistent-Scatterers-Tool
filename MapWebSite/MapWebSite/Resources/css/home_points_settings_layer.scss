@@ -1,4 +1,6 @@
-﻿#points-settings-layer-container {
+﻿@import 'colors.scss';
+
+#points-settings-layer-container {
     position: absolute;
     background: white;
     padding: 20px;
@@ -27,16 +29,126 @@
     .close_points_setting_layer_button:hover {
         background: #ffa740;
     }
+
+    .points-settings-layer-container-content {
+        transition: 0.3s;
+        transition-delay: 0.5s;
+    }
+
+    .points-settings-layer-container-palette-content {
+        display: grid;
+        grid-template: "header header" "left right";
+        grid-template-columns: 370px 180px;
+        grid-template-rows: 50px 300px;
+
+
+        .ps_header {
+            grid-area: header;
+        }
+
+        .ps_left {
+            background-color: get_color(lightGray);
+
+            tr, td {
+                padding: 10px;
+                width: 25%;
+                text-align: center;
+                font-size: smaller;
+                border-top: solid white;
+                border-bottom: solid white;
+
+                button {
+                    margin: 2px;
+                }
+
+                .use {
+                    padding: 0 5px 0 5px;
+                    font-size: 11px;
+                    color: white;
+                    background-color: #b7cca2; //TODO: set this variable to be from variables
+                }
+
+                .preview {
+                    padding: 0 5px 0 5px;
+                    font-size: 11px;
+                    color: white;
+                    background-color: #85b7ca; //TODO: set this variable to be from variables
+                }
+
+                .use:hover {
+                    background-color: #8fb767;
+                }
+
+                .preview:hover {
+                    background-color: #518fa6;
+                }
+
+                .palette {
+                    tr, td {
+                        width: 12px;
+                        height: 12px;
+                        margin: 0;
+                        padding: 0;
+                        border: solid #e3e3e3 1px;
+                    }
+                }
+            }
+
+            td:first-child, th:first-child {
+                width: 15%;
+                background-color: #f2ebdd;
+                border-right: solid;
+                border-color: white;
+                border-width: 3px;
+            }
+
+            td:last-child {
+                width: 1%;
+                padding: 10px 8px 10px 0;
+
+                button {
+                    float: right;
+                }
+            }
+
+            th {
+                padding: 0 10px 10px 10px;
+                text-align: center;
+                font-size: 13px;
+                font-family: 'Century Gothic';
+
+                object {
+                    display: block;
+                    margin: auto;
+                }
+            }
+
+            scrollbar-width: thin;
+            grid-area: left;
+            list-style: none;
+            overflow: auto;
+            height: 300px;
+        }
+
+        .ps_right {
+            grid-area: right;
+        }
+    }
 }
 
 
-.points-settings-layer-container-hidden {
-     
+.points-settings-layer-container-hidden { 
+    transition: 400ms!important;
     opacity: 0;
     width: 10px;
     height: 10px;
+    visibility: hidden;
 
-    .close_points_setting_layer_button{
+    .close_points_setting_layer_button {
+        opacity: 0;
+    }
+
+    div {
         opacity: 0;
     }
 }
