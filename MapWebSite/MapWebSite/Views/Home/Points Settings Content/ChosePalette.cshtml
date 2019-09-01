@@ -5,7 +5,14 @@
 }
 
 <div class="points-settings-layer-container-palette-content points-settings-layer-container-content">
-    <h4 class="ps_header">Chose palette</h4>
+    <div class="ps_header">
+        <h4>Chose palette</h4>
+        <input type="button" value="Search" />
+        @Html.DropDownList("filter",
+                         EnumHelper.GetSelectList(typeof(MapWebSite.Core.Database.ColorMapFilters)))
+
+        <input type="search" placeholder="type here to search..." />
+    </div>
     <div class="ps_left">
         <table>
             <tr>
@@ -13,9 +20,10 @@
                 <th>Palette name</th>
                 <th>Colors</th>
             </tr>
+            @{ int paletteIndex = 0;}
             @foreach (var item in Model.UsersColorMaps)
             {
-                <tr>
+                <tr id="user_palette_index_@(paletteIndex)">
                     <td>@item.Item1</td>
                     <td>@item.Item2.Name</td>
                     <td>
@@ -36,7 +44,7 @@
                             }
                         </table>
                     </td>
-                    <td><button class="use">Use</button><button class="preview">Preview</button></td>
+                    <td><button class="use" onclick="useColorMap(@(paletteIndex++),'@item.Item1','@item.Item2.Name')">Use</button><button class="preview">Preview</button></td>
                 </tr>
             }
            
@@ -44,3 +52,8 @@
     </div>
     <aside class="ps_right"></aside>
 </div>
+
+<script>
+        getScript('#points-settings-layer-container-content', '/Resources/js/chose_palette.js');  
+       
+</script>

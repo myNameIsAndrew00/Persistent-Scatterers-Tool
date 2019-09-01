@@ -108,5 +108,10 @@ namespace MapWebSite.Interaction
             return this.userRepository.GetColorMapsFiltered(filter, filterValue, pageIndex, itemsPerPage);
         }
 
+        public string GetColorPaletteSerialization(string username, string paletteName)
+        {
+            return this.userRepository.GetColorMapSerialization(username, paletteName);
+        }
+
     }
 }

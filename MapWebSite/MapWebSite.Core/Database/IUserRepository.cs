@@ -6,9 +6,9 @@ namespace MapWebSite.Core.Database
 {
     public enum ColorMapFilters
     {
+        None = -1,
         ColorMapName = 1,
         Username = 2,
-        None = -1
     }
 
     public interface IUserRepository
@@ -21,7 +21,12 @@ namespace MapWebSite.Core.Database
 
         bool CreateColorMap(string username, ColorMap colorMap);
 
-        IEnumerable<string> GetColorMaps(string username);
+        /// <summary>
+        /// Get all the color maps for a user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        IEnumerable<string> GetColorMapsNames(string username);
 
         int GetDatasetID(string username, string datasetName);
 
@@ -34,5 +39,7 @@ namespace MapWebSite.Core.Database
         /// <param name="itemsPerPage">Items contained in a page</param>
         /// <returns>List of tuples, first item of tuple represents user username and the second item, its color map</returns>
         IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(ColorMapFilters filter, string filterValue, int pageIndex, int itemsPerPage);
+
+        string GetColorMapSerialization(string username, string paletteName);
     }
 }

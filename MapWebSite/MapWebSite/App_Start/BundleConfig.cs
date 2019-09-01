@@ -82,6 +82,9 @@ namespace MapWebSite
             bundles.Add(new ScriptBundle("~/scripts/color_picker").Include(
                 "~/Resources/js/color_picker_color_list.js",
                 "~/Resources/js/color_picker.js"));
+
+            bundles.Add(new ScriptBundle("~/scripts/select").Include(
+                "~/Resources/js/select.js"));
         }
 
         private static void loadOpenLayersBundles(BundleCollection bundles)

@@ -1,5 +1,8 @@
 ﻿using MapWebSite.Interaction;
 using MapWebSite.Interaction.ViewModel;
+using MapWebSite.Model;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Mvc;
 
@@ -34,6 +37,18 @@ namespace MapWebSite.Controllers
     [Filters.ApiAuthenticationFilter]
     public class PointsSettingsApiController : ApiController
     {
+        [System.Web.Http.HttpGet]
+        public HttpResponseMessage GetColorPalette(string username, string paletteName)
+        {
+            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+            string serializedColorPalete = databaseInteractionHandler.GetColorPaletteSerialization(username, paletteName);
+
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent(serializedColorPalete);
+            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            return response;
+        }
     }
 
 

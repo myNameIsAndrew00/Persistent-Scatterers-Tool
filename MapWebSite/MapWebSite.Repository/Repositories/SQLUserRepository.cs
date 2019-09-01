@@ -61,7 +61,7 @@ namespace MapWebSite.Repository
             return true;
         }
 
-        public IEnumerable<string> GetColorMaps(string username)
+        public IEnumerable<string> GetColorMapsNames(string username)
         {
             List<string> result = new List<string>();
 
@@ -173,6 +173,27 @@ namespace MapWebSite.Repository
             }
 
             return result;
+        }
+
+        public string GetColorMapSerialization(string username, string paletteName)
+        {
+            try
+            {
+                return Convert.ToString(SqlExecutionInstance.ExecuteScalar(new SqlCommand("GetUserColorPalette")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                    new SqlParameter[]{
+                                                         new SqlParameter("username", username),
+                                                         new SqlParameter("palette_name", paletteName) },
+                                                    new SqlConnection(this.connectionString)));
+
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return string.Empty;
+            }
         }
     }
 }

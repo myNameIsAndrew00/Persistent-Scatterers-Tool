@@ -268,6 +268,7 @@
     </None>
     <Content Include="Resources\css\home_points_settings_layer.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
+    <Content Include="Resources\js\chose_palette.js" />
     <Content Include="Resources\js\color_picker.js" />
     <Content Include="Resources\js\color_picker_color_list.js" />
     <Content Include="Resources\js\home.js" />
@@ -276,6 +277,7 @@
     <Content Include="Resources\js\menu.js" />
     <Content Include="Resources\js\plot.js" />
     <Content Include="Resources\js\point_info.js" />
+    <Content Include="Resources\js\select.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
     <Content Include="Resources\resources\icons\arrow_right_icon.svg" />
@@ -362,6 +364,7 @@
     <Content Include="Resources\css\scrollbar.scss" />
     <Content Include="Views\Home\Points Settings Content\ChosePalette.cshtml" />
     <Content Include="Views\Home\Points Settings Content\ChoseDataset.cshtml" />
+    <Content Include="Resources\css\select.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

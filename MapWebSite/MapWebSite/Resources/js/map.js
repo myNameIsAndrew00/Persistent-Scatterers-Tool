@@ -5,57 +5,6 @@ var $control = ol.Control;
 var points = [];
 var vector = null;
 
-var colorPalette = [{
-    Color: '#33ff00',
-    Left: 0.0,
-    Right: 10.0
-},
-{
-    Color: '#33cc00',
-    Left: 10.0,
-    Right: 20.0
-},
-{
-    Color: '#339900',
-    Left: 20.0,
-    Right: 30.0
-},
-{
-    Color: '#ffff00',
-    Left: 30.0,
-    Right: 40.0
-    },
-    {
-        Color: '#ffcc00',
-        Left: 40.0,
-        Right: 50.0
-    },
-    {
-        Color: '#ff9900',
-        Left: 50.0,
-        Right: 60.0
-    },
-    {
-        Color: '#ff6600',
-        Left: 60.0,
-        Right: 70.0
-    },
-    {
-        Color: '#ff3300',
-        Left: 70.0,
-        Right: 80.0
-    },
-    {
-        Color: '#ff0000',
-        Left: 80.0,
-        Right: 90.0
-    },
-    {
-        Color: '#660000',
-        Left: 90.0,
-        Right: 100.0
-    }
-];
 
 /**
  * According to size, change the aspect of points
@@ -88,7 +37,7 @@ function buildStyleFromPalette(featureValue) {
     var paletteColor = binarySearch(
         ((featureValue + Math.abs(rangeMin)) * 100) / (rangeMax + Math.abs(rangeMin)),
         0,
-        9   
+        colorPalette.length - 1
     );
 
     return new ol.style.Style({
@@ -156,16 +105,7 @@ function handleClickFunction(e) {
     });
 
     diplayPointInfo();
-
-    /*change the point style*/
-    /*e.selected[0].setStyle(new ol.style.Style({
-        image: new ol.style.Circle(
-            {
-                radius: 3,
-                fill: new ol.style.Fill({ color: '#0000FF' })
-            }
-        )
-    }));*/
+ 
 }
 
 
@@ -177,8 +117,43 @@ select.on('select', handleClickFunction);
 /**
  * Section bellow contain the points request
  */
+function updatePointsLayer() {
+    var vectorSource = new ol.source.Vector({
+        features: points,
+        wrapX: false
+    });
 
-function loadData(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
+
+    if (vector != null) {
+        vector.setOpacity(0);
+        vector.setSource(vectorSource)
+    }
+    else {
+        vector = new ol.layer.Vector({
+            source: vectorSource,
+            style: function (feature) {
+                return buildStyleFromPalette(feature.get('colorCriteria'));
+            },
+            opacity: 0
+        });
+        map.addLayer(vector);
+    }
+
+    var animationFrames = 0;
+    var opacity = 0.1;
+    setTimeout(function () {
+        function change() {
+            if (animationFrames == 10) return;
+            animationFrames++;
+            opacity = animationFrames / 10;
+            vector.setOpacity(opacity);
+            setTimeout(function () { change() }, 30)
+        }
+        change();
+    }, 50);
+}
+
+function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
     $.ajax({
         type: "GET",
         data: {
@@ -207,39 +182,7 @@ function loadData(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongi
 
             requestedPoints.splice(0, requestedPoints.length);
 
-            var vectorSource = new ol.source.Vector({
-                features: points,
-                wrapX: false
-            });
-
-
-            if (vector != null) {
-                vector.setOpacity(0);
-                vector.setSource(vectorSource)
-            }
-            else {
-                vector = new ol.layer.Vector({
-                    source: vectorSource,
-                    style: function (feature) {
-                        return buildStyleFromPalette(feature.get('colorCriteria'));
-                    },
-                    opacity: 0
-                });
-                map.addLayer(vector);
-            }
-
-            var animationFrames = 0;
-            var opacity = 0.1;
-            setTimeout(function () {
-                function change() {
-                    if (animationFrames == 10) return;
-                    animationFrames++;
-                    opacity = animationFrames / 10;
-                    vector.setOpacity(opacity);
-                    setTimeout(function () { change() }, 30)
-                }
-                change();
-            }, 50);
+            updatePointsLayer();
 
 
         }
@@ -253,7 +196,7 @@ function onMapPositionChanged(evt) {
     var viewBox = map.getView().calculateExtent(map.getSize());
     var cornerCoordinates = ol.proj.transformExtent(viewBox, 'EPSG:3857', 'EPSG:4326');
 
-    loadData(map.getView().getZoom(),
+    loadDataPoints(map.getView().getZoom(),
         cornerCoordinates[1],
         cornerCoordinates[0],
         cornerCoordinates[3],

@@ -94,6 +94,24 @@ begin
 	OFFSET @page_index ROWS FETCH NEXT @items_per_page ROWS ONLY;
 end
  
+go
 
+if object_id('GetUserColorPalette', 'P') is not null
+	drop procedure GetUserColorPalette
+go
+create procedure GetUserColorPalette 
+	@username as varchar(100),
+	@palette_name as varchar(255)	 
+as 
+begin
+	select CP.palette_serialization
+		from ColorPalettes as CP
+		inner join Users as U
+			on U.username = @username and U.user_id = CP.user_id
+	where CP.palette_name = @palette_name			
+end
  
+
+
+
 
