@@ -1,4 +1,6 @@
-/*use this variables for dots controll*/ 
+import { ColorList, ColorNode } from './color_picker_color_list.js';
+
+/*use this variables for dots controll*/
 
 var isMouseDown = false;
 var dotsCount = 1;
@@ -9,10 +11,10 @@ var LeftMargin = 40 + Number(window.getComputedStyle(document.getElementById('co
 var SliderWidth = 800;
 var SliderLeft = 30;
 
-/*color mapping. this variable is loaded when the script is loaded first time (see cshtml code) */
-var colorList = null;
+/*color mapping list*/
+var colorList = new ColorList(new ColorNode('dot-1'), SliderWidth, '#361f9c');
 
-function changePosition() { 
+window.changePosition = function changePosition() { 
     if(currentDot == 1) return;
     if(isMouseDown){
         var dotPosition = event.clientX - LeftMargin;
@@ -36,13 +38,13 @@ function changePosition() {
 }
 
 
-function changeButtonState(state){ 
+window.changeButtonState = function changeButtonState(state){ 
     isMouseDown = state;
 
 }
 
 
-function changeSelectedDot(){
+window.changeSelectedDot = function changeSelectedDot(){
     var id = event.srcElement.id; 
     if(id.includes('dot-')) currentDot = id.split('-')[1];
     
@@ -50,7 +52,7 @@ function changeSelectedDot(){
 }
 
 /*function which handles the points addition to the slider*/  
-function addDot() { 
+window.addDot = function addDot() { 
     
     var dotColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
     var dotPosition = event.clientX - LeftMargin;     
@@ -65,7 +67,7 @@ function addDot() {
  
 }
 
-function createLabel(dotPosition){
+window.createLabel = function createLabel(dotPosition){
     var label = document.createElement('label');
     label.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
     label.style.left = dotPosition + 'px';
@@ -74,7 +76,7 @@ function createLabel(dotPosition){
     $('#dots-container').append(label);
 }
 
-function createSpan(dotPosition, dotColor){
+window.createSpan = function createSpan(dotPosition, dotColor){
     dotsCount++;
     //set the current dot to be the newest one
     currentDot = dotsCount;
@@ -93,7 +95,7 @@ function createSpan(dotPosition, dotColor){
     return dot.id;
 }
 
-function changeSpanColor(newColor){
+window.changeSpanColor = function changeSpanColor(newColor){
     colorList.SetPointColor('dot-' + currentDot, newColor);
     document.getElementById('dot-' + currentDot).style.backgroundColor = newColor;
     
@@ -101,22 +103,22 @@ function changeSpanColor(newColor){
      
 }
 
-function showColorPicker(horizontalPosition) { 
+window.showColorPicker = function showColorPicker(horizontalPosition) { 
    changeColorPickerVisibility(true);
 
    $('#color-picker').css('left', horizontalPosition - 25 + 'px');
 }
 
-function changeColorPickerVisibility(isVisible){
+window.changeColorPickerVisibility = function changeColorPickerVisibility(isVisible){
     isVisible ? $('#color-picker').removeClass('color-picker-hidden') :  $('#color-picker').addClass('color-picker-hidden');
 }
 
-function enableSubmit() {    
+window.enableSubmit = function enableSubmit() {    
     $('#finish-info-card').children('#send-palette-button').prop('disabled',
         $('#name-info-card').children('#color-palette-name').val() === '');
 }
 
-function sendColorPalette() {
+window.sendColorPalette = function sendColorPalette() {
     var paletteName = $('#name-info-card').children('#color-palette-name').val();
 
     if (paletteName === '') return; //TODO: display overlay
@@ -139,7 +141,7 @@ function sendColorPalette() {
     });;
 }
 
-function hideOverlay() {
+window.hideOverlay = function hideOverlay() {
     $('#settings-layer-container').children('#settings-layer-overlay').addClass('message-overlay-hidden');
     $('#settings-layer-container').children('#settings-layer-overlay').empty();
 }

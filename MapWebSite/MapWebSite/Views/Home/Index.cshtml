@@ -11,17 +11,17 @@
 
 
 <!--this represents the layer when a point is clicked-->
-<div id="point-info" class="point-info-layer" >
+<div id="point-info" class="point-info-layer">
     <div class="close-button">
-        <button onclick="hidePointInfo(true)">
+        <button onclick="HidePointInfo(true)">
             <object width="20px" height="30px" type="image/svg+xml" data="~/Resources/resources/icons/arrow_right_icon.svg" )></object>
         </button>
     </div>
 
     @{ Html.RenderPartial("~/Views/Home/PointInfo.cshtml");}
-    
+
 </div>
 
- 
-@Scripts.Render("~/scripts/openlayers")
-@Scripts.Render("~/scripts/home")
+
+@Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/openlayers")
+@Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/home")

@@ -1,5 +1,5 @@
  
-class ColorNode{
+export class ColorNode{
     constructor(pointKey){
         this.pointKey = pointKey;
 
@@ -12,7 +12,7 @@ class ColorNode{
 *  Internals components: a list -> which manages the order of the hashmap
 *                        a hashmap -> which manages the points and their valid positions 
 */
-class ColorList{
+export class ColorList{
     constructor(firstColorNode, barWidth, firstColor){
         this.root = firstColorNode; 
         this.barWidth = barWidth; 

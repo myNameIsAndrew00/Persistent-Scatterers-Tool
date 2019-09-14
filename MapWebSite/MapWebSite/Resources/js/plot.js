@@ -7,7 +7,7 @@ function attrValue(node, attributeName) {
     return node.target.attributes[attributeName].value;
 }
 
-class PlotDrawer {
+export class PlotDrawer {
     constructor(containerID, popupID, oXLength, oYLength, oXInterval, oYInterval, oxLabel, oyLabel) {
         this.containerID = containerID;
         this.popupID = popupID;
@@ -18,9 +18,12 @@ class PlotDrawer {
         this.endAxesValue = { oX: oXInterval.Right, oY: oYInterval.Top };
         this.oxLabel = oxLabel;
         this.oyLabel = oyLabel;
+        this.plotType = 'line';
+        this.currentPoints = null;
 
         this.DrawAxis();
         this.DrawReferences();
+      
 
         function showPopup(popupID, marginLeft, marginTop) {
             $(popupID).css('left', marginLeft + 'px');
@@ -72,19 +75,25 @@ class PlotDrawer {
         }
     }
 
-    DrawPoints(points, graphType) {
+    DrawPoints(points) {
+        this.currentPoints = points;
         this.deleteGraphPoints();
 
-        switch (graphType) {
+        switch (this.plotType) {
             case 'bars':
-                this.drawBarsPoints(points);
+                this.drawBarsPoints(this.currentPoints);
                 break;
             case 'line':
-                this.drawLinePoints(points);
+                this.drawLinePoints(this.currentPoints);
                 break;
 
         }
+    }
 
+    RedrawPoints() {
+        if (this.currentPoints == null) return;
+
+        this.DrawPoints(this.currentPoints);
     }
 
     DrawAxisLabels() {
@@ -102,6 +111,10 @@ class PlotDrawer {
 
         this.drawText({ X: this.origin.X + this.length.oX / 2 - 20, Y: this.origin.Y + 20 }, this.oxLabel, null);
         this.drawText({ X: this.origin.X, Y: this.origin.Y - this.length.oY - 10 }, this.oyLabel, null);
+    }
+
+    SetPlotType(plotType) {
+        this.plotType = plotType;
     }
 
     /*

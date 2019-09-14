@@ -1,19 +1,26 @@
+import { HidePointInfo } from './point_info.js';
+
+window.HidePointInfo = HidePointInfo;
+
 var loadedScripts = [];
 
-function getScript(node, scriptServerPath) {    
+/*Core method which loads javascript if it is not already loaded*/
+
+window.getScript = function getScript(node, scriptServerPath) {    
     if (loadedScripts[scriptServerPath] === true) return;
 
     loadedScripts[scriptServerPath] = true;
         
     var script = document.createElement('script');
     script.src = scriptServerPath;
+    script.type = 'module';
+
     $(node).append(script);
 }
 
 
-/*colorPaletteUsed*/
-
-var colorPalette = [{
+/*colorPalette Used*/
+export var colorPalette = [{
     Color: '#33ff00',
     Left: 0.0,
     Right: 10.0
@@ -64,3 +71,9 @@ var colorPalette = [{
     Right: 100.0
 }
 ];
+
+export function SetColorPalette(palette){
+    colorPalette = palette;
+}
+
+ 

@@ -1,6 +1,8 @@
-﻿  
+﻿import { PlotDrawer } from './plot.js';
 
-function diplayPointInfo() {
+var currentDrawer = null;
+
+export function DisplayPointInfo() {
     function display() {
         document.getElementById("point-info").style = "";   
         $("#point-info").css("opacity", 1);
@@ -9,22 +11,14 @@ function diplayPointInfo() {
         $("#top-menu").addClass('top-menu-hiden');
     }
     if (document.getElementById("point-info").style.visibility == "initial") {
-        hidePointInfo(false);
+        HidePointInfo(false);
         setTimeout(function () { display() }, 200);
     }
     else display();
   
 }
 
-function hidePointInfo(showTopMenu) {
-    if (showTopMenu) $("#top-menu").removeClass('top-menu-hiden');
-
-    $("#point-info").css("opacity", 0);
-    $("#point-info").css("width", "40%"); 
-    $("#point-info").css("visibility", "hidden");    
-}
-
-function setPointInfoData(point) {
+export function SetPointInfoData(point) {
 
     var pointLayer = $('#_point-info');
     var plotUnavailable = point.Displacements == null;
@@ -33,7 +27,7 @@ function setPointInfoData(point) {
         pointLayer.find("#plot").css("display", "none");
         pointLayer.find("#plot-menu").css("display", "none");
     }
-    else { 
+    else {
         var points = [];
 
         for (var index = 0; index < point.Displacements.length; index++)
@@ -42,24 +36,24 @@ function setPointInfoData(point) {
                 Y: point.Displacements[index].Value
             };
 
-        oXRight = Math.max.apply(Math, points.map(function (o) {
+        var oXRight = Math.max.apply(Math, points.map(function (o) {
             return o.X;
         }));
 
-        oXLeft = Math.min.apply(Math, points.map(function (o) {
+        var oXLeft = Math.min.apply(Math, points.map(function (o) {
             return o.X;
         }));
 
-        oYTop = Math.max.apply(Math, points.map(function (o) {
+        var oYTop = Math.max.apply(Math, points.map(function (o) {
             return o.Y;
         }));
 
-        oYBottom = Math.min.apply(Math, points.map(function (o) {
+        var oYBottom = Math.min.apply(Math, points.map(function (o) {
             return o.Y;
         }));
 
         drawPlot(points, oXLeft, oXRight, oYBottom, oYTop);
-      
+
         pointLayer.find("#no-plot-text").css("display", "none");
         pointLayer.find("#plot").css("display", "block");
         pointLayer.find("#plot-menu").css("display", "block");
@@ -72,13 +66,27 @@ function setPointInfoData(point) {
     pointLayer.find("#def_rate").html(point.DeformationRate);
     pointLayer.find("#std_dev").html(point.StandardDeviation);
     pointLayer.find("#est_height").html(point.EstimatedHeight);
-    pointLayer.find("#est_def_rate").html(point.EstimatedDeformationRate);  
+    pointLayer.find("#est_def_rate").html(point.EstimatedDeformationRate);
+}
+
+
+
+
+
+
+export function HidePointInfo(showTopMenu) {
+    if (showTopMenu) $("#top-menu").removeClass('top-menu-hiden');
+
+    $("#point-info").css("opacity", 0);
+    $("#point-info").css("width", "40%"); 
+    $("#point-info").css("visibility", "hidden");    
 }
 
 
 function drawPlot(values, oXLeft, oXRight, oYBottom, oYTop) {
    
-    var drawer = new PlotDrawer('#plot', '#plot-popup', 450, 270,
+    /*Plot drawer object reset*/
+    currentDrawer = new PlotDrawer('#plot', '#plot-popup', 450, 270,
         {
             Left: Math.round(oXLeft),
             Right: Math.round(oXRight)
@@ -90,6 +98,13 @@ function drawPlot(values, oXLeft, oXRight, oYBottom, oYTop) {
         'reference (days)',
         'value');
 
-    drawer.DrawPoints(values,'line');
 
+    currentDrawer.DrawPoints(values);
+}
+
+window.changePlotType = function changePlotType(plotType) {
+    if (currentDrawer == null) return;
+
+    currentDrawer.SetPlotType(plotType);
+    currentDrawer.RedrawPoints();
 }

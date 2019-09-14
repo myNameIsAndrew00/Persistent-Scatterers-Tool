@@ -1,7 +1,12 @@
-﻿/*Shortcut for map and ol*/
-var $map = ol.Map;
-var $feature = ol.Feature;
-var $control = ol.Control;
+﻿//import * as Total from '../../FrameworkContent/OpenLayers/ol.js';
+import { colorPalette } from './home.js';
+import { DisplayPointInfo, SetPointInfoData } from './point_info.js';
+//import { Map } from '../../FrameworkContent/OpenLayers/ol.js';
+
+ 
+/*Shortcut for map and ol*/
+ 
+ 
 var points = [];
 var vector = null;
 
@@ -68,7 +73,7 @@ var mapView = new ol.View({
  * Here the map is rendered 
  */
 
-var map = new $map({
+var map = new ol.Map({
     target: 'map',
     layers: [
         new ol.layer.Tile({
@@ -100,11 +105,11 @@ function handleClickFunction(e) {
         url: '/home/RequestPointDetails',
         success: function (receivedInfo) {
             var point = JSON.parse(receivedInfo.data);
-            setPointInfoData(point);
+            SetPointInfoData(point);
         }
     });
 
-    diplayPointInfo();
+    DisplayPointInfo();
  
 }
 
@@ -117,7 +122,7 @@ select.on('select', handleClickFunction);
 /**
  * Section bellow contain the points request
  */
-function updatePointsLayer() {
+export function UpdatePointsLayer() {
     var vectorSource = new ol.source.Vector({
         features: points,
         wrapX: false
@@ -170,7 +175,7 @@ function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, 
 
             var requestedPoints = JSON.parse(receivedInfo.data);
             for (var i = 0; i < requestedPoints.length; i++) {
-                points[i] = new $feature({
+                points[i] = new ol.Feature({
                     'geometry': new ol.geom.Point(
                         ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
                     'colorCriteria': requestedPoints[i].OptionalField
@@ -182,7 +187,7 @@ function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, 
 
             requestedPoints.splice(0, requestedPoints.length);
 
-            updatePointsLayer();
+            UpdatePointsLayer();
 
 
         }

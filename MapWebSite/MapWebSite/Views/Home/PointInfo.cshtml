@@ -42,15 +42,19 @@
     <div class="plot_container">
         <svg class="plot" id="plot" version="1.1" width="1000" height="1000">
 
-            
+
         </svg>
 
         <ul id="plot-menu" class="plot-menu">
             <li>
-                <object type="image/svg+xml" data="/Resources/resources/icons/bar_plot_icon.svg" width="25x" height="20px"></object>
+                <button onclick="changePlotType('bars')">
+                    <object type="image/svg+xml" data="/Resources/resources/icons/bar_plot_icon.svg" width="25x" height="20px"></object>
+                </button>
             </li>
             <li>
-                <object type="image/svg+xml" data="/Resources/resources/icons/points_plot_icon.svg" width="25x" height="20px"></object>
+                <button onclick="changePlotType('line')">
+                    <object type="image/svg+xml" data="/Resources/resources/icons/points_plot_icon.svg" width="25x" height="20px"></object>
+                </button>
             </li>
         </ul>
 

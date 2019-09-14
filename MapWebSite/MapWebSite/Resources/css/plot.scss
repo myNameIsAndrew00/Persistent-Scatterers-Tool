@@ -42,6 +42,23 @@
     .plot-menu {
         margin-left: -45px;
         padding: 25px;
+
+        button {
+            pointer-events: initial;
+            margin: 2px;
+            height: 30px;
+            background: none;
+            padding: 4px;
+
+            object {
+                pointer-events: none;
+            }
+        }
+
+        button:hover {
+           background: rgba(0,0,0,0.3);
+
+        }
     }
 
     .plot-popup {
