@@ -211,7 +211,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\PointsSettingsController.cs" />
-    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\Settings Controller\SCUploadPoints.cs" />
+    <Compile Include="Controllers\Settings Controller\SCColorPalette.cs" />
+    <Compile Include="Controllers\Settings Controller\SettingsController.cs" />
     <Compile Include="Filters\Authentication\ApiAuthenticationFilter.cs" />
     <Compile Include="Filters\Authentication\AuthenticationHandler.cs" />
     <Compile Include="Filters\Authentication\SiteAuthenticationFilter.cs" />
@@ -276,6 +278,7 @@
     <Content Include="Resources\js\map.js" />
     <Content Include="Resources\js\menu.js" />
     <Content Include="Resources\js\plot.js" />
+    <Content Include="Resources\js\points_dataset_picker.js" />
     <Content Include="Resources\js\point_info.js" />
     <Content Include="Resources\js\select.js" />
     <Content Include="Resources\resources\background-original.jpg" />

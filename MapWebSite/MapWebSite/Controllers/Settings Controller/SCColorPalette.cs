@@ -12,13 +12,12 @@ namespace MapWebSite.Controllers
     /// Use this ApiController to return pages for the settings layer and to interact with it
     /// </summary>
     [Filters.ApiAuthenticationFilter]
-    public class SettingsController : ApiController
+    public partial class SettingsController : ApiController
     {
 
         [HttpPost]
         public HttpResponseMessage SaveColorsPalette(ColorMap colorMap)
-        {
-            //TODO: save the color map to the database
+        { 
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
             bool result = handler.InsertColorPalette(User.Identity.Name, colorMap);
           

@@ -9,6 +9,9 @@ namespace MapWebSite.Core.DataPoints
 {
     using HeaderData = Tuple<DateTime, decimal, decimal>;
      
+    /// <summary>
+    /// Use this object to parse a text file into a Points Dataset object
+    /// </summary>
     public class TxtDataPointsSource : IDataPointsSource
     {
         readonly int headerUnusedLinesCount  = 10;

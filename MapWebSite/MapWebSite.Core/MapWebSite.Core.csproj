@@ -72,15 +72,15 @@
   <ItemGroup>
     <Compile Include="Attributes, Converters and Comparers\DateFormatConverter.cs" />
     <Compile Include="Attributes, Converters and Comparers\DuplicateKeyComparer.cs" />
-    <Compile Include="Database\IDataPointsRepository.cs" />
-    <Compile Include="Database\IUserRepository.cs" />
-    <Compile Include="DataPoints\Interfaces\IDataPointsZoomLevelsGenerator.cs" />
-    <Compile Include="DataPoints\Points Zoom\SquareMeanPZGenerator.cs" />
-    <Compile Include="DataPoints\Points Sources\TxtDataPointsSource.cs" />
+    <Compile Include="Repositories\IDataPointsRepository.cs" />
+    <Compile Include="Repositories\IUserRepository.cs" />
+    <Compile Include="Data Points Handling\Interfaces\IDataPointsZoomLevelsGenerator.cs" />
+    <Compile Include="Data Points Handling\Points Zoom\SquareMeanPZGenerator.cs" />
+    <Compile Include="Data Points Handling\Points Sources\TxtDataPointsSource.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="DataPoints\Interfaces\IDataPointsSource.cs" />
+    <Compile Include="Data Points Handling\Interfaces\IDataPointsSource.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Interfaces\ICloneable.cs" />
+    <Compile Include="Generic Interfaces\ICloneable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
