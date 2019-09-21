@@ -1,0 +1,72 @@
+﻿@import 'colors.scss';
+
+.upload-points-container {
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    object {
+        margin-top: -25px;
+    }
+
+    .upload-points-container-text {
+        margin-top: -50px;
+        text-align: center;
+
+        label {
+            display: block;
+            font-weight: 100;
+            color: get_color(chromaOrange);
+        }
+
+        #warning-text {
+            visibility: collapse;
+        }
+
+        .file-button-interaction {
+            display: block;
+            color: get_color(light);
+            background: get_color(chromaPurple);
+            
+            padding: 5px;
+            border-radius: 5px;
+            width: 200px;
+            height: 32px;
+            margin: 20px auto;
+            
+            transition: 0.3s;
+            cursor: pointer;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .file-button-interaction:before {
+            display: inline-block;
+            float: left;
+            content: ' ';
+            background-image: url(../resources/icons/upload_points_icon.svg);
+            height: 23px;
+            width: 23px;
+            background-size: 23px 23px;
+        }
+
+        .file-button-interaction:hover {
+            background: get_color(lightPink);
+        }
+
+        input, button {
+            color: white;
+        }
+        /*use this to hide the original appeareance of the input*/
+        input[type="file"] {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -5;
+        }
+    }
+}

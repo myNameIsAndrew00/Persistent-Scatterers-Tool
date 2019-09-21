@@ -1,4 +1,5 @@
-import { ColorList, ColorNode } from './color_picker_color_list.js';
+import { ColorList, ColorNode } from '../color_picker_color_list.js';
+import { DisplayOverlay } from './settings.js';
 
 /*use this variables for dots controll*/
 
@@ -131,17 +132,11 @@ window.sendColorPalette = function sendColorPalette() {
         },
         url: 'api/settings/SaveColorsPalette',
         success: function (receivedInfo) {
-            $('#settings-layer-container').children('#settings-layer-overlay').removeClass('message-overlay-hidden');
-            $('#settings-layer-container').children('#settings-layer-overlay').html(receivedInfo);
+            DisplayOverlay(receivedInfo);
         },
         error: function (receivedInfo) {
-            $('#settings-layer-container').children('#settings-layer-overlay').removeClass('message-overlay-hidden');
-            $('#settings-layer-container').children('#settings-layer-overlay').html(receivedInfo);
+            DisplayOverlay(receivedInfo);
         }
     });;
 }
 
-window.hideOverlay = function hideOverlay() {
-    $('#settings-layer-container').children('#settings-layer-overlay').addClass('message-overlay-hidden');
-    $('#settings-layer-container').children('#settings-layer-overlay').empty();
-}

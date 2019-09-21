@@ -5,6 +5,7 @@
 @import 'home_points_settings_layer.scss';
 @import 'scrollbar.scss';
 @import 'select.scss';
+@import 'colors.scss';
 
 ::selection {
     background: none;
@@ -18,7 +19,7 @@ body, html {
 
 input, button {
     margin: 10px;
-    background: #c6a66c; //TODO: make color to be accesed via variable  
+    background: get_color(chromaOrange);   
     transition: 0.3s;
     padding: 5px 15px 5px 15px;
     border: none;

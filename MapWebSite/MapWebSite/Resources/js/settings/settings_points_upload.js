@@ -1,13 +1,56 @@
-﻿var processedFiles = {};
+﻿import { DisplayOverlay } from './settings.js';
+
+var processedFiles = {};
+
+/*Style and aspect handling*/
+
+window.changeFileInputAspect = function changeFileInputAspect() {
+    $('#upload_points_container_form').children('#file-input-visible').html(
+        $('#uploadFile')[0].files[0].name
+    );
+}
+
+function notifyFileNotSelected() {
+    $('#upload_points_container_form').children('#warning-text').css('visibility', 'visible');
+}
+
+window.enableDatasetSubmit = function enableDatasetSubmit() {
+    $('#upload_points_container_form').children('#upload_points_submit').prop('disabled',
+        $('#upload_points_container_form').children('#upload_points_dataset_name').val() === '');
+}
 
 
+/*****************************************************************************/
 /*send button click handling*/
+
+
 window.uploadDataSets = function uploadDataSets() {
-    uploadFile($('#uploadFile')[0].files[0], 'radarada45');
+    var dataSetName = $('#upload_points_container_form').children('#upload_points_dataset_name').val();
+    if ($('#uploadFile')[0].files[0] === undefined) {
+        notifyFileNotSelected();
+        return;
+    }
+    checkDataSetName(dataSetName);    
 };
 
 
+function checkDataSetName(dataSetName) {
+    $.ajax({
+        type: 'POST',
+        url: 'api/settings/CheckDatasetExistance', 
+        data: { fileName: dataSetName },
+        success: function (serverResponse) {
+            if (serverResponse.includes("Success"))
+                uploadFile($('#uploadFile')[0].files[0],
+                    dataSetName);
+            else {
+                DisplayOverlay(serverResponse);
+            }
+        }
+    })
+}
 
+/*****************************************************************************/
 /*sending data functions*/
 
 function uploadFile(file, dataSetName) {
@@ -61,7 +104,6 @@ function mergeChunks(dataSetName) {
     $.ajax({
         type: 'POST',
         url: 'api/settings/MergeFileChunks',
-        dataType: 'json',
         data: { fileName: dataSetName },
         success: function (serverResponse) {
             //process server response

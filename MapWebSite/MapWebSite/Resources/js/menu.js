@@ -1,8 +1,9 @@
-﻿/*functions below are used to add interaction to the down-left menu*/
+﻿import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
+
+/*functions below are used to add interaction to the down-left menu*/
 
 var currentMenuIconIndex = 0;
 var menuIconsCount = 0;
-var rotateSpinner = false;
 
 window.onload = function () {
     menuIconsCount = $('#main-select-menu-icon').find('object').length;
@@ -10,7 +11,7 @@ window.onload = function () {
 
 /*use this function to change the menu content*/
 
-function changeMenuContent(direction, display = false) {
+window.changeMenuContent = function changeMenuContent(direction, display = false) {
     var currentMenuIcon = document.getElementById('main-menu-icon-' + currentMenuIconIndex);
     var currentMenuList = document.getElementById('secondary-menu-items-' + currentMenuIconIndex);
 
@@ -58,6 +59,7 @@ function hideIcon(innerImage, innerText, currentMenuList) {
     innerText.style.opacity = '0';
 }
 
+
 function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
     hideIcon(innerImage, innerText, currentMenuList);
 
@@ -81,29 +83,15 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
 
 /*functions used for setting overlay*/
 
-async function requestSettingsPage(pageName, cssServerPath) {
+window.requestSettingsPage = async function requestSettingsPage(pageName, cssServerPath) {
     ChangeSpinnerVisibility(true);
 
-
-    setTimeout(displayPage, 50, true);
+    setTimeout(DisplayPage, 50, true);
 
     await requestPage(pageName, cssServerPath);
 
 }
 
-
-function displayPage(display) {
-    $('#settings-layer').html('');
-
-    function doAction(remove, id, className) {
-        remove ? $(id).removeClass(className) : $(id).addClass(className);
-    }
-    doAction(display, '#settings-layer-container', 'settings-layer-container-hide');
-    doAction(display, '#settings-layer', 'settings-layer-hide');
-    doAction(!display, '#main-menu', 'main-select-menu-nontransparent');
-    doAction(!display, '#secondary-menu', 'secondary-menu-nontransparent');
-    doAction(!display, '#top-menu', 'top-menu-hiden');
-}
 
 async function requestPage(pageName, cssServerPath) {
 
@@ -132,65 +120,12 @@ function requestCss(cssServerPath) {
 }
 
 
-/*****************************************************************************************/
-
-/*functions used for spinner */
-
-/*this functions rotate the settings page loading spinner */
-function startSpinner() {
-    if (rotateSpinner == false) return;
-    //TODO: refactorize this code
-    var spinnerIcon = document.getElementById('loading-icon');
-    var inner_spin = spinnerIcon.contentDocument.getElementById('inner_circle');
-    var middle_spin = spinnerIcon.contentDocument.getElementById('middle_circle');
-    var outer_circle = spinnerIcon.contentDocument.getElementById('outer_circle');
-    var globe = spinnerIcon.contentDocument.getElementById('Globe');
-
-    var degrees = 0;
-    var scaleValue = 0.801;
-    var scaleDirection = 1;
-
-    function spin() {
-
-        inner_spin.style.transform = 'rotate(' + degrees * 2.4 + 'deg)';
-        inner_spin.style.transformOrigin = 'center';
-
-        middle_spin.style.transform = 'rotate(' + degrees * 1.8 + 'deg)';
-        middle_spin.style.transformOrigin = 'center';
-
-        outer_circle.style.transform = 'rotate(' + degrees * 1.2 + 'deg)';
-        outer_circle.style.transformOrigin = 'center';
-
-        globe.style.transform = 'scale(' + scaleValue + ')';
-        globe.style.transformOrigin = 'center';
-
-        scaleValue += scaleDirection * 0.0015;
-        if (scaleValue >= 1 || scaleValue <= 0.8) scaleDirection = scaleDirection * -1;
-        degrees = (degrees + 1) % 600;
-
-        if (rotateSpinner) setTimeout(spin, 1);
-
-    }
-    spin();
-}
-
-
-function ChangeSpinnerVisibility(visible) {
-
-    if (visible)
-        document.getElementById('loading-icon').classList.remove('loading-icon-hide');
-    else document.getElementById('loading-icon').classList.add('loading-icon-hide');
-
-    rotateSpinner = visible;
-    startSpinner();
-}
-
 
 /*****************************************************************************************/
 
 /*functions used for points setting overlay*/
 
-async function displayPointsLayerPage(display, requestMethodName) {
+window.displayPointsLayerPage = async function displayPointsLayerPage(display, requestMethodName) {
 
     function displayPage(display,serverData) {
         var container = $('#points-settings-layer-container');

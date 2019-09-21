@@ -27,7 +27,7 @@
         }
 
         button:hover {
-            background: #c6a66c; //TODO: make color to be accesed via variable
+            background: get_color(chromaOrange); 
         }
     }
 }

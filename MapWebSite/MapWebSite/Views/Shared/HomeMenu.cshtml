@@ -25,11 +25,11 @@
         <ul id="secondary-menu-items-1">
             <li class="secondary-menu-item">
                 <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/upload_points_icon.svg"></object>
-                <button onclick="requestSettingsPage('upload-points')">Upload points</button>
+                <button onclick="requestSettingsPage('upload-points','/Resources/css/settings_points_upload.scss')">Upload points</button>
             </li>
             <li class="secondary-menu-item">
                 <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/palette_icon.svg"></object>
-                <button onclick="requestSettingsPage('create-palette-color','/Resources/css/color_picker.scss')">Create palette</button>
+                <button onclick="requestSettingsPage('create-palette-color','/Resources/css/settings_color_picker.scss')">Create palette</button>
             </li>
         </ul>
     </nav>
@@ -49,4 +49,4 @@
 </div>
 
 
-@Scripts.Render("~/scripts/menu")
+@Scripts.RenderFormat("<script src={0} type='module'></script>","~/scripts/menu")

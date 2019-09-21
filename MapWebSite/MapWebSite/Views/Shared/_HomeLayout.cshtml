@@ -18,6 +18,7 @@
 
 
     @{ Html.RenderPartial("~/Views/Home/SettingsLayer.cshtml");}
+    @Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/settings")
 
 
     @{ Html.RenderPartial("HomeMenu"); }

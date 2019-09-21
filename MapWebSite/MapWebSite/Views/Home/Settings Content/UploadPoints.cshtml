@@ -3,9 +3,31 @@
     Layout = null;
 }
 
-@*<input type="file" id="uploadFile" name="file" />  
-<btn class="btn btn-primary" id="btnUpload" onclick="uploadDataSets()">Upload file</btn>*@
+<div class="upload-points-container">
+    <object class="current_displayed_icon"
+            width="920px"
+            height="460px"
+            type="image/svg+xml"
+            data="~/Resources/resources/icons/upload_points_gliph.svg" )></object>
+    <div id="upload_points_container_form" class="upload-points-container-text">
+        <h1>Upload points</h1>
+        <small>
+            Select a text file which contains points and upload them on server. <br />
+            The name which you chose must be unique.
+            Dataset will be available for display after a service will process the text file.
+        </small>
+
+        <input onchange="changeFileInputAspect()" type="file" id="uploadFile" name="file" />
+        <label id="file-input-visible" class="file-button-interaction" for="uploadFile">Choose a file</label>
+
+        <label id="warning-text"><small>A file is required...<br /></small></label>
+        <input type="text" onkeyup="enableDatasetSubmit()" id="upload_points_dataset_name" placeholder="insert dataset name..." />
+
+
+        <button id="upload_points_submit" onclick="uploadDataSets()" disabled>Upload file</button>
+    </div>
+</div>
 
 <script>
-    getScript('#settings-layer', '/Resources/js/points_dataset_picker.js');  
+    getScript('#settings-layer', '/Resources/js/settings/settings_points_upload.js');
 </script>

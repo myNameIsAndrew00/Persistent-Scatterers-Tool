@@ -34,9 +34,14 @@ namespace MapWebSite
             homeStyleBundle.Orderer = new NullOrderer();
 
             var colorPickerBundle = new CustomStyleBundle("~/Content/color_picker").Include(
-               "~/Resources/css/color_picker.scss");
+               "~/Resources/css/settings_color_picker.scss");
             colorPickerBundle.Orderer = new NullOrderer();
 
+            var uploadPointsBundle = new CustomStyleBundle("~/Content/upload_points").Include(
+             "~/Resources/css/settings_points_upload.scss");
+            uploadPointsBundle.Orderer = new NullOrderer();
+
+            bundles.Add(uploadPointsBundle);
             bundles.Add(loginStyleBundle);
             bundles.Add(homeStyleBundle);
             bundles.Add(colorPickerBundle);
@@ -79,9 +84,12 @@ namespace MapWebSite
             bundles.Add(new ScriptBundle("~/scripts/menu").Include(
                 "~/Resources/js/menu.js"));
 
+            bundles.Add(new ScriptBundle("~/scripts/settings").Include(
+                "~/Resources/js/settings/settings.js"));
+
             bundles.Add(new ScriptBundle("~/scripts/color_picker").Include(
                 "~/Resources/js/color_picker_color_list.js",
-                "~/Resources/js/color_picker.js"));
+                "~/Resources/js/settings/color_picker.js"));
 
             bundles.Add(new ScriptBundle("~/scripts/select").Include(
                 "~/Resources/js/select.js"));

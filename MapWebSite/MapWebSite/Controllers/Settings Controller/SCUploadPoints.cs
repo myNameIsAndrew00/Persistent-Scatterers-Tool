@@ -58,6 +58,7 @@ namespace MapWebSite.Controllers
         [HttpPost]
         public HttpResponseMessage ClearFileChunks()
         {
+            //TODO: implement
             throw new NotImplementedException();
         }
 
@@ -91,6 +92,24 @@ namespace MapWebSite.Controllers
                 StatusCode = System.Net.HttpStatusCode.OK,
                 Content = new StringContent("File merged")
             };
+        }
+
+        [HttpPost]
+        public HttpResponseMessage CheckDatasetExistance([FromBody] JObject data)
+        {                     
+            string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{HttpContext.Current.User.Identity.Name}\\{data["fileName"].ToObject<string>()}";
+
+            bool directoryExists = Directory.Exists(directoryName);
+
+            var response = new HttpResponseMessage()
+            {
+                Content = new StringContent(MessageBoxBuilder.Create(!directoryExists ? "Success" : "Can't finish operation",
+                                                                          !directoryExists ? "Success"
+                                                                                         : "You chosed an existent name for your dataset. Please chose another"))
+            };                 
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+
+            return response;
         }
 
     }
