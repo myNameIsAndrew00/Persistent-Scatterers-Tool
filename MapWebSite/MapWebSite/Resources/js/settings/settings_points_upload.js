@@ -30,14 +30,14 @@ window.uploadDataSets = function uploadDataSets() {
         notifyFileNotSelected();
         return;
     }
-    checkDataSetName(dataSetName);    
+    checkDataSetName(dataSetName);
 };
 
 
 function checkDataSetName(dataSetName) {
     $.ajax({
         type: 'POST',
-        url: 'api/settings/CheckDatasetExistance', 
+        url: 'api/settings/CheckDatasetExistance',
         data: { fileName: dataSetName },
         success: function (serverResponse) {
             if (serverResponse.includes("Success"))
@@ -50,13 +50,24 @@ function checkDataSetName(dataSetName) {
     })
 }
 
+function enableUpload() {
+    $('#upload_points_container_form').children('#current_percent').removeClass('current-percent-hidden');
+}
+
+function updatePercentText(percent) {
+      $('#upload_points_container_form').children('#current_percent').html(
+        percent + '%');
+}
+
 /*****************************************************************************/
 /*sending data functions*/
 
 function uploadFile(file, dataSetName) {
+    enableUpload();
+
     var fileChunks = [];
 
-    var chunkSize = 1048576;
+    var chunkSize = 10485760;
 
     var fileSize = file.size;
     var chunkBeginPointer = 0;
@@ -72,8 +83,10 @@ function uploadFile(file, dataSetName) {
 
     var chunkIndex = 0;
     var chunk = null;
-    while (chunk = fileChunks.shift())
+    while (chunk = fileChunks.shift()) {
         uploadChunk(chunk, dataSetName + '_' + chunkIndex++, dataSetName);
+        setTimeout(function () { }, 100);
+    };
 
 }
 
@@ -93,8 +106,14 @@ function uploadChunk(chunk, chunkName, dataSetName) {
             //process server response
 
             processedFiles[dataSetName].chunksSent++;
-            if (processedFiles[dataSetName].chunksSent == processedFiles[dataSetName].total)
+
+            //update user interface
+            updatePercentText( ((100 / processedFiles[dataSetName].total) * processedFiles[dataSetName].chunksSent).toFixed(2));
+
+            if (processedFiles[dataSetName].chunksSent >= processedFiles[dataSetName].total) {
+                updatePercentText('100');
                 mergeChunks(dataSetName);
+            }
         }
     });
 }

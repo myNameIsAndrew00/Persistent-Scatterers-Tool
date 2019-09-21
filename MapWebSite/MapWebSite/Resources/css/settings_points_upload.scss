@@ -12,7 +12,7 @@
     }
 
     .upload-points-container-text {
-        margin-top: -50px;
+        margin-top: -100px;
         text-align: center;
 
         label {
@@ -25,15 +25,19 @@
             visibility: collapse;
         }
 
+        .current-percent-hidden{
+            visibility: hidden;
+        }
+
         .file-button-interaction {
             display: block;
             color: get_color(light);
             background: get_color(chromaPurple);
             
             padding: 5px;
+            padding-left: 35px;
             border-radius: 5px;
-            width: 200px;
-            height: 32px;
+            width: 200px; 
             margin: 20px auto;
             
             transition: 0.3s;
@@ -45,8 +49,11 @@
         .file-button-interaction:before {
             display: inline-block;
             float: left;
+            margin-left: -28px;
+
             content: ' ';
-            background-image: url(../resources/icons/upload_points_icon.svg);
+            background-image: url(../resources/icons/upload_points_icon.svg);            
+
             height: 23px;
             width: 23px;
             background-size: 23px 23px;
