@@ -82,6 +82,12 @@
         .ps_left {
             background-color: get_color(lightGray);
 
+            .table-header {
+                th:last-child {
+                    width: 1%;
+                }
+            }
+
             tr, td {
                 padding: 10px;
                 width: 25%;
@@ -177,12 +183,11 @@
             grid-area: right;
         }
     }
-
 }
 
 
-.points-settings-layer-container-hidden { 
-    transition: 400ms!important;
+.points-settings-layer-container-hidden {
+    transition: 400ms !important;
     opacity: 0;
     width: 10px;
     height: 10px;
@@ -201,5 +206,3 @@
     height: 400px;
     width: 600px;
 }
-
- 

@@ -46,7 +46,7 @@
     <Compile Include="Html Helpers\Settings Layer\MessageBoxBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteUser.cs" />
-    <Compile Include="Views Model\ChosePaletteModel.cs" />
+    <Compile Include="Views Model\ChosePaletteViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MapWebSite.Core\MapWebSite.Core.csproj">

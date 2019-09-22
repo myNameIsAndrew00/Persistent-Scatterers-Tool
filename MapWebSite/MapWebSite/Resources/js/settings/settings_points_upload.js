@@ -52,6 +52,7 @@ function checkDataSetName(dataSetName) {
 
 function enableUpload() {
     $('#upload_points_container_form').children('#current_percent').removeClass('current-percent-hidden');
+    updatePercentText('0');
 }
 
 function updatePercentText(percent) {

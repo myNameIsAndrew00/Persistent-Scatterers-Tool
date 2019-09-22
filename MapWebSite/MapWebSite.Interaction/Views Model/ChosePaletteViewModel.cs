@@ -9,13 +9,15 @@ namespace MapWebSite.Interaction.ViewModel
 {
     using UserColorMap = Tuple<string, ColorMap>;
 
-    public class ChosePaletteModel
+    public class ChosePaletteViewModel
     {
-        public readonly int colorsPerRow = 7;
+        public readonly int ColorsPerRow = 7;
+
+        public static readonly int ColorPalettesPerPage = 10;
 
         public IEnumerable<UserColorMap> UsersColorMaps { get; } = null;
 
-        public ChosePaletteModel(IEnumerable<UserColorMap> usersColorMaps)
+        public ChosePaletteViewModel(IEnumerable<UserColorMap> usersColorMaps)
         {
             this.UsersColorMaps = usersColorMaps;
         }

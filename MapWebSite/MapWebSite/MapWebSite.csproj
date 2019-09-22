@@ -210,7 +210,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\PointsSettingsController.cs" />
+    <Compile Include="Controllers\Points Settings Controller\PointsSettingsController.cs" />
     <Compile Include="Controllers\Settings Controller\SCUploadPoints.cs" />
     <Compile Include="Controllers\Settings Controller\SCColorPalette.cs" />
     <Compile Include="Controllers\Settings Controller\SettingsController.cs" />
@@ -271,7 +271,7 @@
     <Content Include="Resources\css\home_points_settings_layer.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
     <None Include="Resources\css\settings_points_upload.scss" />
-    <Content Include="Resources\js\chose_palette.js" />
+    <Content Include="Resources\js\points settings\chose_palette.js" />
     <Content Include="Resources\js\settings\settings.js" />
     <Content Include="Resources\js\settings\settings_color_picker.js" />
     <Content Include="Resources\js\color_picker_color_list.js" />
@@ -282,7 +282,6 @@
     <Content Include="Resources\js\plot.js" />
     <Content Include="Resources\js\settings\settings_points_upload.js" />
     <Content Include="Resources\js\point_info.js" />
-    <Content Include="Resources\js\select.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
     <Content Include="Resources\resources\icons\arrow_right_icon.svg" />

@@ -91,7 +91,7 @@ begin
 				end )) > 0 
 		   OR @filter_id = -1
 	order by CP.creation_date desc
-	OFFSET @page_index ROWS FETCH NEXT @items_per_page ROWS ONLY;
+	OFFSET @page_index * items_per_page ROWS FETCH NEXT @items_per_page ROWS ONLY;
 end
  
 go

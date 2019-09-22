@@ -1,4 +1,4 @@
-﻿@model  MapWebSite.Interaction.ViewModel.ChosePaletteModel
+﻿@model  MapWebSite.Interaction.ViewModel.ChosePaletteViewModel
 
 @{
     Layout = null;
@@ -6,37 +6,40 @@
 
 <div class="points-settings-layer-container-palette-content points-settings-layer-container-content">
     <div class="ps_header">
-        <h4>Chose palette</h4>
-        <input type="button" value="Search" />
+        <h4>Chose palette</h4> 
         @Html.DropDownList("filter",
-                         EnumHelper.GetSelectList(typeof(MapWebSite.Core.Database.ColorMapFilters)))
+                         EnumHelper.GetSelectList(typeof(MapWebSite.Core.Database.ColorMapFilters)),
+                         new { id = "colorPaletteFilterValue", onchange = "loadMorePalettes(true)" })
 
-        <input type="search" placeholder="type here to search..." />
+        <input type="search" id="colorPaletteSearchValue" placeholder="type here to search..." onkeyup="loadMorePalettes(true)" />
+        <input type="hidden" id="colorPalettesPerPage" value="@MapWebSite.Interaction.ViewModel.ChosePaletteViewModel.ColorPalettesPerPage" />
+        <input type="hidden" id="colorsTableColorsPerRow" value="@Model.ColorsPerRow" />
+        <input type="hidden" id="currentColorPaletteIndex" value="1" />
     </div>
-    <div class="ps_left">
+    <div class="ps_left" id="ps_left" onscroll="loadMorePalettes(false)">
         <table>
-            <tr>
+            <tr class="table-header">
                 <th><object width="14px" height="35px" type="image/svg+xml" data="~/Resources/resources/icons/user_palette_icon.svg"></object></th>
                 <th>Palette name</th>
                 <th>Colors</th>
-            </tr>
-            @{ int paletteIndex = 0;}
+                <th>Actions</th>
+            </tr> 
             @foreach (var item in Model.UsersColorMaps)
             {
-                <tr id="user_palette_index_@(paletteIndex)">
+                <tr id="user_palette_index_@(item.Item1)_@(item.Item2.Name)">
                     <td>@item.Item1</td>
                     <td>@item.Item2.Name</td>
                     <td>
                         <table class="palette">
                             @{
                                 var intervals = item.Item2.Intervals;
-                                int rowsCount = intervals.Count / Model.colorsPerRow,
+                                int rowsCount = intervals.Count / Model.ColorsPerRow,
                                     intervalsIndex = 0;
                             }
                             @for (int index = 0; index <= rowsCount; index++)
                             {
                                 <tr>
-                                    @for (int rowIndex = 0; rowIndex < Model.colorsPerRow && intervalsIndex < item.Item2.Intervals.Count; rowIndex++, intervalsIndex++)
+                                    @for (int rowIndex = 0; rowIndex < Model.ColorsPerRow && intervalsIndex < item.Item2.Intervals.Count; rowIndex++, intervalsIndex++)
                                     {
                                     <td style="background:@intervals[intervalsIndex].Color"></td>
                                     }
@@ -44,7 +47,7 @@
                             }
                         </table>
                     </td>
-                    <td><button class="use" onclick="useColorMap(@(paletteIndex++),'@item.Item1','@item.Item2.Name')">Use</button><button class="preview">Preview</button></td>
+                    <td><button class="use" onclick="useColorMap('@(item.Item1)_@(item.Item2.Name)','@item.Item1','@item.Item2.Name')">Use</button><button class="preview">Preview</button></td>
                 </tr>
             }
            
@@ -54,5 +57,5 @@
 </div>
 
 <script>
-        getScript('#points-settings-layer-container-content', '/Resources/js/chose_palette.js');         
+        getScript('#points-settings-layer-container-content', '/Resources/js/points settings/chose_palette.js');         
 </script>

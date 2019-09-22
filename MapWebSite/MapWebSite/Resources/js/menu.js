@@ -1,6 +1,8 @@
 ﻿import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
+import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
 
-/*functions below are used to add interaction to the down-left menu*/
+/**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE DOWN-LEFT MENU******************/
+/*************************************************************************************************/
 
 var currentMenuIconIndex = 0;
 var menuIconsCount = 0;
@@ -80,8 +82,7 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
 }
 
 /*****************************************************************************************/
-
-/*functions used for setting overlay*/
+/*functions used for interaction with setting overlay*/
 
 window.requestSettingsPage = async function requestSettingsPage(pageName, cssServerPath) {
     ChangeSpinnerVisibility(true);
@@ -120,11 +121,10 @@ function requestCss(cssServerPath) {
 }
 
 
-
+/**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE TOP-MIDDLE MENU******************/
 /*****************************************************************************************/
 
 /*functions used for points setting overlay*/
-
 window.displayPointsLayerPage = async function displayPointsLayerPage(display, requestMethodName) {
 
     function displayPage(display,serverData) {
@@ -132,6 +132,8 @@ window.displayPointsLayerPage = async function displayPointsLayerPage(display, r
         var innerContainer = $('#points-settings-layer-container').children("#points-settings-layer-container-content");
 
         innerContainer.html(serverData);
+        //if the request is for 'chose palette control' update the layout
+        if (requestMethodName == 'GetColorPalettePage') UpdateChosePaletteLayout();
 
         setTimeout(function () {
             display ? container.removeClass('points-settings-layer-container-hidden') : container.addClass('points-settings-layer-container-hidden');
