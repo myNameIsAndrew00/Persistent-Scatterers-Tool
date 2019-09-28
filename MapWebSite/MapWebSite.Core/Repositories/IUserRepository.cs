@@ -15,7 +15,11 @@ namespace MapWebSite.Core.Database
     {
         bool InsertUser(User user);
 
+        bool UpdateUser(User user);
+
         User GetUser(string username);
+
+        IList<UserRoles> GetUserRoles(string username);
 
         bool CheckUser(string username, string password);
 

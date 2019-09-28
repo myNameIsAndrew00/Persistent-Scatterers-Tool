@@ -13,6 +13,9 @@ namespace MapWebSite.Model
 
     }
 
+    /// <summary>
+    /// Model used for a color palette
+    /// </summary>
     public class ColorMap
     {
         public string Name { get; set; }

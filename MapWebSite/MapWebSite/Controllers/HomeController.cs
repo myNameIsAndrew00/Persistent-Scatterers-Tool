@@ -5,11 +5,12 @@ using MapWebSite.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.Mvc;
 
 namespace MapWebSite.Controllers
 {
-    [Authorize]
+    [Authorize] 
  //   [Filters.SiteAuthenticationFilter]
     public class HomeController : Controller
     {
@@ -38,7 +39,7 @@ namespace MapWebSite.Controllers
 
         public ActionResult Index()
         {
-
+            var User = RouteConfig.CurrentUser;
             return View();
         }
 
@@ -56,8 +57,6 @@ namespace MapWebSite.Controllers
             }
         }
      
-
-
         [HttpGet] 
         public JsonResult RequestDataPoints(decimal latitudeFrom, decimal longitudeFrom, decimal latitudeTo, decimal longitudeTo, int zoomLevel, string optionalField)
         {
@@ -92,6 +91,15 @@ namespace MapWebSite.Controllers
                                                                        });
         
             return Json(new { data = point.JSONSerialize() }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            var AuthenticationManager = HttpContext.GetOwinContext().Authentication;
+            AuthenticationManager.SignOut();
+
+            return RedirectToAction("Index", "Login");
         }
     }
 }

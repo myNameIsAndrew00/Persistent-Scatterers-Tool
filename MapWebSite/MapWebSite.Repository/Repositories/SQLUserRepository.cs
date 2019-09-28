@@ -228,10 +228,56 @@ namespace MapWebSite.Repository
                     Username = (string)resultRow["username"],
                     FirstName = (string)resultRow["first_name"],
                     LastName = (string)resultRow["last_name"],
+                    SecurityStamp = resultRow["timestamp"] is DBNull ? null : (string)resultRow["timestamp"],
                     PasswordHash = null
                 };
 
             };
+        }
+
+        public bool UpdateUser(User user)
+        {
+            try
+            {
+                SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("UpdateUser")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                    new SqlParameter[]{
+                                                    new SqlParameter("username", user.Username),
+                                                    new SqlParameter("first_name", user.FirstName),
+                                                    new SqlParameter("last_name", user.LastName),
+                                                    new SqlParameter("secure_stamp", user.SecurityStamp) },
+                                                    new SqlConnection(this.connectionString));
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return false;
+            }
+            return true;
+        }
+
+        public IList<UserRoles> GetUserRoles(string username)
+        {
+            List<UserRoles> result = new List<UserRoles>();
+
+            using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUserRoles")
+            { CommandType = CommandType.StoredProcedure },
+                                               new SqlParameter[]
+                                               {
+                                                    new SqlParameter("@username",username)
+                                               },
+                                               new SqlConnection(this.connectionString)))
+            {
+                foreach (DataRow row in colorMapsResult.Tables[0].Rows)
+                    result.Add(
+                        (UserRoles)Enum.Parse(typeof(UserRoles), (string)row["role_name"])
+                        );
+            }
+
+            return result;
+
         }
     }
 }

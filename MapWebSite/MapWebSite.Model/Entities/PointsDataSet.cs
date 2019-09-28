@@ -7,7 +7,9 @@ using System.Runtime.Serialization;
 namespace MapWebSite.Model
 {
 
-
+    /// <summary>
+    /// Model used for points data set
+    /// </summary>
     public class PointsDataSet
     {
         public int ID { get; set; }

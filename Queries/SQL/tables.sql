@@ -17,13 +17,36 @@ create table UsersDetails(
 	last_name varchar(100) not null,
 
 	account_creation_date date not null,
-
+	timestamp nvarchar(255),
 	/*more data can be added here*/
 
 	primary key (user_details_id),
 	foreign key (user_id) references Users(user_id)
 
 )
+
+create table Roles(
+	role_id int identity(1,1) not null,	
+	role_name nvarchar(100) not null unique,
+	primary key(role_id)
+)
+
+/************/
+
+insert into Roles(role_name)
+values ('Normal')
+
+/************/
+
+create table UsersRoles(
+	user_id int not null,
+	role_id int not null,
+
+	primary key(user_id,role_id),
+	foreign key (user_id) references Users(user_id),
+	foreign key(role_id) references Roles(role_id)
+)
+
 
 /*this table holds the data points loaded by user in the application*/
 

@@ -23,7 +23,8 @@ as
 begin
 	select U.username,
 		   UD.first_name,
-		   UD.last_name		  
+		   UD.last_name,
+		   UD.timestamp
 	from Users as U
 		inner join UsersDetails as UD
 		on UD.user_id = U.user_id
@@ -33,7 +34,24 @@ end
 
 go
 
+if object_id('GetUserRoles','P') is not null
+	drop procedure GetUserRoles
+go
+create procedure GetUserRoles
+	@username as varchar(100)
+as
+begin
+	select R.role_name
+	from UsersRoles as UR
+		inner join Users as U
+		on UR.user_id = U.user_id and U.username = @username
+			inner join Roles as R
+			on R.role_id = UR.role_id
+	where U.username = @username
 
+end
+
+go
 if object_id('GetUserPointsDataset','P') is not null
 	drop procedure GetUserPointsDataset
 go

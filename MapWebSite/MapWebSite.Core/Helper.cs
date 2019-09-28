@@ -9,16 +9,7 @@ namespace MapWebSite.Core
 {
     public static class Helper
     {
-        public static byte[] Concatenate(this byte[] firstArray, byte[] secondArray)
-        {
-            byte[] result = new byte[firstArray.Length + secondArray.Length];
-
-            Array.Copy(firstArray, 0, result, 0, firstArray.Length);
-            Array.Copy(secondArray, 0, result, firstArray.Length, secondArray.Length);
-
-            return result;
-        }
-
+   
         public static byte[] GenerateRandomBytes(int bytesCount)
         {
            if (bytesCount == 0) return null;
@@ -72,6 +63,7 @@ namespace MapWebSite.Core
             private double[] phi = new double[2];
 
             private double[] fact = new double[4];
+
 
             public Tuple<decimal, decimal> ToLatLong(int zone, char latitudeZone, double easting, double northing)
             {

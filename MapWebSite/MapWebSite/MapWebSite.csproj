@@ -400,9 +400,7 @@
     <Content Include="Views\Home\Points Settings Content\ChoseDataset.cshtml" />
     <Content Include="Resources\css\select.scss" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="FrameworkContent\bootstrap.min.css.map" />
     <Content Include="FrameworkContent\bootstrap.css.map" />

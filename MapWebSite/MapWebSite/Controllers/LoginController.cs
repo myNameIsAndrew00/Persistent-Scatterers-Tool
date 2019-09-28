@@ -19,10 +19,13 @@ namespace MapWebSite.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                return RedirectToAction("Index");
+
             var signInManager = HttpContext.GetOwinContext().Get<SignInManager>();
 
             var signInStatus = signInManager.PasswordSignIn(username, password, true, false);
-
+    
             if (signInStatus == SignInStatus.Success)
 
                 //TODO: modify string with SecureString       

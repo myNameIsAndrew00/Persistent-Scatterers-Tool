@@ -1,7 +1,10 @@
-﻿
+﻿using MapWebSite.Types;
 
 namespace MapWebSite.Model
 {
+    /// <summary>
+    /// Main user model used in solution
+    /// </summary>
     public class User
     {
         public string Username { get; set; }
@@ -11,5 +14,20 @@ namespace MapWebSite.Model
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public string SecurityStamp { get; set; }
+         
+    }
+
+    /// <summary>
+    /// User possible roles.
+    /// *Enum must be always mapped with Roles table from the database
+    /// </summary>
+    public enum UserRoles
+    {
+        [EnumString("Anonymous")]
+        Anonymous,
+        [EnumString("Normal")]
+        Normal
     }
 }

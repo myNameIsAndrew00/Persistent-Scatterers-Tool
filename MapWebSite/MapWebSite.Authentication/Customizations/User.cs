@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using MapWebSite.Core;
+using MapWebSite.Model;
 
 namespace MapWebSite.Authentication
 {
@@ -16,6 +17,7 @@ namespace MapWebSite.Authentication
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager manager)
         {
+            manager.UpdateSecurityStamp(Username); 
             //AuthenticationType must be the same as the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
 
@@ -25,6 +27,29 @@ namespace MapWebSite.Authentication
             userIdentity.AddClaim(new Claim(Claims.LastName, LastName, ClaimValueTypes.String));           
 
             return userIdentity;
+        }
+    }
+
+    public class AnonymousUser : User
+    {
+        private static readonly AnonymousUser anonymousUser = new AnonymousUser();
+
+        public static AnonymousUser Get => anonymousUser;
+
+        public static IList<string> Roles { get; }
+
+        static AnonymousUser()
+        {
+            Roles = new List<string> {
+                    UserRoles.Anonymous.GetEnumString()
+                };
+        }
+
+        private AnonymousUser()
+        {
+            this.FirstName = "Anonymous";
+            this.LastName = "Anonymous";
+            this.Username = "Anonymous";
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MapWebSite.Core.Database;
+﻿using MapWebSite.Core;
+using MapWebSite.Core.Database;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,15 @@ namespace MapWebSite.Authentication
     public class Store : IUserStore<User, string>,
                          IUserLockoutStore<User,string>,
                          IUserPasswordStore<User, string>,
-                         IUserTwoFactorStore<User, string>
+                         IUserTwoFactorStore<User, string>  ,
+                         IUserRoleStore<User,string>,
+                         IUserSecurityStampStore<User,string>
     {
+        /*cached data used to not hit the database foreach request*/
+        User user = null;
+        IList<string> userRoles = null;
 
+        /*repository used to acces user data*/
         IUserRepository userRepository = null;
 
         public Store(IUserRepository userRepository)
@@ -46,22 +53,32 @@ namespace MapWebSite.Authentication
             return FindByNameAsync(userId);
         }
 
-        //unused
+
         public Task UpdateAsync(User user)
         {
-            throw new NotImplementedException();
+            userRepository.UpdateUser(user);
 
+            return Task.FromResult(0);
         }
 
         public Task<User> FindByNameAsync(string username)
         {
-            var user = userRepository.GetUser(username);
-            return Task.FromResult(new User()
+            /*If the user is not set, it means that it was an anonymous authentication*/
+            if (username == null) return Task.FromResult((User)AnonymousUser.Get);
+
+            /*If the user was already intialised, do not create it again*/
+            if (this.user != null) return Task.FromResult(this.user);
+                
+            var userModel = userRepository.GetUser(username);
+            this.user = new User()
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Username = user.Username
-            });
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Username = userModel.Username,
+                SecurityStamp = userModel.SecurityStamp
+            };
+
+            return Task.FromResult(this.user);
         }
 
         #endregion
@@ -144,6 +161,60 @@ namespace MapWebSite.Authentication
         public Task<bool> GetTwoFactorEnabledAsync(User user)
         {
             return Task.FromResult(false);
+        }
+
+        #endregion
+
+        #region IUserRoleStore
+
+        //unused
+        public Task AddToRoleAsync(User user, string roleName)
+        {
+            throw new NotImplementedException();
+        }
+
+        //unused
+        public Task RemoveFromRoleAsync(User user, string roleName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IList<string>> GetRolesAsync(User user)
+        {
+            if (user == AnonymousUser.Get) return Task.FromResult(AnonymousUser.Roles);
+
+            if (userRoles != null) return Task.FromResult(userRoles);
+
+            this.userRoles = new List<string>();             
+            var userRolesData = userRepository.GetUserRoles(user.Username);
+
+            foreach (var role in userRolesData)
+                this.userRoles.Add(role.GetEnumString());
+
+            return Task.FromResult(this.userRoles);
+        }
+
+        public Task<bool> IsInRoleAsync(User user, string roleName)
+        {
+            if (this.userRoles == null)
+                GetRolesAsync(user);
+
+            return Task.FromResult(this.userRoles.Contains(roleName));            
+        }
+
+        #endregion
+
+        #region ISecurityStampStore
+
+        public Task SetSecurityStampAsync(User user, string stamp)
+        {
+            user.SecurityStamp = stamp;
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetSecurityStampAsync(User user)
+        {
+            return Task.FromResult(user.SecurityStamp);
         }
 
         #endregion
