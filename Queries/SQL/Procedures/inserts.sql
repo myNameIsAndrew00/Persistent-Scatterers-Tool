@@ -3,8 +3,7 @@ if object_id('InsertUser','P') is not null
 go
 
 create procedure InsertUser
-	@hashed_password as varbinary(32),
-	@password_salt as varbinary(32),
+	@hashed_password as varbinary(64)
 	@username as varchar(100),
 	@first_name as varchar(100),
 	@last_name as varchar(100)
@@ -14,8 +13,8 @@ begin
 	begin try
 		begin transaction
 
-		insert into Users(username,hashed_password, password_salt)
-		values (@username, @hashed_password, @password_salt)
+		insert into Users(username,hashed_password)
+		values (@username, @hashed_password)
 
 		declare @user_id as int = SCOPE_IDENTITY();
 

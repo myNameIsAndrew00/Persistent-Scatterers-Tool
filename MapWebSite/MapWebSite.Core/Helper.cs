@@ -9,12 +9,22 @@ namespace MapWebSite.Core
 {
     public static class Helper
     {
+        public static byte[] Concatenate(this byte[] firstArray, byte[] secondArray)
+        {
+            byte[] result = new byte[firstArray.Length + secondArray.Length];
+
+            Array.Copy(firstArray, 0, result, 0, firstArray.Length);
+            Array.Copy(secondArray, 0, result, firstArray.Length, secondArray.Length);
+
+            return result;
+        }
+
         public static byte[] GenerateRandomBytes(int bytesCount)
         {
            if (bytesCount == 0) return null;
 
            byte[] result = new byte[bytesCount];
-
+           
             using (var randomProvider = new RNGCryptoServiceProvider())
                 randomProvider.GetNonZeroBytes(result);
 

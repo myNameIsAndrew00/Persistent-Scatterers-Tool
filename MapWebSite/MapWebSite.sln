@@ -25,7 +25,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.CassandraAccess"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.Tests", "MapWebSite.Tests\MapWebSite.Tests.csproj", "{DF790432-D57B-4708-9147-6C0C10CD9400}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.Types", "MapWebSite.Types\MapWebSite.Types.csproj", "{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapWebSite.Types", "MapWebSite.Types\MapWebSite.Types.csproj", "{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Owin Components", "Owin Components", "{09F8ECBB-E106-4A4C-9BD3-46D4E6DF40D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapWebSite.Authentication", "MapWebSite.Authentication\MapWebSite.Authentication.csproj", "{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,10 @@ Global
 		{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +90,8 @@ Global
 		{A0E0898D-DD00-4BA7-803A-DCC9586B2836} = {1A315415-A01E-4EF3-BD54-F4D6DA454AC3}
 		{9F148B28-5981-40DA-B669-505872475C2A} = {BAE94EBA-9E64-4C6B-B499-6A561FBE3844}
 		{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056} = {AF515D10-8D01-41BE-B32A-8ADEDC446B56}
+		{09F8ECBB-E106-4A4C-9BD3-46D4E6DF40D6} = {1A315415-A01E-4EF3-BD54-F4D6DA454AC3}
+		{2D4A2905-1B2B-44D1-A3BD-A83118C3B097} = {09F8ECBB-E106-4A4C-9BD3-46D4E6DF40D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F3952599-A9CA-4084-99B8-BFC5CFA3833A}

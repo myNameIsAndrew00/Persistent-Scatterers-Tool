@@ -101,7 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MapWebSite.Core\MapWebSite.Core.csproj">
-      <Project>{15A19BAF-8E36-41A7-96EC-3AC2F427FCFB}</Project>
+      <Project>{15a19baf-8e36-41a7-96ec-3ac2f427fcfb}</Project>
       <Name>MapWebSite.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\MapWebSite.Types\MapWebSite.Types.csproj">

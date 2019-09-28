@@ -12,6 +12,8 @@ namespace MapWebSite.Filters
     /// <summary>
     /// Use this filter-attribute to decorate each action that must be authenticated
     /// </summary>
+     
+    [Obsolete("This class is deprecated. Use WebSite.Authentication (owin component)")]
     public class SiteAuthenticationFilter : ActionFilterAttribute, IAuthenticationFilter
     {
 

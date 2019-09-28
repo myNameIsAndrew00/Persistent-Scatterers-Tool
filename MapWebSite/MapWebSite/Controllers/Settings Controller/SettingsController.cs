@@ -11,7 +11,8 @@ namespace MapWebSite.Controllers
     /// <summary>
     /// Use this ApiController to return pages for the settings layer and to interact with it
     /// </summary>
-    [Filters.ApiAuthenticationFilter]
+    //[Filters.ApiAuthenticationFilter]
+    [Authorize]
     public partial class SettingsController : ApiController
     { 
     }

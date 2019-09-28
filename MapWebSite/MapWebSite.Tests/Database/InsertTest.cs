@@ -21,7 +21,7 @@ namespace MapWebSite.Tests.Database
         {
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
 
-            bool response = handler.RegisterUser("woofwoofr", "andrei", "andrei", "andrei1234");
+            bool response = handler.RegisterUser("test45", "andrei", "andrei", "woofwoof");
 
             Assert.IsTrue(response);
 

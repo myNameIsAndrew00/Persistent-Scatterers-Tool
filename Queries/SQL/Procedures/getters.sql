@@ -6,13 +6,33 @@ create procedure GetUserPasswordInfo
 	@username as varchar(100)
 as
 begin
-	select U.hashed_password, U.password_salt
+	select U.hashed_password
 	from Users as U
 	where U.username = @username
 
 end
 
 go
+
+if object_id('GetUser','P') is not null
+	drop procedure GetUser
+go
+create procedure GetUser
+	@username as varchar(100)
+as
+begin
+	select U.username,
+		   UD.first_name,
+		   UD.last_name		  
+	from Users as U
+		inner join UsersDetails as UD
+		on UD.user_id = U.user_id
+	where U.username = @username
+
+end
+
+go
+
 
 if object_id('GetUserPointsDataset','P') is not null
 	drop procedure GetUserPointsDataset

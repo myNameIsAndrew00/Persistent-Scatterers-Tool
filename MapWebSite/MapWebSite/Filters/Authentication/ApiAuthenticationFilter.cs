@@ -11,6 +11,7 @@ using System.Web.Http.Results;
 
 namespace MapWebSite.Filters
 {
+    [Obsolete("This class is deprecated. Use WebSite.Authentication (owin component)")]
     public class ApiAuthenticationFilter : ActionFilterAttribute, IAuthenticationFilter
     {
         private SiteAuthenticationFilter siteFilter = null;

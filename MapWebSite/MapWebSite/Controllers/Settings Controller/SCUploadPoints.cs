@@ -17,14 +17,21 @@ namespace MapWebSite.Controllers
     /// <summary>
     /// Use this ApiController to return pages for the settings layer and to interact with it
     /// </summary>
-    [Filters.ApiAuthenticationFilter]
+    //[Filters.ApiAuthenticationFilter]
+    [Authorize]
     public partial class SettingsController : ApiController
     {
 
+        /// <summary>
+        /// Upload part of a file to the server. 
+        /// The chunk will be saved acording to its user and its dataset name on disk. Chunk names will be indexes (0,1,2,...n).
+        /// After more chunks will be sent, call the Merge method to rebuild the initial file using their indexes
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public HttpResponseMessage UploadFileChunk()
         {
-            string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{HttpContext.Current.User.Identity.Name}";
+            string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{RouteConfig.CurrentUser.Username}";
             if (!Directory.Exists(directoryName))
                 Directory.CreateDirectory(directoryName);
 
@@ -70,7 +77,7 @@ namespace MapWebSite.Controllers
             if(string.IsNullOrEmpty(fileName))
                 return new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.InternalServerError };
 
-            string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{HttpContext.Current.User.Identity.Name}\\{fileName}";
+            string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{RouteConfig.CurrentUser.UserName}\\{fileName}";
 
             if (!Directory.Exists(directoryName))
                 return new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.InternalServerError };
@@ -97,7 +104,7 @@ namespace MapWebSite.Controllers
         [HttpPost]
         public HttpResponseMessage CheckDatasetExistance([FromBody] JObject data)
         {                     
-            string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{HttpContext.Current.User.Identity.Name}\\{data["fileName"].ToObject<string>()}";
+            string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{RouteConfig.CurrentUser.UserName}\\{data["fileName"].ToObject<string>()}";
 
             bool directoryExists = Directory.Exists(directoryName);
 

@@ -20,7 +20,7 @@ namespace MapWebSite.Model
 
     }
     [JsonObject(MemberSerialization.OptIn)]
-    [DataContract] 
+    [DataContract]
     public class BasicPoint
     {
         /// <summary>
@@ -38,7 +38,7 @@ namespace MapWebSite.Model
             StandardDeviation
         }
 
-        [DataMember] 
+        [DataMember]
         [JsonProperty]
         public int Number { get; set; }
 
@@ -56,9 +56,9 @@ namespace MapWebSite.Model
 
     }
     [JsonObject(MemberSerialization.OptIn)]
-    [DataContract] 
-    public class Point  : BasicPoint
-    { 
+    [DataContract]
+    public class Point : BasicPoint
+    {
         [JsonProperty]
         public decimal ReferenceImageX { get; set; }
 
@@ -104,6 +104,6 @@ namespace MapWebSite.Model
         }
     }
 
-   
+
 
 }

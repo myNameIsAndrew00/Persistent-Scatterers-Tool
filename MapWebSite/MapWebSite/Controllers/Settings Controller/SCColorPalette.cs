@@ -11,7 +11,8 @@ namespace MapWebSite.Controllers
     /// <summary>
     /// Use this ApiController to return pages for the settings layer and to interact with it
     /// </summary>
-    [Filters.ApiAuthenticationFilter]
+    // [Filters.ApiAuthenticationFilter]
+    [Authorize]
     public partial class SettingsController : ApiController
     {
 
@@ -19,7 +20,7 @@ namespace MapWebSite.Controllers
         public HttpResponseMessage SaveColorsPalette(ColorMap colorMap)
         { 
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
-            bool result = handler.InsertColorPalette(User.Identity.Name, colorMap);
+            bool result = handler.InsertColorPalette(RouteConfig.CurrentUser.Username, colorMap);
           
             var response = new HttpResponseMessage();
             response.Content = new StringContent(MessageBoxBuilder.Create(result ? "Success" : "Failed", result ? "You succesfully upload your color palette"

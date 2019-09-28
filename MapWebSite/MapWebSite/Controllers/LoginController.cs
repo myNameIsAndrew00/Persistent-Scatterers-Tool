@@ -1,4 +1,6 @@
-﻿using MapWebSite.Interaction;
+﻿using MapWebSite.Authentication;
+using MapWebSite.Interaction;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +18,27 @@ namespace MapWebSite.Controllers
 
         [HttpPost]
         public ActionResult Login(string username, string password)
-        { 
-            //TODO: modify string with SecureString       
-            Filters.SiteAuthenticationFilter.LogoutUser();
+        {
+            var signInManager = HttpContext.GetOwinContext().Get<SignInManager>();
 
-            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+            var signInStatus = signInManager.PasswordSignIn(username, password, true, false);
 
-            if (databaseInteractionHandler.ValidateUser(username, password))
-                Filters.SiteAuthenticationFilter.AuthenticateUser(username);
+            if (signInStatus == SignInStatus.Success)
 
-            return RedirectToAction("Index", "Home");
+                //TODO: modify string with SecureString       
+                //Filters.SiteAuthenticationFilter.LogoutUser();
+
+                //DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+
+
+                //        if (databaseInteractionHandler.ValidateUser(username, password))
+                //            Filters.SiteAuthenticationFilter.AuthenticateUser(username);
+                    
+                return RedirectToAction("Index", "Home");
+
+            else
+
+                return RedirectToAction("Index");
         }
 
     }

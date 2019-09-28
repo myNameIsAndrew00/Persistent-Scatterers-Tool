@@ -18,8 +18,8 @@ namespace MapWebSite.Repository
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return false;
 
-            byte[] storedHash = new byte[32];
-            byte[] storedSalt = new byte[32];
+            byte[] storedHashData = new byte[64];
+
             using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUserPasswordInfo") { CommandType = System.Data.CommandType.StoredProcedure },
                                                 new SqlParameter[]
                                                 {
@@ -28,10 +28,14 @@ namespace MapWebSite.Repository
                                                 new SqlConnection(this.connectionString)))
             {
                 if (userCredentialsInfo.Tables[0].Rows.Count == 0) return false;
-
-                storedHash = (byte[])userCredentialsInfo.Tables[0].Rows[0]["hashed_password"];
-                storedSalt = (byte[])userCredentialsInfo.Tables[0].Rows[0]["password_salt"];
+                storedHashData = (byte[])userCredentialsInfo.Tables[0].Rows[0]["hashed_password"];
             };
+
+            byte[] storedSalt = new byte[32];
+            byte[] storedHash = new byte[32];
+
+            Array.Copy(storedHashData, storedHash, 32);
+            Array.Copy(storedHashData, 32, storedSalt, 0, 32);
 
             var userTrialPassword = Helper.HashData(Encoding.UTF8.GetBytes(password), storedSalt);
 
@@ -132,8 +136,7 @@ namespace MapWebSite.Repository
                     CommandType = System.Data.CommandType.StoredProcedure
                 },
                                                     new SqlParameter[]{
-                                                    new SqlParameter("hashed_password", user.PasswordHash),
-                                                    new SqlParameter("password_salt", user.PasswordSalt),
+                                                    new SqlParameter("hashed_password", user.PasswordHash),                                                    
                                                     new SqlParameter("username", user.Username),
                                                     new SqlParameter("first_name", user.FirstName),
                                                     new SqlParameter("last_name", user.LastName) },
@@ -181,7 +184,7 @@ namespace MapWebSite.Repository
             {
                 return Convert.ToString(SqlExecutionInstance.ExecuteScalar(new SqlCommand("GetUserColorPalette")
                 {
-                    CommandType = System.Data.CommandType.StoredProcedure
+                    CommandType = CommandType.StoredProcedure
                 },
                                                     new SqlParameter[]{
                                                          new SqlParameter("username", username),
@@ -194,6 +197,41 @@ namespace MapWebSite.Repository
                 //TODO: log exception
                 return string.Empty;
             }
+        }
+
+        public byte[] GetUserHashedPassword(string username)
+        {
+            byte[] passwordHash = (byte[])SqlExecutionInstance.ExecuteScalar(new SqlCommand("GetUserPasswordInfo") { CommandType = CommandType.StoredProcedure },
+                                              new SqlParameter[]
+                                              {
+                                                    new SqlParameter("username",username)
+                                              },
+                                              new SqlConnection(this.connectionString));
+
+            return passwordHash;
+        }
+
+        public User GetUser(string username)
+        {
+            using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUser") { CommandType = CommandType.StoredProcedure },
+                                              new SqlParameter[]
+                                              {
+                                                    new SqlParameter("username",username)
+                                              },
+                                              new SqlConnection(this.connectionString)))
+            {
+                if (userCredentialsInfo.Tables[0].Rows.Count == 0) return null;
+                var resultRow = userCredentialsInfo.Tables[0].Rows[0];
+
+                return new User()
+                {
+                    Username = (string)resultRow["username"],
+                    FirstName = (string)resultRow["first_name"],
+                    LastName = (string)resultRow["last_name"],
+                    PasswordHash = null
+                };
+
+            };
         }
     }
 }

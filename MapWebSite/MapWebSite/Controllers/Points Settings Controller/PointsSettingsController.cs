@@ -1,9 +1,13 @@
-﻿using MapWebSite.Core;
+﻿using MapWebSite.Authentication;
+using MapWebSite.Core;
 using MapWebSite.Interaction;
 using MapWebSite.Interaction.ViewModel;
 using MapWebSite.Model;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 
@@ -13,21 +17,29 @@ namespace MapWebSite.Controllers
     /// <summary>
     /// Use this ApiController to return pages for the points settings layer and to interact with it
     /// </summary>
-    [Filters.SiteAuthenticationFilter]
+    //[Filters.SiteAuthenticationFilter]
+    [System.Web.Mvc.Authorize]
     public class PointsSettingsController : Controller
     {
         [System.Web.Mvc.HttpGet]
         public ActionResult GetColorPalettePage()
         {
-            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
-
-            return View("~/Views/Home/Points Settings Content/ChosePalette.cshtml",
-                new ChosePaletteViewModel(databaseInteractionHandler.GetColorPaletes(
-                   Core.Database.ColorMapFilters.None,
-                   string.Empty,
-                   0,
-                   ChosePaletteViewModel.ColorPalettesPerPage
-                    )));
+            try
+            {
+                DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+      
+                return View("~/Views/Home/Points Settings Content/ChosePalette.cshtml",
+                    new ChosePaletteViewModel(databaseInteractionHandler.GetColorPaletes(
+                       Core.Database.ColorMapFilters.None,
+                       string.Empty,
+                       0,
+                       ChosePaletteViewModel.ColorPalettesPerPage
+                        )));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
         [System.Web.Mvc.HttpGet]
@@ -37,7 +49,8 @@ namespace MapWebSite.Controllers
         }
     }
 
-    [Filters.ApiAuthenticationFilter]
+    //[Filters.ApiAuthenticationFilter]
+    [System.Web.Http.Authorize]
     public class PointsSettingsApiController : ApiController
     {
         [System.Web.Http.HttpGet]

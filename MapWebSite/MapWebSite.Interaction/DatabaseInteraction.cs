@@ -29,13 +29,12 @@ namespace MapWebSite.Interaction
             IUserRepository userRepository = new SQLUserRepository();
 
             byte[] passwordSalt = Helper.GenerateRandomBytes(32);
-
+          
             return userRepository.InsertUser(new User()
             {
                 FirstName = firstName,
                 LastName = lastName,
-                PasswordHash = Helper.HashData(Encoding.UTF8.GetBytes(password), passwordSalt),
-                PasswordSalt = passwordSalt,
+                PasswordHash = Helper.HashData(Encoding.UTF8.GetBytes(password), passwordSalt).Concatenate(passwordSalt),            
                 Username = username
             });
 

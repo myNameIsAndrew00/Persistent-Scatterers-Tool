@@ -15,7 +15,11 @@ namespace MapWebSite.Core.Database
     {
         bool InsertUser(User user);
 
+        User GetUser(string username);
+
         bool CheckUser(string username, string password);
+
+        byte[] GetUserHashedPassword(string username);
 
         int CreateUserPointsDataset(string username, string datasetName);
 

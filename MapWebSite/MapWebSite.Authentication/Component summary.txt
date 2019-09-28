@@ -1,0 +1,4 @@
+﻿This assembly contains handlers to manage site authentication.
+Contains interfaces for a custom storage provide which overrides AspNet.Identity logic.
+
+More info here: https://docs.microsoft.com/en-us/aspnet/core/security/authentication/identity-custom-storage-providers?view=aspnetcore-3.0

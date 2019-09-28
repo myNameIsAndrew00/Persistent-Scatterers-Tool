@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MapWebSite.Authentication;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,5 +23,10 @@ namespace MapWebSite
             );
 
         }
+
+        public static User CurrentUser => HttpContext.Current.GetOwinContext()
+                                    .GetUserManager<UserManager>().FindById(HttpContext.Current.User.Identity.GetUserId());
+    
+
     }
 }

@@ -11,6 +11,7 @@ namespace MapWebSite.Filters
     /// <summary>
     /// Base handler for authentication. It may be is used by API and MVC filter attributes
     /// </summary>
+    [Obsolete("This class is deprecated. Use WebSite.Authentication (owin component)")]
     public static class AuthenticationHandler
     {
         public const string authenticationCookieName = "authentication";

@@ -1,4 +1,4 @@
-﻿ 
+﻿
 
 namespace MapWebSite.Model
 {
@@ -6,9 +6,7 @@ namespace MapWebSite.Model
     {
         public string Username { get; set; }
 
-        public byte[] PasswordHash { get; set; }
-
-        public byte[] PasswordSalt { get; set; }
+        public byte[] PasswordHash { get; set; }         
 
         public string FirstName { get; set; }
 
