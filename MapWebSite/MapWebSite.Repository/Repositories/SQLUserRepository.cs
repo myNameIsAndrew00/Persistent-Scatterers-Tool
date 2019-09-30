@@ -201,6 +201,8 @@ namespace MapWebSite.Repository
 
         public byte[] GetUserHashedPassword(string username)
         {
+            if (string.IsNullOrEmpty(username)) return null;
+
             byte[] passwordHash = (byte[])SqlExecutionInstance.ExecuteScalar(new SqlCommand("GetUserPasswordInfo") { CommandType = CommandType.StoredProcedure },
                                               new SqlParameter[]
                                               {

@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Owin Components", "Owin Com
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapWebSite.Authentication", "MapWebSite.Authentication\MapWebSite.Authentication.csproj", "{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{077DF803-FA68-4F96-B7A2-1DDC1EEA70E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

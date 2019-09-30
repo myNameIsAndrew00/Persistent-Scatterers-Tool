@@ -97,6 +97,9 @@ export class ColorList{
 
     }
 
+    RemoveNode(pointID) { 
+        //TODO: implement this
+    }
 
     BuildGradientString(){
         var result = 'linear-gradient(to right';

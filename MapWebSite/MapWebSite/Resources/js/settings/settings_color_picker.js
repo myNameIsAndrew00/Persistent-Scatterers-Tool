@@ -68,7 +68,7 @@ window.addDot = function addDot() {
  
 }
 
-window.createLabel = function createLabel(dotPosition){
+function createLabel(dotPosition){
     var label = document.createElement('label');
     label.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
     label.style.left = dotPosition + 'px';
@@ -77,7 +77,7 @@ window.createLabel = function createLabel(dotPosition){
     $('#dots-container').append(label);
 }
 
-window.createSpan = function createSpan(dotPosition, dotColor){
+function createSpan(dotPosition, dotColor){
     dotsCount++;
     //set the current dot to be the newest one
     currentDot = dotsCount;
@@ -104,7 +104,7 @@ window.changeSpanColor = function changeSpanColor(newColor){
      
 }
 
-window.showColorPicker = function showColorPicker(horizontalPosition) { 
+function showColorPicker(horizontalPosition) { 
    changeColorPickerVisibility(true);
 
    $('#color-picker').css('left', horizontalPosition - 25 + 'px');

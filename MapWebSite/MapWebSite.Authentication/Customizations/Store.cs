@@ -72,10 +72,10 @@ namespace MapWebSite.Authentication
             var userModel = userRepository.GetUser(username);
             this.user = new User()
             {
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                Username = userModel.Username,
-                SecurityStamp = userModel.SecurityStamp
+                FirstName = userModel?.FirstName,
+                LastName = userModel?.LastName,
+                Username = userModel?.Username,
+                SecurityStamp = userModel?.SecurityStamp
             };
 
             return Task.FromResult(this.user);
@@ -137,6 +137,9 @@ namespace MapWebSite.Authentication
         public Task<string> GetPasswordHashAsync(User user)
         {
             var hashedPassword = userRepository.GetUserHashedPassword(user.Username);
+
+            if (hashedPassword == null) return Task.FromResult<string>(null);
+
             return Task.FromResult(Convert.ToBase64String(
                     hashedPassword
                 ));

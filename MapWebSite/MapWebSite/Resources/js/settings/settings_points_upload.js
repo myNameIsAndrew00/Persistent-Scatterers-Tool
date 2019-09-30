@@ -126,8 +126,7 @@ function mergeChunks(dataSetName) {
         url: 'api/settings/MergeFileChunks',
         data: { fileName: dataSetName },
         success: function (serverResponse) {
-            //process server response
-            alert('file uploaded');
+            DisplayOverlay(serverResponse);
         }
     })
 }

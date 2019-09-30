@@ -2,6 +2,18 @@
     Layout = null;
 }
 
-<div class="points-settings-layer-container-content">
-     
+<div class="points-settings-layer-container-palette-content points-settings-layer-container-content">
+    <div class="ps_header">
+        <h4>Chose dataset</h4>
+        @Html.DropDownList("filter",
+                         EnumHelper.GetSelectList(typeof(MapWebSite.Core.Database.DataPointsFilters))
+                         )
+
+        <input type="search" id="colorPaletteSearchValue" placeholder="type here to search..." onkeyup="loadMorePalettes(true)" />
+ 
+    </div>
+    <div class="ps_left" id="ps_left">
+        
+    </div>
+    <aside class="ps_right"></aside>
 </div>

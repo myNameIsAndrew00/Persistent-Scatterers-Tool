@@ -97,7 +97,7 @@ namespace MapWebSite.Controllers
             return new HttpResponseMessage()
             {
                 StatusCode = System.Net.HttpStatusCode.OK,
-                Content = new StringContent("File merged")
+                Content = new StringContent(MessageBoxBuilder.Create("Success", "You succesufully upload your data. Please wait for it to be processed."))
             };
         }
 
