@@ -80,14 +80,19 @@ namespace MapWebSite.Core
 
         }
 
+        /// <summary>
+        /// Get the string which decorate an enum. Decoration its mate with Types.EnumStringAttribute.
+        /// </summary>
+        /// <param name="enumValue"></param>
+        /// <returns></returns>
         public static string GetEnumString(this Enum enumValue)
         {
             var type = enumValue.GetType();
             var info = type.GetMember(enumValue.ToString());
 
-            var enumStringAttribute = info[0].GetCustomAttribute(typeof(EnumStringAttribute), false);
+            var enumStringAttribute = info[0].GetCustomAttribute(typeof(Types.EnumStringAttribute), false);
 
-            return (enumStringAttribute as EnumStringAttribute)?.String;
+            return (enumStringAttribute as Types.EnumStringAttribute)?.String;
         }
 
         public static byte[] Concatenate(this byte[] firstArray, byte[] secondArray)

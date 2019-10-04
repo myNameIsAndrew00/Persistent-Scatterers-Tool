@@ -15,6 +15,17 @@ namespace MapWebSite.Authentication
 
         public string UserName { get => Username; set => Username = value; }
 
+        public static User Create(string username, string firstName, string lastName)
+        {
+            return new User()
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Username = username,
+                SecurityStamp = null,
+            };
+        }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager manager)
         {
             manager.UpdateSecurityStamp(Username); 

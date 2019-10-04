@@ -25,8 +25,7 @@ namespace MapWebSite.Tests.Core
         [TestMethod]
         public void EnumStrings()
         {
-            BasicPoint.BasicInfoOptionalField field = BasicPoint.BasicInfoOptionalField.Height;
-
+            var field = UserRoles.Anonymous;
             string data = field.GetEnumString();
         }
     }

@@ -2,7 +2,8 @@
  document.getElementById('canvas').width = window.innerWidth;
 
  var canvasContext = document.getElementById('canvas').getContext("2d");
-  
+
+/*Drawer for circles effect*/
 
  class Circle{
      constructor(positionX, positionY, radius){            
@@ -154,4 +155,18 @@
  }
  
 window.requestAnimationFrame(draw);
- 
+
+
+/* Register / login handling */
+
+function changePage(pageName) {
+    event.preventDefault();
+
+    var current = pageName == 'Register' ? $('#register-form') : $('#login-form');
+    var previous = pageName == 'Register' ? $('#login-form') : $('#register-form');
+
+    current.removeClass('form-hidden');
+    previous.addClass('form-hidden');
+
+
+}

@@ -25,7 +25,7 @@ begin
 		
 		declare @default_role_id as int = 0;
 
-		select @default_role_id from Roles as R
+		select @default_role_id = R.role_id from Roles as R
 		where R.role_name = 'Normal'
 
 		--set the user role to normal

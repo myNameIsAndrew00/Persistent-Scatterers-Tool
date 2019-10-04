@@ -1,0 +1,24 @@
+﻿@using MapWebSite.Resources.text
+ 
+   <!--Login container-->
+@using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "form", @id = "login-form" }))
+{
+    <h1 class="main-title">@TextDictionary.LLoginTitle</h1>
+
+    <p>
+        @Html.Raw(TextDictionary.LLoginMessage)
+    </p>
+
+    <input class="default-input" placeholder="@TextDictionary.LUsernameInput" name="username" type="text" required>
+    <div class="input-border"></div>
+
+    <input class="default-input" placeholder="@TextDictionary.LPasswordInput" name="password" type="password" required>
+    <div class="input-border"></div>
+
+    <div class="button-group">
+        <input class="default-button" type="submit" value="@TextDictionary.LLoginButton">
+        <button class="default-button" onclick="changePage('Register')">@TextDictionary.LRegisterButton</button>
+    </div>
+  
+    @Html.ActionLink(TextDictionary.LLoginAnonymousLink,null,null,null) 
+}

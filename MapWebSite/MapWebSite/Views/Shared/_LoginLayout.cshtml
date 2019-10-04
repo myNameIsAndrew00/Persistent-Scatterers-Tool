@@ -7,37 +7,30 @@
     <title>Login</title>
     @Styles.Render("~/Content/login_sass")
     @Styles.Render("~/FrameworkContent/css")
-   
+    @Scripts.Render("~/bundles/jquery")
+
 </head>
 <body>
 
     <canvas id="canvas"></canvas>
+
     <!--Main container-->
+    <!--Contains two container: one for login and one for register-->
+
     <div class="form-container">
         <img class="main-logo" src="../Resources/resources/WebDisasterLogo.png">
 
         @RenderBody()
 
-        @Html.BeginForm("Login", "Login")
-        {
-        <!--TODO: content bellow will be inside a view-->
-        <h1 class="main-title">Login</h1>
 
-        <p>
-            Please enter your credentials in the texboxes bellow to use the app <br>
-            More text can be added here :D
-        </p>
+        @{ Html.RenderPartial("~/Views/Login/LoginForm.cshtml"); }
 
-        <input class="default-input" placeholder="username" name="username" type="text">
-        <div class="input-border"></div>
+        @{ Html.RenderPartial("~/Views/Login/RegisterForm.cshtml"); }
 
-        <input class="default-input" placeholder="password" name="password" type="password">
-        <div class="input-border"></div>
 
-        <input class="default-button" type="submit">
-        }
+         
     </div>
 
-    @Scripts.Render("~/scripts/login") 
+    @Scripts.Render("~/scripts/login")
 </body>
 </html>

@@ -13,8 +13,11 @@ namespace MapWebSite.Authentication
 
         public override string HashPassword(string password)
         {
-            //TODO: implement this, probably used for user registration
-            throw new NotImplementedException();
+            byte[] passwordSalt = Helper.GenerateRandomBytes(32);
+
+            var hashedPassword = Helper.HashData(Encoding.UTF8.GetBytes(password), passwordSalt).Concatenate(passwordSalt);
+
+            return Convert.ToBase64String(hashedPassword);
         }
 
         public override PasswordVerificationResult VerifyHashedPassword(string hashedPassword, string providedPassword)

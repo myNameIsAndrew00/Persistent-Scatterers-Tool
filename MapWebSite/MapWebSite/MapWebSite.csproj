@@ -255,6 +255,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Resources\text\TextDictionary.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TextDictionary.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -390,7 +395,6 @@
     <Content Include="Resources\css\home_point_info_layer.scss" />
     <Content Include="Views\Home\SettingsLayer.cshtml" />
     <Content Include="Views\Home\Settings Content\ColorPicker.cshtml" />
-    <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Home\Settings Content\UploadPoints.cshtml" />
     <Content Include="Views\Home\PointInfo.cshtml" />
     <Content Include="Resources\css\plot.scss" />
@@ -399,8 +403,15 @@
     <Content Include="Views\Home\Points Settings Content\ChosePalette.cshtml" />
     <Content Include="Views\Home\Points Settings Content\ChoseDataset.cshtml" />
     <Content Include="Resources\css\select.scss" />
+    <Content Include="Views\Login\LoginForm.cshtml" />
+    <Content Include="Views\Login\RegisterForm.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\text\TextDictionary.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TextDictionary.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="FrameworkContent\bootstrap.min.css.map" />
     <Content Include="FrameworkContent\bootstrap.css.map" />

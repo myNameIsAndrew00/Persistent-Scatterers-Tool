@@ -44,5 +44,28 @@ namespace MapWebSite.Controllers
                 return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public ActionResult Register(string username,
+                                     string firstName,
+                                     string lastName,
+                                     string password)
+        {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                return RedirectToAction("Index");
+
+            var createTask = HttpContext.GetOwinContext()
+                                    .GetUserManager<UserManager>().CreateAsync(Authentication.User.Create(username, firstName, lastName),
+                                                                                password);
+
+            //TODO: return a better response
+            if (createTask.Result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");
+
+        }
+
     }
 }

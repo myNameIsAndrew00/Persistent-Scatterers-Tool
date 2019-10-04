@@ -22,28 +22,8 @@ namespace MapWebSite.Interaction
         {
             userRepository = new SQLUserRepository();
             dataPointsRepository = CassandraDataPointsRepository.Instance;
-        }
+        }       
 
-        public bool RegisterUser(string username, string firstName, string lastName, string password)
-        {
-            IUserRepository userRepository = new SQLUserRepository();
-
-            byte[] passwordSalt = Helper.GenerateRandomBytes(32);
-          
-            return userRepository.InsertUser(new User()
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                PasswordHash = Helper.HashData(Encoding.UTF8.GetBytes(password), passwordSalt).Concatenate(passwordSalt),            
-                Username = username
-            });
-
-        }
-
-        public bool ValidateUser(string username, string password)
-        { 
-            return this.userRepository.CheckUser(username, password);
-        }
 
         /// <summary>
         /// Insert a dataset for a user. Inserted data will contain zoomed versions of points

@@ -17,7 +17,47 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%; 
+    width: 100%;
+    text-align: center;
+
+    #register-form {
+        input[type="text"],
+        input[type="password"] {
+            margin-top: 2px;
+            margin-bottom: 2px; 
+        }
+
+        .input-border {
+            top: -4px;
+        }
+    }
+
+    .button-group {
+        text-align: center;
+    }
+
+    .form {
+        display: inline-block;
+        transition: 1s;
+        overflow: hidden;
+        height: 285px;
+
+        a {
+            font-size: 11px;
+        }
+    }
+
+    .form-hidden {
+        visibility: collapse;
+        opacity: 0;
+        width: 0;
+    }
+
+    input[type="submit"] {
+        display: inline-block;
+        width: 100px;
+        margin: 5px;
+    }
 }
 
 .main-logo{

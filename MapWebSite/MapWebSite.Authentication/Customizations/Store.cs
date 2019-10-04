@@ -29,7 +29,6 @@ namespace MapWebSite.Authentication
 
         #region IUserStore
 
-        //unused
         public Task CreateAsync(User user)
         {
             return Task.FromResult(userRepository.InsertUser(user));           
@@ -37,7 +36,7 @@ namespace MapWebSite.Authentication
 
         //unused
         public Task DeleteAsync(User user)
-        {
+        {            
             throw new NotImplementedException();
         }
 
@@ -70,12 +69,15 @@ namespace MapWebSite.Authentication
             if (this.user != null) return Task.FromResult(this.user);
                 
             var userModel = userRepository.GetUser(username);
+            /*If the user do not exist, return null*/
+            if (userModel == null) return Task.FromResult<User>(null);
+
             this.user = new User()
             {
-                FirstName = userModel?.FirstName,
-                LastName = userModel?.LastName,
-                Username = userModel?.Username,
-                SecurityStamp = userModel?.SecurityStamp
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Username = userModel.Username,
+                SecurityStamp = userModel.SecurityStamp
             };
 
             return Task.FromResult(this.user);
@@ -131,7 +133,12 @@ namespace MapWebSite.Authentication
 
         public Task SetPasswordHashAsync(User user, string passwordHash)
         {
-            return new Task(() => { });
+            if (string.IsNullOrEmpty(passwordHash))
+                throw new ArgumentException("Password hash can not be null or empty");
+
+            user.PasswordHash = Convert.FromBase64String(passwordHash);
+
+            return Task.FromResult(0);
         }
 
         public Task<string> GetPasswordHashAsync(User user)
@@ -147,7 +154,7 @@ namespace MapWebSite.Authentication
 
         public Task<bool> HasPasswordAsync(User user)
         {
-            return Task.FromResult(true);
+            return Task.FromResult(user.PasswordHash != null);
         }
 
 
