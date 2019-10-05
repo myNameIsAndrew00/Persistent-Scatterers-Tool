@@ -5,7 +5,7 @@ var __selected_palette_index = -1;
 
 
 function changeSelectedRowOnMenu(id, visible) {
-    var paletteRow = $('#points-settings-layer-container-content').find(id)[0];
+    var paletteRow = $('#points-settings-layer-container-content').find('[id=\'' + id + '\']')[0];
     if (paletteRow === undefined) return;
     visible ? paletteRow.classList.add('selected-row') : paletteRow.classList.remove('selected-row');
 }
@@ -17,8 +17,8 @@ window.useColorMap = async function useColorMap(paletteIndex, username, paletteN
         SetColorPalette(palette);
         UpdatePointsLayer();
 
-        var previousPaletteId = '#user_palette_index_' + __selected_palette_index;
-        var paletteId = '#user_palette_index_' + paletteIndex;
+        var previousPaletteId = 'user_palette_index_' + __selected_palette_index;
+        var paletteId = 'user_palette_index_' + paletteIndex;
 
         changeSelectedRowOnMenu(previousPaletteId, false);
         changeSelectedRowOnMenu(paletteId, true);
@@ -71,11 +71,11 @@ function fillTable(colorPalettes, table) {
         var useButton = document.createElement('button');
         useButton.classList.add('use');
         useButton.onclick = function () { useColorMap(paletteUserName + '_' + paletteName, paletteUserName, paletteName); };
-        useButton.innerText = 'Use';
+        useButton.innerText = $('#_use-button-text').val();
 
         var previewButton = document.createElement('button');
         previewButton.classList.add('preview');
-        previewButton.innerText = 'Preview';
+        previewButton.innerText = $('#_preview-button-text').val();
 
         return { useButton, previewButton };
     }
@@ -137,5 +137,5 @@ window.loadMorePalettes = function loadMorePalettes(resetPageIndex) {
 
 
 export function UpdateChosePaletteLayout() {
-    changeSelectedRowOnMenu('#user_palette_index_' + __selected_palette_index, true);
+    changeSelectedRowOnMenu('user_palette_index_' + __selected_palette_index, true);
 }

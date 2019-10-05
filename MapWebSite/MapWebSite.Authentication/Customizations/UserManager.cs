@@ -20,7 +20,7 @@ namespace MapWebSite.Authentication
             
             var manager = new UserManager(new Store(userRepository))
             { 
-                PasswordHasher = new Authentication.PasswordHasher()
+                PasswordHasher = new Authentication.PasswordHasher()                
             };
 
 

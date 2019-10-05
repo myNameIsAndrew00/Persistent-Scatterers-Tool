@@ -159,6 +159,8 @@
                     display: flex;
                     align-items: center;
                     text-decoration: none;
+                    white-space: nowrap;
+                    overflow: hidden;
                 }
 
                 a, button {
@@ -181,7 +183,7 @@
                 }
 
                 a:hover, button:hover {
-                    background: orange;
+                    background: get_color(chromaOrange);
                     opacity: 1;
                     width: 120px;
                     visibility: visible;

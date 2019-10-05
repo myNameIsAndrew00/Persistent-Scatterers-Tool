@@ -1,4 +1,4 @@
-﻿
+﻿@using MapWebSite.Resources.text
 @{
     Layout = null;
 }
@@ -11,21 +11,19 @@
             data="~/Resources/resources/icons/upload_points_gliph.svg" )></object>    
     <div id="upload_points_container_form" class="upload-points-container-text">
         <h2 id="current_percent" class="current-percent-hidden">0%</h2>
-        <h1>Upload points</h1>
+        <h1>@TextDictionary.HMenuUPTitle</h1>
         <small>
-            Select a text file which contains points and upload them on server. <br />
-            The name which you chose must be unique.
-            Dataset will be available for display after a service will process the text file.
+            @Html.Raw(TextDictionary.HMenuUPInstructionText)
         </small>
 
         <input onchange="changeFileInputAspect()" type="file" id="uploadFile" name="file" />
-        <label id="file-input-visible" class="file-button-interaction" for="uploadFile">Choose a file</label>
+        <label id="file-input-visible" class="file-button-interaction" for="uploadFile">@TextDictionary.HMenuUPSelectFileButton</label>
 
-        <label id="warning-text"><small>A file is required...<br /></small></label>
-        <input type="text" onkeyup="enableDatasetSubmit()" id="upload_points_dataset_name" placeholder="insert dataset name..." />
+        <label id="warning-text"><small>@TextDictionary.HMenuUPWarningText<br /></small></label>
+        <input type="text" onkeyup="enableDatasetSubmit()" id="upload_points_dataset_name" placeholder="@TextDictionary.HMenuCPNameInput" />
 
 
-        <button id="upload_points_submit" onclick="uploadDataSets()" disabled>Upload file</button>
+        <button id="upload_points_submit" onclick="uploadDataSets()" disabled>@TextDictionary.HMenuCPSubmitButton</button>
     </div>
 </div>
 

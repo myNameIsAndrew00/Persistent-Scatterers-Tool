@@ -61,47 +61,357 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Use the tool above to create a color palette.&lt;br /&gt;
+        ///                Click the bar if you want to create a new color
+        ///                and drag dots left or right to set the intervals.
         /// </summary>
-        public static string HMenuCPTitle {
+        public static string HMenuCPArticle1 {
             get {
-                return ResourceManager.GetString("HMenuCPTitle", resourceCulture);
+                return ResourceManager.GetString("HMenuCPArticle1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Your creation need a name :) chose it carefully, it must be &lt;b&gt;unique&lt;/b&gt;..
         /// </summary>
-        public static string HMenuCreatePalette {
+        public static string HMenuCPArticle2 {
             get {
-                return ResourceManager.GetString("HMenuCreatePalette", resourceCulture);
+                return ResourceManager.GetString("HMenuCPArticle2", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to You are almost done if you look here :) just press the button below if you&apos;re done..
         /// </summary>
-        public static string HMenuLogout {
+        public static string HMenuCPArticle3 {
             get {
-                return ResourceManager.GetString("HMenuLogout", resourceCulture);
+                return ResourceManager.GetString("HMenuCPArticle3", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to done.
         /// </summary>
-        public static string HMenuSettings {
+        public static string HMenuCPClosePicker {
             get {
-                return ResourceManager.GetString("HMenuSettings", resourceCulture);
+                return ResourceManager.GetString("HMenuCPClosePicker", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to enter a name....
         /// </summary>
-        public static string HMenuUploadPoints {
+        public static string HMenuCPNameInput {
             get {
-                return ResourceManager.GetString("HMenuUploadPoints", resourceCulture);
+                return ResourceManager.GetString("HMenuCPNameInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finish.
+        /// </summary>
+        public static string HMenuCPSubmitButton {
+            get {
+                return ResourceManager.GetString("HMenuCPSubmitButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chose colors.
+        /// </summary>
+        public static string HMenuCPSubtitle1 {
+            get {
+                return ResourceManager.GetString("HMenuCPSubtitle1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chose a name.
+        /// </summary>
+        public static string HMenuCPSubtitle2 {
+            get {
+                return ResourceManager.GetString("HMenuCPSubtitle2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload.
+        /// </summary>
+        public static string HMenuCPSubtitle3 {
+            get {
+                return ResourceManager.GetString("HMenuCPSubtitle3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Build your own color palette.
+        /// </summary>
+        public static string HMenuCPTitleText {
+            get {
+                return ResourceManager.GetString("HMenuCPTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create palette.
+        /// </summary>
+        public static string HMenuCreatePaletteText {
+            get {
+                return ResourceManager.GetString("HMenuCreatePaletteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to logout.
+        /// </summary>
+        public static string HMenuLogoutText {
+            get {
+                return ResourceManager.GetString("HMenuLogoutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string HMenuSettingsText {
+            get {
+                return ResourceManager.GetString("HMenuSettingsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a text file which contains points and upload them on server. &lt;br /&gt;
+        ///            The name which you chose must be unique.
+        ///            Dataset will be available for display after a service will process the text file..
+        /// </summary>
+        public static string HMenuUPInstructionText {
+            get {
+                return ResourceManager.GetString("HMenuUPInstructionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload points.
+        /// </summary>
+        public static string HMenuUploadPointsText {
+            get {
+                return ResourceManager.GetString("HMenuUploadPointsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to insert dataset name....
+        /// </summary>
+        public static string HMenuUPNameInput {
+            get {
+                return ResourceManager.GetString("HMenuUPNameInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a file.
+        /// </summary>
+        public static string HMenuUPSelectFileButton {
+            get {
+                return ResourceManager.GetString("HMenuUPSelectFileButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload points.
+        /// </summary>
+        public static string HMenuUPTitle {
+            get {
+                return ResourceManager.GetString("HMenuUPTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload file.
+        /// </summary>
+        public static string HMenuUPUploadButton {
+            get {
+                return ResourceManager.GetString("HMenuUPUploadButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A file is required.....
+        /// </summary>
+        public static string HMenuUPWarningText {
+            get {
+                return ResourceManager.GetString("HMenuUPWarningText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deformation rate.
+        /// </summary>
+        public static string HPIDeformationRateText {
+            get {
+                return ResourceManager.GetString("HPIDeformationRateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estimated def. rate.
+        /// </summary>
+        public static string HPIEstimatedDefRateText {
+            get {
+                return ResourceManager.GetString("HPIEstimatedDefRateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Estimated height.
+        /// </summary>
+        public static string HPIEstimatedHeightText {
+            get {
+                return ResourceManager.GetString("HPIEstimatedHeightText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height.
+        /// </summary>
+        public static string HPIHeightText {
+            get {
+                return ResourceManager.GetString("HPIHeightText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID.
+        /// </summary>
+        public static string HPIIDText {
+            get {
+                return ResourceManager.GetString("HPIIDText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Latitude.
+        /// </summary>
+        public static string HPILatitudeText {
+            get {
+                return ResourceManager.GetString("HPILatitudeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Longitude.
+        /// </summary>
+        public static string HPILongitudeText {
+            get {
+                return ResourceManager.GetString("HPILongitudeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No plot to display.
+        /// </summary>
+        public static string HPINoPlotText {
+            get {
+                return ResourceManager.GetString("HPINoPlotText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard deviation.
+        /// </summary>
+        public static string HPIStandardDeviationText {
+            get {
+                return ResourceManager.GetString("HPIStandardDeviationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coordinate info.
+        /// </summary>
+        public static string HPITitleText {
+            get {
+                return ResourceManager.GetString("HPITitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to type here to search....
+        /// </summary>
+        public static string HPSCDSearchInput {
+            get {
+                return ResourceManager.GetString("HPSCDSearchInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose dataset.
+        /// </summary>
+        public static string HPSCDTitleText {
+            get {
+                return ResourceManager.GetString("HPSCDTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Palette name.
+        /// </summary>
+        public static string HPSCPHead1 {
+            get {
+                return ResourceManager.GetString("HPSCPHead1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colors.
+        /// </summary>
+        public static string HPSCPHead2 {
+            get {
+                return ResourceManager.GetString("HPSCPHead2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        public static string HPSCPHead3 {
+            get {
+                return ResourceManager.GetString("HPSCPHead3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        public static string HPSCPPreviewButton {
+            get {
+                return ResourceManager.GetString("HPSCPPreviewButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to type here to search.
+        /// </summary>
+        public static string HPSCPSearchText {
+            get {
+                return ResourceManager.GetString("HPSCPSearchText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose palette.
+        /// </summary>
+        public static string HPSCPTitle {
+            get {
+                return ResourceManager.GetString("HPSCPTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use.
+        /// </summary>
+        public static string HPSCPUseButton {
+            get {
+                return ResourceManager.GetString("HPSCPUseButton", resourceCulture);
             }
         }
         
@@ -219,6 +529,78 @@ namespace MapWebSite.Resources.text {
         public static string LUsernameInput {
             get {
                 return ResourceManager.GetString("LUsernameInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You chosed an existent name for your dataset. Please chose another.
+        /// </summary>
+        public static string OverlayCDFailText {
+            get {
+                return ResourceManager.GetString("OverlayCDFailText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t finish operation.
+        /// </summary>
+        public static string OverlayCDFailTitle {
+            get {
+                return ResourceManager.GetString("OverlayCDFailTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Something went wrong. Try to change your palette name or check the connection.
+        /// </summary>
+        public static string OverlayCPFailedText {
+            get {
+                return ResourceManager.GetString("OverlayCPFailedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed.
+        /// </summary>
+        public static string OverlayCPFailedTitle {
+            get {
+                return ResourceManager.GetString("OverlayCPFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You succesfully upload your color palette.
+        /// </summary>
+        public static string OverlayCPSuccesText {
+            get {
+                return ResourceManager.GetString("OverlayCPSuccesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        public static string OverlayCPSuccesTitle {
+            get {
+                return ResourceManager.GetString("OverlayCPSuccesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You succesufully upload your data. Please wait for it to be processed..
+        /// </summary>
+        public static string OverlayMFSuccesText {
+            get {
+                return ResourceManager.GetString("OverlayMFSuccesText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        public static string OverlayMFSuccesTitle {
+            get {
+                return ResourceManager.GetString("OverlayMFSuccesTitle", resourceCulture);
             }
         }
     }

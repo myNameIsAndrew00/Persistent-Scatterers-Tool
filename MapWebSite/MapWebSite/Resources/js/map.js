@@ -29,7 +29,14 @@ var map = new ol.Map({
     target: 'map',
     layers: [
         new ol.layer.Tile({
-            source: new ol.source.OSM()
+            source: new ol.source.OSM(
+                {
+                    /*Uncomment this to change the map*/
+                    /*"url": 'https://{1-4}.aerial.maps.cit.api.here.com' +
+                        '/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png' +
+                        '?app_id=oYZx6OXtO1hWKT2ztoeb&app_code=D7b7B1XOmHpFzAFWaaejIRrVqzdDjsJxZYUf_S0mzVA'*/
+                }
+            )
         })
     ],
     view: mapView,

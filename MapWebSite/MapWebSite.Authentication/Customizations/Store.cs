@@ -63,7 +63,11 @@ namespace MapWebSite.Authentication
         public Task<User> FindByNameAsync(string username)
         {
             /*If the user is not set, it means that it was an anonymous authentication*/
-            if (username == null) return Task.FromResult((User)AnonymousUser.Get);
+            if (string.IsNullOrEmpty(username))
+            {
+                this.user = (User)AnonymousUser.Get;
+                return Task.FromResult(this.user);
+            }
 
             /*If the user was already intialised, do not create it again*/
             if (this.user != null) return Task.FromResult(this.user);
@@ -190,10 +194,10 @@ namespace MapWebSite.Authentication
         }
 
         public Task<IList<string>> GetRolesAsync(User user)
-        {
-            if (user == AnonymousUser.Get) return Task.FromResult(AnonymousUser.Roles);
+        {          
+            if (user.Username == AnonymousUser.Get.Username) return Task.FromResult(AnonymousUser.Roles);
 
-            if (userRoles != null) return Task.FromResult(userRoles);
+            if (this.userRoles != null) return Task.FromResult(userRoles);
 
             this.userRoles = new List<string>();             
             var userRolesData = userRepository.GetUserRoles(user.Username);

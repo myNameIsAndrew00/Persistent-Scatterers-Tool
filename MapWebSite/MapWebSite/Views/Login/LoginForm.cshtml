@@ -1,6 +1,6 @@
 ﻿@using MapWebSite.Resources.text
  
-   <!--Login container-->
+   @*Login container*@
 @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "form", @id = "login-form" }))
 {
     <h1 class="main-title">@TextDictionary.LLoginTitle</h1>
@@ -19,6 +19,6 @@
         <input class="default-button" type="submit" value="@TextDictionary.LLoginButton">
         <button class="default-button" onclick="changePage('Register')">@TextDictionary.LRegisterButton</button>
     </div>
-  
-    @Html.ActionLink(TextDictionary.LLoginAnonymousLink,null,null,null) 
+
+    @Html.ActionLink(TextDictionary.LLoginAnonymousLink, "LoginAnonymous", null, null); 
 }

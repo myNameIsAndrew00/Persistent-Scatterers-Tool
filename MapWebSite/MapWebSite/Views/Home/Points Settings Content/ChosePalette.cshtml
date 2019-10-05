@@ -1,17 +1,20 @@
-﻿@model  MapWebSite.Interaction.ViewModel.ChosePaletteViewModel
+﻿@using MapWebSite.Resources.text
+@model  MapWebSite.Interaction.ViewModel.ChosePaletteViewModel
 
 @{
     Layout = null;
 }
+<input type="hidden" id="_use-button-text" value="@TextDictionary.HPSCPUseButton" />
+<input type="hidden" id="_preview-button-text" value="@TextDictionary.HPSCPPreviewButton" />
 
 <div class="points-settings-layer-container-palette-content points-settings-layer-container-content">
     <div class="ps_header">
-        <h4>Chose palette</h4> 
+        <h4>@Html.Raw(TextDictionary.HPSCPTitle)</h4>
         @Html.DropDownList("filter",
                          EnumHelper.GetSelectList(typeof(MapWebSite.Core.Database.ColorMapFilters)),
                          new { id = "colorPaletteFilterValue", onchange = "loadMorePalettes(true)" })
 
-        <input type="search" id="colorPaletteSearchValue" placeholder="type here to search..." onkeyup="loadMorePalettes(true)" />
+        <input type="search" id="colorPaletteSearchValue" placeholder="@TextDictionary.HPSCPSearchText" onkeyup="loadMorePalettes(true)" />
         <input type="hidden" id="colorPalettesPerPage" value="@MapWebSite.Interaction.ViewModel.ChosePaletteViewModel.ColorPalettesPerPage" />
         <input type="hidden" id="colorsTableColorsPerRow" value="@Model.ColorsPerRow" />
         <input type="hidden" id="currentColorPaletteIndex" value="1" />
@@ -20,10 +23,11 @@
         <table>
             <tr class="table-header">
                 <th><object width="14px" height="35px" type="image/svg+xml" data="~/Resources/resources/icons/user_palette_icon.svg"></object></th>
-                <th>Palette name</th>
-                <th>Colors</th>
-                <th>Actions</th>
-            </tr> 
+                <th>@TextDictionary.HPSCPHead1</th>
+                <th>@TextDictionary.HPSCPHead2</th>
+                <th>@TextDictionary.HPSCPHead3</th>
+            </tr>
+
             @foreach (var item in Model.UsersColorMaps)
             {
                 <tr id="user_palette_index_@(item.Item1)_@(item.Item2.Name)">
@@ -41,21 +45,24 @@
                                 <tr>
                                     @for (int rowIndex = 0; rowIndex < Model.ColorsPerRow && intervalsIndex < item.Item2.Intervals.Count; rowIndex++, intervalsIndex++)
                                     {
-                                    <td style="background:@intervals[intervalsIndex].Color"></td>
+                                        <td style="background:@intervals[intervalsIndex].Color"></td>
                                     }
                                 </tr>
                             }
                         </table>
                     </td>
-                    <td><button class="use" onclick="useColorMap('@(item.Item1)_@(item.Item2.Name)','@item.Item1','@item.Item2.Name')">Use</button><button class="preview">Preview</button></td>
+                    <td>
+                        <button class="use" onclick="useColorMap('@(item.Item1)_@(item.Item2.Name)','@item.Item1','@item.Item2.Name')">@TextDictionary.HPSCPUseButton</button>
+                        <button class="preview">@TextDictionary.HPSCPPreviewButton</button>
+                    </td>
                 </tr>
             }
-           
+
         </table>
     </div>
     <aside class="ps_right"></aside>
 </div>
 
 <script>
-        getScript('#points-settings-layer-container-content', '/Resources/js/points settings/chose_palette.js');         
+    getScript('#points-settings-layer-container-content', '/Resources/js/points settings/chose_palette.js');
 </script>

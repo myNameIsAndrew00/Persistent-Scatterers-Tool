@@ -1,4 +1,22 @@
-﻿<div class="fixed-menu">
+﻿@using MapWebSite.Resources.text
+@using MapWebSite.Model
+@using MapWebSite.Core
+
+@*Summary: partial view used for Menu.
+    Menu is divided in three sections:
+        -main-menu (corner left) which manage the displayed secondary menu
+        -secondary-menu (left) which contains general interactions
+        -top-menu (top) which contains map-points interactions
+    Displayed features are provided based on user roles
+*@
+
+@*TODO: fix the bug with the id counter.. main-menu-icon-0 must be followed by main-menu-icon-1, and not main-menu-icon-2 (bug can be caused by role restriction)*@
+
+<div class="fixed-menu">
+
+
+
+
     <div id="main-menu" class="main-select-menu">
         <div class="main-select-menu-arrows">
             <button onclick="changeMenuContent('up')" class="main-select-menu-arrow-up"></button>
@@ -6,47 +24,71 @@
 
         </div>
         <div id="main-select-menu-icon" class="main-select-menu-icon">
+            @*Principal Menu Item: User Details*@
             <object class="current_displayed_icon" id="main-menu-icon-0" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg"></object>
-            <object id="main-menu-icon-1" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
+
+            @*Principal Menu Item: Manage data points*@
+            @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+            {
+                <object id="main-menu-icon-1" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
+            }
         </div>
     </div>
 
+
+
+
+
     <nav id="secondary-menu" class="secondary-menu">
+        @*Secondary menu: used for User details*@
         <ul class="current_displayed_menu" id="secondary-menu-items-0">
-            <li class="secondary-menu-item">
-                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
-                <a href="">Settings</a>
-            </li>
+            @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+            {
+                <li class="secondary-menu-item">
+                    <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
+                    <a href="">@TextDictionary.HMenuSettingsText</a>
+                </li>
+            }
             <li class="secondary-menu-item">
                 <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
-                @Html.ActionLink("Logout","Logout","Home", null)
+                @Html.ActionLink(TextDictionary.HMenuLogoutText, "Logout", "Home", null)
             </li>
         </ul>
-        <ul id="secondary-menu-items-1">
-            <li class="secondary-menu-item">
-                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/upload_points_icon.svg"></object>
-                <button onclick="requestSettingsPage('upload-points','/Resources/css/settings_points_upload.scss')">Upload points</button>
-            </li>
-            <li class="secondary-menu-item">
-                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/palette_icon.svg"></object>
-                <button onclick="requestSettingsPage('create-palette-color','/Resources/css/settings_color_picker.scss')">Create palette</button>
-            </li>
-        </ul>
+
+        @*Secondary menu: used for Manage data points*@
+        @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+        {
+            <ul id="secondary-menu-items-1">
+                <li class="secondary-menu-item">
+                    <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/upload_points_icon.svg"></object>
+                    <button onclick="requestSettingsPage('upload-points','/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuUploadPointsText</button>
+                </li>
+                <li class="secondary-menu-item">
+                    <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/palette_icon.svg"></object>
+                    <button onclick="requestSettingsPage('create-palette-color','/Resources/css/settings_color_picker.scss')">@TextDictionary.HMenuCreatePaletteText</button>
+                </li>
+            </ul>
+        }
+
     </nav>
 
+
+
+
+
     <div id="top-menu" class="top-menu">
-          
-                <div class="top-menu-item">Current data points</div>
-             
-                <button onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
-                    <object width="20px" height="18px" type="image/svg+xml" data="~/Resources/resources/icons/set_icon.svg"></object>
-                </button>
-                <button onclick="displayPointsLayerPage(true,'GetColorPalettePage')" class="top-menu-item" >
-                    <object width="20px" height="18px" type="image/svg+xml" data="~/Resources/resources/icons/simple_palette_icon.svg"></object>
-                </button>
-        </ul>
+
+        <div class="top-menu-item">Current data points</div>
+
+        <button onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
+            <object width="20px" height="18px" type="image/svg+xml" data="~/Resources/resources/icons/set_icon.svg"></object>
+        </button>
+        <button onclick="displayPointsLayerPage(true,'GetColorPalettePage')" class="top-menu-item">
+            <object width="20px" height="18px" type="image/svg+xml" data="~/Resources/resources/icons/simple_palette_icon.svg"></object>
+        </button>
+
     </div>
 </div>
 
 
-@Scripts.RenderFormat("<script src={0} type='module'></script>","~/scripts/menu")
+@Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/menu")

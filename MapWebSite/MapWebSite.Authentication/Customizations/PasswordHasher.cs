@@ -22,8 +22,9 @@ namespace MapWebSite.Authentication
 
         public override PasswordVerificationResult VerifyHashedPassword(string hashedPassword, string providedPassword)
         {
-            if (string.IsNullOrEmpty(hashedPassword) || string.IsNullOrEmpty(providedPassword))
-                return PasswordVerificationResult.Failed;
+            //anonymous authentication must be passed
+            if (hashedPassword == null && providedPassword == null)
+                return PasswordVerificationResult.Success;
 
             var hashedPasswordBytes = Convert.FromBase64String(hashedPassword);
 

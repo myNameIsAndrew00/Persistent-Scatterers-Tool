@@ -11,13 +11,13 @@ using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
+using MapWebSite.Resources.text;
 
 namespace MapWebSite.Controllers
 {
     /// <summary>
     /// Use this ApiController to return pages for the settings layer and to interact with it
-    /// </summary>
-    //[Filters.ApiAuthenticationFilter]
+    /// </summary> 
     [Authorize]
     public partial class SettingsController : ApiController
     {
@@ -97,7 +97,8 @@ namespace MapWebSite.Controllers
             return new HttpResponseMessage()
             {
                 StatusCode = System.Net.HttpStatusCode.OK,
-                Content = new StringContent(MessageBoxBuilder.Create("Success", "You succesufully upload your data. Please wait for it to be processed."))
+                Content = new StringContent(MessageBoxBuilder.Create(TextDictionary.OverlayMFSuccesTitle, 
+                                                                     TextDictionary.OverlayMFSuccesText))
             };
         }
 
@@ -110,9 +111,9 @@ namespace MapWebSite.Controllers
 
             var response = new HttpResponseMessage()
             {
-                Content = new StringContent(MessageBoxBuilder.Create(!directoryExists ? "Success" : "Can't finish operation",
+                Content = new StringContent(MessageBoxBuilder.Create(!directoryExists ? "Success" : TextDictionary.OverlayCDFailTitle,
                                                                           !directoryExists ? "Success"
-                                                                                         : "You chosed an existent name for your dataset. Please chose another"))
+                                                                                         : TextDictionary.OverlayCDFailText))
             };                 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
 

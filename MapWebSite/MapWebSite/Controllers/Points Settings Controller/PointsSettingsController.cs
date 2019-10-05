@@ -16,8 +16,7 @@ namespace MapWebSite.Controllers
 
     /// <summary>
     /// Use this ApiController to return pages for the points settings layer and to interact with it
-    /// </summary>
-    //[Filters.SiteAuthenticationFilter]
+    /// </summary> 
     [System.Web.Mvc.Authorize]
     public class PointsSettingsController : Controller
     {
@@ -48,8 +47,8 @@ namespace MapWebSite.Controllers
             return View("~/Views/Home/Points Settings Content/ChoseDataset.cshtml");
         }
     }
+     
 
-    //[Filters.ApiAuthenticationFilter]
     [System.Web.Http.Authorize]
     public class PointsSettingsApiController : ApiController
     {

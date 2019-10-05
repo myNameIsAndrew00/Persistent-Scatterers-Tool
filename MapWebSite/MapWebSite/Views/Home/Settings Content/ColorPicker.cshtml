@@ -1,4 +1,5 @@
-﻿@{
+﻿@using MapWebSite.Resources.text
+@{
     Layout = null;
 }
 
@@ -43,16 +44,16 @@
             </tr>
         </table>
 
-        <button onclick="changeColorPickerVisibility(false)">done</button>
+        <button onclick="changeColorPickerVisibility(false)">@TextDictionary.HMenuCPClosePicker</button>
         <button class="close-button" onclick="">X</button>
     </div>
 
 </div>
- 
+
 
 <div id="color-picker-info-container"
      class="color-picker-info-container">
-    <h1>Build your own color palette</h1>
+    <h1>@TextDictionary.HMenuCPTitleText</h1>
 
     <section class="instructions-container" id="instructions-container">
         <article id="picker-info-card">
@@ -61,11 +62,9 @@
                     height="160px"
                     type="image/svg+xml"
                     data="~/Resources/resources/icons/first_gliph.svg" )></object>
-            <h4>Chose colors</h4>
+            <h4>@TextDictionary.HMenuCPSubtitle1</h4>
             <small>
-                Use the tool above to create a color palette.<br />
-                Click the bar if you want to create a new color
-                and drag dots left or right to set the intervals
+                @Html.Raw(TextDictionary.HMenuCPArticle1)        
             </small>
         </article>
         <article id="name-info-card">
@@ -74,10 +73,10 @@
                     height="160px"
                     type="image/svg+xml"
                     data="~/Resources/resources/icons/second_gliph.svg" )></object>
-            <h4>Chose a name</h4>
-            <small>Your creation need a name :) chose it carefully, it must be <b>unique</b>.</small>
+            <h4>@TextDictionary.HMenuCPSubtitle2</h4>
+            <small>@Html.Raw(TextDictionary.HMenuCPArticle2)</small>
             <br />
-            <input onkeyup="enableSubmit()" id="color-palette-name" type="text" placeholder="enter a name...">
+            <input onkeyup="enableSubmit()" id="color-palette-name" type="text" placeholder="@TextDictionary.HMenuCPNameInput">
         </article>
         <article id="finish-info-card">
             <object class="current_displayed_icon"
@@ -85,16 +84,16 @@
                     height="160px"
                     type="image/svg+xml"
                     data="~/Resources/resources/icons/third_gliph.svg" )></object>
-            <h4>Upload</h4>
+            <h4>@TextDictionary.HMenuCPSubtitle3</h4>
             <small>
-                You are almost done if you look here :) just press the button below if you're done.
+                @Html.Raw(TextDictionary.HMenuCPArticle3)
             </small><br />
-            <button id="send-palette-button" onclick="sendColorPalette()" disabled>Finish</button>
+            <button id="send-palette-button" onclick="sendColorPalette()" disabled>@TextDictionary.HMenuCPSubmitButton</button>
         </article>
     </section>
-</div> 
+</div>
 
 <script>
     getScript('#settings-layer', '/Resources/js/color_picker_color_list.js');
-    getScript('#settings-layer', '/Resources/js/settings/settings_color_picker.js'); 
+    getScript('#settings-layer', '/Resources/js/settings/settings_color_picker.js');
 </script>

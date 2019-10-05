@@ -10,8 +10,7 @@ using System.Web.Mvc;
 
 namespace MapWebSite.Controllers
 {
-    [Authorize] 
- //   [Filters.SiteAuthenticationFilter]
+    [Authorize]  
     public class HomeController : Controller
     {
 

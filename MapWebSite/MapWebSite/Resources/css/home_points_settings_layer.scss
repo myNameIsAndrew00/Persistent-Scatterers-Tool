@@ -71,11 +71,11 @@
             }
 
             input[type='search'] {
-                background: rgba(200,200,200,1); //TODO: colors must be one place
+                background: get_color(easeGray);
             }
 
             input[type='search']:hover {
-                background: rgba(180,180,180,1); //TODO: color must be one place
+                background: get_color(easeStrongGray);
             }
         }
 
@@ -104,22 +104,22 @@
                     padding: 0 5px 0 5px;
                     font-size: 11px;
                     color: white;
-                    background-color: #b7cca2; //TODO: set this variable to be from variables
+                    background-color: get_color(chromaGreen);
                 }
 
                 .preview {
                     padding: 0 5px 0 5px;
                     font-size: 11px;
                     color: white;
-                    background-color: #85b7ca; //TODO: set this variable to be from variables
+                    background-color: get_color(chromaBlue);
                 }
 
                 .use:hover {
-                    background-color: #8fb767;
+                    background-color: get_color(chromaDarkGreen);
                 }
 
                 .preview:hover {
-                    background-color: #518fa6;
+                    background-color: get_color(chromaDarkBlue);
                 }
 
                 .palette {

@@ -117,23 +117,110 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="HMenuCPTitle" xml:space="preserve">
-    <value />
+  <data name="HMenuCPArticle1" xml:space="preserve">
+    <value>Use the tool above to create a color palette.&lt;br /&gt;
+                Click the bar if you want to create a new color
+                and drag dots left or right to set the intervals</value>
+    <comment>HMenuCP --&gt; Home Menu Color Palette (page)</comment>
   </data>
-  <data name="HMenuCreatePalette" xml:space="preserve">
-    <value />
+  <data name="HMenuCPArticle2" xml:space="preserve">
+    <value>Your creation need a name :) chose it carefully, it must be &lt;b&gt;unique&lt;/b&gt;.</value>
   </data>
-  <data name="HMenuLogout" xml:space="preserve">
-    <value />
+  <data name="HMenuCPArticle3" xml:space="preserve">
+    <value>You are almost done if you look here :) just press the button below if you're done.</value>
   </data>
-  <data name="HMenuSettings" xml:space="preserve">
-    <value />
+  <data name="HMenuCPNameInput" xml:space="preserve">
+    <value>enter a name...</value>
   </data>
-  <data name="HMenuUploadPoints" xml:space="preserve">
-    <value />
+  <data name="HMenuCPSubmitButton" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="HMenuCPSubtitle1" xml:space="preserve">
+    <value>Chose colors</value>
+  </data>
+  <data name="HMenuCPSubtitle2" xml:space="preserve">
+    <value>Chose a name</value>
+  </data>
+  <data name="HMenuCPSubtitle3" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="HMenuCPTitleText" xml:space="preserve">
+    <value>Build your own color palette</value>
+  </data>
+  <data name="HMenuCreatePaletteText" xml:space="preserve">
+    <value>Create palette</value>
+  </data>
+  <data name="HMenuLogoutText" xml:space="preserve">
+    <value>Go to logout</value>
+  </data>
+  <data name="HMenuSettingsText" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="HMenuUPInstructionText" xml:space="preserve">
+    <value>Select a text file which contains points and upload them on server. &lt;br /&gt;
+            The name which you chose must be unique.
+            Dataset will be available for display after a service will process the text file.</value>
+    <comment>HMenuUP --&gt; Home Menu Upload Points (page)</comment>
+  </data>
+  <data name="HMenuUploadPointsText" xml:space="preserve">
+    <value>Upload points</value>
+  </data>
+  <data name="HMenuUPNameInput" xml:space="preserve">
+    <value>insert dataset name...</value>
+  </data>
+  <data name="HMenuUPSelectFileButton" xml:space="preserve">
+    <value>Choose a file</value>
+  </data>
+  <data name="HMenuUPTitle" xml:space="preserve">
+    <value>Upload points</value>
+  </data>
+  <data name="HMenuUPUploadButton" xml:space="preserve">
+    <value>Upload file</value>
+  </data>
+  <data name="HPIDeformationRateText" xml:space="preserve">
+    <value>Deformation rate</value>
+  </data>
+  <data name="HPIEstimatedDefRateText" xml:space="preserve">
+    <value>Estimated def. rate</value>
+  </data>
+  <data name="HPIEstimatedHeightText" xml:space="preserve">
+    <value>Estimated height</value>
+  </data>
+  <data name="HPIHeightText" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="HPIIDText" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="HPILatitudeText" xml:space="preserve">
+    <value>Latitude</value>
+  </data>
+  <data name="HPILongitudeText" xml:space="preserve">
+    <value>Longitude</value>
+    <comment>HPI --&gt; Home points Info</comment>
+  </data>
+  <data name="HPIStandardDeviationText" xml:space="preserve">
+    <value>Standard deviation</value>
+  </data>
+  <data name="HPSCPHead1" xml:space="preserve">
+    <value>Palette name</value>
+  </data>
+  <data name="HPSCPHead2" xml:space="preserve">
+    <value>Colors</value>
+  </data>
+  <data name="HPSCPHead3" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="HPSCPSearchText" xml:space="preserve">
+    <value>type here to search</value>
+  </data>
+  <data name="HPSCPTitle" xml:space="preserve">
+    <value>Choose palette</value>
+    <comment>HPS --&gt; Home points Settings</comment>
   </data>
   <data name="LBackButton" xml:space="preserve">
     <value>Back</value>
+    <comment>L --&gt; Login</comment>
   </data>
   <data name="LFirstNameInput" xml:space="preserve">
     <value>first name</value>
@@ -170,5 +257,56 @@
   </data>
   <data name="LUsernameInput" xml:space="preserve">
     <value>username</value>
+  </data>
+  <data name="HPSCDSearchInput" xml:space="preserve">
+    <value>type here to search...</value>
+  </data>
+  <data name="HPSCDTitleText" xml:space="preserve">
+    <value>Choose dataset</value>
+  </data>
+  <data name="HMenuCPClosePicker" xml:space="preserve">
+    <value>done</value>
+  </data>
+  <data name="HMenuUPWarningText" xml:space="preserve">
+    <value>A file is required....</value>
+  </data>
+  <data name="HPINoPlotText" xml:space="preserve">
+    <value>No plot to display</value>
+  </data>
+  <data name="HPITitleText" xml:space="preserve">
+    <value>Coordinate info</value>
+  </data>
+  <data name="OverlayCDFailText" xml:space="preserve">
+    <value>You chosed an existent name for your dataset. Please chose another</value>
+  </data>
+  <data name="OverlayCDFailTitle" xml:space="preserve">
+    <value>Can't finish operation</value>
+    <comment>OverlayCD --&gt; overlay for dataset existance</comment>
+  </data>
+  <data name="OverlayCPFailedText" xml:space="preserve">
+    <value>Something went wrong. Try to change your palette name or check the connection</value>
+  </data>
+  <data name="OverlayCPFailedTitle" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="OverlayCPSuccesText" xml:space="preserve">
+    <value>You succesfully upload your color palette</value>
+  </data>
+  <data name="OverlayCPSuccesTitle" xml:space="preserve">
+    <value>Success</value>
+    <comment>OverlayCPS --&gt; overlay create palette</comment>
+  </data>
+  <data name="OverlayMFSuccesText" xml:space="preserve">
+    <value>You succesufully upload your data. Please wait for it to be processed.</value>
+  </data>
+  <data name="OverlayMFSuccesTitle" xml:space="preserve">
+    <value>Success</value>
+    <comment>OverlayMF --&gt; overlay merge files</comment>
+  </data>
+  <data name="HPSCPPreviewButton" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="HPSCPUseButton" xml:space="preserve">
+    <value>Use</value>
   </data>
 </root>

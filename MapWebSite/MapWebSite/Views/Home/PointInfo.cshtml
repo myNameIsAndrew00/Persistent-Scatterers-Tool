@@ -1,40 +1,41 @@
-﻿<div class="info" id="_point-info">
+﻿@using MapWebSite.Resources.text
+<div class="info" id="_point-info">
 
-    <h1>Coordinate info</h1>
+    <h1>@TextDictionary.HPITitleText</h1>
     <hr />
     <div class="text">
         <div class="left-area">
 
-            <h3>Longitude:</h3>
+            <h3>@TextDictionary.HPILongitudeText:</h3>
             <p id="longitude"></p>
-            <h3>Latitude:</h3>
+            <h3>@TextDictionary.HPILatitudeText:</h3>
             <p id="latitude"></p>
         </div>
 
         <ul>
             <li>
-                <label>ID</label>
+                <label>@TextDictionary.HPIIDText</label>
 
                 <label id="ID" class="value">N/A</label>
             </li>
             <li>
-                <label>Height</label>
+                <label>@TextDictionary.HPIHeightText</label>
                 <label id="height" class="value">N/A</label>
             </li>
             <li>
-                <label>Deformation rate</label>
+                <label>@TextDictionary.HPIDeformationRateText</label>
                 <label id="def_rate" class="value">N/A</label>
             </li>
             <li>
-                <label>Standard deviation</label>
+                <label>@TextDictionary.HPIStandardDeviationText</label>
                 <label id="std_dev" class="value">N/A</label>
             </li>
             <li>
-                <label>Estimated height</label>
+                <label>@TextDictionary.HPIEstimatedHeightText</label>
                 <label id="est_height" class="value">N/A</label>
             </li>
             <li>
-                <label>Estimated def. rate</label>
+                <label>@TextDictionary.HPIEstimatedDefRateText</label>
                 <label id="est_def_rate" class="value">N/A</label>
             </li>
         </ul>
@@ -63,7 +64,7 @@
             <label class="plot-plopup-text"></label>
         </div>
 
-        <h3 id="no-plot-text">No plot to display</h3>
+        <h3 id="no-plot-text">@TextDictionary.HPINoPlotText</h3>
     </div>
 </div>
 

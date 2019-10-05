@@ -28,20 +28,27 @@ namespace MapWebSite.Controllers
     
             if (signInStatus == SignInStatus.Success)
 
-                //TODO: modify string with SecureString       
-                //Filters.SiteAuthenticationFilter.LogoutUser();
-
-                //DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
-
-
-                //        if (databaseInteractionHandler.ValidateUser(username, password))
-                //            Filters.SiteAuthenticationFilter.AuthenticateUser(username);
+                //TODO: modify string with SecureString                      
                     
                 return RedirectToAction("Index", "Home");
 
             else
 
                 return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult LoginAnonymous()
+        {
+            var signInManager = HttpContext.GetOwinContext().Get<SignInManager>();
+
+            var signInStatus = signInManager.PasswordSignIn("", null, true, false);
+
+            if (signInStatus == SignInStatus.Success)
+                return RedirectToAction("Index", "Home");
+            else
+                return RedirectToAction("Index");
+
         }
 
         [HttpPost]
@@ -51,6 +58,8 @@ namespace MapWebSite.Controllers
                                      string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                return RedirectToAction("Index");
+            if(username == AnonymousUser.Get.Username)
                 return RedirectToAction("Index");
 
             var createTask = HttpContext.GetOwinContext()

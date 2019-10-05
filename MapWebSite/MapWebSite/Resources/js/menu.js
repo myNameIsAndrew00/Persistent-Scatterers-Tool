@@ -99,7 +99,6 @@ async function requestPage(pageName, cssServerPath) {
 
     if (cssServerPath != null) requestCss(cssServerPath);
     await $.get("/Home/RequestSettingsLayerContent", { settingsPageName: pageName }, await function (data) {
-        //TODO: check if the page was already loaded and do not request resources again. It generates errors
         setTimeout(function () {
             ChangeSpinnerVisibility(false);
             $('#settings-layer').html(data);

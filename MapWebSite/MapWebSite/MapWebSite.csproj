@@ -243,9 +243,6 @@
     <Compile Include="Controllers\Settings Controller\SCUploadPoints.cs" />
     <Compile Include="Controllers\Settings Controller\SCColorPalette.cs" />
     <Compile Include="Controllers\Settings Controller\SettingsController.cs" />
-    <Compile Include="Filters\Authentication\ApiAuthenticationFilter.cs" />
-    <Compile Include="Filters\Authentication\AuthenticationHandler.cs" />
-    <Compile Include="Filters\Authentication\SiteAuthenticationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -444,6 +441,9 @@
       <Project>{921645e7-a83e-408a-b4c8-f7cd21db3329}</Project>
       <Name>MapWebSite.Model</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Filters\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
