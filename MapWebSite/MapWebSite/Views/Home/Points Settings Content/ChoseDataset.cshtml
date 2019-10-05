@@ -1,20 +1,48 @@
 ﻿@using MapWebSite.Resources.text
+@model  MapWebSite.Interaction.ViewModel.ChoseDatasetViewModel
 @{
     Layout = null;
 }
+
+<input type="hidden" id="_use-dataset-button-text" value="@TextDictionary.HPSCDUseButton"/>
+<input type="hidden" id="_preview-dataset-button-text" value="@TextDictionary.HPSCDPreviewButton" />
 
 <div class="points-settings-layer-container-palette-content points-settings-layer-container-content">
     <div class="ps_header">
         <h4>@Html.Raw(TextDictionary.HPSCDTitleText)</h4>
         @Html.DropDownList("filter",
-                         EnumHelper.GetSelectList(typeof(MapWebSite.Core.Database.DataPointsFilters))
+                         EnumHelper.GetSelectList(typeof(MapWebSite.Core.Database.DataSetsFilters)),
+                         new { id = "datasetFilterValue", onchange = "loadMorePointsDatasets(true)" }
                          )
 
-        <input type="search" id="colorPaletteSearchValue" placeholder="@TextDictionary.HPSCDSearchInput" onkeyup="loadMorePalettes(true)" />
-
+        <input type="search" id="datasetSearchValue" placeholder="@TextDictionary.HPSCDSearchInput" onkeyup="loadMorePointsDatasets(true)" />
+        <input type="hidden" id="currentDatasetIndex" value="1" />
     </div>
-    <div class="ps_left" id="ps_left">
+    <div class="ps_left" id="ps_left" onscroll="loadMorePointsDatasets(false)">
+        <table>
+            <tr class="table-header">
+                <th><object width="14px" height="35px" type="image/svg+xml" data="~/Resources/resources/icons/user_default_icon.svg"></object></th>
+                <th>Dataset Name</th>
+                <th>Actions</th>
+            </tr>
 
+            @foreach (var item in Model.Datasets)
+            {
+                <tr id="user_dataset_@(item.Item1)_@(item.Item2)">
+                    <td>@item.Item1</td>
+                    <td>@item.Item2</td>
+                    <td>
+                        <button class="use">@TextDictionary.HPSCDUseButton</button>
+                        <button class="preview">@TextDictionary.HPSCDPreviewButton</button>
+                    </td>
+                </tr>
+            }
+
+        </table>
     </div>
     <aside class="ps_right"></aside>
 </div>
+
+<script>
+    getScript('#points-settings-layer-container-content', '/Resources/js/points settings/chose_dataset.js');
+</script>

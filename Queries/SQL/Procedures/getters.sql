@@ -129,7 +129,36 @@ begin
 				end )) > 0 
 		   OR @filter_id = -1
 	order by CP.creation_date desc
-	OFFSET @page_index * items_per_page ROWS FETCH NEXT @items_per_page ROWS ONLY;
+	OFFSET @page_index * @items_per_page ROWS FETCH NEXT @items_per_page ROWS ONLY;
+end
+ 
+go
+
+
+if object_id('GetDataSetsFiltered', 'P') is not null
+	drop procedure GetDataSetsFiltered
+go
+create procedure GetDataSetsFiltered 
+	@filter_id as int,
+	@filter_value as varchar(255),
+	@page_index as int,
+	@items_per_page as int
+as 
+begin
+	select 
+		   U.username,
+		   DS.dataset_name 
+		from DataSets as DS
+		inner join Users as U
+		on DS.user_id = U.user_id 
+	where CHARINDEX(@filter_value,
+				( case 
+					when @filter_id = 1 then DS.dataset_name
+					when @filter_id = 2 then U.username
+				end )) > 0 
+		   OR @filter_id = -1
+	order by DS.data_set_id desc
+	OFFSET @page_index * @items_per_page ROWS FETCH NEXT @items_per_page ROWS ONLY;
 end
  
 go

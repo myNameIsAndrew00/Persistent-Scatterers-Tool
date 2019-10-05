@@ -71,6 +71,7 @@
     <Compile Include="Owin\ComponentsFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteUser.cs" />
+    <Compile Include="Views Model\ChoseDatasetViewModel.cs" />
     <Compile Include="Views Model\ChosePaletteViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

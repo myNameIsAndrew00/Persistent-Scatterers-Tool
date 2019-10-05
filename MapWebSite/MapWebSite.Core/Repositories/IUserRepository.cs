@@ -11,6 +11,16 @@ namespace MapWebSite.Core.Database
         Username = 2,
     }
 
+    public enum DataSetsFilters
+    {
+        None = -1,
+        DataSetName = 1,
+        Username = 2
+    }
+
+    /// <summary>
+    /// Interface for a repository which contains users and other data (palettes and points datasets headers)
+    /// </summary>
     public interface IUserRepository
     {
         bool InsertUser(User user);
@@ -49,5 +59,7 @@ namespace MapWebSite.Core.Database
         IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(ColorMapFilters filter, string filterValue, int pageIndex, int itemsPerPage);
 
         string GetColorMapSerialization(string username, string paletteName);
+
+        IEnumerable<Tuple<string, string>> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
     }
 }

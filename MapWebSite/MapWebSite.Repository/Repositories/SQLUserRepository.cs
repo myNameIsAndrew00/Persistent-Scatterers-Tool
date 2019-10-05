@@ -281,5 +281,30 @@ namespace MapWebSite.Repository
             return result;
 
         }
+
+        public IEnumerable<Tuple<string, string>> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
+        {
+            List<Tuple<string, string>> result = new List<Tuple<string, string>>();
+
+            using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetDataSetsFiltered")
+            { CommandType = System.Data.CommandType.StoredProcedure },
+                                               new SqlParameter[]
+                                               {
+                                                    new SqlParameter("@filter_id",(int)filter),
+                                                    new SqlParameter("@filter_value",filterValue),
+                                                    new SqlParameter("@page_index",pageIndex),
+                                                    new SqlParameter("@items_per_page",itemsPerPage)
+                                               },
+                                               new SqlConnection(this.connectionString)))
+            {
+                foreach (DataRow row in colorMapsResult.Tables[0].Rows)
+                    result.Add(new Tuple<string, string>(
+                        (string)row["username"],
+                        (string)row["dataset_name"]));
+            }
+
+            return result;
+
+        }
     }
 }

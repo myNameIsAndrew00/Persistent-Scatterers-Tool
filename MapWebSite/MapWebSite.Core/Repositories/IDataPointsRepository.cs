@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 namespace MapWebSite.Core.Database
 {
 
-    public enum DataPointsFilters
-    {
-        None = -1
-    }
 
+    /// <summary>
+    /// Interface for a repository which contains points
+    /// </summary>
     public interface IDataPointsRepository
     {      
         Task<bool> InsertPointsDatasets(PointsDataSet originalDataSet, PointsDataSet[] zoomedDatasets);

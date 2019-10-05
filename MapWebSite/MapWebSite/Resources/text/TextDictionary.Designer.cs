@@ -335,6 +335,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        public static string HPSCDPreviewButton {
+            get {
+                return ResourceManager.GetString("HPSCDPreviewButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to type here to search....
         /// </summary>
         public static string HPSCDSearchInput {
@@ -349,6 +358,15 @@ namespace MapWebSite.Resources.text {
         public static string HPSCDTitleText {
             get {
                 return ResourceManager.GetString("HPSCDTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use.
+        /// </summary>
+        public static string HPSCDUseButton {
+            get {
+                return ResourceManager.GetString("HPSCDUseButton", resourceCulture);
             }
         }
         

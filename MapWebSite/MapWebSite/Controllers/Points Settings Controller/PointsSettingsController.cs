@@ -44,7 +44,21 @@ namespace MapWebSite.Controllers
         [System.Web.Mvc.HttpGet]
         public ActionResult GetChoseDatasetPage()
         {
-            return View("~/Views/Home/Points Settings Content/ChoseDataset.cshtml");
+            try
+            {
+                DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+                return View("~/Views/Home/Points Settings Content/ChoseDataset.cshtml",
+                    new ChoseDatasetViewModel(databaseInteractionHandler.GetDataSets(
+                        Core.Database.DataSetsFilters.None,
+                        string.Empty,
+                        0,
+                        ChoseDatasetViewModel.DataPointsPerPage
+                        )));
+            }
+            catch
+            {
+                return View();
+            }
         }
     }
      
@@ -70,12 +84,30 @@ namespace MapWebSite.Controllers
         {
             var databaseInteractionHandler = new DatabaseInteractionHandler();
             var response = new HttpResponseMessage();
+
             response.Content = new StringContent(
                 databaseInteractionHandler.GetColorPaletes(
                     filter,
                     filterValue ?? string.Empty,
                     pageIndex,
                     ChosePaletteViewModel.ColorPalettesPerPage
+                )?.JSONSerialize());
+            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            return response;
+        }
+
+        public HttpResponseMessage GetDatasetsList(string filterValue, Core.Database.DataSetsFilters filter, int pageIndex)
+        {
+            var databaseInteractionHandler = new DatabaseInteractionHandler();
+            var response = new HttpResponseMessage();
+
+            response.Content = new StringContent(
+                databaseInteractionHandler.GetDataSets(
+                    filter,
+                    filterValue ?? string.Empty,
+                    pageIndex,
+                    ChoseDatasetViewModel.DataPointsPerPage
                 )?.JSONSerialize());
             response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
