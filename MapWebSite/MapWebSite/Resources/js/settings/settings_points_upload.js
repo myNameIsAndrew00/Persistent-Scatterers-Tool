@@ -1,4 +1,5 @@
 ﻿import { DisplayOverlay } from './settings.js';
+import { Router, endpoints } from '../api/api_router.js';
 
 var processedFiles = {};
 
@@ -35,19 +36,16 @@ window.uploadDataSets = function uploadDataSets() {
 
 
 function checkDataSetName(dataSetName) {
-    $.ajax({
-        type: 'POST',
-        url: 'api/settings/CheckDatasetExistance',
-        data: { fileName: dataSetName },
-        success: function (serverResponse) {
+    Router.Post(endpoints.Settings.CheckDatasetExistance,
+        { fileName: dataSetName },
+        function (serverResponse) {
             if (serverResponse.includes("Success"))
                 uploadFile($('#uploadFile')[0].files[0],
                     dataSetName);
             else {
                 DisplayOverlay(serverResponse);
             }
-        }
-    })
+        });   
 }
 
 function enableUpload() {
@@ -99,7 +97,7 @@ function uploadChunk(chunk, chunkName, dataSetName) {
 
     $.ajax({
         type: 'POST',
-        url: 'api/settings/UploadFileChunk',
+        url: endpoints.Settings.UploadFileChunk,
         contentType: false,
         processData: false,
         data: formData,
@@ -121,12 +119,10 @@ function uploadChunk(chunk, chunkName, dataSetName) {
 
 
 function mergeChunks(dataSetName) {
-    $.ajax({
-        type: 'POST',
-        url: 'api/settings/MergeFileChunks',
-        data: { fileName: dataSetName },
-        success: function (serverResponse) {
+
+    Router.Post(endpoints.Settings.MergeFileChunks,
+        { fileName: dataSetName },
+        function (serverResponse) {
             DisplayOverlay(serverResponse);
-        }
-    })
+        });
 }

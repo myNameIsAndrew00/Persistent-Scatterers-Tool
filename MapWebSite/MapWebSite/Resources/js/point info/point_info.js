@@ -1,4 +1,4 @@
-﻿import { PlotDrawer } from './plot.js';
+﻿import { PlotDrawer } from '../plot.js';
 
 var currentDrawer = null;
 

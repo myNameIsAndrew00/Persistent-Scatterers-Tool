@@ -78,7 +78,7 @@ namespace MapWebSite
             bundles.Add(new ScriptBundle("~/scripts/home").Include(
                 "~/Resources/js/home.js",
                 "~/Resources/js/plot.js",
-                "~/Resources/js/point_info.js",
+                "~/Resources/js/point info/point_info.js",
                 "~/Resources/js/map.js"));
 
             bundles.Add(new ScriptBundle("~/scripts/menu").Include(
@@ -93,6 +93,10 @@ namespace MapWebSite
 
             bundles.Add(new ScriptBundle("~/scripts/select").Include(
                 "~/Resources/js/select.js"));
+
+            bundles.Add(new ScriptBundle("~/scripts/api").Include(
+                "~/Resources/js/api/api_router.js"));
+                
         }
 
         private static void loadOpenLayersBundles(BundleCollection bundles)

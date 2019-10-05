@@ -1,5 +1,6 @@
 ﻿import { SetColorPalette, colorPalette } from '../home.js';
 import { UpdatePointsLayer } from '../map.js';
+import { Router, endpoints } from '../api/api_router.js';
 
 var __selected_palette_index = -1;
 
@@ -12,19 +13,21 @@ function changeSelectedRowOnMenu(id, visible) {
 
 window.useColorMap = async function useColorMap(paletteIndex, username, paletteName) {
 
+    Router.Get(endpoints.PointsSettingsApi.GetColorPalette,
+        { username: username, paletteName: paletteName },
+        await function (palette) {
+            SetColorPalette(palette);
+            UpdatePointsLayer();
 
-    await $.get("/api/PointsSettingsApi/GetColorPalette", { username: username, paletteName: paletteName }, await function (palette) {
-        SetColorPalette(palette);
-        UpdatePointsLayer();
+            var previousPaletteId = 'user_palette_index_' + __selected_palette_index;
+            var paletteId = 'user_palette_index_' + paletteIndex;
 
-        var previousPaletteId = 'user_palette_index_' + __selected_palette_index;
-        var paletteId = 'user_palette_index_' + paletteIndex;
+            changeSelectedRowOnMenu(previousPaletteId, false);
+            changeSelectedRowOnMenu(paletteId, true);
 
-        changeSelectedRowOnMenu(previousPaletteId, false);
-        changeSelectedRowOnMenu(paletteId, true);
-
-        __selected_palette_index = paletteIndex;
-    });
+            __selected_palette_index = paletteIndex;
+        }
+    );
 }
 
 /* ***************************************************************************************/
@@ -124,7 +127,8 @@ window.loadMorePalettes = function loadMorePalettes(resetPageIndex) {
         var pageIndex = $('#points-settings-layer-container-content').find('#currentColorPaletteIndex')[0];
         var filter = $('#points-settings-layer-container-content').find('#colorPaletteFilterValue')[0];
 
-        $.get("/api/PointsSettingsApi/GetColorPaletteList", { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
+        Router.Get(endpoints.PointsSettingsApi.GetColorPaletteList,
+            { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
             function (palette) {
                 if (palette.length)
                     $('#points-settings-layer-container-content').find('#currentColorPaletteIndex')[0].value = parseInt(pageIndex.value) + 1;

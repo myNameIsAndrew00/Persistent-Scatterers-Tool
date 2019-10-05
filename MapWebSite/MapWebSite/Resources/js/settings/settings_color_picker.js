@@ -1,5 +1,6 @@
 import { ColorList, ColorNode } from '../color_picker_color_list.js';
 import { DisplayOverlay } from './settings.js';
+import { Router, endpoints } from '../api/api_router.js';
 
 /*use this variables for dots controll*/
 
@@ -122,21 +123,18 @@ window.enableSubmit = function enableSubmit() {
 window.sendColorPalette = function sendColorPalette() {
     var paletteName = $('#name-info-card').children('#color-palette-name').val();
 
-    if (paletteName === '') return; //TODO: display overlay
+    if (paletteName === '') return;  
 
-    $.ajax({
-        type: "POST",
-        data: {
+    Router.Post(endpoints.Settings.SaveColorsPalette,
+        {
             Intervals: colorList.GetColorMap(),
             Name: paletteName,
         },
-        url: 'api/settings/SaveColorsPalette',
-        success: function (receivedInfo) {
+        function (receivedInfo) {
             DisplayOverlay(receivedInfo);
         },
-        error: function (receivedInfo) {
+        function (receivedInfo) {
             DisplayOverlay(receivedInfo);
-        }
-    });;
+        });   
 }
 

@@ -1,5 +1,5 @@
-﻿
-
+﻿import { Router, endpoints } from '../api/api_router.js';
+ 
 /** Dataset request to fill the table **/
 
 function resetTable(table) {
@@ -62,8 +62,9 @@ window.loadMorePointsDatasets = function loadMorePointsDatasets(resetPageIndex) 
         var filterValue = $('#points-settings-layer-container-content').find('#datasetSearchValue')[0];
         var pageIndex = $('#points-settings-layer-container-content').find('#currentDatasetIndex')[0];
         var filter = $('#points-settings-layer-container-content').find('#datasetFilterValue')[0];
-
-        $.get("/api/PointsSettingsApi/GetDatasetsList",
+        
+        Router.Get(
+            endpoints.PointsSettingsApi.GetDatasetsList,
             { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
             function (datasets) {
                 if (datasets.length)
@@ -71,6 +72,6 @@ window.loadMorePointsDatasets = function loadMorePointsDatasets(resetPageIndex) 
 
                 //fill the table tbody with rows
                 fillTable(datasets, table.children[0].children[0]);
-            });
+            });       
     }
 }

@@ -303,6 +303,8 @@
     <None Include="Resources\css\home_settings_layer.scss" />
     <None Include="Resources\css\settings_points_upload.scss" />
     <Content Include="Resources\js\api\api_router.js" />
+    <Content Include="Resources\js\point info\card_drawer.js" />
+    <Content Include="Resources\js\point info\cards_manager.js" />
     <Content Include="Resources\js\points settings\chose_dataset.js" />
     <Content Include="Resources\js\points settings\chose_palette.js" />
     <Content Include="Resources\js\settings\settings.js" />
@@ -314,7 +316,7 @@
     <Content Include="Resources\js\menu.js" />
     <Content Include="Resources\js\plot.js" />
     <Content Include="Resources\js\settings\settings_points_upload.js" />
-    <Content Include="Resources\js\point_info.js" />
+    <Content Include="Resources\js\point info\point_info.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
     <Content Include="Resources\resources\icons\arrow_right_icon.svg" />

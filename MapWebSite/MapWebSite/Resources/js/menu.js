@@ -1,5 +1,6 @@
 ﻿import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
 import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
+import { Router, endpoints } from './api/api_router.js';
 
 /**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE DOWN-LEFT MENU******************/
 /*************************************************************************************************/
@@ -98,13 +99,17 @@ async function requestPage(pageName, cssServerPath) {
 
 
     if (cssServerPath != null) requestCss(cssServerPath);
-    await $.get("/Home/RequestSettingsLayerContent", { settingsPageName: pageName }, await function (data) {
-        setTimeout(function () {
-            ChangeSpinnerVisibility(false);
-            $('#settings-layer').html(data);
-        }, 1200);
 
-    });
+    Router.Get(endpoints.Home.RequestSettingsLayerContent,
+        { settingsPageName: pageName },
+        await function (data) {
+            setTimeout(function () {
+                ChangeSpinnerVisibility(false);
+                $('#settings-layer').html(data);
+            }, 1200)
+        }
+    );
+
 }
 
 function requestCss(cssServerPath) {
@@ -126,7 +131,7 @@ function requestCss(cssServerPath) {
 /*functions used for points setting overlay*/
 window.displayPointsLayerPage = async function displayPointsLayerPage(display, requestMethodName) {
 
-    function displayPage(display,serverData) {
+    function displayPage(display, serverData) {
         var container = $('#points-settings-layer-container');
         var innerContainer = $('#points-settings-layer-container').children("#points-settings-layer-container-content");
 
@@ -141,10 +146,10 @@ window.displayPointsLayerPage = async function displayPointsLayerPage(display, r
     }
 
     if (!display)
-        displayPage(display,'');
+        displayPage(display, '');
     else
-    await $.get("/PointsSettings/" + requestMethodName, await function (data) {
-        displayPage(false,'');
-        setTimeout(function () { displayPage(true,data) }, 150);
-    });
+        await $.get("/PointsSettings/" + requestMethodName, await function (data) {
+            displayPage(false, '');
+            setTimeout(function () { displayPage(true, data) }, 150);
+        });
 }

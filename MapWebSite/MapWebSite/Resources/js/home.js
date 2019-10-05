@@ -1,4 +1,4 @@
-import { HidePointInfo } from './point_info.js';
+import { HidePointInfo } from './point info/point_info.js';
 
 window.HidePointInfo = HidePointInfo;
 

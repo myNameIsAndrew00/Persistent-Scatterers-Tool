@@ -1,6 +1,6 @@
 ﻿import { colorPalette } from './home.js';
-import { DisplayPointInfo, SetPointInfoData } from './point_info.js';
-
+import { DisplayPointInfo, SetPointInfoData } from './point info/point_info.js';
+import { Router, endpoints } from './api/api_router.js';
 
 
 var points = [];
@@ -170,20 +170,18 @@ function buildStyleFromPalette(featureValue, latitude, longitude) {
 function handleClickFunction(e) {
     if (e.selected.length == 0) return;
     var point = e.selected[0];
-    $.ajax({
-        type: "GET",
-        data: {
+
+    Router.Get(endpoints.Home.RequestPointDetails,
+        {
             zoomLevel: map.getView().getZoom(),
             latitude: point.latitude,
             longitude: point.longitude,
             identifier: point.ID,
-        },
-        url: '/home/RequestPointDetails',
-        success: function (receivedInfo) {
+        }, function (receivedInfo) {
             var point = JSON.parse(receivedInfo.data);
             SetPointInfoData(point);
         }
-    });
+    )     
 
     DisplayPointInfo();
 
@@ -237,9 +235,9 @@ export function UpdatePointsLayer() {
 }
 
 function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
-    $.ajax({
-        type: "GET",
-        data: {
+
+    Router.Get(endpoints.Home.RequestDataPoints,
+        {
             zoomLevel: pZoomLevel,
             latitudeFrom: pLatitudeFrom,
             longitudeFrom: pLongitudeFrom,
@@ -247,8 +245,7 @@ function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, 
             longitudeTo: pLongitudeTo,
             optionalField: 'Height'
         },
-        url: '/home/RequestDataPoints',
-        success: function (receivedInfo) {
+        function (receivedInfo) {
             points.splice(0, points.length);
 
             var requestedPoints = JSON.parse(receivedInfo.data);
@@ -266,10 +263,9 @@ function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, 
             requestedPoints.splice(0, requestedPoints.length);
 
             UpdatePointsLayer();
-
-
         }
-    });
+    )
+    
 }
 
 

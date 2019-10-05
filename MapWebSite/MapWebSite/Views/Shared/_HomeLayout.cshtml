@@ -9,7 +9,8 @@
     @Styles.Render("~/FrameworkContent/css")
     @Styles.Render("~/css/openlayers")
     @Scripts.Render("~/bundles/jquery")
-
+    @Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/api")
+  
 </head>
 <body>
     @RenderBody()
