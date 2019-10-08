@@ -8,6 +8,8 @@ using System.Web;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.AspNet.Identity;
 
+
+
 [assembly: OwinStartup(typeof(MapWebSite.Startup))]
 
 namespace MapWebSite
@@ -30,6 +32,9 @@ namespace MapWebSite
             });
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-        }
+
+            
+            app.MapSignalR();
+        } 
     }
 }

@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 namespace MapWebSite.Interaction
 {
     using Pair = Tuple<decimal, decimal>;
+    using Coordinates = Tuple<
+               Tuple<decimal, decimal>,
+               Tuple<decimal, decimal>>
+               ;
 
     /// <summary>
     /// Provides methods for interacting with the database 
@@ -68,6 +72,21 @@ namespace MapWebSite.Interaction
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
             if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
+            //TODO: test this
+          /*var points = PointsCacheManager.Get(leftMargin, rightMargin, dataSetID, out List<Coordinates> coordinates);
+
+            if (points != null) return points; 
+            else
+            {
+                foreach( var coordinate in coordinates)
+                {
+                    var result = this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, 0, coordinate.Item1, coordinate.Item2, optionalField);
+                    PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, dataSetID, result);
+
+                    //TODO: return result via web sockets
+                }
+            }*/
+            //TODO: ignore zoom level
             return this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, zoomLevel, leftMargin, rightMargin, optionalField);
         }
 
@@ -76,6 +95,8 @@ namespace MapWebSite.Interaction
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
             if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
+            //TODO: ignore zoom level
+            
             return this.dataPointsRepository.GetPointDetails(dataSetID, zoomLevel, basicPoint);
         }
 

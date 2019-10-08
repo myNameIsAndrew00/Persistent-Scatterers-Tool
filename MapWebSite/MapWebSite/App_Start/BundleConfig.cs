@@ -70,6 +70,9 @@ namespace MapWebSite
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/FrameworkContent/Scripts/bootstrap.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/hub").Include(
+                "~/Scripts/jquery.signalR-2.4.1.js"));
+
 
             /**Custom scripts bellow**/
             bundles.Add(new ScriptBundle("~/scripts/login").Include(
@@ -80,6 +83,9 @@ namespace MapWebSite
                 "~/Resources/js/plot.js",
                 "~/Resources/js/point info/point_info.js",
                 "~/Resources/js/map.js"));
+
+            bundles.Add(new ScriptBundle("~/scripts/hubProxy").Include(
+                "~/Resources/js/api/hub_router.js"));
 
             bundles.Add(new ScriptBundle("~/scripts/menu").Include(
                 "~/Resources/js/menu.js"));

@@ -9,8 +9,10 @@
     @Styles.Render("~/FrameworkContent/css")
     @Styles.Render("~/css/openlayers")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/hub")
+    @Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/hubProxy")
     @Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/api")
-  
+
 </head>
 <body>
     @RenderBody()

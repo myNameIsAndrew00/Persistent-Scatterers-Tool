@@ -1,10 +1,33 @@
 ﻿import { colorPalette } from './home.js';
 import { DisplayPointInfo, SetPointInfoData } from './point info/point_info.js';
 import { Router, endpoints } from './api/api_router.js';
-
+import { HubRouter } from './api/hub_router.js';
 
 var points = [];
 var vector = null;
+
+/*initialise the router*/
+const hubRouter = new HubRouter();
+hubRouter.SetCallback('ProcessPoints', function (receivedInfo) {
+    points.splice(0, points.length); 
+
+    var requestedPoints = JSON.parse(receivedInfo);
+    for (var i = 0; i < requestedPoints.length; i++) {
+        points[i] = new ol.Feature({
+            'geometry': new ol.geom.Point(
+                ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
+            'colorCriteria': requestedPoints[i].OptionalField
+        });
+        points[i].ID = requestedPoints[i].Number;
+        points[i].longitude = requestedPoints[i].Longitude;
+        points[i].latitude = requestedPoints[i].Latitude;
+    }
+
+    requestedPoints.splice(0, requestedPoints.length);
+
+    UpdatePointsLayer();
+});
+
 
 /**
  * View for map
@@ -141,21 +164,21 @@ function buildStyleFromPalette(featureValue, latitude, longitude) {
      
 
     //select the shape based on zoom level
-    if (map.getView().getZoom() > 16)
+   // if (map.getView().getZoom() > 16)
         return new ol.style.Style({
             image: new ol.style.Circle({
                 radius: 3,
                 fill: new ol.style.Fill({ color: paletteColor })
             })
         });
-    else return new ol.style.Style({
+    /*else return new ol.style.Style({
         stroke: new ol.style.Stroke({
             color: 'transparent',
             width: 0
         }),
         fill: new ol.style.Fill({ color: paletteColor + '3F' }),
         geometry: new ol.geom.Polygon([ getRectangleCoordinates() ] )
-    });
+    });*/
 
 }
 
@@ -236,36 +259,17 @@ export function UpdatePointsLayer() {
 
 function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
 
-    Router.Get(endpoints.Home.RequestDataPoints,
-        {
-            zoomLevel: pZoomLevel,
-            latitudeFrom: pLatitudeFrom,
-            longitudeFrom: pLongitudeFrom,
-            latitudeTo: pLatitudeTo,
-            longitudeTo: pLongitudeTo,
-            optionalField: 'Height'
-        },
-        function (receivedInfo) {
-            points.splice(0, points.length);
 
-            var requestedPoints = JSON.parse(receivedInfo.data);
-            for (var i = 0; i < requestedPoints.length; i++) {
-                points[i] = new ol.Feature({
-                    'geometry': new ol.geom.Point(
-                        ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
-                    'colorCriteria': requestedPoints[i].OptionalField
-                });
-                points[i].ID = requestedPoints[i].Number;
-                points[i].longitude = requestedPoints[i].Longitude;
-                points[i].latitude = requestedPoints[i].Latitude;
-            }
+    hubRouter.RequestDataPoints(
+        pLatitudeFrom,
+        pLongitudeFrom,
+        pLatitudeTo,
+        pLongitudeTo,
+        pZoomLevel,
+        'Height'
+    );
 
-            requestedPoints.splice(0, requestedPoints.length);
 
-            UpdatePointsLayer();
-        }
-    )
-    
 }
 
 
