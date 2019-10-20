@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 
 namespace MapWebSite.Core.Database
 {
-
-
     /// <summary>
     /// Interface for a repository which contains points
     /// </summary>
@@ -29,5 +27,6 @@ namespace MapWebSite.Core.Database
                                                         BasicPoint.BasicInfoOptionalField optionalField);
 
         Point GetPointDetails(int dataSetID, int zoomLevel, BasicPoint basicPoint);
+         
     }
 }

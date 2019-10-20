@@ -36,7 +36,7 @@ namespace MapWebSite.Controllers
            
             
         [HttpGet]
-        public JsonResult RequestPointDetails(decimal latitude, decimal longitude, int identifier, int zoomLevel)
+        public JsonResult RequestPointDetails(decimal latitude, decimal longitude, int identifier, decimal zoomLevel)
         {
             //TODO: change the user and the dataset name
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();

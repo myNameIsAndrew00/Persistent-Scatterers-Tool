@@ -2,30 +2,39 @@
 import { DisplayPointInfo, SetPointInfoData } from './point info/point_info.js';
 import { Router, endpoints } from './api/api_router.js';
 import { HubRouter } from './api/hub_router.js';
+import { PointsLayer } from './map/points_layer.js';
 
 var points = [];
-var vector = null;
+var vector = null; 
+var cachedStyles = {};
+var vectorSource = null;
 
 /*initialise the router*/
 const hubRouter = new HubRouter();
-hubRouter.SetCallback('ProcessPoints', function (receivedInfo) {
+hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) {
     points.splice(0, points.length); 
+    var index = 0;
 
     var requestedPoints = JSON.parse(receivedInfo);
+    console.log('Hub result: ' + requestedPoints.length);
+
     for (var i = 0; i < requestedPoints.length; i++) {
-        points[i] = new ol.Feature({
+        points[i + index] = new ol.Feature({
             'geometry': new ol.geom.Point(
                 ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
             'colorCriteria': requestedPoints[i].OptionalField
         });
-        points[i].ID = requestedPoints[i].Number;
-        points[i].longitude = requestedPoints[i].Longitude;
-        points[i].latitude = requestedPoints[i].Latitude;
+        points[i + index].ID = requestedPoints[i].Number;
+        points[i + index].longitude = requestedPoints[i].Longitude;
+        points[i + index].latitude = requestedPoints[i].Latitude;     
     }
 
     requestedPoints.splice(0, requestedPoints.length);
 
-    UpdatePointsLayer();
+    if (vector == null)
+        UpdatePointsLayer();
+    else vectorSource.addFeatures(points);
+    
 });
 
 
@@ -50,6 +59,7 @@ var mapView = new ol.View({
 
 var map = new ol.Map({
     target: 'map',
+    renderer: 'webgl',
     layers: [
         new ol.layer.Tile({
             source: new ol.source.OSM(
@@ -63,15 +73,10 @@ var map = new ol.Map({
         })
     ],
     view: mapView,
-    controls: [],
-    renderer: 'webgl'
+    controls: []
 });
 
 
-/**
- * According to size, change the aspect of points
- * THIS IS A EXAMPLE
- */
 
 function binarySearch(value, left, right) {
     if (left == right) return colorPalette[right].Color;
@@ -92,67 +97,8 @@ function binarySearch(value, left, right) {
     return colorPalette[middle].Color;
 }
  
-
-function buildStyleFromPalette(featureValue, latitude, longitude) {
-
-    function getRectangleCoordinates() {
-        var rectangleWidth = 0;
-        switch (map.getView().getZoom()) {
-            case 19:
-                rectangleWidth = 0.0001; break;                
-            case 18:
-                rectangleWidth = 0.00045; break;
-            case 17:
-                rectangleWidth = 0.00125; break;
-            case 16:
-                rectangleWidth = 0.0018; break;
-            case 15:
-                rectangleWidth = 0.0032; break;
-            case 14:
-                rectangleWidth = 0.00405; break;
-            case 13:
-                rectangleWidth = 0.00605; break;
-            case 12:
-                rectangleWidth = 0.00845; break;
-            case 11:
-                rectangleWidth = 0.01125; break;
-            case 10:
-                rectangleWidth = 0.01445; break;
-            case 9:
-                rectangleWidth = 0.01805; break;
-            case 8:
-                rectangleWidth = 0.02205; break; 
-            case 7:
-                rectangleWidth = 0.02645; break; 
-            case 6:
-                rectangleWidth = 0.03125; break;
-            case 5:
-                rectangleWidth = 0.03645; break;
-            case 4:
-                rectangleWidth = 0.04205; break;
-            case 3:
-                rectangleWidth = 0.04805; break;
-            default:
-                rectangleWidth =  0.5;
-        }
-
-        var polyCoords = [];
-
-        polyCoords.push(ol.proj.transform([longitude + rectangleWidth, latitude - rectangleWidth * 2   ],
-            'EPSG:4326',
-            'EPSG:3857'));
-        polyCoords.push(ol.proj.transform([longitude + rectangleWidth, latitude + rectangleWidth * 2  ],
-            'EPSG:4326',
-            'EPSG:3857'));
-        polyCoords.push(ol.proj.transform([longitude - rectangleWidth, latitude + rectangleWidth * 2  ],
-                'EPSG:4326',
-            'EPSG:3857'));
-        polyCoords.push(ol.proj.transform([longitude - rectangleWidth, latitude - rectangleWidth * 2  ],
-                    'EPSG:4326',
-            'EPSG:3857')); 
-        return polyCoords;
-    }
-
+/*
+function buildStyleFromPalette(featureValue) {
     var rangeMin = -2;
     var rangeMax = 80;
 
@@ -161,27 +107,22 @@ function buildStyleFromPalette(featureValue, latitude, longitude) {
         0,
         colorPalette.length - 1
     );
-     
 
-    //select the shape based on zoom level
-   // if (map.getView().getZoom() > 16)
-        return new ol.style.Style({
+
+    if (cachedStyles[paletteColor] !== undefined) return cachedStyles[paletteColor];
+    else {
+        var style = new ol.style.Style({
             image: new ol.style.Circle({
                 radius: 3,
                 fill: new ol.style.Fill({ color: paletteColor })
             })
-        });
-    /*else return new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: 'transparent',
-            width: 0
-        }),
-        fill: new ol.style.Fill({ color: paletteColor + '3F' }),
-        geometry: new ol.geom.Polygon([ getRectangleCoordinates() ] )
-    });*/
-
+        });  
+        
+        cachedStyles[paletteColor] = style;
+        return style;
+    }
 }
-
+*/
 
 
 
@@ -220,29 +161,33 @@ select.on('select', handleClickFunction);
  * Section bellow contain the points request
  */
 export function UpdatePointsLayer() {
-    var vectorSource = new ol.source.Vector({
+    
+    vectorSource = new ol.source.Vector({
         features: points,
         wrapX: false
     });
 
 
-    if (vector != null) {
-        vector.setOpacity(0);
-        vector.setSource(vectorSource)
-    }
-    else {
-        vector = new ol.layer.Vector({
-            source: vectorSource,
-            style: function (feature) {
-                return buildStyleFromPalette(feature.get('colorCriteria'),
-                                             feature.latitude,
-                                             feature.longitude);
-            },
-            opacity: 0
+   //    if (vector.length > 0) {
+        //temporary hide all points
+        /*for (var i = 0; i < vector.length; i++) {
+            vector[i].setOpacity(0);
+            vector[i].setSource(vectorSource)
+        }*/
+  //  }
+  //  {
+        
+        vector = new PointsLayer({
+            source: vectorSource
+        /*    style: function (feature) {
+                return buildStyleFromPalette(feature.get('colorCriteria'));
+            } */,
+           // opacity: 0
         });
         map.addLayer(vector);
-    }
+    //}
 
+    /*
     var animationFrames = 0;
     var opacity = 0.1;
     setTimeout(function () {
@@ -250,16 +195,17 @@ export function UpdatePointsLayer() {
             if (animationFrames == 10) return;
             animationFrames++;
             opacity = animationFrames / 10;
-            vector.setOpacity(opacity);
+            vector[vector.length - 1].setOpacity(opacity);
             setTimeout(function () { change() }, 30)
         }
         change();
     }, 50);
+    */
 }
 
 function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
 
-
+    //cache and check the data here
     hubRouter.RequestDataPoints(
         pLatitudeFrom,
         pLongitudeFrom,

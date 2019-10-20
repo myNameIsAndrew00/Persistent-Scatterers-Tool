@@ -5,6 +5,7 @@ using MapWebSite.Model;
 using MapWebSite.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks; 
 
@@ -54,40 +55,51 @@ namespace MapWebSite.Interaction
         }
 
         /// <summary>
-        /// Returns data points which are inside a specific area of screen for a zoom level. Limits unit of measure is latitude/longitude.
+        /// Returns data points which are inside a specific area of screen for a zoom level. Limits unit of measure with latitude/longitude.
         /// </summary>
         /// <param name="leftMargin"></param>
         /// <param name="rightMargin"></param>
         /// <param name="username"></param>
         /// <param name="dataSet"></param>
         /// <param name="zoomLevel"></param>
+        /// <param name="callback"></param>
         /// <returns></returns>
-        public IEnumerable<BasicPoint> RequestPoints(Pair leftMargin, 
+        public void RequestPoints(Pair leftMargin, 
                                                      Pair rightMargin, 
                                                      string username, 
                                                      string dataSet, 
                                                      int zoomLevel,
-                                                     BasicPoint.BasicInfoOptionalField optionalField)
+                                                     BasicPoint.BasicInfoOptionalField optionalField,
+                                                     Action<IEnumerable<BasicPoint>> callback)
         {
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
             if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
-            //TODO: test this
-          /*var points = PointsCacheManager.Get(leftMargin, rightMargin, dataSetID, out List<Coordinates> coordinates);
+            var points = PointsCacheManager.Get(leftMargin, rightMargin, dataSetID, out List<Coordinates> requiredCoordinates);
 
-            if (points != null) return points; 
-            else
-            {
-                foreach( var coordinate in coordinates)
+            if (requiredCoordinates != null)
+            {              
+                Parallel.ForEach(requiredCoordinates, coordinate =>
                 {
-                    var result = this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, 0, coordinate.Item1, coordinate.Item2, optionalField);
-                    PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, dataSetID, result);
+                    try
+                    {
+                        var result = this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, 0, coordinate.Item1, coordinate.Item2, optionalField);
+                        PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, dataSetID, result);
 
-                    //TODO: return result via web sockets
-                }
-            }*/
-            //TODO: ignore zoom level
-            return this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, zoomLevel, leftMargin, rightMargin, optionalField);
+                        //for(int i  = 0; i < result.Count() / 200; i++)
+                        //    callback(result.Skip(i * 200).Take(200));
+                        callback(result.Take(1000));
+                    }
+                    catch { //TODO: log exception
+                    }
+                });
+            }
+            
+            //TODO: do not send a big bulk of data to client. Send it in packages.
+            callback(points.Take(20000));
+//            for (int i = 0; i < points.Count() / 200; i++)
+//                    callback(points.Skip(i * 200).Take(200));
+
         }
 
         public Point RequestPointDetails(string dataSet, string username, int zoomLevel, BasicPoint basicPoint)
