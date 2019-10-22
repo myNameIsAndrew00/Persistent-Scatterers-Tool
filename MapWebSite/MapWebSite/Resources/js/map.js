@@ -4,15 +4,20 @@ import { Router, endpoints } from './api/api_router.js';
 import { HubRouter } from './api/hub_router.js';
 import { PointsLayer } from './map/points_layer.js';
 
-var points = [];
+//var points = [];
 var vector = null; 
 var cachedStyles = {};
 var vectorSource = null;
 
+/*workers*/
+//var receivedPointsWorker = new Worker('script.js', { type: "module" });
+
 /*initialise the router*/
-const hubRouter = new HubRouter();
+export const hubRouter = new HubRouter();
+
+
 hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) {
-    points.splice(0, points.length); 
+    var points = [];
     var index = 0;
 
     var requestedPoints = JSON.parse(receivedInfo);
@@ -24,17 +29,17 @@ hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) {
                 ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
             'colorCriteria': requestedPoints[i].OptionalField
         });
+        points[i + index].setId(requestedPoints[i].Number);
         points[i + index].ID = requestedPoints[i].Number;
         points[i + index].longitude = requestedPoints[i].Longitude;
-        points[i + index].latitude = requestedPoints[i].Latitude;     
+        points[i + index].latitude = requestedPoints[i].Latitude;   
+        points[i + index].color = buildStyleFromPalette(requestedPoints[i].OptionalField);
     }
 
     requestedPoints.splice(0, requestedPoints.length);
 
-    if (vector == null)
-        UpdatePointsLayer();
-    else vectorSource.addFeatures(points);
-    
+   
+    UpdatePointsLayer(points);       
 });
 
 
@@ -42,8 +47,8 @@ hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) {
  * View for map
  */
 var mapView = new ol.View({
-    center: ol.proj.fromLonLat([26.102538390000063, 44.4267674], 'EPSG:3857'),
-    zoom: 3,
+    center: ol.proj.fromLonLat([28.652880, 44.177269], 'EPSG:3857'),
+    zoom: 16,
     minZoom: 3,
     maxZoom: 20
 })
@@ -97,8 +102,18 @@ function binarySearch(value, left, right) {
     return colorPalette[middle].Color;
 }
  
-/*
+
 function buildStyleFromPalette(featureValue) {
+
+    function hexToRgb(hex) {
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
+    }
+
     var rangeMin = -2;
     var rangeMax = 80;
 
@@ -107,8 +122,9 @@ function buildStyleFromPalette(featureValue) {
         0,
         colorPalette.length - 1
     );
-
-
+    
+    return hexToRgb(paletteColor);
+    /*
     if (cachedStyles[paletteColor] !== undefined) return cachedStyles[paletteColor];
     else {
         var style = new ol.style.Style({
@@ -120,9 +136,9 @@ function buildStyleFromPalette(featureValue) {
         
         cachedStyles[paletteColor] = style;
         return style;
-    }
+    }*/
 }
-*/
+
 
 
 
@@ -154,14 +170,22 @@ function handleClickFunction(e) {
 
 var select = new ol.interaction.Select();
 map.addInteraction(select);
-select.on('select', handleClickFunction);
+select.on('click', handleClickFunction);
 
 
 /**
  * Section bellow contain the points request
  */
-export function UpdatePointsLayer() {
-    
+export function UpdatePointsLayer(points) {
+    if (vector != null) {
+        if (points == null) {
+            vectorSource.refresh();           
+            return;
+        }
+        vectorSource.addFeatures(points);
+        return;
+    }
+
     vectorSource = new ol.source.Vector({
         features: points,
         wrapX: false
@@ -234,4 +258,13 @@ function onMapPositionChanged(evt) {
 }
 map.on('moveend', onMapPositionChanged);
 
-onMapPositionChanged(null);
+map.on('click', function (evt) {
+    if (map.getView().getInteracting()) {
+        return;
+    }
+    var pixel = evt.pixel;
+
+    map.forEachFeatureAtPixel(pixel, function (feature) {
+        alert('youre there');
+    });
+});

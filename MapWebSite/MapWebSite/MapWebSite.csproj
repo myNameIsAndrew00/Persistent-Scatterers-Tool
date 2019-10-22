@@ -317,6 +317,7 @@
     <Content Include="Resources\js\api\api_router.js" />
     <Content Include="Resources\js\api\hub_router.js" />
     <Content Include="Resources\js\map\points_layer.js" />
+    <Content Include="Resources\js\map\received_points_worker.js" />
     <Content Include="Resources\js\point info\card_drawer.js" />
     <Content Include="Resources\js\point info\cards_manager.js" />
     <Content Include="Resources\js\points settings\chose_dataset.js" />
