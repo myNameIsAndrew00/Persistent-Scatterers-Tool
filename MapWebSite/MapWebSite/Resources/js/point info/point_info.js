@@ -1,5 +1,7 @@
 ﻿import { PlotDrawer } from '../plot.js';
+import { CardsManager } from './cards_manager.js';
 
+var cardsManager = new CardsManager('map-container');
 var currentDrawer = null;
 
 export function DisplayPointInfo() {
@@ -80,6 +82,10 @@ export function HidePointInfo(showTopMenu) {
     $("#point-info").css("opacity", 0);
     $("#point-info").css("width", "40%"); 
     $("#point-info").css("visibility", "hidden");    
+}
+
+export function CreatePopupWindow() {
+    cardsManager.Draw();
 }
 
 

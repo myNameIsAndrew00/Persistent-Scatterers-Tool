@@ -1,8 +1,22 @@
-﻿
-import { hubRouter } from '../map.js';
-import { UpdatePointsLayer } from '../map.js';
+﻿//import { HubRouter } from '/Resources/js/api/hub_router.js';
+//var hubRouter = null;
+//self.importScripts('/Resources/js/api/hub_router.js');
 
-hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) {
+self.addEventListener('message', function (e) {
+    //hubRouter = hub.data;
+    //console.log(e.data);
+    self.postMessage('done');
+    //hubRouter.SetCallback('ProcessPoints', processPoints);
+});
+
+
+
+//import { hubRouter } from '../map.js';
+//import { UpdatePointsLayer } from '../map.js';
+
+//alert('loaded');
+ /*
+async function processPoints(receivedInfo) {
     var points = [];
     var index = 0;
 
@@ -26,5 +40,6 @@ hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) {
 
     requestedPoints.splice(0, requestedPoints.length);
 
-    UpdatePointsLayer(points);
-});
+    self.postMessage(points);
+}
+*/

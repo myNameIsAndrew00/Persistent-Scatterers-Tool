@@ -3,11 +3,12 @@ import { DisplayPointInfo, SetPointInfoData } from './point info/point_info.js';
 import { Router, endpoints } from './api/api_router.js';
 import { HubRouter } from './api/hub_router.js';
 import { PointsLayer } from './map/points_layer.js';
+import { PointsRegionsManager } from './api/cache/points_regions_manager.js';
 
 //var points = [];
-var vector = null; 
-var cachedStyles = {};
+var vector = null;  
 var vectorSource = null;
+var pointsRegionsManager = new PointsRegionsManager();
 
 /*workers*/
 //var receivedPointsWorker = new Worker('script.js', { type: "module" });
@@ -15,6 +16,10 @@ var vectorSource = null;
 /*initialise the router*/
 export const hubRouter = new HubRouter();
 
+hubRouter.SetCallback('UpdateRegionsData', function (receivedInfo) {
+    var regionData = JSON.parse(receivedInfo);
+    pointsRegionsManager.AddRegion(regionData.Region, regionData.PointsCount, regionData.Filled);     
+});
 
 hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) {
     var points = [];
@@ -62,7 +67,7 @@ var mapView = new ol.View({
  * Here the map is rendered 
  */
 
-var map = new ol.Map({
+export const map = new ol.Map({
     target: 'map',
     renderer: 'webgl',
     layers: [
@@ -124,19 +129,6 @@ function buildStyleFromPalette(featureValue) {
     );
     
     return hexToRgb(paletteColor);
-    /*
-    if (cachedStyles[paletteColor] !== undefined) return cachedStyles[paletteColor];
-    else {
-        var style = new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 3,
-                fill: new ol.style.Fill({ color: paletteColor })
-            })
-        });  
-        
-        cachedStyles[paletteColor] = style;
-        return style;
-    }*/
 }
 
 
@@ -147,10 +139,8 @@ function buildStyleFromPalette(featureValue) {
  * This functions handle the click on point. Parameter represents the feature
  */
 
-function handleClickFunction(e) {
-    if (e.selected.length == 0) return;
-    var point = e.selected[0];
-
+function handleClickFunction(point) {
+    
     Router.Get(endpoints.Home.RequestPointDetails,
         {
             zoomLevel: map.getView().getZoom(),
@@ -166,15 +156,10 @@ function handleClickFunction(e) {
     DisplayPointInfo();
 
 }
-
-
-var select = new ol.interaction.Select();
-map.addInteraction(select);
-select.on('click', handleClickFunction);
-
+ 
 
 /**
- * Section bellow contain the points request
+ * Section bellow contain the points request handling
  */
 export function UpdatePointsLayer(points) {
     if (vector != null) {
@@ -191,51 +176,34 @@ export function UpdatePointsLayer(points) {
         wrapX: false
     });
 
-
-   //    if (vector.length > 0) {
-        //temporary hide all points
-        /*for (var i = 0; i < vector.length; i++) {
-            vector[i].setOpacity(0);
-            vector[i].setSource(vectorSource)
-        }*/
-  //  }
-  //  {
-        
-        vector = new PointsLayer({
-            source: vectorSource
-        /*    style: function (feature) {
-                return buildStyleFromPalette(feature.get('colorCriteria'));
-            } */,
-           // opacity: 0
+    vector = new PointsLayer({
+            source: vectorSource        
         });
-        map.addLayer(vector);
-    //}
-
-    /*
-    var animationFrames = 0;
-    var opacity = 0.1;
-    setTimeout(function () {
-        function change() {
-            if (animationFrames == 10) return;
-            animationFrames++;
-            opacity = animationFrames / 10;
-            vector[vector.length - 1].setOpacity(opacity);
-            setTimeout(function () { change() }, 30)
-        }
-        change();
-    }, 50);
-    */
+    map.addLayer(vector);   
 }
 
-function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
+function loadDataPoints(pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
+    var existingRegions = pointsRegionsManager.GetRegions(
+        {
+            lat: pLatitudeFrom,
+            long: pLongitudeFrom
+        },
+        {
+            lat: pLatitudeTo,
+            long: pLongitudeTo
+        },
+        //TODO: change the datasetId to be generic
+        1059);
 
-    //cache and check the data here
+    //*cache and check the data here*
+    if (existingRegions === 'cached') return;
+   
     hubRouter.RequestDataPoints(
         pLatitudeFrom,
         pLongitudeFrom,
         pLatitudeTo,
         pLongitudeTo,
-        pZoomLevel,
+        existingRegions,
         'Height'
     );
 
@@ -244,20 +212,20 @@ function loadDataPoints(pZoomLevel, pLatitudeFrom, pLongitudeFrom, pLatitudeTo, 
 
 
 
-
 function onMapPositionChanged(evt) {
     var viewBox = map.getView().calculateExtent(map.getSize());
     var cornerCoordinates = ol.proj.transformExtent(viewBox, 'EPSG:3857', 'EPSG:4326');
 
-    loadDataPoints(map.getView().getZoom(),
+    loadDataPoints(
         cornerCoordinates[1],
         cornerCoordinates[0],
         cornerCoordinates[3],
         cornerCoordinates[2]
     )
 }
-map.on('moveend', onMapPositionChanged);
 
+//initialise map interactions
+map.on('moveend', onMapPositionChanged);
 map.on('click', function (evt) {
     if (map.getView().getInteracting()) {
         return;
@@ -265,6 +233,7 @@ map.on('click', function (evt) {
     var pixel = evt.pixel;
 
     map.forEachFeatureAtPixel(pixel, function (feature) {
-        alert('youre there');
+        handleClickFunction(feature);
     });
 });
+ 

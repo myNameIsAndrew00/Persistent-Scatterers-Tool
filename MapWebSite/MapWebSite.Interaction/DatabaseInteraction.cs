@@ -14,14 +14,17 @@ namespace MapWebSite.Interaction
     using Pair = Tuple<decimal, decimal>;
     using Coordinates = Tuple<
                Tuple<decimal, decimal>,
-               Tuple<decimal, decimal>>
-               ;
+               Tuple<decimal, decimal>>;
 
+    using PointsZonePair = Tuple<IEnumerable<BasicPoint>, string, bool>;
+
+   
     /// <summary>
     /// Provides methods for interacting with the database 
     /// </summary>
     public class DatabaseInteractionHandler
     {
+        private readonly int pointsPerBlock = 1000;
 
         private readonly IUserRepository userRepository;
 
@@ -61,22 +64,35 @@ namespace MapWebSite.Interaction
         /// <param name="rightMargin"></param>
         /// <param name="username"></param>
         /// <param name="dataSet"></param>
-        /// <param name="zoomLevel"></param>
+        /// <param name="regionsPointsCount">Contains a list of regions which can be ignored for processing if the 
+        /// number of points inside that region is valid. Could be optimized</param>
         /// <param name="callback"></param>
         /// <returns></returns>
         public void RequestPoints(Pair leftMargin, 
                                                      Pair rightMargin, 
                                                      string username, 
                                                      string dataSet, 
-                                                     int zoomLevel,
+                                                     Dictionary<string,int> regionsPointsCount,
                                                      BasicPoint.BasicInfoOptionalField optionalField,
-                                                     Action<IEnumerable<BasicPoint>> callback)
+                                                     Action<IEnumerable<BasicPoint>,Tuple<string,int>,bool> callback)
         {
+            Action<IEnumerable<BasicPoint>, string, bool> triggerCallback = (points, regionKey, filled) =>
+            {
+                callback(null, new Tuple<string, int>(regionKey, points.Count()),filled);
+
+                for (int i = 0; i < points.Count() / pointsPerBlock; i++)
+                    callback(points.Skip(i * pointsPerBlock).Take(pointsPerBlock), null, filled);
+            };
+
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
             if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
-            var points = PointsCacheManager.Get(leftMargin, rightMargin, dataSetID, out List<Coordinates> requiredCoordinates);
-
+            var pointsZonePairs = PointsCacheManager.Get(leftMargin, 
+                                                         rightMargin, 
+                                                         dataSetID,
+                                                         regionsPointsCount,
+                                                         out List<Coordinates> requiredCoordinates);
+         
             if (requiredCoordinates != null)
             {              
                 Parallel.ForEach(requiredCoordinates, coordinate =>
@@ -84,21 +100,21 @@ namespace MapWebSite.Interaction
                     try
                     {
                         var result = this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, 0, coordinate.Item1, coordinate.Item2, optionalField);
-                        PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, dataSetID, result);
 
-                        //for(int i  = 0; i < result.Count() / 200; i++)
-                        //    callback(result.Skip(i * 200).Take(200));
-                        callback(result.Take(1000));
+                        string regionKey = PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, dataSetID, result);
+
+                        triggerCallback(result,regionKey, true); 
                     }
                     catch { //TODO: log exception
                     }
                 });
             }
-            
-            //TODO: do not send a big bulk of data to client. Send it in packages.
-            callback(points.Take(20000));
-//            for (int i = 0; i < points.Count() / 200; i++)
-//                    callback(points.Skip(i * 200).Take(200));
+             
+            foreach(var pointsZonePair in pointsZonePairs)
+            {
+                triggerCallback(pointsZonePair.Item1, pointsZonePair.Item2, pointsZonePair.Item3);
+            }
+         
 
         }
 

@@ -14,10 +14,16 @@ $colors: (
     strongPink: #ff7588,
     chromaPurple: #7586ff,
     chromaOrange: #dfba76,
+    chromaLightOrange: #ffd689,
     chromaGreen: #b7cca2,
     chromaBlue: #85b7ca,
+    chromaRed: #ff6060,
     chromaDarkGreen: #8fb767,
     chromaDarkBlue: #518fa6,
     easeGray: rgba(200,200,200,1),
     easeStrongGray: rgba(180,180,180,1)
 );
+
+$principal_z_index : 100000;
+$critical_z_index: 100010;
+$overflow_z_index: 99000;

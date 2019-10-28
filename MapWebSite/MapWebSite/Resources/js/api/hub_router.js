@@ -20,7 +20,7 @@
         this.hubProxy.on(callbackName, callback);        
     }
 
-    RequestDataPoints(latitudeFrom, longitudeFrom, latitudeTo, longitudeTo, zoomLevel, optionalField) {
+    RequestDataPoints(latitudeFrom, longitudeFrom, latitudeTo, longitudeTo, existingRegions, optionalField) {
         if (!this.enabled) return;
 
         this.hubProxy.invoke('RequestDataPoints',
@@ -28,7 +28,7 @@
             longitudeFrom,
             latitudeTo,
             longitudeTo,
-            zoomLevel,
+            existingRegions,
             optionalField);
     }
 

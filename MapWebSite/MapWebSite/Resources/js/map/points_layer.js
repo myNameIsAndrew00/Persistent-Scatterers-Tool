@@ -2,6 +2,8 @@
 var oldColor = [180, 140, 140];
 var newColor = [255, 80, 80];
 
+import { map } from '../map.js';
+ 
 
 export class PointsLayer extends ol.layer.Vector {
 
@@ -25,8 +27,13 @@ export class PointsLayer extends ol.layer.Vector {
                     callback: function (feature) {
                         return feature.color.g / 255.0;
                     }
+                },
+                {
+                    name: 'zoom',
+                    callback: function (feature) {
+                        return map.getView().getZoom().toFixed(2) / 10.0;
+                    }
                 }
-
             ],
             vertexShader: `        
                     precision mediump float;       
@@ -38,24 +45,27 @@ export class PointsLayer extends ol.layer.Vector {
                     attribute float a_red;
                     attribute float a_blue;
                     attribute float a_green;
-                    
+                    attribute float a_zoom;
+
                     varying vec4 v_color;     
                     void main(void) {    
                         
                         mat4 offsetMatrix = u_offsetScaleMatrix;         
-                        float offsetX = a_index == 0.0 || a_index == 3.0 ? -3.0 : 3.0 ;         
-                        float offsetY = a_index == 0.0 || a_index == 1.0 ? -3.0 : 3.0 ;         
+                        float offsetX = a_index == 0.0 || a_index == 3.0 ? -a_zoom : a_zoom ;         
+                        float offsetY = a_index == 0.0 || a_index == 1.0 ? -a_zoom : a_zoom ;         
                         vec4 offsets = offsetMatrix * vec4(offsetX, offsetY, 0.0, 0.0);         
                         
-                        gl_Position = u_projectionMatrix * vec4(a_position, 0.0, 1.0) + offsets;         
+                        gl_Position = u_projectionMatrix * vec4(a_position, 1.0, 1.0) + offsets;         
                         float u = a_index == 0.0 || a_index == 3.0 ? 0.0 : 1.0;     
                         float v = a_index == 0.0 || a_index == 1.0 ? 0.0 : 1.0;         
                                              
                         v_color = vec4(a_red,a_green,a_blue,1.0);
                     }`,
-            fragmentShader: `precision mediump float;                    
+            fragmentShader: 
+                   `precision mediump float;                    
                     varying vec4 v_color; 
 
+                
                     void main(void) {                                   
                         gl_FragColor = v_color;     
                     }`,
@@ -69,7 +79,9 @@ export class PointsLayer extends ol.layer.Vector {
                     attribute float a_red;
                     attribute float a_blue;
                     attribute float a_green;
+                    attribute vec4 a_hitColor;
                     
+                    varying vec4 v_hitColor;
                     varying vec4 v_color;     
                     void main(void) {    
                         
@@ -83,13 +95,16 @@ export class PointsLayer extends ol.layer.Vector {
                         float v = a_index == 0.0 || a_index == 1.0 ? 0.0 : 1.0;         
                                              
                         v_color = vec4(a_red,a_green,a_blue,1.0);
+                        v_hitColor = a_hitColor;
                     }`,
             hitFragmentShader: `
-                    precision mediump float;                    
+                    precision mediump float;    
+
                     varying vec4 v_color; 
+                    varying vec4 v_hitColor;
 
                     void main(void) {                                              
-                        gl_FragColor = v_color;    
+                        gl_FragColor = v_hitColor;    
                     }`
         });
     }

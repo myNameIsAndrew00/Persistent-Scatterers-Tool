@@ -14,20 +14,35 @@ namespace MapWebSite.Hubs
     [Authorize]
     public class DataPointsHub : Hub
     {
-        public void RequestDataPoints(decimal latitudeFrom, decimal longitudeFrom, decimal latitudeTo, decimal longitudeTo, decimal zoomLevel, string optionalField)
+        public void RequestDataPoints(decimal latitudeFrom, decimal longitudeFrom, decimal latitudeTo, decimal longitudeTo, dynamic[] existingRegions, string optionalField)
         {
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
              
-            Action<IEnumerable<BasicPoint>> callback = (pointsData) =>
+            Action<IEnumerable<BasicPoint>, Tuple<string,int>, bool> callback = (pointsData, regionData, filled) =>
             {
-                Clients.Caller.ProcessPoints(pointsData.DataContractJSONSerialize());
+                if(pointsData != null)
+                    Clients.Caller.ProcessPoints(pointsData.DataContractJSONSerialize());
+                if(regionData != null)
+                    Clients.Caller.UpdateRegionsData( new
+                    {
+                        Region = regionData.Item1,
+                        PointsCount = regionData.Item2,
+                        Filled = filled
+                    }.JSONSerialize());
             };
+
+            Dictionary<string, int> existingRegionsDictionary = new Dictionary<string, int>();
+
+            foreach (var region in existingRegions)
+                existingRegionsDictionary.Add((string)region.RegionKey.Value,
+                                              (int)region.RegionPointsCount.Value);
+             
 
             databaseInteractionHandler.RequestPoints(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
                                       new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
                                       "woofwoof", //this will be changed and customized for current user
                                       "mainTest", //this will be changed and customized for current user
-                                      0,
+                                       existingRegionsDictionary,
                                       (BasicPoint.BasicInfoOptionalField)Enum.Parse(typeof(BasicPoint.BasicInfoOptionalField), optionalField),
                                       callback);
 

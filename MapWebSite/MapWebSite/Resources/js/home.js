@@ -1,6 +1,7 @@
-import { HidePointInfo } from './point info/point_info.js';
+import { HidePointInfo, CreatePopupWindow } from './point info/point_info.js';
 
 window.HidePointInfo = HidePointInfo;
+window.CreatePopupWindow = CreatePopupWindow;
 
 var loadedScripts = [];
 

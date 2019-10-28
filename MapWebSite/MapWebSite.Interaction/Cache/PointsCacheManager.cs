@@ -11,8 +11,9 @@ namespace MapWebSite.Interaction
 {
     using Coordinates = Tuple<
                 Tuple<decimal, decimal>,
-                Tuple<decimal, decimal>>
-                ;
+                Tuple<decimal, decimal>>;
+
+    using PointsZonePair = Tuple<IEnumerable<BasicPoint>, string, bool>;
     /// <summary>
     /// A cache which manages the points
     /// Cache flow:
@@ -27,10 +28,14 @@ namespace MapWebSite.Interaction
         const decimal latitudeSide = 0.05m;
         const decimal longitudeSide = 0.10m;
 
-        internal static void Write(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId, IEnumerable<BasicPoint> dataPoints)
-        {
-            string key = string.Format("{0}_{1}_{2}_{3}_{4}", from.Item1, from.Item2, to.Item1, to.Item2, datasetId);
+        internal static string GenerateKey(decimal fromLatitude, decimal fromLongitude, decimal toLatitude, decimal toLongitude, int datasetId)
+                => string.Format("{0:0.00}_{1:0.00}_{2:0.00}_{3:0.00}_{4}", fromLatitude, fromLongitude,toLatitude, toLongitude, datasetId);
 
+        
+
+        internal static string Write(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId, IEnumerable<BasicPoint> dataPoints)
+        {
+            string key = GenerateKey(from.Item1, from.Item2, to.Item1, to.Item2, datasetId);
             MemoryCache.Default.Set(key,
                 new CacheEntry
                 {
@@ -38,44 +43,56 @@ namespace MapWebSite.Interaction
                     Value = dataPoints
                 },
                 DateTimeOffset.MaxValue);
+            return key;
         }
 
 
         /// <summary>
-        /// Get the points which are contained in a interval. If the requested points are not in cache, they will not be returned
+        /// Get the points which are contained in a interval and the key of the region in which points are contained.
+        /// If the requested points are not in cache, they will not be returned
         /// </summary>
         /// <param name="from">Starting position for requested interval</param>
         /// <param name="to">End position for requested interval</param>
         /// <param name="datasetId">Id of the dataset which contains the points</param>
         /// <param name="coordinates">A parameter which contains which region was not found in the cache</param>
         /// <returns></returns>
-        internal static IEnumerable<BasicPoint> Get(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId, out List<Coordinates> coordinates)
+        internal static IEnumerable<PointsZonePair> Get(Tuple<decimal, decimal> from, 
+                                                        Tuple<decimal, decimal> to, 
+                                                        int datasetId,
+                                                        Dictionary<string,int> regionsPointsCount,
+                                                        out List<Coordinates> coordinates)
         {         
             List<string> cacheInfo = getCacheKeys(from, to, datasetId, out List<Coordinates> requiredPoints);
 
-            var result = new List<BasicPoint>();
+            var result = new List<PointsZonePair>();
 
             foreach (var cacheKey in cacheInfo)
             {
-                CacheEntry cacheValue = null;
+                CacheEntry cacheEntry = null;
                 int attempts = 10;
                 do //busyWaiting
                 {
                     attempts--;
-                    if (cacheValue != null) Task.Delay(25);
-                    cacheValue = (MemoryCache.Default.Get(cacheKey)) as CacheEntry;                    
+                    if (cacheEntry != null) Task.Delay(25);
+                    cacheEntry = (MemoryCache.Default.Get(cacheKey)) as CacheEntry;                    
                 }
                 while ((MemoryCache.Default.Get(cacheKey) as CacheEntry).Status == EntryStatus.Creating
                     && attempts >= 0 );
 
-                if (cacheValue.Value == null)                   
+                var cacheEntryValue = cacheEntry?.Value as IEnumerable<BasicPoint>;
+
+                //if the entry is not valid or if the points where already fully requested, ignore the entry
+                if (cacheEntryValue == null || 
+                   (regionsPointsCount.Keys.Contains(cacheKey) && cacheEntryValue.Count() == regionsPointsCount[cacheKey]))                  
                     continue; 
 
-                result.AddRange((cacheValue.Value as IEnumerable<BasicPoint>)?.Where
+                IEnumerable<BasicPoint> points = (cacheEntryValue).Where
                     (item => item.Latitude >= from.Item1 &&
                              item.Longitude >= from.Item2 &&
                              item.Latitude <= to.Item1 &&
-                             item.Longitude <= to.Item2));
+                             item.Longitude <= to.Item2);
+
+                result.Add(new PointsZonePair(points, cacheKey, points.Count() == cacheEntryValue.Count()));
             }
 
             coordinates = requiredPoints.Count > 0 ? requiredPoints : null;
@@ -87,7 +104,7 @@ namespace MapWebSite.Interaction
 
         private static List<string> getCacheKeys(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId, out List<Coordinates> requiredPoints)
         {
-            getCacheSearhingLimits(from,
+            getCacheSearchingLimits(from,
                                    to,
                                    out decimal fromLat,
                                    out decimal fromLong,
@@ -109,7 +126,7 @@ namespace MapWebSite.Interaction
                         j <= 30m))
                         continue;
 
-                    string key = string.Format("{0}_{1}_{2}_{3}_{4}", i, j, i + latitudeSide, j + longitudeSide, datasetId);
+                    string key = GenerateKey(i, j, i + latitudeSide, j + longitudeSide, datasetId);
                     var cacheValue = MemoryCache.Default.Get(key);
 
                     //if the key was not found as entry in cache, request the points and create an entry
@@ -133,7 +150,7 @@ namespace MapWebSite.Interaction
             return result;
         }
 
-        private static void getCacheSearhingLimits(
+        private static void getCacheSearchingLimits(
             Tuple<decimal,decimal> from,
             Tuple<decimal,decimal> to,
             out decimal fromLat, 
@@ -152,7 +169,7 @@ namespace MapWebSite.Interaction
             fromLat = Convert.ToDecimal((fromLatInt - fromLatInt % latSideInt)) / 100;
             fromLong = Convert.ToDecimal((fromLongInt - fromLongInt % longSideInt)) / 100;
             toLat = Convert.ToDecimal((toLatInt + (latSideInt - toLatInt % latSideInt))) / 100;
-            toLong = decimal.ToInt32((toLongInt + (longSideInt - toLongInt % longSideInt))) / 100;
+            toLong = Convert.ToDecimal((toLongInt + (longSideInt - toLongInt % longSideInt))) / 100;
 
         }
 

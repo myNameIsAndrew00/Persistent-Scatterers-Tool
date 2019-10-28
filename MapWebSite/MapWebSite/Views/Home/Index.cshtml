@@ -5,7 +5,7 @@
 }
 
 
-<div class="map-container">
+<div id="map-container" class="map-container">
     <div id="map" class="map"></div>
 </div>
 
@@ -13,9 +13,13 @@
 @*this represents the layer when a point is clicked*@
 <div id="point-info" class="point-info-layer">
     <div class="close-button">
-        <button onclick="HidePointInfo(true)">
-            <object width="20px" height="30px" type="image/svg+xml" data="~/Resources/resources/icons/arrow_right_icon.svg" )></object>
+        <button onclick="CreatePopupWindow()">
+            <object width="23px" height="18px" type="image/svg+xml" data="~/Resources/resources/icons/window_icon.svg" ></object>
         </button>
+        <button onclick="HidePointInfo(true)">
+            <object width="23px" height="18px" type="image/svg+xml" data="~/Resources/resources/icons/arrow_right_icon.svg"></object>
+        </button>
+
     </div>
 
     @{ Html.RenderPartial("~/Views/Home/PointInfo.cshtml");}

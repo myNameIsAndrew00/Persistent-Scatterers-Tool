@@ -112,7 +112,7 @@ html, body {
 .color-picker {
     position: absolute;
     background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
-    z-index: 1000;
+    z-index: $principal_z_index;
     border-radius: 4px;
     top: 170px;
 

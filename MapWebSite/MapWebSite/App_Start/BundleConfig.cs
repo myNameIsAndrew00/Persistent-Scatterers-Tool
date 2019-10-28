@@ -30,7 +30,9 @@ namespace MapWebSite
             
             var homeStyleBundle = new CustomStyleBundle("~/Content/home_sass").Include(
                 "~/Resources/css/plot.scss",
-                "~/Resources/css/home.scss");
+                "~/Resources/css/home.scss",
+                "~/Resources/css/card.scss");
+
             homeStyleBundle.Orderer = new NullOrderer();
 
             var colorPickerBundle = new CustomStyleBundle("~/Content/color_picker").Include(
@@ -82,7 +84,8 @@ namespace MapWebSite
                 "~/Resources/js/home.js",
                 "~/Resources/js/plot.js",
                 "~/Resources/js/point info/point_info.js",
-                "~/Resources/js/map.js"));
+                "~/Resources/js/map.js"               
+               ));
 
             bundles.Add(new ScriptBundle("~/scripts/hubProxy").Include(
                 "~/Resources/js/api/hub_router.js"));

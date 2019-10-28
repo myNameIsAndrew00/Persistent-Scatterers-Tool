@@ -8,17 +8,7 @@ namespace MapWebSite.Tests.Database
     [TestClass]
     public class SelectTest
     {
-        [TestMethod]
-        public void SelectFromCassandra()
-        {
-
-            HomeController controller = new HomeController();
-
-            controller.RequestDataPoints(44.1808535337334495m, 28.620140047623096m,
-                                        44.1866236776545m, 28.629087896896777m, 17, "Height");
-
-        }
-
+      
         [TestMethod]
         public void SelectPointDetails()
         {

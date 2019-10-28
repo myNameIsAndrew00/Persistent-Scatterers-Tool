@@ -312,9 +312,11 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Content Include="Resources\css\home_points_settings_layer.scss" />
+    <Content Include="Resources\css\card.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
     <None Include="Resources\css\settings_points_upload.scss" />
     <Content Include="Resources\js\api\api_router.js" />
+    <Content Include="Resources\js\api\cache\points_regions_manager.js" />
     <Content Include="Resources\js\api\hub_router.js" />
     <Content Include="Resources\js\map\points_layer.js" />
     <Content Include="Resources\js\map\received_points_worker.js" />
@@ -354,6 +356,7 @@
     <Content Include="Resources\resources\icons\user_default_icon.svg" />
     <Content Include="Resources\resources\icons\user_details_icon.svg" />
     <Content Include="Resources\resources\icons\user_palette_icon.svg" />
+    <Content Include="Resources\resources\icons\window_icon.svg" />
     <Content Include="Resources\resources\settings_background.png" />
     <Content Include="Resources\resources\WebDisasterLogo.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
