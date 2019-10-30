@@ -2,6 +2,12 @@
 @using MapWebSite.Model
 @using MapWebSite.Core
 
+@{
+    @*LINE BELLOW IS FOR FIXING: fix the bug with the id counter.. main-menu-icon-0 must be followed by main-menu-icon-1, and not main-menu-icon-2 (bug can be caused by role restriction)*@
+    @*Delete above comment on next commit*@
+    int sectionsCount = 0;
+}
+
 @*Summary: partial view used for Menu.
     Menu is divided in three sections:
         -main-menu (corner left) which manage the displayed secondary menu
@@ -10,7 +16,6 @@
     Displayed features are provided based on user roles
 *@
 
-@*TODO: fix the bug with the id counter.. main-menu-icon-0 must be followed by main-menu-icon-1, and not main-menu-icon-2 (bug can be caused by role restriction)*@
 
 <div class="fixed-menu">
 
@@ -25,12 +30,12 @@
         </div>
         <div id="main-select-menu-icon" class="main-select-menu-icon">
             @*Principal Menu Item: User Details*@
-            <object class="current_displayed_icon" id="main-menu-icon-0" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg"></object>
+            <object class="current_displayed_icon" id="main-menu-icon-@(sectionsCount++)" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg"></object>
 
             @*Principal Menu Item: Manage data points*@
             @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
             {
-                <object id="main-menu-icon-1" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
+                <object id="main-menu-icon-@(sectionsCount++)" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
             }
         </div>
     </div>
@@ -38,10 +43,11 @@
 
 
 
-
+    @(sectionsCount = 0);
     <nav id="secondary-menu" class="secondary-menu">
         @*Secondary menu: used for User details*@
-        <ul class="current_displayed_menu" id="secondary-menu-items-0">
+        <ul class="current_displayed_menu" id="secondary-menu-items-@(sectionsCount++)">
+
             @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
             {
                 <li class="secondary-menu-item">
@@ -53,12 +59,13 @@
                 <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
                 @Html.ActionLink(TextDictionary.HMenuLogoutText, "Logout", "Home", null)
             </li>
+
         </ul>
 
         @*Secondary menu: used for Manage data points*@
         @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
         {
-            <ul id="secondary-menu-items-1">
+            <ul id="secondary-menu-items-@(sectionsCount++)">
                 <li class="secondary-menu-item">
                     <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/upload_points_icon.svg"></object>
                     <button onclick="requestSettingsPage('upload-points','/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuUploadPointsText</button>

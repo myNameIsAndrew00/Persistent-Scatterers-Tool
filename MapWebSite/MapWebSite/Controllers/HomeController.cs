@@ -36,6 +36,7 @@ namespace MapWebSite.Controllers
            
             
         [HttpGet]
+        [Obsolete]
         public JsonResult RequestPointDetails(decimal latitude, decimal longitude, int identifier, decimal zoomLevel)
         {
             //TODO: change the user and the dataset name

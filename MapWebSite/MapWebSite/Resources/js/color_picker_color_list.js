@@ -35,6 +35,14 @@ export class ColorList{
         return 100 * (this.pointsDictionary[pointKey].position) / this.barWidth;
     }
 
+    findNodeById(id) {
+        var currentNode = this.root;
+        while (currentNode.pointKey != id && currentNode != null)
+            currentNode = currentNode.nextColor;
+
+        return currentNode;
+    }
+
     findPreviousRoot(percent){
         var currentNode = this.root;
         var nextNode = currentNode.nextColor;
@@ -94,11 +102,28 @@ export class ColorList{
         colorNode.nextColor = previousColor.nextColor;
         colorNode.prevColor = previousColor;
         previousColor.nextColor = colorNode; 
-
+        if(nextColor != null) nextColor.prevColor = colorNode;
     }
 
     RemoveNode(pointID) { 
-        //TODO: implement this
+        var node = this.findNodeById(pointID);
+        var previousNode = node.prevColor;
+        var nextNode = node.nextColor;
+
+        if (previousNode == null) return false;
+
+        previousNode.nextColor = nextNode;
+        this.pointsDictionary[previousNode.pointKey].rightPointID = nextNode == null ? null : nextNode.pointKey;
+
+        if (nextNode != null) {
+            nextNode.prevColor = previousNode;
+            this.pointsDictionary[nextNode.pointKey].leftPointID =
+                        previousNode == null ? null : previousNode.pointKey;
+        }
+
+        delete this.pointsDictionary[pointID];       
+
+        return true;
     }
 
     BuildGradientString(){

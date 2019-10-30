@@ -119,7 +119,7 @@ namespace MapWebSite.Interaction
                 for (decimal j = fromLong; j <= toLong; j += longitudeSide)
                 {
                     if (
-                        //TODO: check if region exists
+                        //TODO: check if region exists. A new entry must be added in database
                         !(i >= 44m &&
                         i <= 45m &&
                         j >= 28 &&

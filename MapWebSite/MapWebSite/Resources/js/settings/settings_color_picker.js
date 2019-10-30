@@ -111,6 +111,22 @@ function showColorPicker(horizontalPosition) {
    $('#color-picker').css('left', horizontalPosition - 25 + 'px');
 }
 
+window.removeSpan = function removeSpan() {
+    if(colorList.RemoveNode('dot-' + currentDot) === false) return;
+
+    //remove the point from internal structures
+    var dotId = '#dot-' + currentDot;
+    var dotLabelId = dotId + '-label';
+
+    //remove the point visualy
+    $('#dots-container').children(dotId).remove();
+    $('#dots-container').children(dotLabelId).remove();
+
+    //redraw the slider and close the color picker
+    $('#slider').css({ background: colorList.BuildGradientString() }); 
+    changeColorPickerVisibility(false);
+}
+
 window.changeColorPickerVisibility = function changeColorPickerVisibility(isVisible){
     isVisible ? $('#color-picker').removeClass('color-picker-hidden') :  $('#color-picker').addClass('color-picker-hidden');
 }
