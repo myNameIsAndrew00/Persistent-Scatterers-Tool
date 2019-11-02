@@ -18,6 +18,8 @@ namespace MapWebSite.Tests.Controllers
         public void MessageBox()
         {
             var result = MessageBoxBuilder.Create("titlu", "mesaj");
+
+            Assert.IsNotNull(result);
         }
        
  

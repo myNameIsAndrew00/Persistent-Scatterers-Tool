@@ -20,13 +20,18 @@ namespace MapWebSite.Tests.Core
             Point point = new Point();
 
             var data = point.JSONSerialize<Point>();
+
+            Assert.IsNotNull(data);
         }
 
         [TestMethod]
         public void EnumStrings()
         {
             var field = UserRoles.Anonymous;
+
             string data = field.GetEnumString();
+
+            Assert.Equals(data, "Anonymous");
         }
     }
 }

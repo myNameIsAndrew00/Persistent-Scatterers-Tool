@@ -10,13 +10,20 @@ class CardsManager {
         this.containerId = containerId;
     }
 
-    Draw() { 
-
-        this.drawer.Draw('popup-window-' + this.idIndex,
+    Draw(animate) { 
+        var popupId = 'popup-window-' + this.idIndex;
+        this.drawer.Draw(popupId,
                          document.getElementById(this.containerId),
                          null,
-                         this.erasePopup);
-        this.idIndex++;
+                         this.erasePopup,
+                         animate); 
+
+        //delay for animation
+        if(animate == true) setTimeout(function () {
+            $('#' + popupId).removeClass('point-info-popup-hidden');
+        }, 50);
+
+        return '#popup-window-' + (this.idIndex++) + ' #window-body';;
     }
 
     erasePopup(id, manager) {

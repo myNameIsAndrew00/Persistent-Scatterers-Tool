@@ -31,7 +31,8 @@ namespace MapWebSite
             var homeStyleBundle = new CustomStyleBundle("~/Content/home_sass").Include(
                 "~/Resources/css/plot.scss",
                 "~/Resources/css/home.scss",
-                "~/Resources/css/card.scss");
+                "~/Resources/css/card.scss",
+                "~/Resources/css/small_loading_spinner.scss");
 
             homeStyleBundle.Orderer = new NullOrderer();
 

@@ -6,6 +6,7 @@
     border-radius: 3px;
     box-shadow: 2px 3px 10px get_color(strongTransparentBlue);
 
+    transition: width 0.4s, height 0.4s;
     .popup-header {
         border-radius: 3px;
         height: 20px;
@@ -27,4 +28,12 @@
             background: red;
         }
     }
+
+    
+}
+
+.point-info-popup-hidden{
+    visibility: hidden;
+    width: 0!important;
+    height: 0!important;
 }

@@ -4,6 +4,8 @@ import { CardsManager } from './cards_manager.js';
 var cardsManager = new CardsManager('map-container');
 var currentDrawer = null;
 
+var currentDisplayedPlot = null;
+
 export function DisplayPointInfo() {
     function display() {
         document.getElementById("point-info").style = "";   
@@ -60,15 +62,16 @@ export function SetPointInfoData(point) {
         pointLayer.find("#plot").css("display", "block");
         pointLayer.find("#plot-menu").css("display", "block");
     }
+    currentDisplayedPlot = point;
 
-    pointLayer.find("#ID").html(point.Number);
-    pointLayer.find("#longitude").html(point.Longitude);
-    pointLayer.find("#latitude").html(point.Latitude);
-    pointLayer.find("#height").html(point.Height);
-    pointLayer.find("#def_rate").html(point.DeformationRate);
-    pointLayer.find("#std_dev").html(point.StandardDeviation);
-    pointLayer.find("#est_height").html(point.EstimatedHeight);
-    pointLayer.find("#est_def_rate").html(point.EstimatedDeformationRate);
+    pointLayer.find("#ID").html(currentDisplayedPlot.Number);
+    pointLayer.find("#longitude").html(currentDisplayedPlot.Longitude);
+    pointLayer.find("#latitude").html(currentDisplayedPlot.Latitude);
+    pointLayer.find("#height").html(currentDisplayedPlot.Height);
+    pointLayer.find("#def_rate").html(currentDisplayedPlot.DeformationRate);
+    pointLayer.find("#std_dev").html(currentDisplayedPlot.StandardDeviation);
+    pointLayer.find("#est_height").html(currentDisplayedPlot.EstimatedHeight);
+    pointLayer.find("#est_def_rate").html(currentDisplayedPlot.EstimatedDeformationRate);
 }
 
 
@@ -85,7 +88,71 @@ export function HidePointInfo(showTopMenu) {
 }
 
 export function CreatePopupWindow() {
-    cardsManager.Draw();
+
+    var cardContentId = cardsManager.Draw(true);
+
+    function drawPlot() {
+        var svgPlot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svgPlot.id = 'window-plot';
+        svgPlot.classList.add('plot');
+        svgPlot.setAttributeNS(null, 'width', 300);
+        svgPlot.setAttributeNS(null, 'height', 200);
+
+        svgPlot.style.display = 'block';
+
+        currentDrawer.SetContainerObject(svgPlot);
+        currentDrawer.SetGraphColor('black');
+        currentDrawer.SetFontSize(10);
+        currentDrawer.SetOrigin(30, 180);
+        currentDrawer.SetLength(230, 150);
+
+        currentDrawer.DrawReferences();
+        currentDrawer.DrawAxis(true);
+        currentDrawer.RedrawPoints(true);
+        
+        currentDrawer.ResetSetters();
+
+        $(cardContentId).append(svgPlot);
+    }
+
+    function drawText() {
+        var textContent = document.createElement('div');
+        textContent.classList.add('popup-data-container');
+        var rowsLength = 5;
+        var rows = [];
+        for (var i = 0; i < rowsLength; i++) {
+            rows[i] = {
+                header: document.createElement('p'),
+                label: document.createElement('label')
+            };
+        }
+
+        rows[0].header.innerText = 'Latitude';
+        rows[0].label.innerText = '~ ' + currentDisplayedPlot.Latitude.toFixed(6);
+        rows[1].header.innerText = 'Longitude';
+        rows[1].label.innerText = '~ ' + currentDisplayedPlot.Longitude.toFixed(6);
+        rows[2].header.innerText = 'Height';
+        rows[2].label.innerText = '~ ' + currentDisplayedPlot.Height.toFixed(6);
+        rows[3].header.innerText = 'Deformation rate';
+        rows[3].label.innerText = '~ ' + currentDisplayedPlot.DeformationRate.toFixed(6);
+        rows[4].header.innerText = 'Std.dev. rate';
+        rows[4].label.innerText = '~ ' + currentDisplayedPlot.StandardDeviation.toFixed(6);
+
+        for (var i = 0; i < rowsLength; i++) {
+            textContent.append(rows[i].header);
+            textContent.append(rows[i].label);
+        }
+
+        $(cardContentId).append(textContent);
+    }
+
+
+    //delay for animation
+    setTimeout(function () {
+        drawPlot();
+        drawText();
+    }, 250);
+
 }
 
 
@@ -111,6 +178,6 @@ function drawPlot(values, oXLeft, oXRight, oYBottom, oYTop) {
 window.changePlotType = function changePlotType(plotType) {
     if (currentDrawer == null) return;
 
-    currentDrawer.SetPlotType(plotType);
+    currentDrawer.SetPlotType(plotType,true);
     currentDrawer.RedrawPoints();
 }

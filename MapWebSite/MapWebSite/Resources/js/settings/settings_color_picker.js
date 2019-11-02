@@ -2,6 +2,11 @@ import { ColorList, ColorNode } from '../color_picker_color_list.js';
 import { DisplayOverlay } from './settings.js';
 import { Router, endpoints } from '../api/api_router.js';
 
+/*finaliser*/
+export function PageFinaliser() {
+    colorList = new ColorList(new ColorNode('dot-1'), SliderWidth, '#361f9c');
+}
+
 /*use this variables for dots controll*/
 
 var isMouseDown = false;

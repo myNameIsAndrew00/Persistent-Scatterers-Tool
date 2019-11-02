@@ -313,6 +313,7 @@
     </None>
     <Content Include="Resources\css\home_points_settings_layer.scss" />
     <Content Include="Resources\css\card.scss" />
+    <Content Include="Resources\css\small_loading_spinner.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
     <None Include="Resources\css\settings_points_upload.scss" />
     <Content Include="Resources\js\api\api_router.js" />

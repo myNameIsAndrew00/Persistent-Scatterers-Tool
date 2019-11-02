@@ -46,7 +46,7 @@ namespace MapWebSite.Hubs
                                       (BasicPoint.BasicInfoOptionalField)Enum.Parse(typeof(BasicPoint.BasicInfoOptionalField), optionalField),
                                       callback);
 
-        
+            Clients.Caller.PointsProcessedNotification();
         }
 
     }

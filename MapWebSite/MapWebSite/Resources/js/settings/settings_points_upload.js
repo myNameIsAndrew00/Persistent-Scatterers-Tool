@@ -3,6 +3,11 @@ import { Router, endpoints } from '../api/api_router.js';
 
 var processedFiles = {};
 
+/*finaliser*/
+export function PageFinaliser() {
+    //finalise logic here
+}
+
 /*Style and aspect handling*/
 
 window.changeFileInputAspect = function changeFileInputAspect() {

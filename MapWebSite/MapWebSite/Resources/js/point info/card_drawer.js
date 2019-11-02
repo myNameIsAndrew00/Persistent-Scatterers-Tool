@@ -12,14 +12,14 @@ class CardDrawer {
         this.manager = manager;
     }
 
-    Draw(id, container, info, closeHandler) {
+    Draw(id, container, info, closeHandler,hidden) {
         this.id = id;
         this.closeHandler = closeHandler;
 
 
-        var popup = this.drawPopup();
+        var popup = this.drawPopup(hidden);
         this.drawPopupHeader(popup);
-
+         
         container.appendChild(popup);
 
         popup.id = id;
@@ -50,9 +50,12 @@ class CardDrawer {
         popup.appendChild(header);
     }
 
-    drawPopup() {
+    drawPopup(hidden) {
         var popup = document.createElement('div');
         popup.classList.add('point-info-popup');
+        popup.style.zIndex = currentZIndex++;
+
+        if (hidden == true) popup.classList.add('point-info-popup-hidden');
 
         function initialisePosition(defaultDimensions) {
             /*center the intial position*/
@@ -124,10 +127,10 @@ class CardDrawer {
                 if (e.offsetY <= getBorderWidth() + 2) resizingStates.switchStates('resizing', 'top');
                 if (e.offsetY >= getPopupHeight() - getBorderWidth() - 2) resizingStates.switchStates('resizing', 'bottom');
 
-                if (resizingStates.enabledX())
-                    document.body.style.cursor = 'e-resize';
-                if (resizingStates.enabledY())
-                    document.body.style.cursor = 'n-resize';
+                if (resizingStates.enabledX());
+                    //     document.body.style.cursor = 'e-resize';
+                if (resizingStates.enabledY());
+               //     document.body.style.cursor = 'n-resize';
 
             }
 
@@ -196,7 +199,11 @@ class CardDrawer {
     }
 
     addData(popup, info) {
+        var content = document.createElement('div');
+        content.id = 'window-body';
+        content.classList.add('popup-body');
 
+        popup.appendChild(content);
     }
 
 }

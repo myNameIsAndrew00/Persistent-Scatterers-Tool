@@ -95,3 +95,29 @@
         }
     }
 }
+
+/*Styles related to popup*/
+
+.point-info-popup {
+    .popup-body {
+        display: flex;
+
+        .popup-data-container {
+            padding: 8px;
+            margin-top: 10px;
+            display: block;
+
+            p {
+                line-height: 1.1;
+                margin: 0 0 -4px;
+                font-size: small;
+                color: get_color(easeStrongGray);
+            }
+
+            label {
+                font-size: x-small;
+                color: get_color(gray);
+            }
+        }
+    }
+}

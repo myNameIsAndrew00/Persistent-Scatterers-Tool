@@ -9,6 +9,7 @@ import { PointsRegionsManager } from './api/cache/points_regions_manager.js';
 var vector = null;  
 var vectorSource = null;
 var pointsRegionsManager = new PointsRegionsManager();
+var processingEnabled = 0;
 
 /*workers*/
 //var receivedPointsWorker = new Worker('script.js', { type: "module" });
@@ -47,6 +48,17 @@ hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) {
     UpdatePointsLayer(points);       
 });
 
+hubRouter.SetCallback('PointsProcessedNotification', function () {    
+    processingEnabled--;
+    if (processingEnabled == 0)
+        displayHubProcessing(false);
+})
+
+function displayHubProcessing(display) {
+    if (display)
+        $('#hub-loading-spinner').removeClass('small-loading-spinner-hidden');
+    else $('#hub-loading-spinner').addClass('small-loading-spinner-hidden');
+}
 
 /**
  * View for map
@@ -197,7 +209,10 @@ function loadDataPoints(pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo
 
     //*cache and check the data here*
     if (existingRegions === 'cached') return;
-   
+
+    if(processingEnabled == 0) displayHubProcessing(true);
+    processingEnabled++;
+
     hubRouter.RequestDataPoints(
         pLatitudeFrom,
         pLongitudeFrom,

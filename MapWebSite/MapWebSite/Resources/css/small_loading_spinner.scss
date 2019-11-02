@@ -1,0 +1,50 @@
+@import 'colors.scss';
+
+.small-loading-spinner {
+    display: inline-block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    top: 0;
+    right: 0;
+
+    div {
+        position: absolute;
+        border: 3px solid #fff;
+        opacity: 1;
+        border-radius: 50%;
+        animation: small-loading-spinner 1s cubic-bezier(0.3, 0.8, 0.8, 2) infinite;
+    }
+
+    div:nth-child(2) {
+        animation-delay: -1.6s;
+
+    }
+   
+    @keyframes small-loading-spinner {
+        0% {
+            top: 30px;
+            right: 28px;
+            background: get_color(chromaOrange);
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+
+        50%{
+            opacity: 0.9
+        }
+
+        100% {
+            top: 10px;
+            right: 10px;
+            width: 38px;
+            height: 38px;
+            opacity: 0;
+        }
+    }
+}
+
+.small-loading-spinner-hidden{
+    visibility: hidden;
+}

@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CacheTest.cs" />
+    <Compile Include="Core\UTMConverter.cs" />
     <Compile Include="Core\Serialization.cs" />
     <Compile Include="Database\CassandraTest.cs" />
     <Compile Include="Database\CheckTest.cs" />

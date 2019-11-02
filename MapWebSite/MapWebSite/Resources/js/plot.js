@@ -9,17 +9,22 @@ function attrValue(node, attributeName) {
 
 export class PlotDrawer {
     constructor(containerID, popupID, oXLength, oYLength, oXInterval, oYInterval, oxLabel, oyLabel) {
+        this.containerObject = null;
+
         this.containerID = containerID;
         this.popupID = popupID;
 
-        this.origin = { X: 50, Y: 300 };
-        this.length = { oX: oXLength, oY: oYLength };
-        this.originAxesValue = { oX: oXInterval.Left, oY: oYInterval.Bottom };
-        this.endAxesValue = { oX: oXInterval.Right, oY: oYInterval.Top };
-        this.oxLabel = oxLabel;
-        this.oyLabel = oyLabel;
-        this.plotType = 'line';
-        this.currentPoints = null;
+        this.initialOrigin = this.origin = { X: 50, Y: 300 };
+        this.initialLength = this.length = { oX: oXLength, oY: oYLength };
+        this.initialOriginAxesValue = this.originAxesValue = { oX: oXInterval.Left, oY: oYInterval.Bottom };
+        this.initialEndAxesValue = this.endAxesValue = { oX: oXInterval.Right, oY: oYInterval.Top };
+        this.initialOxLabel = this.oxLabel = oxLabel;
+        this.initialOyLabel = this.oyLabel = oyLabel;
+        this.initialPlotType = this.plotType = 'line';
+        this.initialCurrentPoints = this.currentPoints = null;
+
+        this.initialGraphColor = this.graphColor = 'white';
+        this.initialFontSize = this.fontSize = 14;
 
         this.DrawAxis();
         this.DrawReferences();
@@ -60,10 +65,10 @@ export class PlotDrawer {
     /*
     *   Public methods
     */
-    DrawAxis() {
+    DrawAxis(keepExisting) {
         this.drawLine(this.origin, true, this.length.oX, '2', null);
         this.drawLine(this.origin, false, -this.length.oY - 5, '2', null);
-        this.DrawAxisLabels();
+        this.DrawAxisLabels(keepExisting);
     }
 
     DrawReferences() {
@@ -75,9 +80,9 @@ export class PlotDrawer {
         }
     }
 
-    DrawPoints(points) {
+    DrawPoints(points, keepExisting) {
         this.currentPoints = points;
-        this.deleteGraphPoints();
+        if(keepExisting != true) this.deleteGraphPoints();
 
         switch (this.plotType) {
             case 'bars':
@@ -90,14 +95,15 @@ export class PlotDrawer {
         }
     }
 
-    RedrawPoints() {
+    RedrawPoints(keepExisting) {
         if (this.currentPoints == null) return;
 
-        this.DrawPoints(this.currentPoints);
+        if (keepExisting) this.DrawPoints(this.currentPoints, true);
+        else this.DrawPoints(this.currentPoints);
     }
 
-    DrawAxisLabels() {
-        this.deleteLabels();
+    DrawAxisLabels(keepExisting) {
+        if(keepExisting != true) this.deleteLabels();
         this.drawText({ X: this.origin.X - 10, Y: this.origin.Y + 20 },
             this.originAxesValue.oX,
             [{ key: 'label', value: 'axis' }]);
@@ -113,8 +119,40 @@ export class PlotDrawer {
         this.drawText({ X: this.origin.X, Y: this.origin.Y - this.length.oY - 10 }, this.oyLabel, null);
     }
 
-    SetPlotType(plotType) {
+    SetPlotType(plotType, permanent) {
         this.plotType = plotType;
+        if (permanent) this.initialPlotType = this.plotType;
+    }
+
+    SetContainerObject(containerObject) {
+        this.containerObject = containerObject;
+    }
+
+    SetGraphColor(newColor) {
+        this.graphColor = newColor; 
+    }
+
+    SetFontSize(fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    SetLength(oX, oY) {
+        this.length = { oX: oX, oY: oY };
+    }
+
+    SetOrigin(X, Y) {
+        this.origin = { X: X, Y: Y };
+    }
+
+    /*Method use to cancel all changes made by setters*/
+    ResetSetters() {
+        this.containerObject = null;
+
+        this.initialFontSize = this.fontSize;
+        this.origin = this.initialOrigin;
+        this.length = this.initialLength;
+        this.plotType = this.initialPlotType;
+        this.graphColor = this.initialGraphColor;
     }
 
     /*
@@ -126,13 +164,15 @@ export class PlotDrawer {
         text.textContent = toWrite;
         text.setAttribute('x', origin.X);
         text.setAttribute('y', origin.Y);
-        text.setAttribute('fill', 'white');
+        text.setAttribute('fill', this.graphColor);
+        text.setAttribute('font-size', this.fontSize);
 
         if (optionalAttributes !== null)
             for (var index = 0; index < optionalAttributes.length; index++)
                 text.setAttribute(optionalAttributes[index].key, optionalAttributes[index].value);
 
-        $(this.containerID).append(text);
+        if (this.containerObject != null) this.containerObject.append(text);
+        else $(this.containerID).append(text);
     }
 
     drawBarsPoints(points) {
@@ -169,11 +209,12 @@ export class PlotDrawer {
             }
             line.setAttributeNS(null, "d", path);
             line.setAttributeNS(null, "stroke-width", 1);
-            line.setAttributeNS(null, "stroke", "white");
+            line.setAttributeNS(null, "stroke", object.graphColor);
             line.setAttributeNS(null, "fill", "none");
             line.setAttributeNS(null, "graphPoint", null);
 
-            $(object.containerID).append(line);
+            if (object.containerObject != null) object.containerObject.append(line);
+            else $(object.containerID).append(line);
         }
 
         function drawCircles(object) {
@@ -185,7 +226,9 @@ export class PlotDrawer {
                 circle.setAttributeNS(null, "graphPoint", '{ "oY": ' + points[index].Y + ', "oX": ' + points[index].X + '}');
                 circle.setAttributeNS(null, "class", "graphPoint graphPointDot");
                 circle.setAttributeNS(null, 'r', 3);
-                $(object.containerID).append(circle);
+
+                if (object.containerObject != null) object.containerObject.append(circle);
+                else $(object.containerID).append(circle);
             }
         }
 
@@ -204,12 +247,13 @@ export class PlotDrawer {
             (isHorizontaly ? 'h' : 'v') + ' ' +
             length);
 
-        $(this.containerID).append(newpath);
+        if (this.containerObject != null) this.containerObject.append(newpath);
+        else $(this.containerID).append(newpath);
 
     }
 
     setAttributes(path, strokeWidth, optionalAttributes) {
-        path.setAttributeNS(null, "stroke", "white");
+        path.setAttributeNS(null, "stroke", this.graphColor);
         path.setAttributeNS(null, "stroke-width", strokeWidth);
         path.setAttributeNS(null, "fill", "none");
 
