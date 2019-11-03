@@ -98,14 +98,21 @@
             margin-left: -5px;
             margin-top: -12px;
 
-            object {
-                display: none;
+            object {  
+                position: absolute;
+                /*value which send the menu content off ov view*/
+                left: -1000px; 
                 padding: 12px;
             }
 
-            .current_displayed_icon {
-                display: block;
+           
+
+            .current_displayed_icon { 
+                position: relative;
+                left: initial;
+                visibility: visible;
             }
+                        
         }
     }
 

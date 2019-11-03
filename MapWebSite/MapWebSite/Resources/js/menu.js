@@ -10,6 +10,18 @@ var menuIconsCount = 0;
 
 window.onload = function () {
     menuIconsCount = $('#main-select-menu-icon').find('object').length;
+
+    //hide every content which is not displayed
+    for (var menuIndex = 1; menuIndex < menuIconsCount; menuIndex++) {
+        var menuIcon = document.getElementById('main-menu-icon-' + menuIndex);
+
+        var svgObject = menuIcon.contentDocument;
+
+        var innerImage = svgObject.getElementById('inner_image');
+        var innerText = svgObject.getElementById('inner_text');
+
+        hideIcon(innerImage, innerText, null);
+    }
 };
 
 /*use this function to change the menu content*/
@@ -49,7 +61,7 @@ window.changeMenuContent = function changeMenuContent(direction, display = false
 function hideIcon(innerImage, innerText, currentMenuList) {
     /*reset elements transition timer*/
     /*animation for side menu*/
-    currentMenuList.style.margin = '0 0 0 -50px';
+    if(currentMenuList != null) currentMenuList.style.margin = '0 0 0 -50px';
 
     /*animation for main menu*/
     innerImage.style.transition = '0.5s';

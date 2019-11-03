@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite", "MapWebSite\Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapWebSite.Model", "MapWebSite.Model\MapWebSite.Model.csproj", "{921645E7-A83E-408A-B4C8-F7CD21DB3329}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{1A315415-A01E-4EF3-BD54-F4D6DA454AC3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapWebSite.Web", "MapWebSite.Web", "{1A315415-A01E-4EF3-BD54-F4D6DA454AC3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Access", "Data Access", "{BAE94EBA-9E64-4C6B-B499-6A561FBE3844}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapWebSite.Data Access", "MapWebSite.Data Access", "{BAE94EBA-9E64-4C6B-B499-6A561FBE3844}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.Repository", "MapWebSite.Repository\MapWebSite.Repository.csproj", "{0886D345-5858-4711-A80C-A08BBFEE1E27}"
 EndProject
@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.SQLAccess", "Map
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapWebSite.Core", "MapWebSite.Core\MapWebSite.Core.csproj", "{15A19BAF-8E36-41A7-96EC-3AC2F427FCFB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{AF515D10-8D01-41BE-B32A-8ADEDC446B56}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapWebSite.Core", "MapWebSite.Core", "{AF515D10-8D01-41BE-B32A-8ADEDC446B56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.Interaction", "MapWebSite.Interaction\MapWebSite.Interaction.csproj", "{A0E0898D-DD00-4BA7-803A-DCC9586B2836}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapWebSite.Authentication", "MapWebSite.Authentication\MapWebSite.Authentication.csproj", "{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{077DF803-FA68-4F96-B7A2-1DDC1EEA70E3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapWebSiteData Services", "MapWebSiteData Services", "{04357A52-9F1F-4721-A2E8-9E60034EFB4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

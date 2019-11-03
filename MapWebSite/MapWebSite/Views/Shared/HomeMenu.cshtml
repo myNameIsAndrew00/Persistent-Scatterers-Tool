@@ -30,20 +30,23 @@
         </div>
         <div id="main-select-menu-icon" class="main-select-menu-icon">
             @*Principal Menu Item: User Details*@
-            <object class="current_displayed_icon" id="main-menu-icon-@(sectionsCount++)" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg"></object>
+
+                <object class="current_displayed_icon" id="main-menu-icon-@(sectionsCount++)" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg"></object>
+
 
             @*Principal Menu Item: Manage data points*@
+
             @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
             {
-                <object id="main-menu-icon-@(sectionsCount++)" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
+                <object class="" id="main-menu-icon-@(sectionsCount++)" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
+
             }
+
         </div>
     </div>
 
+    @{ sectionsCount = 0; }
 
-
-
-    @(sectionsCount = 0);
     <nav id="secondary-menu" class="secondary-menu">
         @*Secondary menu: used for User details*@
         <ul class="current_displayed_menu" id="secondary-menu-items-@(sectionsCount++)">
