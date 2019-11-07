@@ -37,6 +37,7 @@ namespace MapWebSite.Interaction
         }       
 
 
+        [Obsolete("This method is implemented in service")]
         /// <summary>
         /// Insert a dataset for a user. Inserted data will contain zoomed versions of points
         /// </summary>
@@ -44,8 +45,7 @@ namespace MapWebSite.Interaction
         /// <param name="username"></param>
         /// <returns></returns>
         public async Task<bool> InsertDataSet(PointsDataSet pointsDataSet, string username)
-        {
-   
+        { 
             pointsDataSet.ID = this.userRepository.CreateUserPointsDataset(username, pointsDataSet.Name);
 
             if (pointsDataSet.ID == -1) return false;

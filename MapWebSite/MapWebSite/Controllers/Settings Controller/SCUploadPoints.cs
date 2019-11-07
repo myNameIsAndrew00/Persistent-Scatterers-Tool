@@ -45,6 +45,8 @@ namespace MapWebSite.Controllers
 
                 if (!Directory.Exists(fileFolderName)) Directory.CreateDirectory(fileFolderName);
 
+
+
                 if (FileData?.ContentLength > 0)
                 {
                     using (var fileStream = File.Create($"{fileFolderName}\\{checkoutData[1]}"))
@@ -84,7 +86,7 @@ namespace MapWebSite.Controllers
 
             var chunksFiles = Directory.GetFiles(directoryName).OrderBy(file => file);
 
-            using (FileStream finalFile = new FileStream($"{directoryName}\\__OK", FileMode.Create))
+            using (FileStream finalFile = new FileStream($"{directoryName}\\{ConfigurationManager.AppSettings["DataPointsSourceFileName"]}", FileMode.Create))
                 foreach (var chunkFile in chunksFiles)
                 {
                     using (FileStream fileChunk =

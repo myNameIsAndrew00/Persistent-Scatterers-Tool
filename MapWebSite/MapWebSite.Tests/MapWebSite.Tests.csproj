@@ -53,6 +53,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
@@ -101,6 +102,7 @@
     <Compile Include="Database\SelectTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="Service\DataPointsParserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -116,6 +118,10 @@
     <ProjectReference Include="..\MapWebSite.Core\MapWebSite.Core.csproj">
       <Project>{15A19BAF-8E36-41A7-96EC-3AC2F427FCFB}</Project>
       <Name>MapWebSite.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.DataPointsParserService\MapWebSite.DataPointsParserService.csproj">
+      <Project>{131c0e23-29ba-48da-8f5f-0f9a0d40ef87}</Project>
+      <Name>MapWebSite.DataPointsParserService</Name>
     </ProjectReference>
     <ProjectReference Include="..\MapWebSite.Interaction\MapWebSite.Interaction.csproj">
       <Project>{a0e0898d-dd00-4ba7-803a-dcc9586b2836}</Project>

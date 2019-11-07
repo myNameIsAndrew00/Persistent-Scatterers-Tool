@@ -35,6 +35,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{07
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapWebSiteData Services", "MapWebSiteData Services", "{04357A52-9F1F-4721-A2E8-9E60034EFB4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.DataPointsParserService", "MapWebSite.DataPointsParserService\MapWebSite.DataPointsParserService.csproj", "{131C0E23-29BA-48DA-8F5F-0F9A0D40EF87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D4A2905-1B2B-44D1-A3BD-A83118C3B097}.Release|Any CPU.Build.0 = Release|Any CPU
+		{131C0E23-29BA-48DA-8F5F-0F9A0D40EF87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{131C0E23-29BA-48DA-8F5F-0F9A0D40EF87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{131C0E23-29BA-48DA-8F5F-0F9A0D40EF87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{131C0E23-29BA-48DA-8F5F-0F9A0D40EF87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056} = {AF515D10-8D01-41BE-B32A-8ADEDC446B56}
 		{09F8ECBB-E106-4A4C-9BD3-46D4E6DF40D6} = {1A315415-A01E-4EF3-BD54-F4D6DA454AC3}
 		{2D4A2905-1B2B-44D1-A3BD-A83118C3B097} = {09F8ECBB-E106-4A4C-9BD3-46D4E6DF40D6}
+		{131C0E23-29BA-48DA-8F5F-0F9A0D40EF87} = {04357A52-9F1F-4721-A2E8-9E60034EFB4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F3952599-A9CA-4084-99B8-BFC5CFA3833A}
