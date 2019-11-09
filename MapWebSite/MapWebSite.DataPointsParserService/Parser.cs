@@ -81,11 +81,12 @@ namespace MapWebSite.DataPointsParserService
                     {
                         try
                         {
-                            /*processFile(Path.Combine(unprocessedDirectory,
+                             
+                            processFile(Path.Combine(unprocessedDirectory,
                                                      ConfigurationManager.AppSettings["DataPointsSourceFileName"]),
                                         username,
                                         Path.GetDirectoryName(unprocessedDirectory));
-                            */
+                            
                             string processedDirectory = Path.Combine(ConfigurationManager.AppSettings["PointsDatasetsParsedFolder"], 
                                                                      username,
                                                                      Path.GetFileName(unprocessedDirectory));

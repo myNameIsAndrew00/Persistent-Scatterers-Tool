@@ -251,6 +251,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\Points Settings Controller\PointsSettingsController.cs" />
+    <Compile Include="Controllers\Settings Controller\SCAccountController.cs" />
     <Compile Include="Controllers\Settings Controller\SCUploadPoints.cs" />
     <Compile Include="Controllers\Settings Controller\SCColorPalette.cs" />
     <Compile Include="Controllers\Settings Controller\SettingsController.cs" />
@@ -429,6 +430,7 @@
     <Content Include="Resources\css\select.scss" />
     <Content Include="Views\Login\LoginForm.cshtml" />
     <Content Include="Views\Login\RegisterForm.cshtml" />
+    <Content Include="Views\Home\Settings Content\AccountSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

@@ -19,9 +19,6 @@
 
 <div class="fixed-menu">
 
-
-
-
     <div id="main-menu" class="main-select-menu">
         <div class="main-select-menu-arrows">
             <button onclick="changeMenuContent('up')" class="main-select-menu-arrow-up"></button>
@@ -31,7 +28,7 @@
         <div id="main-select-menu-icon" class="main-select-menu-icon">
             @*Principal Menu Item: User Details*@
 
-                <object class="current_displayed_icon" id="main-menu-icon-@(sectionsCount++)" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg"></object>
+            <object class="current_displayed_icon" id="main-menu-icon-@(sectionsCount++)" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg"></object>
 
 
             @*Principal Menu Item: Manage data points*@
@@ -48,6 +45,7 @@
     @{ sectionsCount = 0; }
 
     <nav id="secondary-menu" class="secondary-menu">
+
         @*Secondary menu: used for User details*@
         <ul class="current_displayed_menu" id="secondary-menu-items-@(sectionsCount++)">
 
@@ -55,7 +53,7 @@
             {
                 <li class="secondary-menu-item">
                     <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
-                    <a href="">@TextDictionary.HMenuSettingsText</a>
+                    <button onclick="requestSettingsPage('account-settings','/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuSettingsText</button>
                 </li>
             }
             <li class="secondary-menu-item">

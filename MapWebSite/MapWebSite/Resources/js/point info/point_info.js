@@ -1,10 +1,11 @@
 ﻿import { PlotDrawer } from '../plot.js';
 import { CardsManager } from './cards_manager.js';
+import { UnselectFeatureOnMap } from '../map.js';
 
 var cardsManager = new CardsManager('map-container');
 var currentDrawer = null;
 
-var currentDisplayedPlot = null;
+var currentDisplayedPoint = null;
 
 export function DisplayPointInfo() {
     function display() {
@@ -62,16 +63,16 @@ export function SetPointInfoData(point) {
         pointLayer.find("#plot").css("display", "block");
         pointLayer.find("#plot-menu").css("display", "block");
     }
-    currentDisplayedPlot = point;
+    currentDisplayedPoint = point;
 
-    pointLayer.find("#ID").html(currentDisplayedPlot.Number);
-    pointLayer.find("#longitude").html(currentDisplayedPlot.Longitude);
-    pointLayer.find("#latitude").html(currentDisplayedPlot.Latitude);
-    pointLayer.find("#height").html(currentDisplayedPlot.Height);
-    pointLayer.find("#def_rate").html(currentDisplayedPlot.DeformationRate);
-    pointLayer.find("#std_dev").html(currentDisplayedPlot.StandardDeviation);
-    pointLayer.find("#est_height").html(currentDisplayedPlot.EstimatedHeight);
-    pointLayer.find("#est_def_rate").html(currentDisplayedPlot.EstimatedDeformationRate);
+    pointLayer.find("#ID").html(currentDisplayedPoint.Number);
+    pointLayer.find("#longitude").html(currentDisplayedPoint.Longitude);
+    pointLayer.find("#latitude").html(currentDisplayedPoint.Latitude);
+    pointLayer.find("#height").html(currentDisplayedPoint.Height);
+    pointLayer.find("#def_rate").html(currentDisplayedPoint.DeformationRate);
+    pointLayer.find("#std_dev").html(currentDisplayedPoint.StandardDeviation);
+    pointLayer.find("#est_height").html(currentDisplayedPoint.EstimatedHeight);
+    pointLayer.find("#est_def_rate").html(currentDisplayedPoint.EstimatedDeformationRate);
 }
 
 
@@ -84,7 +85,9 @@ export function HidePointInfo(showTopMenu) {
 
     $("#point-info").css("opacity", 0);
     $("#point-info").css("width", "40%"); 
-    $("#point-info").css("visibility", "hidden");    
+    $("#point-info").css("visibility", "hidden");  
+
+    UnselectFeatureOnMap(currentDisplayedPoint.Number);
 }
 
 export function CreatePopupWindow() {
@@ -128,15 +131,15 @@ export function CreatePopupWindow() {
         }
 
         rows[0].header.innerText = 'Latitude';
-        rows[0].label.innerText = '~ ' + currentDisplayedPlot.Latitude.toFixed(6);
+        rows[0].label.innerText = '~ ' + currentDisplayedPoint.Latitude.toFixed(6);
         rows[1].header.innerText = 'Longitude';
-        rows[1].label.innerText = '~ ' + currentDisplayedPlot.Longitude.toFixed(6);
+        rows[1].label.innerText = '~ ' + currentDisplayedPoint.Longitude.toFixed(6);
         rows[2].header.innerText = 'Height';
-        rows[2].label.innerText = '~ ' + currentDisplayedPlot.Height.toFixed(6);
+        rows[2].label.innerText = '~ ' + currentDisplayedPoint.Height.toFixed(6);
         rows[3].header.innerText = 'Deformation rate';
-        rows[3].label.innerText = '~ ' + currentDisplayedPlot.DeformationRate.toFixed(6);
+        rows[3].label.innerText = '~ ' + currentDisplayedPoint.DeformationRate.toFixed(6);
         rows[4].header.innerText = 'Std.dev. rate';
-        rows[4].label.innerText = '~ ' + currentDisplayedPlot.StandardDeviation.toFixed(6);
+        rows[4].label.innerText = '~ ' + currentDisplayedPoint.StandardDeviation.toFixed(6);
 
         for (var i = 0; i < rowsLength; i++) {
             textContent.append(rows[i].header);

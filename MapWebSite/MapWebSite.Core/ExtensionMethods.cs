@@ -80,11 +80,13 @@ namespace MapWebSite.Core
 
         }
 
+
+
         /// <summary>
         /// Get the string which decorate an enum. Decoration its mate with Types.EnumStringAttribute.
         /// </summary>
         /// <param name="enumValue"></param>
-        /// <returns></returns>
+        /// <returns></returns>        
         public static string GetEnumString(this Enum enumValue)
         {
             var type = enumValue.GetType();

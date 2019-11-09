@@ -29,6 +29,8 @@ namespace MapWebSite.Controllers
                     return View((string)"Settings Content/ColorPicker");
                 case "upload-points":
                     return View((string)"Settings Content/UploadPoints");
+                case "account-settings":
+                    return View((string)"Settings Content/AccountSettings"); 
                 default:
                     return View((string)"Settings Content/ColorPicker");
             }

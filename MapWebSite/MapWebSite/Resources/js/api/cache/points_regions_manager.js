@@ -9,6 +9,10 @@ class PointsRegionsManager {
         this.pointsRegions = {};
     }
 
+    ResetCache() {
+        this.pointsRegions = {};
+    }
+
     AddRegion(cacheKey, pointsCount, filled) {
         if (this.pointsRegions.hasOwnProperty(cacheKey)) {
             if (this.pointsRegions[cacheKey].pointsCount < pointsCount)

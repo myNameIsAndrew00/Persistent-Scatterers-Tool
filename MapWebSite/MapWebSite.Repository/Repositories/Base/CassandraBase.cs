@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+ 
 
 namespace MapWebSite.Repository
 {
@@ -14,6 +15,7 @@ namespace MapWebSite.Repository
 
         public CassandraBaseRepository()
         {
+           
             server = ConfigurationManager.AppSettings["CassandraServer"];
             keyspace = ConfigurationManager.AppSettings["CassandraKeyspace"];
         }

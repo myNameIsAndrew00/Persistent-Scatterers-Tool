@@ -9,6 +9,12 @@ namespace MapWebSite.CassandraAccess
 {
     public class CassandraExecutionInstance : IDisposable
     {
+        private readonly int maxAttempts = 10;         
+
+        private string keyspace = null;
+
+        private string server = null;
+
         private ISession currentSession = null;
 
         private Cluster cluster = null;
@@ -19,10 +25,15 @@ namespace MapWebSite.CassandraAccess
           
         public CassandraExecutionInstance(string server, string keyspace)
         {
-            cluster = Cluster.Builder().AddContactPoint(server).Build();
+            this.cluster = Cluster.Builder().AddContactPoint(server).Build();
+            this.server = server;
+            this.keyspace = keyspace;
 
-            currentSession = cluster.Connect(keyspace); 
-  
+            try
+            {
+                currentSession = cluster.Connect(this.keyspace);
+            }
+            catch { currentSession = null; }
         }
 
         public void Dispose()
@@ -35,18 +46,25 @@ namespace MapWebSite.CassandraAccess
 
         public async Task ExecuteNonQuery(dynamic parameters)
         {
-            if (this.query == null) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
+            if (string.IsNullOrEmpty(this.query)) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
+            if (this.currentSession == null) createConnection();
 
-            var statement = await currentSession.PrepareAsync(this.query);
+            try
+            {
+                var statement = await currentSession.PrepareAsync(this.query);
+                var boundStatement = statement.Bind(parameters);
+            
+                await currentSession.ExecuteAsync(boundStatement);
+            }
+            catch
+            {
 
-            var boundStatement = statement.Bind(parameters);
-
-            await currentSession.ExecuteAsync(boundStatement);
+            }
         }
 
         public List<Row> ExecuteQuery(dynamic parameters)
         {
-            if (this.query == null) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
+            if (string.IsNullOrEmpty(this.query)) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
 
             var statement = currentSession.Prepare(this.query);
 
@@ -65,7 +83,23 @@ namespace MapWebSite.CassandraAccess
         }
 
 
-        
+        private void createConnection()
+        {
+            int attempts = 0;
+            while (this.currentSession == null)
+            {
+                try
+                {
+                    this.currentSession = cluster.Connect(this.keyspace);
+                }
+                catch
+                {
+                    attempts++;
+                    currentSession = null;
+                    if (attempts >= maxAttempts) throw;
+                }
+            }
+        }
 
     }
 }

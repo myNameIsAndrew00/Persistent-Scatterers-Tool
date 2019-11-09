@@ -29,9 +29,11 @@ export class PointsLayer extends ol.layer.Vector {
                     }
                 },
                 {
-                    name: 'zoom',
+                    name: 'size',
                     callback: function (feature) {
-                        return map.getView().getZoom().toFixed(2) / 10.0;
+                        if(feature.size === undefined) 
+                            return 1.5;
+                        return feature.size;
                     }
                 }
             ],
@@ -45,14 +47,14 @@ export class PointsLayer extends ol.layer.Vector {
                     attribute float a_red;
                     attribute float a_blue;
                     attribute float a_green;
-                    attribute float a_zoom;
+                    attribute float a_size;
 
                     varying vec4 v_color;     
                     void main(void) {    
                         
                         mat4 offsetMatrix = u_offsetScaleMatrix;         
-                        float offsetX = a_index == 0.0 || a_index == 3.0 ? -a_zoom : a_zoom ;         
-                        float offsetY = a_index == 0.0 || a_index == 1.0 ? -a_zoom : a_zoom ;         
+                        float offsetX = a_index == 0.0 || a_index == 3.0 ? -a_size : a_size;         
+                        float offsetY = a_index == 0.0 || a_index == 1.0 ? -a_size: a_size ;         
                         vec4 offsets = offsetMatrix * vec4(offsetX, offsetY, 0.0, 0.0);         
                         
                         gl_Position = u_projectionMatrix * vec4(a_position, 1.0, 1.0) + offsets;         
