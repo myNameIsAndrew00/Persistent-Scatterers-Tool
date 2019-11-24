@@ -21,15 +21,14 @@
     }
 
     .top-menu {
-        background: get_color(strongTransparentBlue);
 
         button {
             opacity: 1;
-            background: rgba(0,0,0,0.1);
+            background: get_color(chromaOrange);
         }
 
         button:hover {
-            background: get_color(chromaOrange);
+            background: orange;
         }
     }
 }
@@ -98,21 +97,20 @@
             margin-left: -5px;
             margin-top: -12px;
 
-            object {  
+            object {
                 position: absolute;
                 /*value which send the menu content off ov view*/
-                left: -1000px; 
+                left: -1000px;
                 padding: 12px;
             }
 
-           
 
-            .current_displayed_icon { 
+
+            .current_displayed_icon {
                 position: relative;
                 left: initial;
                 visibility: visible;
             }
-                        
         }
     }
 
@@ -214,52 +212,59 @@
     }
 
     .top-menu {
+        display: grid;
+        grid-template-areas: "left right";
         z-index: $principal_z_index;
-
         position: fixed;
-        top: 0;
-        left: 50%;
-        width: 300px;
-        border-radius: 0 0 10px 10px;
+        top: 5px;
+        right: 5px;
+        width: 325px;
+        border-radius: 5px;
         margin-left: -150px;
-        height: 30px;
-        background: get_color(transparentBlue);
+        padding: 10px;
+        box-shadow: 3px 8px 11px -2px get_color(strongTransparentBlue);
+        background: get_color(white);
+        color: get_color(mediumGray);
         transition: 0.3s;
-        color: white;
 
-        div {
-            height: auto;
-            width: 220px;
-            vertical-align: top;
-            text-align: center;
+        .text-area {
+            display: table-cell;
+            grid-area: left;
+            font-size: 13px;
+            margin: auto 0;
+            vertical-align: middle;
         }
 
-        button {
-            padding: 0;
-            height: 27px;
-            width: 30px;
-            margin-top: 1px;
-            background: none;
-            cursor: pointer;
-            opacity: 0.7;
-        }
+        .buttons-area {
+            grid-area: right;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
 
-        button-selected {
-            background: orange;
-        }
+            button {
+                display: inline-flex !important;
+                justify-content: center;
+                vertical-align: text-top;
+                padding: 0;
+                width: 30px;
+                height: 30px;
+                margin: 5px;
+                cursor: pointer;
+                opacity: 0.7;
+            }
 
-        object {
-            pointer-events: none;
-        }
+            button-selected {
+                background: orange;
+            }
 
-        .top-menu-item {
-            display: inline-block;
-            padding: 5px;
+            object {
+                pointer-events: none;
+            }
         }
     }
 
     .top-menu-hiden {
-        height: 0;
+        margin-top: -100px;
         opacity: 0;
         visibility: hidden;
     }

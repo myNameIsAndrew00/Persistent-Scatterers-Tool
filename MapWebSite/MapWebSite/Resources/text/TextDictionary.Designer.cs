@@ -61,6 +61,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hello.
+        /// </summary>
+        public static string GreetingMessage {
+            get {
+                return ResourceManager.GetString("GreetingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the tool above to create a color palette.&lt;br /&gt;
         ///                Click the bar if you want to create a new color
         ///                and drag dots left or right to set the intervals.

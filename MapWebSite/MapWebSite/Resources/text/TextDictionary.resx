@@ -315,4 +315,8 @@
   <data name="HPSCDUseButton" xml:space="preserve">
     <value>Use</value>
   </data>
+  <data name="GreetingMessage" xml:space="preserve">
+    <value>Hello</value>
+    <comment>Message displayed on top bar</comment>
+  </data>
 </root>

@@ -16,7 +16,6 @@ namespace MapWebSite.Controllers
 
         public ActionResult Index()
         {
-            var User = RouteConfig.CurrentUser;
             return View();
         }
 
