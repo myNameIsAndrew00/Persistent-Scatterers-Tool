@@ -29,6 +29,14 @@ input, button {
     color: white;
 }
 
+.box {
+    border-radius: 5px;
+    box-shadow: 3px 8px 11px -2px get_color(strongTransparentBlue);
+    background: get_color(white);
+    color: get_color(mediumGray);
+    box-shadow: 3px 8px 11px -2px rgba(0, 28, 79, 0.66);
+    border: solid 1px #ececec;
+}
 
 button:disabled {
     background-color: gray;

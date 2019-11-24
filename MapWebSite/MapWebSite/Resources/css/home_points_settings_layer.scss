@@ -3,15 +3,12 @@
 #points-settings-layer-container {
     position: absolute;
     padding: 20px;
-    margin: 0;
-    border-radius: 2px;
+    margin: 0; 
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     transition: width 300ms ease-in-out 0.2s, height 0.3s, opacity 0.3s;
     
-    background: white;
-    box-shadow: 3px 8px 11px -2px rgba(0, 28, 79, 0.66);
 
     .close_points_setting_layer_button {
         position: fixed;
@@ -97,6 +94,7 @@
                 font-size: smaller;
                 border-top: solid white;
                 border-bottom: solid white;
+                color: black;
 
                 button {
                     margin: 2px;

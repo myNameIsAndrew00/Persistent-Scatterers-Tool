@@ -53,6 +53,8 @@ class CardDrawer {
     drawPopup(hidden) {
         var popup = document.createElement('div');
         popup.classList.add('point-info-popup');
+        popup.classList.add('box');
+
         popup.style.zIndex = currentZIndex++;
 
         if (hidden == true) popup.classList.add('point-info-popup-hidden');

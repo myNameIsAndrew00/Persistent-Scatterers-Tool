@@ -3,10 +3,12 @@
 .point-info-popup {
     position: absolute;
     background: white;
-    border-radius: 3px;
-    box-shadow: 2px 3px 10px get_color(strongTransparentBlue);
+    border-top: none;
+    border-left: none;
+    border-right: none;
 
     transition: width 0.4s, height 0.4s;
+
     .popup-header {
         border-radius: 3px;
         height: 20px;
@@ -28,8 +30,6 @@
             background: red;
         }
     }
-
-    
 }
 
 .point-info-popup-hidden{
