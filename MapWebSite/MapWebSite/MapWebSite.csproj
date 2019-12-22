@@ -308,6 +308,7 @@
     <Content Include="FrameworkContent\Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="FrameworkContent\Scripts\modernizr-2.8.3.js" />
     <Content Include="Resources\css\settings_color_picker.scss" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

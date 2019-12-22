@@ -106,6 +106,8 @@ namespace MapWebSite.Interaction
                         triggerCallback(result,regionKey, true); 
                     }
                     catch { //TODO: log exception
+                        //if a error ocurs, the created entry must be deleted from the cache
+                        PointsCacheManager.Remove(coordinate.Item1, coordinate.Item2, dataSetID);
                     }
                 });
             }

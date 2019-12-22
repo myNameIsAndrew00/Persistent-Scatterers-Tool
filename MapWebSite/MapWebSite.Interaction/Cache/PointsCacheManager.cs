@@ -31,8 +31,15 @@ namespace MapWebSite.Interaction
         internal static string GenerateKey(decimal fromLatitude, decimal fromLongitude, decimal toLatitude, decimal toLongitude, int datasetId)
                 => string.Format("{0:0.00}_{1:0.00}_{2:0.00}_{3:0.00}_{4}", fromLatitude, fromLongitude,toLatitude, toLongitude, datasetId);
 
-        
 
+        /// <summary>
+        /// Update an existing entry in the cache
+        /// </summary>
+        /// <param name="from">Start position (Latitude and longitude) of the area which contains data points</param>
+        /// <param name="to">End position (Latitude and longitude) of the area which contains data points</param>
+        /// <param name="datasetId">Id of the dataset which contains the points</param>
+        /// <param name="dataPoints">Datapoints which must be cached</param>
+        /// <returns>A string which represents the key generated for the cached zone</returns>
         internal static string Write(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId, IEnumerable<BasicPoint> dataPoints)
         {
             string key = GenerateKey(from.Item1, from.Item2, to.Item1, to.Item2, datasetId);
@@ -44,6 +51,37 @@ namespace MapWebSite.Interaction
                 },
                 DateTimeOffset.MaxValue);
             return key;
+        }
+
+        /// <summary>
+        /// Create a new empty entry in the cache
+        /// </summary>
+        /// <param name="from">Start position (Latitude and longitude) of the area which contains data points</param>
+        /// <param name="to">End position (Latitude and longitude) of the area which contains data points</param>
+        /// <param name="datasetId">Id of the dataset which contains the points</param>
+        internal static void Create(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId)
+        {
+            string key = GenerateKey(from.Item1, from.Item2, to.Item1, to.Item2, datasetId);
+            
+            MemoryCache.Default.Add(key,
+                             new CacheEntry()
+                             {
+                                 Status = EntryStatus.Creating,
+                                 Value = null
+                             },
+                             DateTimeOffset.MaxValue);
+        }
+
+        /// <summary>
+        /// Remove a entry from the cache
+        /// </summary>
+        /// <param name="from">Start position (Latitude and longitude) of the area which contains data points</param>
+        /// <param name="to">End position (Latitude and longitude) of the area which contains data points</param>
+        /// <param name="datasetId">Id of the dataset which contains the points</param>
+        internal static void Remove(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId)
+        {
+            string key = GenerateKey(from.Item1, from.Item2, to.Item1, to.Item2, datasetId);
+            MemoryCache.Default.Remove(key);
         }
 
 
@@ -80,6 +118,7 @@ namespace MapWebSite.Interaction
                     && attempts >= 0 );
 
                 var cacheEntryValue = cacheEntry?.Value as IEnumerable<BasicPoint>;
+
 
                 //if the entry is not valid or if the points where already fully requested, ignore the entry
                 if (cacheEntryValue == null || 
@@ -133,16 +172,11 @@ namespace MapWebSite.Interaction
                     //which is identified as 'creating'
                     if (cacheValue == null )
                     {
-                        requiredPoints.Add(new Coordinates(
-                                                new Tuple<decimal, decimal>(i, j),
-                                                new Tuple<decimal, decimal>(i + latitudeSide, j + longitudeSide)));
-                        MemoryCache.Default.Add(key,
-                                new CacheEntry()
-                                {
-                                    Status = EntryStatus.Creating,
-                                    Value = null
-                                },
-                                DateTimeOffset.MaxValue);
+                        var startCoordinates = new Tuple<decimal, decimal>(i, j);
+                        var endCoordinates = new Tuple<decimal, decimal>(i + latitudeSide, j + longitudeSide);
+                        requiredPoints.Add(new Coordinates( startCoordinates, endCoordinates));
+
+                        PointsCacheManager.Create(startCoordinates, endCoordinates, datasetId);
                     }
                     else result.Add(key);
                 }

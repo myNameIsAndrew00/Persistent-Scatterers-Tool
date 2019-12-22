@@ -37,7 +37,7 @@ namespace MapWebSite.Tests.Database
             (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\displacements.txt";
             (pointsSource as TxtDataPointsSource).LatitudeZone = 'T';
             (pointsSource as TxtDataPointsSource).Zone = 35;
-            PointsDataSet dataset = pointsSource.CreateDataSet("mainTest");
+            PointsDataSet dataset = pointsSource.CreateDataSet("mainTest2");
 
             Task<bool> result = handler.InsertDataSet(dataset, "woofwoof");
 

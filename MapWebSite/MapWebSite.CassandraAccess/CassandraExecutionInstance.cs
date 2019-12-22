@@ -20,7 +20,14 @@ namespace MapWebSite.CassandraAccess
         private Cluster cluster = null;
 
         private string query = null;
-         
+
+
+        //use this object to handle the access to the connection
+        private object connectingLock = new object();
+
+        //a boolean value which handle if a connection attempt is in progress
+        private bool connecting = false;
+        
         public UdtMappingDefinitions UserDefinedTypeMappings => currentSession?.UserDefinedTypes;
           
         public CassandraExecutionInstance(string server, string keyspace)
@@ -65,6 +72,7 @@ namespace MapWebSite.CassandraAccess
         public List<Row> ExecuteQuery(dynamic parameters)
         {
             if (string.IsNullOrEmpty(this.query)) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
+            if (this.currentSession == null) createConnection();
 
             var statement = currentSession.Prepare(this.query);
 
@@ -86,6 +94,13 @@ namespace MapWebSite.CassandraAccess
         private void createConnection()
         {
             int attempts = 0;
+
+            lock (connectingLock)
+            {
+                if (connecting) return;
+                connecting = true;
+            }
+
             while (this.currentSession == null)
             {
                 try
@@ -96,9 +111,11 @@ namespace MapWebSite.CassandraAccess
                 {
                     attempts++;
                     currentSession = null;
-                    if (attempts >= maxAttempts) throw;
-                }
+                    if (attempts >= maxAttempts) break;
+                }                
             }
+            
+            lock (connectingLock) connecting = false;
         }
 
     }
