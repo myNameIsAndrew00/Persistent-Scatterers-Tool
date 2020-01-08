@@ -1,4 +1,11 @@
-﻿const apiUrl = '/api';
+﻿/*! MODULE: ApiRouter
+ * 
+ * This module is responsable for api requests handling.
+ * Do not use the api without using this component
+ * 
+ * */
+
+const apiUrl = '/api';
 
 export const endpoints = {
     Home: {

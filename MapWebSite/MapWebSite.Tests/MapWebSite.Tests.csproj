@@ -123,9 +123,9 @@
       <Project>{131c0e23-29ba-48da-8f5f-0f9a0d40ef87}</Project>
       <Name>MapWebSite.DataPointsParserService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MapWebSite.Interaction\MapWebSite.Interaction.csproj">
+    <ProjectReference Include="..\MapWebSite.Interaction\MapWebSite.Domain.csproj">
       <Project>{a0e0898d-dd00-4ba7-803a-dcc9586b2836}</Project>
-      <Name>MapWebSite.Interaction</Name>
+      <Name>MapWebSite.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\MapWebSite.Model\MapWebSite.Model.csproj">
       <Project>{921645E7-A83E-408A-B4C8-F7CD21DB3329}</Project>

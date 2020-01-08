@@ -1,4 +1,10 @@
-﻿import { PlotDrawer } from '../plot.js';
+﻿/*! Component: PointInfo
+ *
+ * This component is used for handling the point info slider actions and information 
+ *
+ * */
+
+import { PlotDrawer } from '../plot.js';
 import { CardsManager } from './cards_manager.js';
 import { UnselectFeatureOnMap } from '../map.js';
 

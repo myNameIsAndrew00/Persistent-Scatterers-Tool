@@ -37,15 +37,19 @@ namespace MapWebSite.Controllers
            
             
         [HttpGet]
-        [Obsolete]
-        public JsonResult RequestPointDetails(decimal latitude, decimal longitude, int identifier, decimal zoomLevel)
+        public JsonResult RequestPointDetails(decimal latitude, 
+                                              decimal longitude, 
+                                              int identifier, 
+                                              decimal zoomLevel,
+                                              string username,
+                                              string datasetName)
         {
             //TODO: change the user and the dataset name
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
             
             //zoomLevel is not required anymore
-            var point = databaseInteractionHandler.RequestPointDetails("mainTest",//this will be changed and customized for current user
-                                                                       "woofwoof",//this will be changed and customized for current user
+            var point = databaseInteractionHandler.RequestPointDetails(username,
+                                                                       datasetName, 
                                                                        0,
                                                                        new BasicPoint()
                                                                        {

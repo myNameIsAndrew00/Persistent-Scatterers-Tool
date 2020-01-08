@@ -1,4 +1,10 @@
-﻿import { DisplayOverlay } from './settings.js';
+﻿/*! Component: PointsUpload
+ *
+ * This component maintains a upload page in the GUI
+ *
+ * */
+
+import { DisplayOverlay } from './settings.js';
 import { Router, endpoints } from '../api/api_router.js';
 
 var processedFiles = {};

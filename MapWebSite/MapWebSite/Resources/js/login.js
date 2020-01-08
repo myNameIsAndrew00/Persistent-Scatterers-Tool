@@ -1,3 +1,9 @@
+/*! Module: Login
+ *
+ * Handles the login page client logic
+ *
+ * */
+
  document.getElementById('canvas').height = window.innerHeight;
  document.getElementById('canvas').width = window.innerWidth;
 

@@ -14,8 +14,17 @@ namespace MapWebSite.Hubs
     [Authorize]
     public class DataPointsHub : Hub
     {
-        public void RequestDataPoints(decimal latitudeFrom, decimal longitudeFrom, decimal latitudeTo, decimal longitudeTo, dynamic[] existingRegions, string optionalField)
+        public void RequestDataPoints(decimal latitudeFrom, 
+                                      decimal longitudeFrom, 
+                                      decimal latitudeTo, 
+                                      decimal longitudeTo, 
+                                      dynamic[] existingRegions, 
+                                      string optionalField,
+                                      string username,
+                                      string datasetName)
         {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(datasetName)) return;
+
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
              
             Action<IEnumerable<BasicPoint>, Tuple<string,int>, bool> callback = (pointsData, regionData, filled) =>
@@ -40,8 +49,8 @@ namespace MapWebSite.Hubs
 
             databaseInteractionHandler.RequestPoints(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
                                       new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
-                                      "woofwoof", //this will be changed and customized for current user
-                                      "mainTest", //this will be changed and customized for current user
+                                      username,
+                                      datasetName, 
                                        existingRegionsDictionary,
                                       (BasicPoint.BasicInfoOptionalField)Enum.Parse(typeof(BasicPoint.BasicInfoOptionalField), optionalField),
                                       callback);

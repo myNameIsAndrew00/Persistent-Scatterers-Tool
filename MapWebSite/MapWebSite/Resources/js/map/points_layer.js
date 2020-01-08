@@ -1,4 +1,10 @@
-﻿
+﻿/*! Component: PointsLayer
+ *
+ * This component is responsable for rendering the points layer on the map.
+ * It will be used as a tile on top of the map
+ *
+ * */
+
 var oldColor = [180, 140, 140];
 var newColor = [255, 80, 80];
 

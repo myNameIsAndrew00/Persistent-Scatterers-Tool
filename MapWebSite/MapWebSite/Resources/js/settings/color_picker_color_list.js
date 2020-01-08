@@ -1,4 +1,9 @@
- 
+/*! Component: ColorPickerList
+*
+* This component maintaint the logic of color picker used in GUI
+*
+* */
+
 export class ColorNode{
     constructor(pointKey){
         this.pointKey = pointKey;

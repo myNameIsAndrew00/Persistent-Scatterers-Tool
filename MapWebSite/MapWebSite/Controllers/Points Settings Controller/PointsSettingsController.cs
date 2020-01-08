@@ -62,7 +62,9 @@ namespace MapWebSite.Controllers
         }
     }
      
-
+    /// <summary>
+    /// Represents the api used for points settings layer
+    /// </summary>
     [System.Web.Http.Authorize]
     public class PointsSettingsApiController : ApiController
     {

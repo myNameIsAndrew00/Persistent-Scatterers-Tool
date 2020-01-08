@@ -1,5 +1,12 @@
-﻿import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
+﻿/*! Component: Menu
+ *
+ * Thie component handles the menu (application navigation) logic
+ *
+ * */
+
+import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
 import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
+import { UpdateSelectedDatasetLayout } from './points settings/chose_dataset.js';
 import { Router, endpoints } from './api/api_router.js';
 
 /**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE DOWN-LEFT MENU******************/
@@ -141,15 +148,18 @@ function requestCss(cssServerPath) {
 /*****************************************************************************************/
 
 /*functions used for points setting overlay*/
-window.displayPointsLayerPage = async function displayPointsLayerPage(display, requestMethodName) {
+window.displayPointsLayerPage = async function displayPointsLayerPage(display, requestMethodName, callback) {
 
     function displayPage(display, serverData) {
         var container = $('#points-settings-layer-container');
         var innerContainer = $('#points-settings-layer-container').children("#points-settings-layer-container-content");
 
         innerContainer.html(serverData);
+
         //if the request is for 'chose palette control' update the layout
         if (requestMethodName == 'GetColorPalettePage') UpdateChosePaletteLayout();
+        //if the request is for 'chose dataset control' update the layout
+        if (requestMethodName == 'GetChoseDatasetPage') UpdateSelectedDatasetLayout();
 
         setTimeout(function () {
             display ? container.removeClass('points-settings-layer-container-hidden') : container.addClass('points-settings-layer-container-hidden');

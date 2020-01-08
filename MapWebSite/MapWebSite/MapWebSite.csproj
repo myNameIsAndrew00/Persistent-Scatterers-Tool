@@ -330,7 +330,7 @@
     <Content Include="Resources\js\map\points_source_manager.js" />
     <Content Include="Resources\js\settings\settings.js" />
     <Content Include="Resources\js\settings\settings_color_picker.js" />
-    <Content Include="Resources\js\color_picker_color_list.js" />
+    <Content Include="Resources\js\settings\color_picker_color_list.js" />
     <Content Include="Resources\js\home.js" />
     <Content Include="Resources\js\login.js" />
     <Content Include="Resources\js\map.js" />
@@ -463,9 +463,9 @@
       <Project>{15A19BAF-8E36-41A7-96EC-3AC2F427FCFB}</Project>
       <Name>MapWebSite.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MapWebSite.Interaction\MapWebSite.Interaction.csproj">
+    <ProjectReference Include="..\MapWebSite.Interaction\MapWebSite.Domain.csproj">
       <Project>{a0e0898d-dd00-4ba7-803a-dcc9586b2836}</Project>
-      <Name>MapWebSite.Interaction</Name>
+      <Name>MapWebSite.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\MapWebSite.Model\MapWebSite.Model.csproj">
       <Project>{921645e7-a83e-408a-b4c8-f7cd21db3329}</Project>

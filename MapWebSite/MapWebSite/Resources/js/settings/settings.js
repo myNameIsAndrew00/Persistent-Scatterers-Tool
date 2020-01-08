@@ -1,4 +1,8 @@
-/*****************************************************************************************/
+/*! Module: Settings
+ *
+ * This module handles a slider which contains features of application
+ * 
+ * */
 
 /*functions used for spinner */
 var rotateSpinner = false;

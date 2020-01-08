@@ -18,9 +18,7 @@
     }
 
     .settings-layer {
-
         z-index: $overflow_z_index;
-
         position: absolute;
         background-color: #FFF;
         width: 100%;
@@ -35,7 +33,6 @@
 
     .close_setting_layer_button {
         z-index: $critical_z_index;
-
         position: fixed;
         right: 10px;
         top: 10px;
@@ -61,7 +58,7 @@
         top: 0;
         left: 0;
         background-color: rgba(0,0,0,0.5); //TODO: make a variable for color
-        z-index: $principal_z_index;
+        z-index: $critical_z_index;
         transition: 0.3s;
 
         .message-overlay-container {

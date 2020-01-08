@@ -1,12 +1,19 @@
-﻿import { SetColorPalette, colorPalette } from '../home.js';
+﻿/*! Component: ChosePalette
+ *
+ * This component is responsable for chose palette content ( inside points setting window )
+ *
+ * */
+
+import { SetColorPalette, colorPalette } from '../home.js';
 import { UpdatePointsLayer } from '../map.js';
 import { Router, endpoints } from '../api/api_router.js';
 
 var __selected_palette_index = -1;
 
+const settingsLayerContainerId = '#points-settings-layer-container-content';
 
 function changeSelectedRowOnMenu(id, visible) {
-    var paletteRow = $('#points-settings-layer-container-content').find('[id=\'' + id + '\']')[0];
+    var paletteRow = $(settingsLayerContainerId).find('[id=\'' + id + '\']')[0];
     if (paletteRow === undefined) return;
     visible ? paletteRow.classList.add('selected-row') : paletteRow.classList.remove('selected-row');
 }
@@ -34,7 +41,7 @@ window.useColorMap = async function useColorMap(paletteIndex, username, paletteN
 /*palettes request to display on table*/
 
 function resetTable(table) {
-    $('#points-settings-layer-container-content').find('#currentColorPaletteIndex')[0].value = 0;
+    $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0].value = 0;
     var tableHeader = table.children[0].children[0].children[0];
 
     table.children[0].children[0].innerText = '';
@@ -49,7 +56,7 @@ function fillTable(colorPalettes, table) {
     function buildColorsTable(colors) {
         var colorsTable = document.createElement('table');
         var colorsTableBody = document.createElement('tbody');
-        var colorsPerRow = $('#points-settings-layer-container-content').find('#colorsTableColorsPerRow')[0].value;
+        var colorsPerRow = $(settingsLayerContainerId).find('#colorsTableColorsPerRow')[0].value;
         var intervalsIndex = 0;
 
         colorsTable.classList.add('palette');
@@ -119,19 +126,19 @@ function fillTable(colorPalettes, table) {
 }
 
 window.loadMorePalettes = function loadMorePalettes(resetPageIndex) {
-    var table = $('#points-settings-layer-container-content').find('#ps_left')[0];
+    var table = $(settingsLayerContainerId).find('#ps_left')[0];
     if (resetPageIndex) resetTable(table);
 
     if (table.offsetHeight + table.scrollTop == table.scrollHeight) {
-        var filterValue = $('#points-settings-layer-container-content').find('#colorPaletteSearchValue')[0];
-        var pageIndex = $('#points-settings-layer-container-content').find('#currentColorPaletteIndex')[0];
-        var filter = $('#points-settings-layer-container-content').find('#colorPaletteFilterValue')[0];
+        var filterValue = $(settingsLayerContainerId).find('#colorPaletteSearchValue')[0];
+        var pageIndex = $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0];
+        var filter = $(settingsLayerContainerId).find('#colorPaletteFilterValue')[0];
 
         Router.Get(endpoints.PointsSettingsApi.GetColorPaletteList,
             { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
             function (palette) {
                 if (palette.length)
-                    $('#points-settings-layer-container-content').find('#currentColorPaletteIndex')[0].value = parseInt(pageIndex.value) + 1;
+                    $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0].value = parseInt(pageIndex.value) + 1;
 
                 //fill the table tbody with rows
                 fillTable(palette, table.children[0].children[0]);
@@ -143,3 +150,4 @@ window.loadMorePalettes = function loadMorePalettes(resetPageIndex) {
 export function UpdateChosePaletteLayout() {
     changeSelectedRowOnMenu('user_palette_index_' + __selected_palette_index, true);
 }
+ 

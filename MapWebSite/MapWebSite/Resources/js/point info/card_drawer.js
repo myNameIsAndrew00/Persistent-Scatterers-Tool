@@ -1,4 +1,11 @@
-﻿var currentZIndex = 100;
+﻿/*! Component: CardDrawer
+ *
+ * This component is used to create a card on GUI.
+ * It is used as a helper for Cards Manager, but can be used standalone
+ *
+ * */
+
+var currentZIndex = 100;
 
 class CardDrawer {
 

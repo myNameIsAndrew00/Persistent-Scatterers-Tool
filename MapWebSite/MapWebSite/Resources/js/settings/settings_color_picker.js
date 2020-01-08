@@ -1,4 +1,10 @@
-import { ColorList, ColorNode } from '../color_picker_color_list.js';
+/*! Component: ColorPicker
+ *
+ * This component maintaint a color picker in the GUI 
+ *
+ * */
+
+import { ColorList, ColorNode } from './color_picker_color_list.js';
 import { DisplayOverlay } from './settings.js';
 import { Router, endpoints } from '../api/api_router.js';
 

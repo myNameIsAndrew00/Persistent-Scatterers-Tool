@@ -1,3 +1,9 @@
+/*! Module: Home
+ *
+ * Handles the home page client logic
+ *
+ * */
+
 import { HidePointInfo, CreatePopupWindow } from './point info/point_info.js';
 
 window.HidePointInfo = HidePointInfo;
@@ -5,8 +11,9 @@ window.CreatePopupWindow = CreatePopupWindow;
 
 var loadedScripts = [];
 
-/*Core method which loads javascript if it is not already loaded*/
-
+/**
+ * Core method which loads javascript if it is not already loaded
+ * */
 window.getScript = function getScript(node, scriptServerPath) {    
     if (loadedScripts[scriptServerPath] === true) return;
 

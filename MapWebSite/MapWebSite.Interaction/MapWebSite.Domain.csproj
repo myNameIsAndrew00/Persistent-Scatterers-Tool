@@ -71,11 +71,11 @@
     <Compile Include="Cache\PointsCacheManager.cs" />
     <Compile Include="DatabaseInteraction.cs" />
     <Compile Include="Html Helpers\Settings Layer\MessageBoxBuilder.cs" />
-    <Compile Include="Owin\ComponentsFactory.cs" />
+    <Compile Include="Owin Components\ComponentsFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteUser.cs" />
-    <Compile Include="Views Model\ChoseDatasetViewModel.cs" />
-    <Compile Include="Views Model\ChosePaletteViewModel.cs" />
+    <Compile Include="Views Models\ChoseDatasetViewModel.cs" />
+    <Compile Include="Views Models\ChosePaletteViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MapWebSite.Authentication\MapWebSite.Authentication.csproj">

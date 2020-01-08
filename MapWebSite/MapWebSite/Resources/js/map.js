@@ -1,10 +1,18 @@
-﻿import { colorPalette } from './home.js';
+﻿/*! Component: Map
+ *
+ * This map contains the logic used for map navigation and interaction with Map Server
+ *
+ * */
+
+import { colorPalette } from './home.js';
 import { DisplayPointInfo, SetPointInfoData } from './point info/point_info.js';
 import { Router, endpoints } from './api/api_router.js';
 import { HubRouter } from './api/hub_router.js';
 import { PointsLayer } from './map/points_layer.js';
 import { PointsRegionsManager } from './api/cache/points_regions_manager.js';
+import { SelectedDataset } from './points settings/chose_dataset.js';
 
+//var SelectedDataset;
 //var points = [];
 var vector = null;
 var vectorSource = null;
@@ -178,6 +186,8 @@ function handleClickFunction(point) {
             latitude: point.latitude,
             longitude: point.longitude,
             identifier: point.ID,
+            username: SelectedDataset.username,
+            datasetName: SelectedDataset.datasetName
         }, function (receivedInfo) {
             var point = JSON.parse(receivedInfo.data);
             SetPointInfoData(point);
@@ -225,6 +235,10 @@ export function UpdatePointsLayer(points) {
     map.addLayer(vector);
 }
 
+export function ClearMap() {
+    vectorSource.refresh();
+}
+
 function loadDataPoints(pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
     var existingRegions = pointsRegionsManager.GetRegions(
         {
@@ -236,7 +250,7 @@ function loadDataPoints(pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo
             long: pLongitudeTo
         },
         //TODO: change the datasetId to be generic
-        1059);
+        SelectedDataset.identifier);
 
     //*cache and check the data here*
     if (existingRegions === 'cached') return;
@@ -250,7 +264,9 @@ function loadDataPoints(pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo
         pLatitudeTo,
         pLongitudeTo,
         existingRegions,
-        'Height'
+        'Height',
+        SelectedDataset.username,
+        SelectedDataset.datasetName
     );
 
 

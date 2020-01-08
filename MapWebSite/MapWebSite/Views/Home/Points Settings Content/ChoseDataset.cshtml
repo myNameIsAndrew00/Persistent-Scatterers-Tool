@@ -28,11 +28,12 @@
 
             @foreach (var item in Model.Datasets)
             {
+                @Html.Hidden($"user_dataset_{item.Item1}_{item.Item2}_id", item.Item3)
                 <tr id="user_dataset_@(item.Item1)_@(item.Item2)">
                     <td>@item.Item1</td>
                     <td>@item.Item2</td>
                     <td>
-                        <button class="use">@TextDictionary.HPSCDUseButton</button>
+                        <button class="use" onclick="useDataset('@item.Item1','@item.Item2')">@TextDictionary.HPSCDUseButton</button>
                         <button class="preview">@TextDictionary.HPSCDPreviewButton</button>
                     </td>
                 </tr>

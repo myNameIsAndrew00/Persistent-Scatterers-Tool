@@ -282,9 +282,9 @@ namespace MapWebSite.Repository
 
         }
 
-        public IEnumerable<Tuple<string, string>> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
+        public IEnumerable<Tuple<string, string, int>> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
         {
-            List<Tuple<string, string>> result = new List<Tuple<string, string>>();
+            List<Tuple<string, string, int>> result = new List<Tuple<string, string, int>>();
 
             using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetDataSetsFiltered")
             { CommandType = System.Data.CommandType.StoredProcedure },
@@ -298,9 +298,10 @@ namespace MapWebSite.Repository
                                                new SqlConnection(this.connectionString)))
             {
                 foreach (DataRow row in colorMapsResult.Tables[0].Rows)
-                    result.Add(new Tuple<string, string>(
+                    result.Add(new Tuple<string, string, int>(
                         (string)row["username"],
-                        (string)row["dataset_name"]));
+                        (string)row["dataset_name"],
+                        (int)row["dataset_id"]));
             }
 
             return result;

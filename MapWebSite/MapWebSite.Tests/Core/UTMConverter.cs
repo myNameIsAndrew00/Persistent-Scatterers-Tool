@@ -21,6 +21,7 @@ namespace MapWebSite.Tests.Core
 
             Tuple<decimal, decimal>[] validResult = new Tuple<decimal, decimal>[]
             {
+                new Tuple<decimal, decimal>(44.143143m, 28.652490m), //invalid
                 new Tuple<decimal, decimal>(43.531231m,31.4124m),       //0
                 new Tuple<decimal, decimal>(-3.531231m,12.412414m),     //1
                 new Tuple<decimal, decimal>(61.35918m,34.312415m),      //2
@@ -35,16 +36,17 @@ namespace MapWebSite.Tests.Core
 
             Tuple<decimal, decimal>[] converterResult = new Tuple<decimal, decimal>[validResult.Length];
 
-            converterResult[0] = converter.ToLatLong(36, 'T', 371717.98, 4821034.09);
-            converterResult[1] = converter.ToLatLong(33, 'M', 212511.84, 9609287.87);
-            converterResult[2] = converter.ToLatLong(36, 'V', 570176.83, 6803500.96);
-            converterResult[3] = converter.ToLatLong(31, 'N', 166021.44, 0.00);
-            converterResult[4] = converter.ToLatLong(22, 'L', 575197.48, 8859976.41);
-            converterResult[5] = converter.ToLatLong(1,  'Z', 833978.56, 19995929.89);
-            converterResult[6] = converter.ToLatLong(46, 'Z', 500000.00, 9997964.94);
-            converterResult[7] = converter.ToLatLong(47, 'G', 691049.80, 5416228.06);
-            converterResult[8] = converter.ToLatLong(14, 'X', 468672.17, 8589834.08);
-            converterResult[9] = converter.ToLatLong(4, 'Z', 495951.87, 182548.45);
+            converterResult[0] = converter.ToLatLong(35, 'T', 632308.875, 4895179.500);
+            converterResult[1] = converter.ToLatLong(36, 'T', 371717.98, 4821034.09);
+            converterResult[2] = converter.ToLatLong(33, 'M', 212511.84, 9609287.87);
+            converterResult[3] = converter.ToLatLong(36, 'V', 570176.83, 6803500.96);
+            converterResult[4] = converter.ToLatLong(31, 'N', 166021.44, 0.00);
+            converterResult[5] = converter.ToLatLong(22, 'L', 575197.48, 8859976.41);
+            converterResult[6] = converter.ToLatLong(1,  'Z', 833978.56, 19995929.89);
+            converterResult[7] = converter.ToLatLong(46, 'Z', 500000.00, 9997964.94);
+            converterResult[8] = converter.ToLatLong(47, 'G', 691049.80, 5416228.06);
+            converterResult[9] = converter.ToLatLong(14, 'X', 468672.17, 8589834.08);
+            converterResult[10] = converter.ToLatLong(4, 'Z', 495951.87, 182548.45);
 
             bool validAssert = true;
 

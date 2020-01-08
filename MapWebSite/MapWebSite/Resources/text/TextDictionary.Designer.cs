@@ -171,7 +171,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go to logout.
+        ///   Looks up a localized string similar to Go to login.
         /// </summary>
         public static string HMenuLogoutText {
             get {

@@ -1,4 +1,13 @@
-﻿class HubRouter {
+﻿/*! MODULE: HubRouter
+ * 
+ * This module is responsable for hub requests handling.
+ * Do not use the hub without using this component
+ *
+ * */
+
+
+
+class HubRouter {
     connection = null;
     hubProxy = null;
     enabled = false;
@@ -20,7 +29,16 @@
         this.hubProxy.on(callbackName, callback);        
     }
 
-    RequestDataPoints(latitudeFrom, longitudeFrom, latitudeTo, longitudeTo, existingRegions, optionalField) {
+    RequestDataPoints(latitudeFrom,
+        longitudeFrom,
+        latitudeTo,
+        longitudeTo,
+        existingRegions,
+        optionalField,
+        username,
+        datasetName) {
+
+        if (username == null || datasetName == null) return;
         if (!this.enabled) return;
 
         this.hubProxy.invoke('RequestDataPoints',
@@ -29,7 +47,9 @@
             latitudeTo,
             longitudeTo,
             existingRegions,
-            optionalField);
+            optionalField,
+            username,
+            datasetName);
     }
 
 }

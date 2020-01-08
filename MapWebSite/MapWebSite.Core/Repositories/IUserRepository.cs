@@ -60,6 +60,6 @@ namespace MapWebSite.Core.Database
 
         string GetColorMapSerialization(string username, string paletteName);
 
-        IEnumerable<Tuple<string, string>> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
+        IEnumerable<Tuple<string, string, int>> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
     }
 }

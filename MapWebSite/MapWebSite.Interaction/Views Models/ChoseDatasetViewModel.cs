@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MapWebSite.Interaction.ViewModel
 {
-    using UserDataset = Tuple<string, string>;
+    using UserDataset = Tuple<string, string, int>;
 
     public class ChoseDatasetViewModel
     { 

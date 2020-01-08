@@ -35,9 +35,9 @@ namespace MapWebSite.Tests.Database
 
             (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\header.txt";
             (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\displacements.txt";
-            (pointsSource as TxtDataPointsSource).LatitudeZone = 'T';
+            (pointsSource as TxtDataPointsSource).LatitudeZone = 'T';   
             (pointsSource as TxtDataPointsSource).Zone = 35;
-            PointsDataSet dataset = pointsSource.CreateDataSet("mainTest2");
+            PointsDataSet dataset = pointsSource.CreateDataSet("fourthTest");
 
             Task<bool> result = handler.InsertDataSet(dataset, "woofwoof");
 
@@ -53,6 +53,8 @@ namespace MapWebSite.Tests.Database
 
             (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondHeader.txt";
             (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\secondDisplacements.txt";
+
+            
 
             PointsDataSet dataset = pointsSource.CreateDataSet("Test");
              

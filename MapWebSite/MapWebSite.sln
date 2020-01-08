@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapWebSite.Core", "MapWebSi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapWebSite.Core", "MapWebSite.Core", "{AF515D10-8D01-41BE-B32A-8ADEDC446B56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.Interaction", "MapWebSite.Interaction\MapWebSite.Interaction.csproj", "{A0E0898D-DD00-4BA7-803A-DCC9586B2836}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.Domain", "MapWebSite.Interaction\MapWebSite.Domain.csproj", "{A0E0898D-DD00-4BA7-803A-DCC9586B2836}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.CassandraAccess", "MapWebSite.CassandraAccess\MapWebSite.CassandraAccess.csproj", "{9F148B28-5981-40DA-B669-505872475C2A}"
 EndProject

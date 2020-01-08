@@ -151,7 +151,7 @@
     <value>Create palette</value>
   </data>
   <data name="HMenuLogoutText" xml:space="preserve">
-    <value>Go to logout</value>
+    <value>Go to login</value>
   </data>
   <data name="HMenuSettingsText" xml:space="preserve">
     <value>Settings</value>

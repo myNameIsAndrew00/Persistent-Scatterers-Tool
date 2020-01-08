@@ -1,4 +1,10 @@
-﻿import { CardDrawer } from './card_drawer.js';
+﻿/*! Component: CardsManager
+ *
+ * This component is managing the cards (windows) inside the application
+ *
+ * */
+
+import { CardDrawer } from './card_drawer.js';
 
 class CardsManager {
     containerId = null;

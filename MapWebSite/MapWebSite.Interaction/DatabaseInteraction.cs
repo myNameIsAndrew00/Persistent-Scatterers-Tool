@@ -142,7 +142,7 @@ namespace MapWebSite.Interaction
             return this.userRepository.GetColorMapsFiltered(filter, filterValue, pageIndex, itemsPerPage);
         }
 
-        public IEnumerable<Tuple<string, string>> GetDataSets(DataSetsFilters filter, string filterValue, int pageIndex = 0, int itemsPerPage = 10)
+        public IEnumerable<Tuple<string, string, int>> GetDataSets(DataSetsFilters filter, string filterValue, int pageIndex = 0, int itemsPerPage = 10)
         {
             //TODO: handle errors or do more checks if needed
             return this.userRepository.GetDataSetsFiltered(filter, filterValue, pageIndex, itemsPerPage);
