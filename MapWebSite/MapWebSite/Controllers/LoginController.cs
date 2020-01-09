@@ -1,19 +1,21 @@
 ﻿using MapWebSite.Authentication;
 using MapWebSite.Interaction;
+using MapWebSite.Resources.text;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace MapWebSite.Controllers
 {
     public class LoginController : Controller
-    { 
+    {
         public ActionResult Index()
-        {         
-            return View();            
+        {
+            return View();
         }
 
         [HttpPost]
@@ -25,11 +27,11 @@ namespace MapWebSite.Controllers
             var signInManager = HttpContext.GetOwinContext().Get<SignInManager>();
 
             var signInStatus = signInManager.PasswordSignIn(username, password, true, false);
-    
+
             if (signInStatus == SignInStatus.Success)
 
                 //TODO: modify string with SecureString                      
-                    
+
                 return RedirectToAction("Index", "Home");
 
             else
@@ -59,20 +61,27 @@ namespace MapWebSite.Controllers
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return RedirectToAction("Index");
-            if(username == AnonymousUser.Get.Username)
+            if (username == AnonymousUser.Get.Username)
                 return RedirectToAction("Index");
 
             var createTask = HttpContext.GetOwinContext()
                                     .GetUserManager<UserManager>().CreateAsync(Authentication.User.Create(username, firstName, lastName),
-                                                                                password);
-
-            //TODO: return a better response
-            if (createTask.Result.Succeeded)
+                                                                            password);
+            //if an exception has been throwned return a failure message
+            try
             {
-                return RedirectToAction("Index");
+                createTask.Wait();
             }
+            catch 
+            {
+                return Json(new { message = TextDictionary.LRegisterFailMessage , type = "Failed"});
+            }
+            
 
-            return RedirectToAction("Index");
+            return Json(new { message = createTask.Result.Succeeded ? 
+                                          TextDictionary.LRegisterSuccessMessage
+                                        : TextDictionary.LRegisterFailMessage ,
+                               type = "Success" });
 
         }
 

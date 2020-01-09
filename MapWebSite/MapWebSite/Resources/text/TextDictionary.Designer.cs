@@ -524,11 +524,29 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create a new account. Change the username and try again please..
+        /// </summary>
+        public static string LRegisterFailMessage {
+            get {
+                return ResourceManager.GetString("LRegisterFailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register to use the application. Enter the credentials bellow.
         /// </summary>
         public static string LRegisterMessage {
             get {
                 return ResourceManager.GetString("LRegisterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You registered with success!.
+        /// </summary>
+        public static string LRegisterSuccessMessage {
+            get {
+                return ResourceManager.GetString("LRegisterSuccessMessage", resourceCulture);
             }
         }
         

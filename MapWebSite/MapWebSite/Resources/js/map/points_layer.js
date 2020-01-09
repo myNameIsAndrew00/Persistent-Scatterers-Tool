@@ -8,7 +8,7 @@
 var oldColor = [180, 140, 140];
 var newColor = [255, 80, 80];
 
-import { map } from '../map.js';
+import { map } from './map.js';
  
 
 export class PointsLayer extends ol.layer.Vector {

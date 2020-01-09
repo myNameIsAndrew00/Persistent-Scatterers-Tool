@@ -131,7 +131,7 @@ namespace MapWebSite.Repository
         {
             try
             {
-                SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("InsertUser")
+                return (int)SqlExecutionInstance.ExecuteScalar(new SqlCommand("InsertUser")
                 {
                     CommandType = System.Data.CommandType.StoredProcedure
                 },
@@ -140,14 +140,15 @@ namespace MapWebSite.Repository
                                                     new SqlParameter("username", user.Username),
                                                     new SqlParameter("first_name", user.FirstName),
                                                     new SqlParameter("last_name", user.LastName) },
-                                                    new SqlConnection(this.connectionString));
+                                                    new SqlConnection(this.connectionString))
+                    == 1;
             }
             catch (Exception exception)
             {
                 //TODO: log exception
                 return false;
             }
-            return true;
+
         }
 
         public IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(ColorMapFilters filter, string filterValue, int pageIndex, int itemsPerPage)

@@ -4,8 +4,8 @@
  *
  * */
 
-import { SetColorPalette, colorPalette } from '../home.js';
-import { UpdatePointsLayer } from '../map.js';
+import { SetColorPalette } from '../home.js';
+import { UpdatePointsLayer } from '../map/map.js';
 import { Router, endpoints } from '../api/api_router.js';
 
 var __selected_palette_index = -1;

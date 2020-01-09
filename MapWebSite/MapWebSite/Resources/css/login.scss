@@ -22,9 +22,9 @@ body{
     text-align: center;
 
     input:invalid {
-        box-shadow: none;       
+        box-shadow: none;
     }
-     
+
 
     #register-form {
         input[type="text"],
@@ -35,6 +35,18 @@ body{
 
         .input-border {
             top: -4px;
+        }
+
+        .register-message {
+            font-weight: 200;
+        }
+
+        .register-success {
+            color: get_color(chromaGreen);
+        }
+
+        .register-error {
+            color: get_color(chromaRed);
         }
     }
 
@@ -53,7 +65,7 @@ body{
             transition: 0.3s;
         }
 
-        a:hover{
+        a:hover {
             color: get_color(chromaBlue);
         }
     }
@@ -69,6 +81,10 @@ body{
         width: 100px;
         margin: 5px;
     }
+}
+
+.error-message {
+    color: red;
 }
 
 .main-logo{

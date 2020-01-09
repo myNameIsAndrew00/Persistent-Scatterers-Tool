@@ -319,4 +319,10 @@
     <value>Hello</value>
     <comment>Message displayed on top bar</comment>
   </data>
+  <data name="LRegisterFailMessage" xml:space="preserve">
+    <value>Failed to create a new account. Change the username and try again please.</value>
+  </data>
+  <data name="LRegisterSuccessMessage" xml:space="preserve">
+    <value>You registered with success!</value>
+  </data>
 </root>

@@ -166,7 +166,7 @@ window.requestAnimationFrame(draw);
 /* Register / login handling */
 
 function changePage(pageName) {
-    event.preventDefault();
+    if(event !== undefined) event.preventDefault();
 
     var current = pageName == 'Register' ? $('#register-form') : $('#login-form');
     var previous = pageName == 'Register' ? $('#login-form') : $('#register-form');
@@ -174,5 +174,24 @@ function changePage(pageName) {
     current.removeClass('form-hidden');
     previous.addClass('form-hidden');
 
+}
 
+function register(loginPath) {
+    event.preventDefault();
+
+    $.ajax({
+        url: loginPath,
+        type: "POST",
+        data: {
+            username: $('#register-form').children('input[name="username"]').val(),
+            firstName: $('#register-form').children('input[name="firstName"]').val(),
+            lastName: $('#register-form').children('input[name="lastName"]').val(),
+            password: $('#register-form').children('input[name="password"]').val()
+        },
+        success: function (response) { 
+            $('#register-message').addClass(response.type != 'Success' ? 'register-error' : 'register-success');
+
+            $('#register-message').text(response.message);
+        }        
+    })
 }

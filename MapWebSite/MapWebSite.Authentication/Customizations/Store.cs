@@ -31,7 +31,8 @@ namespace MapWebSite.Authentication
 
         public Task CreateAsync(User user)
         {
-            return Task.FromResult(userRepository.InsertUser(user));           
+            if (!userRepository.InsertUser(user)) throw new Exception("Failed to insert the user");
+            return Task.FromResult(0);          
         }
 
         //unused

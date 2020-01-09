@@ -333,7 +333,7 @@
     <Content Include="Resources\js\settings\color_picker_color_list.js" />
     <Content Include="Resources\js\home.js" />
     <Content Include="Resources\js\login.js" />
-    <Content Include="Resources\js\map.js" />
+    <Content Include="Resources\js\map\map.js" />
     <Content Include="Resources\js\menu.js" />
     <Content Include="Resources\js\plot.js" />
     <Content Include="Resources\js\settings\settings_points_upload.js" />

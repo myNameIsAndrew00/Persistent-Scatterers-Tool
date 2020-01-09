@@ -1,11 +1,11 @@
 ﻿@using MapWebSite.Resources.text
 
 @*Register container*@
-@using (Html.BeginForm("Register", "Login", FormMethod.Post, new { @class = "form form-hidden", @id = "register-form" }))
-{
+<form class="form form-hidden" id="register-form">
+
     <h1 class="main-title">@TextDictionary.LRegisterTitle</h1>
     <p>
-        @Html.Raw(TextDictionary.LRegisterMessage)
+        @Html.Label("register-message", TextDictionary.LRegisterMessage, new { id = "register-message", @class = "register-message" })
     </p>
 
     <input class="default-input" placeholder="@TextDictionary.LUsernameInput" name="username" type="text" required>
@@ -22,7 +22,8 @@
 
     <div class="button-group">
         <button class="default-button" onclick="changePage('Login')">@TextDictionary.LBackButton</button>
-        <input class="default-button" type="submit" value="@TextDictionary.LSubmitRegisterButton">
+        <button class="default-button" onclick="register('@this.Url.Action("Register", "Login")')">@TextDictionary.LSubmitRegisterButton</button>
     </div>
 
-}
+
+</form>

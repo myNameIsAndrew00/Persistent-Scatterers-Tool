@@ -5,13 +5,13 @@
  * */
 
 import { Router, endpoints } from '../api/api_router.js';
-import { UpdatePointsLayer } from '../map.js';
+import { UpdatePointsLayer } from '../map/map.js';
 
 const settingsLayerContainerId = '#points-settings-layer-container-content';
 
 /** Dataset request to fill the table **/
 
-/** Use this class the model a dataset of points inside the table*/
+/** Use this class to model a dataset of points inside the table*/
 class PointsDataset {
 
     constructor(username, datasetName) {
@@ -88,19 +88,21 @@ function fillTable(datasets, table) {
         useButton.onclick = function () {
             useDataset(username, datasetName); 
         };
-
-        var previewButton = document.createElement('button');
-        previewButton.classList.add('preview');
-        previewButton.innerText = $('#_preview-dataset-button-text').val();
-
-        return { useButton, previewButton };
-
+         
+        return { useButton };
     }
 
 
     for (var i = 0; i < datasets.length; i++) {
         var row = document.createElement('tr');
+        var hiddenInput = document.createElement('input');
+
+
         row.id = 'user_dataset_' + datasets[i].Item1 + '_' + datasets[i].Item2;
+        hiddenInput.id = row.id + '_id';
+        hiddenInput.name = hiddenInput.id;     
+        hiddenInput.value = datasets[i].Item3; //store the value of dataset
+        hiddenInput.type = 'hidden';
 
         var usernameColumn = document.createElement('td');
         usernameColumn.innerText = datasets[i].Item1;
@@ -111,9 +113,8 @@ function fillTable(datasets, table) {
         var buttonsColumn = document.createElement('td');
         var buttons = buildButtonsColumn(datasets[i].Item1, datasets[i].Item2);
 
-
-        buttonsColumn.appendChild(buttons.useButton);
-        buttonsColumn.appendChild(buttons.previewButton);
+        
+        buttonsColumn.appendChild(buttons.useButton); 
 
         row.appendChild(usernameColumn);
         row.appendChild(datasetNameColumn);
@@ -125,6 +126,7 @@ function fillTable(datasets, table) {
 
 
         table.appendChild(row);
+        table.appendChild(hiddenInput);
     }
 }
 

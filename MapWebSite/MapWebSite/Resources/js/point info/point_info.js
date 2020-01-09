@@ -6,7 +6,7 @@
 
 import { PlotDrawer } from '../plot.js';
 import { CardsManager } from './cards_manager.js';
-import { UnselectFeatureOnMap } from '../map.js';
+import { UnselectFeatureOnMap } from '../map/map.js';
 
 var cardsManager = new CardsManager('map-container');
 var currentDrawer = null;
