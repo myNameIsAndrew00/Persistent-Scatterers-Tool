@@ -125,25 +125,34 @@ function fillTable(colorPalettes, table) {
 
 }
 
-window.loadMorePalettes = function loadMorePalettes(resetPageIndex) {
-    var table = $(settingsLayerContainerId).find('#ps_left')[0];
-    if (resetPageIndex) resetTable(table);
+//this variable is used internally to check if a user is writing in the textbox
+var writing = 0;
+window.loadMorePalettes = function loadMorePalettes(resetPageIndex) {   
+    var endWriting = ++writing;
 
-    if (table.offsetHeight + table.scrollTop == table.scrollHeight) {
-        var filterValue = $(settingsLayerContainerId).find('#colorPaletteSearchValue')[0];
-        var pageIndex = $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0];
-        var filter = $(settingsLayerContainerId).find('#colorPaletteFilterValue')[0];
+    setTimeout(function () {
+        if (endWriting != writing) return;
 
-        Router.Get(endpoints.PointsSettingsApi.GetColorPaletteList,
-            { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
-            function (palette) {
-                if (palette.length)
-                    $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0].value = parseInt(pageIndex.value) + 1;
+        var table = $(settingsLayerContainerId).find('#ps_left')[0];
+        if (resetPageIndex) resetTable(table);
 
-                //fill the table tbody with rows
-                fillTable(palette, table.children[0].children[0]);
-            });
-    }
+        if (table.offsetHeight + table.scrollTop == table.scrollHeight) {
+            var filterValue = $(settingsLayerContainerId).find('#colorPaletteSearchValue')[0];
+            var pageIndex = $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0];
+            var filter = $(settingsLayerContainerId).find('#colorPaletteFilterValue')[0];
+
+            Router.Get(endpoints.PointsSettingsApi.GetColorPaletteList,
+                { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
+                function (palette) {
+                    if (palette.length)
+                        $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0].value = parseInt(pageIndex.value) + 1;
+
+                    //fill the table tbody with rows
+                    fillTable(palette, table.children[0].children[0]);
+                });
+        }
+    },
+        400);
 }
 
 

@@ -130,28 +130,37 @@ function fillTable(datasets, table) {
     }
 }
 
-window.loadMorePointsDatasets = function loadMorePointsDatasets(resetPageIndex) {
-    var table = $(settingsLayerContainerId).find('#ps_left')[0];
-    if (resetPageIndex) resetTable(table);
+//this variable is used internally to check if a user is writing in the textbox
+var writing = 0;
+window.loadMorePointsDatasets = function loadMorePointsDatasets(resetPageIndex) { 
+    var endWriting = ++writing;
 
+    setTimeout(
+        function () {
+            if (endWriting != writing) return;
 
+            var table = $(settingsLayerContainerId).find('#ps_left')[0];
+            if (resetPageIndex) resetTable(table);
 
-    if (table.offsetHeight + table.scrollTop == table.scrollHeight) {
-        var filterValue = $(settingsLayerContainerId).find('#datasetSearchValue')[0];
-        var pageIndex = $(settingsLayerContainerId).find('#currentDatasetIndex')[0];
-        var filter = $(settingsLayerContainerId).find('#datasetFilterValue')[0];
+            if (table.offsetHeight + table.scrollTop == table.scrollHeight) {
+                var filterValue = $(settingsLayerContainerId).find('#datasetSearchValue')[0];
+                var pageIndex = $(settingsLayerContainerId).find('#currentDatasetIndex')[0];
+                var filter = $(settingsLayerContainerId).find('#datasetFilterValue')[0];
 
-        Router.Get(
-            endpoints.PointsSettingsApi.GetDatasetsList,
-            { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
-            function (datasets) {
-                if (datasets.length)
-                    $(settingsLayerContainerId).find('#currentDatasetIndex')[0].value = parseInt(pageIndex.value) + 1;
+                Router.Get(
+                    endpoints.PointsSettingsApi.GetDatasetsList,
+                    { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
+                    function (datasets) {
+                        if (datasets.length)
+                            $(settingsLayerContainerId).find('#currentDatasetIndex')[0].value = parseInt(pageIndex.value) + 1;
 
-                //fill the table tbody with rows
-                fillTable(datasets, table.children[0].children[0]);
-            });
-    }
+                        //fill the table tbody with rows
+                        fillTable(datasets, table.children[0].children[0]);
+                    });
+            }
+        },
+        400
+    )
 }
 
 export function UpdateSelectedDatasetLayout() {
