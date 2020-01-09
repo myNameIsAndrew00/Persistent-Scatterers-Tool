@@ -43,13 +43,12 @@ namespace MapWebSite.Controllers
                                               decimal zoomLevel,
                                               string username,
                                               string datasetName)
-        {
-            //TODO: change the user and the dataset name
+        { 
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
             
-            //zoomLevel is not required anymore
-            var point = databaseInteractionHandler.RequestPointDetails(username,
-                                                                       datasetName, 
+            //*zoomLevel is not required anymore
+            var point = databaseInteractionHandler.RequestPointDetails(datasetName,
+                                                                       username, 
                                                                        0,
                                                                        new BasicPoint()
                                                                        {

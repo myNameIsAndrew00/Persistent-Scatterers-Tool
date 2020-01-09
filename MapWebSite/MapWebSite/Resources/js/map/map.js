@@ -240,6 +240,9 @@ export function ClearMap() {
 }
 
 function loadDataPoints(pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo) {
+    //do not load any points if the username and dataset is not set 
+    if (SelectedDataset.username === null && SelectedDataset.datasetName === null) return;
+
     var existingRegions = pointsRegionsManager.GetRegions(
         {
             lat: pLatitudeFrom,

@@ -27,7 +27,7 @@ window.getScript = function getScript(node, scriptServerPath) {
 }
 
 
-/*colorPalette Used*/
+/*colorPalette used default*/
 export var colorPalette = [{
     Color: '#33ff00',
     Left: 0.0,
