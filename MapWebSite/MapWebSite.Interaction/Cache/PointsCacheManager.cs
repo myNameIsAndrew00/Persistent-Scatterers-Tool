@@ -7,7 +7,7 @@ using System.Runtime.Caching;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapWebSite.Interaction
+namespace MapWebSite.Domain
 {
     using Coordinates = Tuple<
                 Tuple<decimal, decimal>,

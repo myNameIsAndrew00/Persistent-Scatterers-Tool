@@ -19,6 +19,8 @@ namespace MapWebSite
             WebApiConfig.Register(GlobalConfiguration.Configuration); 
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            Domain.DatabaseInteractionHandler.Initialise();
         }
     }
 }

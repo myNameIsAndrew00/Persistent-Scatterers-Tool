@@ -18,7 +18,12 @@ namespace MapWebSite.Repository
     {
         private CassandraExecutionInstance executionInstance = null;
 
-        public static CassandraDataPointsRepository Instance { get; } = new CassandraDataPointsRepository();
+        public static  CassandraDataPointsRepository Instance { get; set; } 
+
+        public static void Initialise()
+        {
+            Instance = new CassandraDataPointsRepository();
+        }
 
         private CassandraDataPointsRepository()
         {

@@ -1,5 +1,5 @@
 ﻿using MapWebSite.Authentication;
-using MapWebSite.Interaction;
+using MapWebSite.Domain;
 using MapWebSite.Resources.text;
 using Microsoft.AspNet.Identity.Owin;
 using System;

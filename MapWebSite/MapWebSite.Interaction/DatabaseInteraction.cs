@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks; 
 
-namespace MapWebSite.Interaction
+namespace MapWebSite.Domain
 {
     using Pair = Tuple<decimal, decimal>;
     using Coordinates = Tuple<
@@ -18,6 +18,7 @@ namespace MapWebSite.Interaction
 
     using PointsZonePair = Tuple<IEnumerable<BasicPoint>, string, bool>;
 
+  
    
     /// <summary>
     /// Provides methods for interacting with the database 
@@ -29,6 +30,14 @@ namespace MapWebSite.Interaction
         private readonly IUserRepository userRepository;
 
         private readonly IDataPointsRepository dataPointsRepository;
+
+        /// <summary>
+        /// Use this method to initialise the any database connections
+        /// </summary>
+        public static void Initialise()
+        {
+            CassandraDataPointsRepository.Initialise();
+        }
 
         public DatabaseInteractionHandler()
         {

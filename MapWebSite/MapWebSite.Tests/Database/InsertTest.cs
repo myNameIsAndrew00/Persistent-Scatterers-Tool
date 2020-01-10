@@ -1,5 +1,5 @@
 ﻿using MapWebSite.Core.DataPoints;
-using MapWebSite.Interaction;
+using MapWebSite.Domain;
 using MapWebSite.Model;
 using MapWebSite.Repository;
 using MapWebSite.Repository.Entities;

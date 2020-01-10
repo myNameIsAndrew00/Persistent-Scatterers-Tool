@@ -6,7 +6,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapWebSite.Interaction
+namespace MapWebSite.Domain
 {
     public class SiteIdentity : IIdentity
     {

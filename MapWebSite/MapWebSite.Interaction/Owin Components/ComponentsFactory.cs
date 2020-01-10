@@ -3,7 +3,7 @@ using MapWebSite.Repository;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 
-namespace MapWebSite.Interaction.Owin
+namespace MapWebSite.Domain.Owin
 {
     public static class ComponentsFactory
     {

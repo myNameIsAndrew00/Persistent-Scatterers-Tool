@@ -1,5 +1,5 @@
 ﻿using MapWebSite.Core;
-using MapWebSite.Interaction;
+using MapWebSite.Domain;
 using MapWebSite.Model;
 using Microsoft.AspNet.SignalR;
 using System;

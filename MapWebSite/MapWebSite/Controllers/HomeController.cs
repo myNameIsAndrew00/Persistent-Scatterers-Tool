@@ -1,6 +1,6 @@
 ﻿using MapWebSite.Core;
 using MapWebSite.HtmlHelpers;
-using MapWebSite.Interaction;
+using MapWebSite.Domain;
 using MapWebSite.Model; 
 using System;
 using System.Collections;

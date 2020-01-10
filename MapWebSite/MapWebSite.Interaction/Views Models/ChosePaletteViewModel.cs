@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapWebSite.Interaction.ViewModel
+namespace MapWebSite.Domain.ViewModel
 {
     using UserColorMap = Tuple<string, ColorMap>;
 

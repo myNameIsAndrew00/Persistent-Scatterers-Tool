@@ -1,5 +1,5 @@
 ﻿@using MapWebSite.Resources.text
-@model  MapWebSite.Interaction.ViewModel.ChosePaletteViewModel
+@model  MapWebSite.Domain.ViewModel.ChosePaletteViewModel
 
 @{
     Layout = null;
@@ -15,7 +15,7 @@
                          new { id = "colorPaletteFilterValue", onchange = "loadMorePalettes(true)" })
 
         <input type="search" id="colorPaletteSearchValue" placeholder="@TextDictionary.HPSCPSearchText" onkeyup="loadMorePalettes(true)" />
-        <input type="hidden" id="colorPalettesPerPage" value="@MapWebSite.Interaction.ViewModel.ChosePaletteViewModel.ColorPalettesPerPage" />
+        <input type="hidden" id="colorPalettesPerPage" value="@MapWebSite.Domain.ViewModel.ChosePaletteViewModel.ColorPalettesPerPage" />
         <input type="hidden" id="colorsTableColorsPerRow" value="@Model.ColorsPerRow" />
         <input type="hidden" id="currentColorPaletteIndex" value="1" />
     </div>

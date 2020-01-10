@@ -1,7 +1,7 @@
 ﻿using MapWebSite.Authentication;
 using MapWebSite.Core;
-using MapWebSite.Interaction;
-using MapWebSite.Interaction.ViewModel;
+using MapWebSite.Domain;
+using MapWebSite.Domain.ViewModel;
 using MapWebSite.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;

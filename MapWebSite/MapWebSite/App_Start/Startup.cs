@@ -20,7 +20,7 @@ namespace MapWebSite
         {
             /*Register the authentication component to the application*/
 
-            app.CreatePerOwinContext<UserManager>(Interaction.Owin.ComponentsFactory.CreateUserManager);
+            app.CreatePerOwinContext<UserManager>(Domain.Owin.ComponentsFactory.CreateUserManager);
             app.CreatePerOwinContext<SignInManager>(SignInManager.Create);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions

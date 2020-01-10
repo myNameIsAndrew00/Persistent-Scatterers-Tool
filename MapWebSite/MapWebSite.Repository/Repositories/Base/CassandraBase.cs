@@ -18,6 +18,7 @@ namespace MapWebSite.Repository
            
             server = ConfigurationManager.AppSettings["CassandraServer"];
             keyspace = ConfigurationManager.AppSettings["CassandraKeyspace"];
+
         }
     }
 }

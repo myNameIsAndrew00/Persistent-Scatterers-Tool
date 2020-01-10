@@ -1,5 +1,5 @@
 ﻿using MapWebSite.HtmlHelpers;
-using MapWebSite.Interaction;
+using MapWebSite.Domain;
 using MapWebSite.Model;
 using Newtonsoft.Json.Linq;
 using System;

@@ -9,8 +9,12 @@
 
  var canvasContext = document.getElementById('canvas').getContext("2d");
 
-/*Drawer for circles effect*/
-
+/*Drawer for circles effect section*/
+/**
+ * 
+ * This class handle the circle which is displayed
+ * 
+ * */
  class Circle{
      constructor(positionX, positionY, radius){            
         this.positionX = positionX;
@@ -40,7 +44,11 @@
 
  };
 
-
+/**
+ * 
+ * This represents a arc which is displayed
+ * 
+ * */
  class Arc{
      constructor(sourceX, sourceY, destinationX, destinationY){
          this.sourceX = sourceX;
@@ -69,6 +77,9 @@
 
  }
 
+/*
+ * This class handles a wave which is displayed on screen background (uses circle class)
+ * */
  class Wave{    
     constructor(positionX, positionY, waveMaxScale, circlesCount){
         this.arc = null;
@@ -148,7 +159,9 @@
  var wavesCount = 5;
  for(var i =0; i < wavesCount; i++)
     waves[ i ] = new Wave();
- 
+ /**
+  * This function draw the waves in background
+  * */
  function draw(){ 
 
     canvasContext.clearRect(0,0,window.innerWidth, window.innerHeight);
@@ -163,7 +176,11 @@
 window.requestAnimationFrame(draw);
 
 
-/* Register / login handling */
+/* Register / login handling section*/
+/**
+ * This function is responsable for changing the page displayed on login (register or login)
+ * @param {string} pageName represents the page which must be displayed (posible values: 'Register' and 'Login')
+ */
 
 function changePage(pageName) {
     if(event !== undefined) event.preventDefault();
@@ -176,11 +193,16 @@ function changePage(pageName) {
 
 }
 
-function register(loginPath) {
+/**
+ * 
+ * This function handles the register request on register button pressed
+ * @param {string} registerPath the path to the uri which require register data
+ */
+function register(registerPath) {
     event.preventDefault();
 
     $.ajax({
-        url: loginPath,
+        url: registerPath,
         type: "POST",
         data: {
             username: $('#register-form').children('input[name="username"]').val(),
@@ -189,7 +211,9 @@ function register(loginPath) {
             password: $('#register-form').children('input[name="password"]').val()
         },
         success: function (response) { 
+            //change the visual color of the message and display the message
             $('#register-message').addClass(response.type != 'Success' ? 'register-error' : 'register-success');
+            $('#register-message').removeClass(response.type != 'Success' ? 'register-success' : 'register-error');
 
             $('#register-message').text(response.message);
         }        
