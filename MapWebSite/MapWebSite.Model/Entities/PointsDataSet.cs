@@ -6,11 +6,26 @@ using System.Runtime.Serialization;
 
 namespace MapWebSite.Model
 {
-    
+    /// <summary>
+    /// Model used for basic data of points data set
+    /// </summary>
+    public class PointsDataSetBase
+    {
+        public int ID { get; set; }
+
+        public string Username { get; set; }
+
+        public string DatasetName { get; set; }
+
+        public DatasetStatus Status { get; set; }
+
+        public bool IsValid => Status == DatasetStatus.Generated;
+    }
+
     /// <summary>
     /// Model used for points data set
     /// </summary>
-    public class PointsDataSet
+    public class PointsDataSet : PointsDataSetBase
     {
         public int ID { get; set; }
 
@@ -21,6 +36,7 @@ namespace MapWebSite.Model
         public IEnumerable<Point> Points { get; set; }
 
     }
+
     [JsonObject(MemberSerialization.OptIn)]
     [DataContract]
     public class BasicPoint

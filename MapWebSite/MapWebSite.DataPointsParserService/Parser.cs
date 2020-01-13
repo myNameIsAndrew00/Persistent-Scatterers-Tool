@@ -18,6 +18,12 @@ using System.Timers;
 
 namespace MapWebSite.DataPointsParserService
 {
+    /// <summary>
+    /// Represents a parser service which process csv files to create points in cassandra database. 
+    /// Files are uploaded by users in a directory configured in app.config.
+    /// The datasets header data exists in the database with the status 'Uploaded'.
+    /// After the points are inserted in database, the status of the dataset is changed in 'Generated'.
+    /// </summary>
     public partial class Parser : ServiceBase
     {
 
@@ -112,13 +118,14 @@ namespace MapWebSite.DataPointsParserService
 
             (pointsSource as TxtDataPointsSource).HeaderFile = ConfigurationManager.AppSettings["DataSetsHeaderFile"];
             (pointsSource as TxtDataPointsSource).DisplacementsFile = fileName;
-            (pointsSource as TxtDataPointsSource).LatitudeZone = 'T'; //TODO: modify here
-            (pointsSource as TxtDataPointsSource).Zone = 35;          //TODO: modify here
+            (pointsSource as TxtDataPointsSource).LatitudeZone = 'T'; //TODO: modify here. This can be read from database
+            (pointsSource as TxtDataPointsSource).Zone = 35;          //TODO: modify here. This can be read from database
 
             PointsDataSet dataset = pointsSource.CreateDataSet(datasetName);
 
-            dataset.ID = this.userRepository.CreateUserPointsDataset(username, dataset.Name);
-            if (dataset.ID == -1) throw new Exception($"Failed to find create dataset with the name {dataset.Name} for user {username} ");
+            //get the id of the dataset which has been processed
+            dataset.ID = this.userRepository.GetDatasetID(username, dataset.Name);
+            if (dataset.ID == -1) throw new Exception($"Failed to find create / dataset with the name {dataset.Name} for user {username} ");
 
             IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
             PointsDataSet[] zoomedDataSets = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
@@ -126,6 +133,9 @@ namespace MapWebSite.DataPointsParserService
             Task insertTask = this.dataPointsRepository.InsertPointsDatasets(dataset, zoomedDataSets);
 
             insertTask.Wait();
+
+            //update the status of the dataset which has been processed
+            this.userRepository.UpdateDatasetStatus(dataset.Name, DatasetStatus.Generated, username);
         }
 
 

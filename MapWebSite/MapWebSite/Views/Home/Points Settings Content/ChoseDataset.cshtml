@@ -23,17 +23,19 @@
             <tr class="table-header">
                 <th><object width="14px" height="35px" type="image/svg+xml" data="~/Resources/resources/icons/user_default_icon.svg"></object></th>
                 <th>Dataset Name</th>
-                <th>Actions</th>
+                <th>Status</th>
+                <th>Actions</th>                
             </tr>
 
             @foreach (var item in Model.Datasets)
             {
-                @Html.Hidden($"user_dataset_{item.Item1}_{item.Item2}_id", item.Item3)
-                <tr id="user_dataset_@(item.Item1)_@(item.Item2)">
-                    <td>@item.Item1</td>
-                    <td>@item.Item2</td>
+                @Html.Hidden($"user_dataset_{item.Username}_{item.DatasetName}_id", item.ID)
+                <tr id="user_dataset_@(item.Username)_@(item.DatasetName)">
+                    <td>@item.Username</td>
+                    <td>@item.DatasetName</td>
+                    <td>@item.Status.GetEnumString()</td>
                     <td>
-                        <button class="use" onclick="useDataset('@item.Item1','@item.Item2')">@TextDictionary.HPSCDUseButton</button>
+                        <button class="use" disabled="@(!item.IsValid)" onclick="useDataset('@item.Username','@item.DatasetName')">@TextDictionary.HPSCDUseButton</button>
                     </td>
                 </tr>
             }

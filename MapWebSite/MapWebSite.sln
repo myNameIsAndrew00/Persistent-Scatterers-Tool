@@ -33,7 +33,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapWebSite.Authentication",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{077DF803-FA68-4F96-B7A2-1DDC1EEA70E3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapWebSiteData Services", "MapWebSiteData Services", "{04357A52-9F1F-4721-A2E8-9E60034EFB4D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapWebSite.Data Services", "MapWebSite.Data Services", "{04357A52-9F1F-4721-A2E8-9E60034EFB4D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.DataPointsParserService", "MapWebSite.DataPointsParserService\MapWebSite.DataPointsParserService.csproj", "{131C0E23-29BA-48DA-8F5F-0F9A0D40EF87}"
 EndProject

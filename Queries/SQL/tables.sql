@@ -48,17 +48,33 @@ create table UsersRoles(
 )
 
 
+create table DatasetsStatuses
+  (
+	status_id int not null,
+	name nvarchar(100) not null,
+	primary key(status_id)
+)
+
+
+insert into DatasetsStatuses(status_id, name)
+values (1, 'Created'),
+		   (2, 'Generated'),
+		   (3, 'Pending'),
+		   (4, 'UploadFail')
+
 /*this table holds the data points loaded by user in the application*/
 
 create table DataSet(
 	data_set_id int identity(1,1) not null,
 	user_id int not null,
 	dataset_name varchar(100) not null,
+	status_id int,
 	
 	unique nonclustered (user_id,dataset_name),
 
 	primary key (data_set_id),
-	foreign key (user_id) references Users(user_id) on delete cascade
+	foreign key (user_id) references Users(user_id) on delete cascade,
+	foreign key (status_id) references DatasetsStatuses(status_id)
 )
 
 

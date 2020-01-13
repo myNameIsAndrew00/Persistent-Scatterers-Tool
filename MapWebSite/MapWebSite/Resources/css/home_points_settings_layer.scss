@@ -3,12 +3,12 @@
 #points-settings-layer-container {
     position: absolute;
     padding: 20px;
-    margin: 0; 
+    margin: 0;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     transition: width 300ms ease-in-out 0.2s, height 0.3s, opacity 0.3s;
-    
+
 
     .close_points_setting_layer_button {
         position: fixed;
@@ -105,6 +105,14 @@
                     font-size: 11px;
                     color: white;
                     background-color: get_color(chromaGreen);
+                }
+
+                .use:disabled {
+                    background: get_color(mediumGray);
+                }
+
+                .use:disabled:hover {
+                    background: get_color(mediumGray);
                 }
 
                 .preview {

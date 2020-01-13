@@ -283,9 +283,9 @@ namespace MapWebSite.Repository
 
         }
 
-        public IEnumerable<Tuple<string, string, int>> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
+        public IEnumerable<PointsDataSetBase> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
         {
-            List<Tuple<string, string, int>> result = new List<Tuple<string, string, int>>();
+            List<PointsDataSetBase> result = new List<PointsDataSetBase>();
 
             using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetDataSetsFiltered")
             { CommandType = System.Data.CommandType.StoredProcedure },
@@ -299,14 +299,42 @@ namespace MapWebSite.Repository
                                                new SqlConnection(this.connectionString)))
             {
                 foreach (DataRow row in colorMapsResult.Tables[0].Rows)
-                    result.Add(new Tuple<string, string, int>(
-                        (string)row["username"],
-                        (string)row["dataset_name"],
-                        (int)row["dataset_id"]));
+                {
+                    result.Add(new PointsDataSetBase()
+                    {
+                        Username = (string)row["username"],
+                        DatasetName = (string)row["dataset_name"],
+                        ID = (int)row["dataset_id"],
+                        Status = row["status_id"] == DBNull.Value ? DatasetStatus.None : (DatasetStatus) ((int)row["status_id"])
+                    }); ;
+                     
+                }
             }
 
             return result;
+        }
 
+        public bool UpdateDatasetStatus(string datasetName, DatasetStatus status, string username)
+        {
+            try
+            {
+                SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("UpdatePointsDatasetStatus")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                    new SqlParameter[]{
+                                                        new SqlParameter("datasetName", datasetName),
+                                                        new SqlParameter("statusId",(int)status),
+                                                        new SqlParameter("username",username)
+                                                    },
+                                                    new SqlConnection(this.connectionString));
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -60,6 +60,17 @@ namespace MapWebSite.Core.Database
 
         string GetColorMapSerialization(string username, string paletteName);
 
-        IEnumerable<Tuple<string, string, int>> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
+        IEnumerable<PointsDataSetBase> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
+
+        /// <summary>
+        /// Use this method to update the status of an existing dataset
+        /// </summary>
+        /// <param name="datasetName">The name of the dataset which must change the status</param>
+        /// <param name="status">The new status of the dataset</param>
+        /// <param name="username">The owner of the dataset </param>
+        /// <returns></returns>
+        bool UpdateDatasetStatus(string datasetName, DatasetStatus status, string username);       
+
+        
     }
 }

@@ -95,10 +95,14 @@ begin
 			--Get the user id
 			select @user_id = U.user_id
 			from Users as U where U.username = @username
+			
+			--Get the status id of 'Pending' status
+			select @status_id = DS.status_id
+			from DatasetsStatuses as DS where DS.name = 'Pending' 
 
 			--Insert data into the dataset 
-			insert into DataSets(user_id, dataset_name)
-			values (@user_id, @dataset_name)
+			insert into DataSets(user_id, dataset_name, status_id)
+			values (@user_id, @dataset_name, @status_id)
 			
 			select SCOPE_IDENTITY() as ID;
 		commit

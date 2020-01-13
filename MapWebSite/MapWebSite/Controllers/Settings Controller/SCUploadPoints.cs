@@ -31,9 +31,12 @@ namespace MapWebSite.Controllers
         [HttpPost]
         public HttpResponseMessage UploadFileChunk()
         {
+            var databaseInteractionHandler = new DatabaseInteractionHandler();
+
             string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{RouteConfig.CurrentUser.Username}";
-            if (!Directory.Exists(directoryName))
+            if (!Directory.Exists(directoryName))           
                 Directory.CreateDirectory(directoryName);
+            
 
             foreach (string file in HttpContext.Current.Request.Files)
             {
@@ -41,10 +44,18 @@ namespace MapWebSite.Controllers
 
                 string[] checkoutData = FileData.FileName.Split(new char[] { '_' }, 2, StringSplitOptions.RemoveEmptyEntries);
 
+                //fileFolderName represents the path to the folder where the dataset will be stored
                 string fileFolderName = $"{directoryName}\\{checkoutData[0]}";
 
-                if (!Directory.Exists(fileFolderName)) Directory.CreateDirectory(fileFolderName);
-
+                //If the directory for the requested file doesnt has an entry in databse, create one
+                if (!Directory.Exists(fileFolderName))
+                {
+                    Directory.CreateDirectory(fileFolderName);
+                    databaseInteractionHandler.CreateDataSet(
+                       checkoutData[0],
+                       RouteConfig.CurrentUser.Username
+                    );    
+                }
 
 
                 if (FileData?.ContentLength > 0)
@@ -95,6 +106,11 @@ namespace MapWebSite.Controllers
                         fileChunk.CopyTo(finalFile);
                     }
                 }
+
+            //TODO: handle an error if any problems are encountered
+            new DatabaseInteractionHandler().UpdateDatasetStatus(fileName,
+                                                DatasetStatus.Uploaded,
+                                                RouteConfig.CurrentUser.Username);
 
             return new HttpResponseMessage()
             {

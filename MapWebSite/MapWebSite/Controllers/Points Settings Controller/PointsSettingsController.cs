@@ -5,7 +5,9 @@ using MapWebSite.Domain.ViewModel;
 using MapWebSite.Model;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
@@ -55,7 +57,7 @@ namespace MapWebSite.Controllers
                         ChoseDatasetViewModel.DataPointsPerPage
                         )));
             }
-            catch
+            catch(Exception e)
             {
                 return View();
             }
@@ -104,13 +106,21 @@ namespace MapWebSite.Controllers
             var databaseInteractionHandler = new DatabaseInteractionHandler();
             var response = new HttpResponseMessage();
 
-            response.Content = new StringContent(
-                databaseInteractionHandler.GetDataSets(
+            var model = databaseInteractionHandler.GetDataSets(
                     filter,
                     filterValue ?? string.Empty,
                     pageIndex,
                     ChoseDatasetViewModel.DataPointsPerPage
-                )?.JSONSerialize());
+                )?.Select(dataset => new
+                {
+                    dataset.DatasetName,
+                    dataset.ID,
+                    dataset.Username,
+                    Status = dataset.Status.GetEnumString(),
+                    dataset.IsValid
+                });
+
+            response.Content = new StringContent(model?.JSONSerialize());
             response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
             return response;

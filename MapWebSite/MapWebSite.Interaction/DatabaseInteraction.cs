@@ -45,6 +45,22 @@ namespace MapWebSite.Domain
             dataPointsRepository = CassandraDataPointsRepository.Instance;
         }       
 
+        /// <summary>
+        /// Create a dataset in the database. Created dataset will wave status Pending 
+        /// </summary>
+        /// <param name="datasetName"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public bool CreateDataSet(string datasetName, string username)
+        {
+            int datasetId = this.userRepository.CreateUserPointsDataset(username, datasetName);
+            return datasetId != -1;
+        }
+
+        public bool UpdateDatasetStatus(string datasetName, DatasetStatus status, string username)
+        {
+            return this.userRepository.UpdateDatasetStatus(datasetName, status, username);
+        }
 
         [Obsolete("This method is implemented in service")]
         /// <summary>
@@ -151,7 +167,7 @@ namespace MapWebSite.Domain
             return this.userRepository.GetColorMapsFiltered(filter, filterValue, pageIndex, itemsPerPage);
         }
 
-        public IEnumerable<Tuple<string, string, int>> GetDataSets(DataSetsFilters filter, string filterValue, int pageIndex = 0, int itemsPerPage = 10)
+        public IEnumerable<PointsDataSetBase> GetDataSets(DataSetsFilters filter, string filterValue, int pageIndex = 0, int itemsPerPage = 10)
         {
             //TODO: handle errors or do more checks if needed
             return this.userRepository.GetDataSetsFiltered(filter, filterValue, pageIndex, itemsPerPage);

@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace MapWebSite.Domain.ViewModel
 {
-    using UserDataset = Tuple<string, string, int>;
+   
 
     public class ChoseDatasetViewModel
     { 
         public static readonly int DataPointsPerPage = 10;
 
-        public IEnumerable<UserDataset> Datasets { get; } = null;
+        public IEnumerable<PointsDataSetBase> Datasets { get; } = null;
 
-        public ChoseDatasetViewModel(IEnumerable<UserDataset> usersDatasets)
+        public ChoseDatasetViewModel(IEnumerable<PointsDataSetBase> usersDatasets)
         {
             this.Datasets = usersDatasets;
         }

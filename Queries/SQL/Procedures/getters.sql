@@ -148,7 +148,8 @@ begin
 	select 
 		   U.username,
 		   DS.dataset_name,		
-		   DS.data_set_id as dataset_id
+		   DS.data_set_id as dataset_id,
+		   DS.status_id
 		from DataSets as DS
 		inner join Users as U
 		on DS.user_id = U.user_id 

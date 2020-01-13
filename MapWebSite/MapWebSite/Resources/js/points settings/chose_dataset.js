@@ -81,14 +81,15 @@ function resetTable(table) {
 function fillTable(datasets, table) {
 
 
-    function buildButtonsColumn(username, datasetName) {
+    function buildButtonsColumn(username, datasetName, isValid) {
         var useButton = document.createElement('button');
         useButton.classList.add('use');
         useButton.innerText = $('#_use-dataset-button-text').val();
         useButton.onclick = function () {
             useDataset(username, datasetName); 
         };
-         
+        useButton.disabled = !isValid;
+
         return { useButton };
     }
 
@@ -98,30 +99,34 @@ function fillTable(datasets, table) {
         var hiddenInput = document.createElement('input');
 
 
-        row.id = 'user_dataset_' + datasets[i].Item1 + '_' + datasets[i].Item2;
+        row.id = 'user_dataset_' + datasets[i].Username + '_' + datasets[i].DatasetName;
         hiddenInput.id = row.id + '_id';
         hiddenInput.name = hiddenInput.id;     
-        hiddenInput.value = datasets[i].Item3; //store the value of dataset
+        hiddenInput.value = datasets[i].ID; //store the value of dataset
         hiddenInput.type = 'hidden';
 
         var usernameColumn = document.createElement('td');
-        usernameColumn.innerText = datasets[i].Item1;
+        usernameColumn.innerText = datasets[i].Username;
 
         var datasetNameColumn = document.createElement('td');
-        datasetNameColumn.innerText = datasets[i].Item2;
+        datasetNameColumn.innerText = datasets[i].DatasetName;
+
+        var statusColumn = document.createElement('td');
+        statusColumn.innerText = datasets[i].Status;
 
         var buttonsColumn = document.createElement('td');
-        var buttons = buildButtonsColumn(datasets[i].Item1, datasets[i].Item2);
+        var buttons = buildButtonsColumn(datasets[i].Username, datasets[i].DatasetName, datasets[i].IsValid);
 
         
         buttonsColumn.appendChild(buttons.useButton); 
 
         row.appendChild(usernameColumn);
         row.appendChild(datasetNameColumn);
+        row.appendChild(statusColumn);
         row.appendChild(buttonsColumn);
 
         /*hover the row if the color palette is in use*/
-        if (SelectedDataset.username === datasets[i].Item1 && SelectedDataset.datasetName == datasets[i].Item2)
+        if (SelectedDataset.username === datasets[i].Username && SelectedDataset.datasetName == datasets[i].DatasetName)
             row.classList.add('selected-row');
 
 

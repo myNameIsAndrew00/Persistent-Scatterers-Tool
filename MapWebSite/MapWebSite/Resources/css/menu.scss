@@ -223,6 +223,17 @@
         padding: 10px;
         transition: 0.3s;
 
+        .pre-text-area {
+            position: absolute;
+            left: -80px;
+            top: 15px;
+
+            svg {
+                margin: 3px;
+                filter: drop-shadow(3px 1px 3px get_color(strongTransparentBlue));
+            }
+        }
+
         .text-area {
             display: table-cell;
             grid-area: left;
