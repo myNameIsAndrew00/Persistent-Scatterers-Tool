@@ -30,6 +30,8 @@
         button:hover {
             background: orange;
         }
+
+        
     }
 }
 
@@ -228,9 +230,28 @@
             left: -80px;
             top: 15px;
 
-            svg {
-                margin: 3px;
-                filter: drop-shadow(3px 1px 3px get_color(strongTransparentBlue));
+            button {
+                padding: 0;
+                background: none;
+
+
+                svg {
+                    margin: 3px;
+                    filter: drop-shadow(3px 1px 3px get_color(strongTransparentBlue));
+                }
+            }
+
+            button:hover {
+                background: none;
+
+                svg {
+                    .cls-2, .cls-4, .cls-13 {
+                        fill: get_color(strongTransparentBlue);
+                    }
+
+                    path, polyline {
+                    }
+                }
             }
         }
 
@@ -240,6 +261,18 @@
             font-size: 13px;
             margin: auto 0;
             vertical-align: middle;
+
+            label {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                font-weight: 100;
+                margin: 0;
+            }
+
+            .current-dataset-text {
+                width: 100px;
+            }
         }
 
         .buttons-area {

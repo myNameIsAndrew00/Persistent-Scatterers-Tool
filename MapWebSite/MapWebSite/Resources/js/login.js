@@ -201,6 +201,8 @@ function changePage(pageName) {
 function register(registerPath) {
     event.preventDefault();
 
+    //todo: further checks for user credentials
+
     $.ajax({
         url: registerPath,
         type: "POST",

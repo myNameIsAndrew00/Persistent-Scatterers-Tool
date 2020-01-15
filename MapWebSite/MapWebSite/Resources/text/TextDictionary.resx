@@ -325,4 +325,11 @@
   <data name="LRegisterSuccessMessage" xml:space="preserve">
     <value>You registered with success!</value>
   </data>
+  <data name="HTMDefaultDataset" xml:space="preserve">
+    <value>Unselected</value>
+    <comment>HTM --&gt; Home Top Menu</comment>
+  </data>
+  <data name="HTMSelectedDataset" xml:space="preserve">
+    <value>Dataset name:</value>
+  </data>
 </root>

@@ -27,7 +27,6 @@ namespace MapWebSite.Model
     /// </summary>
     public class PointsDataSet : PointsDataSetBase
     {
-        public int ID { get; set; }
 
         public string Name { get; set; }
 
@@ -70,7 +69,27 @@ namespace MapWebSite.Model
 
         [DataMember]
         [JsonProperty]
-        public decimal OptionalField { get; set; }
+        public decimal Height { get; set; }
+
+        [DataMember]
+        [JsonProperty]
+        public decimal DeformationRate { get; set; }
+
+        [DataMember]
+        [JsonProperty]
+        public decimal StandardDeviation { get; set; }
+
+        [DataMember]
+        [JsonProperty]
+        public decimal EstimatedHeight { get; set; }
+
+        [DataMember]
+        [JsonProperty]
+        public decimal EstimatedDeformationRate { get; set; }
+
+        [DataMember]
+        [JsonProperty]
+        public string Observations { get; set; }
 
     }
     [JsonObject(MemberSerialization.OptIn)]
@@ -82,24 +101,6 @@ namespace MapWebSite.Model
 
         [JsonProperty]
         public decimal ReferenceImageY { get; set; }
-
-        [JsonProperty]
-        public decimal Height { get; set; }
-
-        [JsonProperty]
-        public decimal DeformationRate { get; set; }
-
-        [JsonProperty]
-        public decimal StandardDeviation { get; set; }
-
-        [JsonProperty]
-        public decimal EstimatedHeight { get; set; }
-
-        [JsonProperty]
-        public decimal EstimatedDeformationRate { get; set; }
-
-        [JsonProperty]
-        public string Observations { get; set; }
 
         [JsonProperty]
         public List<Displacement> Displacements { get; set; }

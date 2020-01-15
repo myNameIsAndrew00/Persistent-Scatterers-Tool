@@ -18,8 +18,7 @@ namespace MapWebSite.Hubs
                                       decimal longitudeFrom, 
                                       decimal latitudeTo, 
                                       decimal longitudeTo, 
-                                      dynamic[] existingRegions, 
-                                      string optionalField,
+                                      dynamic[] existingRegions,
                                       string username,
                                       string datasetName)
         {
@@ -51,8 +50,7 @@ namespace MapWebSite.Hubs
                                       new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
                                       username,
                                       datasetName, 
-                                       existingRegionsDictionary,
-                                      (BasicPoint.BasicInfoOptionalField)Enum.Parse(typeof(BasicPoint.BasicInfoOptionalField), optionalField),
+                                       existingRegionsDictionary, 
                                       callback);
 
             Clients.Caller.PointsProcessedNotification();

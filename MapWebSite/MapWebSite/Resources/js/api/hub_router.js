@@ -34,7 +34,6 @@ class HubRouter {
         latitudeTo,
         longitudeTo,
         existingRegions,
-        optionalField,
         username,
         datasetName) {
 
@@ -47,7 +46,6 @@ class HubRouter {
             latitudeTo,
             longitudeTo,
             existingRegions,
-            optionalField,
             username,
             datasetName);
     }

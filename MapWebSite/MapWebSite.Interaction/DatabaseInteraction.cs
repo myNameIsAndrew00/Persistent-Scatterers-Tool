@@ -98,7 +98,6 @@ namespace MapWebSite.Domain
                                                      string username, 
                                                      string dataSet, 
                                                      Dictionary<string,int> regionsPointsCount,
-                                                     BasicPoint.BasicInfoOptionalField optionalField,
                                                      Action<IEnumerable<BasicPoint>,Tuple<string,int>,bool> callback)
         {
             Action<IEnumerable<BasicPoint>, string, bool> triggerCallback = (points, regionKey, filled) =>
@@ -109,6 +108,7 @@ namespace MapWebSite.Domain
                     callback(points.Skip(i * pointsPerBlock).Take(pointsPerBlock), null, filled);
             };
 
+            //todo: cache the datasetId and request maximum/minimum lat/long for optimizations
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
             if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
@@ -124,7 +124,7 @@ namespace MapWebSite.Domain
                 {
                     try
                     {
-                        var result = this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, 0, coordinate.Item1, coordinate.Item2, optionalField);
+                        var result = this.dataPointsRepository.GetDataPointsBasicInfo(dataSetID, 0, coordinate.Item1, coordinate.Item2);
 
                         string regionKey = PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, dataSetID, result);
 
@@ -150,7 +150,7 @@ namespace MapWebSite.Domain
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
             if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
-            //TODO: ignore zoom level
+            //TODO: ignore zoom level, delete it in further updates (*)
             
             return this.dataPointsRepository.GetPointDetails(dataSetID, zoomLevel, basicPoint);
         }

@@ -86,8 +86,12 @@
 
     <div id="top-menu" class="top-menu box">
         <div class="pre-text-area">
-            @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "25px", width = "25px" })
-            @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "25px", width = "25px" })
+            <button>
+                @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "25px", width = "25px" })
+            </button>
+            <button>
+                @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "25px", width = "25px" })
+            </button>
         </div>
         <div class="text-area">
             @if (RouteConfig.CurrentUser != null)
@@ -99,7 +103,9 @@
                 </b>
                 </div>               
             }
-            <div class="top-menu-item">Current data points</div>
+            @Html.Label(TextDictionary.HTMSelectedDataset, new { @class = "top-menu-item" })
+            @Html.Label(TextDictionary.HTMDefaultDataset, new { @class = "top-menu-item current-dataset-text", id = "current-dataset-text" })
+           
         </div>
 
         <div class="buttons-area"> 

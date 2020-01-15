@@ -23,8 +23,7 @@ namespace MapWebSite.Core.Database
         IEnumerable<BasicPoint> GetDataPointsBasicInfo(int dataSetID, 
                                                         int zoomLevel, 
                                                         Tuple<decimal, decimal> from, 
-                                                        Tuple<decimal, decimal> to,
-                                                        BasicPoint.BasicInfoOptionalField optionalField);
+                                                        Tuple<decimal, decimal> to);
 
         Point GetPointDetails(int dataSetID, int zoomLevel, BasicPoint basicPoint);
          

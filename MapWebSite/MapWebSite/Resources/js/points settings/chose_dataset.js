@@ -8,7 +8,8 @@ import { Router, endpoints } from '../api/api_router.js';
 import { UpdatePointsLayer } from '../map/map.js';
 
 const settingsLayerContainerId = '#points-settings-layer-container-content';
-
+const currentDatasetTextId = '#current-dataset-text';
+ 
 /** Dataset request to fill the table **/
 
 /** Use this class to model a dataset of points inside the table*/
@@ -56,6 +57,7 @@ window.useDataset = function useDataset(username, datasetName) {
     changeSelectedRowOnMenu(datasetRowId, true);
 
     SelectedDataset = new PointsDataset(username, datasetName);
+    $(currentDatasetTextId).text(datasetName);
 
     UpdatePointsLayer();
 }
@@ -66,7 +68,10 @@ window.useDataset = function useDataset(username, datasetName) {
 
 
 
-
+/**
+ * This function can be used to reset the content of the displayed table wihout removing the header
+ * @param {any} table
+ */
 function resetTable(table) {
     $(settingsLayerContainerId).find('#currentDatasetIndex')[0].value = 0;
     var tableHeader = table.children[0].children[0].children[0];
@@ -86,7 +91,7 @@ function fillTable(datasets, table) {
         useButton.classList.add('use');
         useButton.innerText = $('#_use-dataset-button-text').val();
         useButton.onclick = function () {
-            useDataset(username, datasetName); 
+            useDataset(username, datasetName);  
         };
         useButton.disabled = !isValid;
 
@@ -107,7 +112,7 @@ function fillTable(datasets, table) {
 
         var usernameColumn = document.createElement('td');
         usernameColumn.innerText = datasets[i].Username;
-
+          
         var datasetNameColumn = document.createElement('td');
         datasetNameColumn.innerText = datasets[i].DatasetName;
 

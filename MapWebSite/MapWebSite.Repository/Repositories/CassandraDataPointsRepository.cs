@@ -53,13 +53,12 @@ namespace MapWebSite.Repository
             return true;
         }
 
-        public IEnumerable<BasicPoint> GetDataPointsBasicInfo(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, BasicPoint.BasicInfoOptionalField optionalField)
-        {
-            string optionalFieldString = getCassandraFieldName(optionalField);
+        public IEnumerable<BasicPoint> GetDataPointsBasicInfo(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to)
+        { 
 
-            var dataRows = selectBasicPointsDataset(dataSetID, zoomLevel, from, to, optionalFieldString);
+            var dataRows = selectBasicPointsDataset(dataSetID, zoomLevel, from, to);
 
-            return convertRowSetToBasicPointList(dataRows, optionalFieldString);
+            return convertRowSetToBasicPointList(dataRows);
         }
 
 
@@ -118,14 +117,21 @@ namespace MapWebSite.Repository
             return true;
         }
 
-        private List<Row> selectBasicPointsDataset(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, string optionalField)
+        private List<Row> selectBasicPointsDataset(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to)
         {
             CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder()
             {
                 QueryType = CassandraQueryBuilder.QueryTypes.Select
             };
             queryBuilder.TableName = zoomLevel == 0 ? "points_by_dataset" : $"points_by_dataset_zoom_{zoomLevel}";
-            queryBuilder.SelectColumnNames = new List<string>() { "latitude", "longitude", "number", optionalField };
+            queryBuilder.SelectColumnNames = new List<string>() { "latitude", 
+                                                                  "longitude", 
+                                                                  "number", 
+                                                                  "height", 
+                                                                  "deformation_rate", 
+                                                                  "standard_deviation", 
+                                                                  "estimated_height", 
+                                                                  "estimated_deformation_rate" };
             queryBuilder.ClausesList.Add(new BuilderTuple("dataSetID", "dataset_id", CassandraQueryBuilder.Clauses.Equals));
             queryBuilder.ClausesList.Add(new BuilderTuple("leftLatitude", "latitude", CassandraQueryBuilder.Clauses.GreaterOrEqual));
             queryBuilder.ClausesList.Add(new BuilderTuple("leftLongitude", "longitude", CassandraQueryBuilder.Clauses.GreaterOrEqual));
@@ -174,8 +180,9 @@ namespace MapWebSite.Repository
         }
 
 
-        private IEnumerable<BasicPoint> convertRowSetToBasicPointList(List<Row> rowSet, string optionalField)
+        private IEnumerable<BasicPoint> convertRowSetToBasicPointList(List<Row> rowSet)
         {
+             
             ConcurrentBag<BasicPoint> result = new ConcurrentBag<BasicPoint>();
             Parallel.ForEach(rowSet, row =>
             {
@@ -184,7 +191,11 @@ namespace MapWebSite.Repository
                     Latitude = Convert.ToDecimal(row["latitude"]),
                     Longitude = Convert.ToDecimal(row["longitude"]),
                     Number = Convert.ToInt32(row["number"]),
-                    OptionalField = Convert.ToDecimal(row[optionalField])
+                    DeformationRate = Convert.ToDecimal(row["deformation_rate"]),
+                    EstimatedDeformationRate = Convert.ToDecimal(row["estimated_deformation_rate"]),
+                    EstimatedHeight = Convert.ToDecimal(row["estimated_height"]),
+                    StandardDeviation = Convert.ToDecimal(row["standard_deviation"]),
+                    Height = Convert.ToDecimal(row["height"])
                 });
             });
 
@@ -230,17 +241,7 @@ namespace MapWebSite.Repository
             return result;
         }
 
-
-        private string getCassandraFieldName(BasicPoint.BasicInfoOptionalField optionalField)
-        {
-            switch (optionalField)
-            {
-                case BasicPoint.BasicInfoOptionalField.DeformationRate: return "deformation_rate";
-                case BasicPoint.BasicInfoOptionalField.Height: return "height";
-                case BasicPoint.BasicInfoOptionalField.StandardDeviation: return "standard_deviation";
-            }
-            return null;
-        }
+         
 
         #endregion
     }

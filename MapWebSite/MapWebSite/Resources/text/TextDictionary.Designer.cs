@@ -443,6 +443,24 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unselected.
+        /// </summary>
+        public static string HTMDefaultDataset {
+            get {
+                return ResourceManager.GetString("HTMDefaultDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dataset name:.
+        /// </summary>
+        public static string HTMSelectedDataset {
+            get {
+                return ResourceManager.GetString("HTMSelectedDataset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string LBackButton {

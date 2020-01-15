@@ -42,13 +42,13 @@ hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) {
         points[i + index] = new ol.Feature({
             'geometry': new ol.geom.Point(
                 ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
-            'colorCriteria': requestedPoints[i].OptionalField
+            'colorCriteria': requestedPoints[i].Height
         });
         points[i + index].setId(requestedPoints[i].Number);
         points[i + index].ID = requestedPoints[i].Number;
         points[i + index].longitude = requestedPoints[i].Longitude;
         points[i + index].latitude = requestedPoints[i].Latitude;
-        points[i + index].color = buildStyleFromPalette(requestedPoints[i].OptionalField);
+        points[i + index].color = buildStyleFromPalette(requestedPoints[i].Height);
     }
 
     requestedPoints.splice(0, requestedPoints.length);
@@ -267,7 +267,6 @@ function loadDataPoints(pLatitudeFrom, pLongitudeFrom, pLatitudeTo, pLongitudeTo
         pLatitudeTo,
         pLongitudeTo,
         existingRegions,
-        'Height',
         SelectedDataset.username,
         SelectedDataset.datasetName
     );

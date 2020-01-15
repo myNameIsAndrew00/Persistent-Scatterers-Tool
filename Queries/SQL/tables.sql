@@ -57,18 +57,24 @@ create table DatasetsStatuses
 
 
 insert into DatasetsStatuses(status_id, name)
-values (1, 'Created'),
+values (1, 'Uploaded'),
 		   (2, 'Generated'),
 		   (3, 'Pending'),
 		   (4, 'UploadFail')
 
 /*this table holds the data points loaded by user in the application*/
 
-create table DataSet(
+create table DataSets(
 	data_set_id int identity(1,1) not null,
 	user_id int not null,
 	dataset_name varchar(100) not null,
 	status_id int,
+	
+	/*this fields are used for optimizations*/
+	minimum_latitude decimal, 
+	minimum_longitude decimal, 
+	maximum_latitude decimal, 
+	maximum_longitude decimal
 	
 	unique nonclustered (user_id,dataset_name),
 
