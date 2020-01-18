@@ -1,3 +1,8 @@
+/*!
+ * Component: PlotDrawer
+ * Handles plots drawing
+ * */
+
 function hasAttribute(node, attributeName) {
     var attribute = node.attributes[attributeName];
     return (typeof attribute !== 'undefined');

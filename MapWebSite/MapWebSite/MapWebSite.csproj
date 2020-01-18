@@ -323,12 +323,14 @@
     <Content Include="Resources\js\api\cache\points_regions_manager.js" />
     <Content Include="Resources\js\api\hub_router.js" />
     <Content Include="Resources\js\map\points_layer.js" />
+    <Content Include="Resources\js\map\points_section_handler.js" />
     <Content Include="Resources\js\map\received_points_worker.js" />
     <Content Include="Resources\js\point info\card_drawer.js" />
     <Content Include="Resources\js\point info\cards_manager.js" />
     <Content Include="Resources\js\points settings\chose_dataset.js" />
     <Content Include="Resources\js\points settings\chose_palette.js" />
     <Content Include="Resources\js\map\points_source_manager.js" />
+    <Content Include="Resources\js\popup.js" />
     <Content Include="Resources\js\settings\settings.js" />
     <Content Include="Resources\js\settings\settings_color_picker.js" />
     <Content Include="Resources\js\settings\color_picker_color_list.js" />

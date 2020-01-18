@@ -21,6 +21,33 @@ class PointsRegionsManager {
         else this.pointsRegions[cacheKey] = { pointsCount, filled };
     }
 
+    GetCachedPoints(from, to, datasetId) {
+        var result = [];
+        var limits = this.getCacheSearchingLimits(from, to);
+        var cacheKey = null;
+
+        for (var i = limits.from.lat; i <= limits.to.lat; i += this.latitudeSide)
+            for (var j = limits.from.long; j <= limits.to.long; j += this.longitudeSide) {
+                cacheKey = this.getCacheKey({
+                    lat: i.toFixed(2),
+                    long: j.toFixed(2)
+                }, {
+                    lat: (i + this.latitudeSide).toFixed(2),
+                    long: (j + this.longitudeSide).toFixed(2)
+                },
+                    datasetId);
+                result = result.concat(this.pointsRegions[cacheKey]);
+            }
+
+        return result;
+    }
+
+    /**
+     * Get the regions which are not cached
+     * @param {any} from latitude and longitude of the top left offset
+     * @param {any} to latitude and longitude of the bottom right offset
+     * @param {any} datasetId id of the dataset
+     */
     GetRegions(from, to, datasetId) {
         var result = [];
         var resultIndex = 0;

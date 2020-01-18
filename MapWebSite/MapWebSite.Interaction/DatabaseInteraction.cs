@@ -103,9 +103,9 @@ namespace MapWebSite.Domain
             Action<IEnumerable<BasicPoint>, string, bool> triggerCallback = (points, regionKey, filled) =>
             {
                 callback(null, new Tuple<string, int>(regionKey, points.Count()),filled);
-
-                for (int i = 0; i < points.Count() / pointsPerBlock; i++)
-                    callback(points.Skip(i * pointsPerBlock).Take(pointsPerBlock), null, filled);
+                callback(points.Take(300), null, filled);
+                //for (int i = 0; i < points.Count() / pointsPerBlock; i++)
+                //    callback(points.Skip(i * pointsPerBlock).Take(pointsPerBlock), null, filled);
             };
 
             //todo: cache the datasetId and request maximum/minimum lat/long for optimizations
