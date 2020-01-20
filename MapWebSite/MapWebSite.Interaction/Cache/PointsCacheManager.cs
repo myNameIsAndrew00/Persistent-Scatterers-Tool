@@ -114,7 +114,7 @@ namespace MapWebSite.Domain
                     if (cacheEntry != null) Task.Delay(25);
                     cacheEntry = (MemoryCache.Default.Get(cacheKey)) as CacheEntry;                    
                 }
-                while ((MemoryCache.Default.Get(cacheKey) as CacheEntry).Status == EntryStatus.Creating
+                while ((MemoryCache.Default.Get(cacheKey) as CacheEntry)?.Status == EntryStatus.Creating
                     && attempts >= 0 );
 
                 var cacheEntryValue = cacheEntry?.Value as IEnumerable<BasicPoint>;

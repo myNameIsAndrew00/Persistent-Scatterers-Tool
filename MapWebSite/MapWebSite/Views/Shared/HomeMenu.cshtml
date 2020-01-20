@@ -36,7 +36,7 @@
             @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
             {
                 <object class="" id="main-menu-icon-@(sectionsCount++)" width="130px" height="110px" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
-                 
+
             }
 
         </div>
@@ -56,6 +56,10 @@
                     <button onclick="requestSettingsPage('account-settings','/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuSettingsText</button>
                 </li>
             }
+            <li class="secondary-menu-item">
+                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/info_icon.svg"></object>
+                @Html.ActionLink(TextDictionary.HMenuAboutText, "Logout", "Home", null)
+            </li>
             <li class="secondary-menu-item">
                 <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
                 @Html.ActionLink(TextDictionary.HMenuLogoutText, "Logout", "Home", null)
@@ -96,19 +100,19 @@
         <div class="text-area">
             @if (RouteConfig.CurrentUser != null)
             {
-            <div class="top-menu-item">
-                @TextDictionary.GreetingMessage,
-                <b>
-                    @RouteConfig.CurrentUser.FirstName
-                </b>
-                </div>               
+                <div class="top-menu-item">
+                    @TextDictionary.GreetingMessage,
+                    <b>
+                        @RouteConfig.CurrentUser.FirstName
+                    </b>
+                </div>
             }
             @Html.Label(TextDictionary.HTMSelectedDataset, new { @class = "top-menu-item" })
             @Html.Label(TextDictionary.HTMDefaultDataset, new { @class = "top-menu-item current-dataset-text", id = "current-dataset-text" })
-           
+
         </div>
 
-        <div class="buttons-area"> 
+        <div class="buttons-area">
             <button onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
                 <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/set_icon.svg"></object>
             </button>

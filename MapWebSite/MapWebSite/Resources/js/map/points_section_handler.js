@@ -10,7 +10,7 @@ import { PointsLayer } from './points_layer.js';
 import { HubRouter } from '../api/hub_router.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
 
-export const SectionsRowsCount = 2;
+export const SectionsRowsCount = 1;
 export const SectionsColumnsCount = 3;
 
 export class PointsSectionsContainer {
@@ -39,6 +39,8 @@ export class PointsSectionsContainer {
 class PointsSectionHandler {
 
     constructor(rowIndex, columnIndex, map) {
+        this.previousDisplayedPoints = null;
+
         var caller = this;
 
         this.rowIndex = rowIndex;
@@ -58,20 +60,36 @@ class PointsSectionHandler {
 
         this.hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) { caller.processPoints(receivedInfo) });
         this.hubRouter.SetCallback('PointsProcessedNotification', PointsProcessedNotificationHandler);
-        this.vectorSource = new ol.source.Vector({
+
+        /**Use two vector sources to display the data. Alternate this layers when displaying something on map*/
+        this.secondaryVectorSource = new ol.source.Vector({
+            wrapX: false
+        });
+        this.mainVectorSource = new ol.source.Vector({
             wrapX: false
         });
 
-        this.vector = new PointsLayer({
-            source: this.vectorSource
+        this.mainVector = new PointsLayer({
+            source: this.mainVectorSource
+        });
+        this.secondaryVector = new PointsLayer({
+            source: this.secondaryVectorSource
         });
 
+
         this.map = map;
-        this.map.addLayer(this.vector);
+        this.map.addLayer(this.mainVector);
+        this.map.addLayer(this.secondaryVector);
     }
 
 
     LoadPoints() {
+
+        this.secondaryVectorSource.clear();
+
+        /*switch the displayed layers*/
+        this.switchLayers();
+
         if (SelectedDataset.username === null && SelectedDataset.datasetName === null) return;
 
 
@@ -93,7 +111,7 @@ class PointsSectionHandler {
         //this can be used with caching
         var existingRegions = [];
 
-        if (ProcessingEnabled <= 0) DisplayHubProcessing(true);
+        DisplayHubProcessing(true);
 
 
         var coordinates = this.getCornerCoordinates();
@@ -110,14 +128,20 @@ class PointsSectionHandler {
     }
 
     UpdatePointsLayer(points) {
-        if (this.vector != null) {
+        if (this.mainVector != null) {
             if (points == null) {
-                this.vectorSource.clear();
+                this.mainVectorSource.clear(); 
+
                 // pointsRegionsManager.ResetCache();
                 this.LoadPoints();
                 return;
             }
-            this.vectorSource.addFeatures(points);
+
+            this.mainVector.hide();
+            this.mainVectorSource.addFeatures(points);      
+            this.mainVector.animateIn();
+
+           
         }
     }
 
@@ -218,6 +242,16 @@ class PointsSectionHandler {
                 longitude: topCorner.longitude + sectionLength.oY
             }
         }
+    }
+
+    switchLayers() {
+        var aux = this.mainVectorSource;
+        this.mainVectorSource = this.secondaryVectorSource;
+        this.secondaryVectorSource = aux;
+
+        aux = this.secondaryVector;
+        this.secondaryVector = this.mainVector;
+        this.mainVector = aux;
     }
 
 

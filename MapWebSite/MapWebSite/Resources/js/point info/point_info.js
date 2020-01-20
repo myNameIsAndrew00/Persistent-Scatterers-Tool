@@ -93,7 +93,8 @@ export function HidePointInfo(showTopMenu) {
     $("#point-info").css("width", "40%"); 
     $("#point-info").css("visibility", "hidden");  
 
-    UnselectFeatureOnMap(currentDisplayedPoint.Number);
+    if(currentDisplayedPoint != null)
+         UnselectFeatureOnMap(currentDisplayedPoint.Number);
 }
 
 export function CreatePopupWindow() {

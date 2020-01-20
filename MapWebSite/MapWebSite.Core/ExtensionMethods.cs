@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json; 
-using System; 
+using System;
+using System.Collections;
 using System.Data;
 using System.IO;
 using System.Reflection;
@@ -8,6 +9,9 @@ using System.Runtime.Serialization.Json;
 
 namespace MapWebSite.Core
 {
+    /// <summary>
+    /// Contains methods which extends base data types
+    /// </summary>
     public static class ExtensionMethods
     {
         /// <summary>
@@ -107,5 +111,27 @@ namespace MapWebSite.Core
             return result;
         }
 
+        /// <summary>
+        /// Extension method for exponentiation of a decimal number 
+        /// </summary>
+        /// <param name="number">The number which must be expoentiate</param>
+        /// <param name="pow">The power used for exponentiation</param>
+        /// <returns></returns>
+        public static decimal Pow(this decimal number, uint pow)
+        {
+            decimal A = 1m;
+            BitArray e = new BitArray(BitConverter.GetBytes(pow));
+            int t = e.Count;
+
+            for (int i = t - 1; i >= 0; --i)
+            {
+                A *= A;
+                if (e[i] == true)
+                {
+                    A *= number;
+                }
+            }
+            return A;
+        }
     }
 }

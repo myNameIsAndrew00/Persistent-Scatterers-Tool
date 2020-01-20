@@ -348,6 +348,7 @@
     <Content Include="Resources\resources\icons\bell_icon.svg" />
     <Content Include="Resources\resources\icons\close_icon.svg" />
     <Content Include="Resources\resources\icons\first_gliph.svg" />
+    <Content Include="Resources\resources\icons\info_icon.svg" />
     <Content Include="Resources\resources\icons\loading_icon.svg" />
     <Content Include="Resources\resources\icons\logout_icon.svg" />
     <Content Include="Resources\resources\icons\map_icon.svg" />

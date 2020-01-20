@@ -332,4 +332,7 @@
   <data name="HTMSelectedDataset" xml:space="preserve">
     <value>Dataset name:</value>
   </data>
+  <data name="HMenuAboutText" xml:space="preserve">
+    <value>About application</value>
+  </data>
 </root>

@@ -13,6 +13,31 @@ import { map } from './map.js';
 
 export class PointsLayer extends ol.layer.Vector {
 
+    hide() {
+        this.setOpacity(0);
+    }
+
+    animateIn() {
+        var layer = this;
+        const incrementRatio = 0.1; 
+        const timeout = 50;
+
+        function changeOpacity(opacity) {
+
+            layer.setOpacity(opacity);
+             
+            if (opacity >= 1.0) return;
+
+            setTimeout(function () { changeOpacity(opacity + incrementRatio) },
+                timeout);
+        }
+
+        setTimeout(function () {
+            changeOpacity(incrementRatio);
+        }, timeout);
+       
+    }
+
     createRenderer() { 
         return new ol.renderer.webgl.PointsLayer(this, {     
             attributes: [

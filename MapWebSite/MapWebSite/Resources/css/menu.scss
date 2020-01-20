@@ -187,14 +187,14 @@
                 object:hover + a, object:hover + button {
                     background: get_color(strongTransparentBlue);
                     opacity: 1;
-                    width: 100px;
+                    width: 150px;
                     visibility: visible;
                 }
 
                 a:hover, button:hover {
                     background: get_color(chromaOrange);
                     opacity: 1;
-                    width: 120px;
+                    width: 140px;
                     visibility: visible;
                 }
             }

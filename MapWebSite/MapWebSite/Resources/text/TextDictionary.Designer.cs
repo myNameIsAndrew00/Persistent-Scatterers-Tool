@@ -70,6 +70,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About application.
+        /// </summary>
+        public static string HMenuAboutText {
+            get {
+                return ResourceManager.GetString("HMenuAboutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the tool above to create a color palette.&lt;br /&gt;
         ///                Click the bar if you want to create a new color
         ///                and drag dots left or right to set the intervals.
