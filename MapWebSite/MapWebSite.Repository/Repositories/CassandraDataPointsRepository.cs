@@ -43,11 +43,14 @@ namespace MapWebSite.Repository
 
             if (!success) return false;
 
+            //zoomed points are not necesary anymore
+            /*
             foreach (var pointsDataset in zoomedDatasets)
             {
                 success = await this.insertPointsDataset(pointsDataset);
                 if (!success) return false;
             }
+            */
 
             //TODO: clear the data if not success
             return true;
@@ -159,10 +162,13 @@ namespace MapWebSite.Repository
             {
                 QueryType = CassandraQueryBuilder.QueryTypes.Select
             };
+
+            //update: do not use latitude and longitude to search for points details
+
             queryBuilder.TableName = zoomLevel == 0 ? "points_by_dataset" : $"points_by_dataset_zoom_{zoomLevel}";
             queryBuilder.ClausesList.Add(new BuilderTuple("dataSetID", "dataset_id", CassandraQueryBuilder.Clauses.Equals));
-            queryBuilder.ClausesList.Add(new BuilderTuple("latitude", "latitude", CassandraQueryBuilder.Clauses.Equals));
-            queryBuilder.ClausesList.Add(new BuilderTuple("longitude", "longitude", CassandraQueryBuilder.Clauses.Equals));
+         //   queryBuilder.ClausesList.Add(new BuilderTuple("latitude", "latitude", CassandraQueryBuilder.Clauses.Equals));
+         //   queryBuilder.ClausesList.Add(new BuilderTuple("longitude", "longitude", CassandraQueryBuilder.Clauses.Equals));
             queryBuilder.ClausesList.Add(new BuilderTuple("number", "number", CassandraQueryBuilder.Clauses.Equals));
 
             executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
@@ -172,8 +178,8 @@ namespace MapWebSite.Repository
             return executionInstance.ExecuteQuery(new
             {
                 dataSetID,
-                latitude = basicPoint.Latitude,
-                longitude = basicPoint.Longitude,
+          //      latitude = basicPoint.Latitude,
+          //      longitude = basicPoint.Longitude,
                 number = basicPoint.Number
             });
 

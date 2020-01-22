@@ -103,7 +103,7 @@ namespace MapWebSite.Domain
             Action<IEnumerable<BasicPoint>, string, bool> triggerCallback = (points, regionKey, filled) =>
             {
                 callback(null, new Tuple<string, int>(regionKey, points.Count()),filled);
-                callback(points.Take(500), null, filled);
+                callback(points.Take(1000), null, filled);
                 //for (int i = 0; i < points.Count() / pointsPerBlock; i++)
                 //    callback(points.Skip(i * pointsPerBlock).Take(pointsPerBlock), null, filled);
             };

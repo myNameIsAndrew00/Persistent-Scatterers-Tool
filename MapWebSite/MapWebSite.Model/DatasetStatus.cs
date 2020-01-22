@@ -24,9 +24,13 @@ namespace MapWebSite.Model
         //This status means that the dataset was only proposed to be uploaded 
         Pending = 3,
 
+       
+        [EnumString("Upload failure")] 
         //This status means that the dataset has an error during uploading
+        UploadFail = 4,
 
-        [EnumString("Upload failure")]
-        UploadFail = 4
+        [EnumString("Generating failure")]
+        //This status means that the points failed to generate the points in database
+        GenerateFail = 5
     }
 }

@@ -53,7 +53,7 @@ namespace MapWebSite
         private static void loadBootstrapBundles(BundleCollection bundles)
         {
             bundles.Add(new StyleBundle("~/FrameworkContent/css").Include(
-                         "~/FrameworkContent/bootstrap.css"));
+                         "~/FrameworkContent/Bootstrap/bootstrap.css"));
         }
 
         private static void loadScriptBundles(BundleCollection bundles)

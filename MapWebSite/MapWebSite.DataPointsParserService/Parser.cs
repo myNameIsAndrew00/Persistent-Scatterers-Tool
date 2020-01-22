@@ -3,16 +3,10 @@ using MapWebSite.Core.DataPoints;
 using MapWebSite.Model;
 using MapWebSite.Repository;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
+using System.Configuration; 
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading;
+using System.IO; 
+using System.ServiceProcess; 
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -23,6 +17,7 @@ namespace MapWebSite.DataPointsParserService
     /// Files are uploaded by users in a directory configured in app.config.
     /// The datasets header data exists in the database with the status 'Uploaded'.
     /// After the points are inserted in database, the status of the dataset is changed in 'Generated'.
+    /// Any parsing exception will change the dataset status in 'Generate Fail'
     /// </summary>
     public partial class Parser : ServiceBase
     {
@@ -38,8 +33,9 @@ namespace MapWebSite.DataPointsParserService
         public Parser()
         {
             InitializeComponent();
+            CassandraDataPointsRepository.Initialise();
 
-            this.userRepository = new SQLUserRepository();
+            this.userRepository = new SQLUserRepository();           
             this.dataPointsRepository = CassandraDataPointsRepository.Instance;
 
             if (!EventLog.Exists(ConfigurationManager.AppSettings["LogEntryName"]))
@@ -91,7 +87,7 @@ namespace MapWebSite.DataPointsParserService
                             processFile(Path.Combine(unprocessedDirectory,
                                                      ConfigurationManager.AppSettings["DataPointsSourceFileName"]),
                                         username,
-                                        Path.GetDirectoryName(unprocessedDirectory));
+                                        Path.GetFileName(unprocessedDirectory));
                             
                             string processedDirectory = Path.Combine(ConfigurationManager.AppSettings["PointsDatasetsParsedFolder"], 
                                                                      username,
@@ -103,7 +99,9 @@ namespace MapWebSite.DataPointsParserService
                         }
                         catch (Exception exception)
                         {
-                            logData(exception.Message, EventLogEntryType.Error);                            
+                            logData(
+                                "Failed to parse: " + unprocessedDirectory + "\n" +
+                                exception.Message + "\n" + exception.StackTrace, EventLogEntryType.Error);                            
                         }
                     }
 
@@ -116,21 +114,30 @@ namespace MapWebSite.DataPointsParserService
         {
             IDataPointsSource pointsSource = new TxtDataPointsSource();
 
+            int datasetId = this.userRepository.GetDatasetID(username, datasetName);
+            if (datasetId == -1) throw new Exception($"Failed to find create / dataset with the name {datasetName} for user {username} ");
+
             (pointsSource as TxtDataPointsSource).HeaderFile = ConfigurationManager.AppSettings["DataSetsHeaderFile"];
             (pointsSource as TxtDataPointsSource).DisplacementsFile = fileName;
             (pointsSource as TxtDataPointsSource).LatitudeZone = 'T'; //TODO: modify here. This can be read from database
             (pointsSource as TxtDataPointsSource).Zone = 35;          //TODO: modify here. This can be read from database
-
+           
             PointsDataSet dataset = pointsSource.CreateDataSet(datasetName);
 
+            if(dataset == null)
+            {
+                this.userRepository.UpdateDatasetStatus(datasetName, DatasetStatus.GenerateFail, username);
+                return;
+            }
+            dataset.ID = datasetId;
+
             //get the id of the dataset which has been processed
-            dataset.ID = this.userRepository.GetDatasetID(username, dataset.Name);
-            if (dataset.ID == -1) throw new Exception($"Failed to find create / dataset with the name {dataset.Name} for user {username} ");
 
-            IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
-            PointsDataSet[] zoomedDataSets = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
+            //UPDATE:zoom is not required for now
+            //IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
+            //PointsDataSet[] zoomedDataSets = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
 
-            Task insertTask = this.dataPointsRepository.InsertPointsDatasets(dataset, zoomedDataSets);
+            Task insertTask = this.dataPointsRepository.InsertPointsDatasets(dataset, null);
 
             insertTask.Wait();
 

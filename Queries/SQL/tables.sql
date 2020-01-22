@@ -60,7 +60,8 @@ insert into DatasetsStatuses(status_id, name)
 values (1, 'Uploaded'),
 		   (2, 'Generated'),
 		   (3, 'Pending'),
-		   (4, 'UploadFail')
+		   (4, 'UploadFail'),
+		   (5, 'GenerateFail')
 
 /*this table holds the data points loaded by user in the application*/
 

@@ -4,7 +4,7 @@
     Layout = null;
 }
 
-<input type="hidden" id="_use-dataset-button-text" value="@TextDictionary.HPSCDUseButton"/>
+<input type="hidden" id="_use-dataset-button-text" value="@TextDictionary.HPSCDUseButton" />
 <input type="hidden" id="_preview-dataset-button-text" value="@TextDictionary.HPSCDPreviewButton" />
 
 <div class="points-settings-layer-container-palette-content points-settings-layer-container-content">
@@ -24,20 +24,21 @@
                 <th><object width="14px" height="35px" type="image/svg+xml" data="~/Resources/resources/icons/user_default_icon.svg"></object></th>
                 <th>Dataset Name</th>
                 <th>Status</th>
-                <th>Actions</th>                
+                <th>Actions</th>
             </tr>
 
             @foreach (var item in Model.Datasets)
             {
-                @Html.Hidden($"user_dataset_{item.Username}_{item.DatasetName}_id", item.ID)
-                <tr id="user_dataset_@(item.Username)_@(item.DatasetName)">
-                    <td>@item.Username</td>
-                    <td>@item.DatasetName</td>
-                    <td>@item.Status.GetEnumString()</td>
-                    <td>
-                        <button class="use" disabled="@(!item.IsValid)" onclick="useDataset('@item.Username','@item.DatasetName')">@TextDictionary.HPSCDUseButton</button>
-                    </td>
-                </tr>
+        <tr id="user_dataset_@(item.Username)_@(item.DatasetName)">
+
+            <td>@item.Username</td>
+            <td>@item.DatasetName</td>
+            <td>@item.Status.GetEnumString()</td>
+            <td>
+                <input type="hidden" id="user_dataset_@(item.Username)_@(item.DatasetName)_id" value="@item.ID" />
+                <button class="use" disabled="@(!item.IsValid)" onclick="useDataset('@item.Username','@item.DatasetName')">@TextDictionary.HPSCDUseButton</button>
+            </td>
+        </tr>
             }
 
         </table>

@@ -1,0 +1,17 @@
+﻿body{
+    color: black;
+}
+
+h1 {
+    font-size: 2.2rem;
+}
+
+a, button, input{
+    font-size: 0.8rem;
+}
+
+input[type="submit"]:hover,
+input[type="button"]:hover,
+button:hover{
+    cursor: pointer;
+}

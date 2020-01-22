@@ -11,7 +11,7 @@ import { HubRouter } from '../api/hub_router.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
 
 export const SectionsRowsCount = 1;
-export const SectionsColumnsCount = 3;
+export const SectionsColumnsCount = 2;
 
 export class PointsSectionsContainer {
 

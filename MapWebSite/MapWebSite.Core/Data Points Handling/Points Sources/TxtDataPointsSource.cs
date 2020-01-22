@@ -38,13 +38,24 @@ namespace MapWebSite.Core.DataPoints
             {
                 HeaderData[] headerData = parseHeaderData();
                 string[] displacementsTextLines = File.ReadAllLines(DisplacementsFile);
- 
+
+                ConcurrentQueue<Exception> exceptions = new ConcurrentQueue<Exception>();
+
                 Parallel.ForEach(displacementsTextLines, (dataLine) =>
                 {
-                    IDictionary<string, decimal> lineInfo = generateDictionary(dataLine, out decimal[] lineDisplacements);
-                    points.Add(generatePoint(lineInfo, lineDisplacements, headerData));
+                    try
+                    {
+                        IDictionary<string, decimal> lineInfo = generateDictionary(dataLine, out decimal[] lineDisplacements);
+                        points.Add(generatePoint(lineInfo, lineDisplacements, headerData));
+                    }
+                    catch(Exception exception)
+                    {
+                        //TODO: log exception
+                        exceptions.Enqueue(exception);
+                    }
                 });
-                                 
+
+                if (exceptions.Count > 0) throw new Exception("Failed to parse with success the file");
             }
             catch(Exception exception)
             {
@@ -75,8 +86,8 @@ namespace MapWebSite.Core.DataPoints
                 Observations = "Generated from file" // TODO:add information to observations                
             };
             Tuple<decimal, decimal> coordinatesPair = utmConverter.ToLatLong(this.Zone, this.LatitudeZone, 
-                                                                            (double)lineInfo["EastingProjection"], 
-                                                                            (double)lineInfo["NorthingProjection"]);
+                                                                            lineInfo["EastingProjection"], 
+                                                                            lineInfo["NorthingProjection"]);
             point.Latitude = coordinatesPair.Item1;
             point.Longitude = coordinatesPair.Item2;
 
