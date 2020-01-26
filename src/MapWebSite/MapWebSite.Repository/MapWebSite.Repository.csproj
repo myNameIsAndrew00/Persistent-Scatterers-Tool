@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0886D345-5858-4711-A80C-A08BBFEE1E27}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MapWebSite.Repository</RootNamespace>
+    <AssemblyName>MapWebSite.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AsyncEnumerable, Version=2.2.2.0, Culture=neutral, PublicKeyToken=0426b068161bd1d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\AsyncEnumerator.2.2.2\lib\net45\AsyncEnumerable.dll</HintPath>
+    </Reference>
+    <Reference Include="Cassandra, Version=3.99.0.0, Culture=neutral, PublicKeyToken=10b231fbfc8c4b4d" />
+    <Reference Include="FastMember, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.5.0\lib\net461\FastMember.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\User Defined Types\BasePointType.cs" />
+    <Compile Include="Entities\User Defined Types\PointDisplacementType.cs" />
+    <Compile Include="Entities\User Defined Types\PointsRegionType.cs" />
+    <Compile Include="Entities\User Defined Types\PointType.cs" />
+    <Compile Include="Repositories\Base\CassandraBase.cs" />
+    <Compile Include="Repositories\Base\SQLBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\CassandraDataPointsRepository.cs" />
+    <Compile Include="Repositories\SQLUserRepository.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MapWebSite.CassandraAccess\MapWebSite.CassandraAccess.csproj">
+      <Project>{9F148B28-5981-40DA-B669-505872475C2A}</Project>
+      <Name>MapWebSite.CassandraAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.Core\MapWebSite.Core.csproj">
+      <Project>{15a19baf-8e36-41a7-96ec-3ac2f427fcfb}</Project>
+      <Name>MapWebSite.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.Model\MapWebSite.Model.csproj">
+      <Project>{921645E7-A83E-408A-B4C8-F7CD21DB3329}</Project>
+      <Name>MapWebSite.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.SQLAccess\MapWebSite.SQLAccess.csproj">
+      <Project>{a5caf727-b169-4ea1-8d41-910ab7bd0ed7}</Project>
+      <Name>MapWebSite.SQLAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.Types\MapWebSite.Types.csproj">
+      <Project>{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056}</Project>
+      <Name>MapWebSite.Types</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

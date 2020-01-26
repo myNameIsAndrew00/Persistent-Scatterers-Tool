@@ -1,0 +1,57 @@
+   1  point number
+   2  x pixel in the reference image
+   3  y pixel in the reference image
+   4  easting map projection coordinate (m)
+   5  northing map projection coordinate (m)
+   6  height (m)
+   7  deformation rate (mm/y)
+   8  standard deviation of the residual phase (rad)
+   9  estimated height uncertainty (m)
+  10  estimated deformation rate uncertainty (mm/y)
+  11  displacement (mm)  date: 2014 11 13     15195.497  JD:    16387.17587  days:  -107.99997
+  12  displacement (mm)  date: 2014 11 25     15195.458  JD:    16399.17587  days:   -95.99997
+  13  displacement (mm)  date: 2014 12  7     15195.101  JD:    16411.17587  days:   -83.99998
+  14  displacement (mm)  date: 2014 12 19     15194.865  JD:    16423.17587  days:   -71.99998
+  15  displacement (mm)  date: 2014 12 31     15194.239  JD:    16435.17586  days:   -59.99999
+  16  displacement (mm)  date: 2015  1 12     15193.929  JD:    16447.17586  days:   -47.99999
+  17  displacement (mm)  date: 2015  1 24     15193.632  JD:    16459.17585  days:   -35.99999
+  18  displacement (mm)  date: 2015  2  5     15192.905  JD:    16471.17584  days:   -24.00000
+  19  displacement (mm)  date: 2015  2 17     15193.154  JD:    16483.17585  days:   -12.00000
+  20  displacement (mm)  date: 2015  3  1     15193.158  JD:    16495.17585  days:     0.00000
+  21  displacement (mm)  date: 2015  3 13     15193.309  JD:    16507.17585  days:    12.00000
+  22  displacement (mm)  date: 2015  3 25     15193.489  JD:    16519.17585  days:    24.00000
+  23  displacement (mm)  date: 2015  4  6     15193.838  JD:    16531.17585  days:    36.00001
+  24  displacement (mm)  date: 2015  4 30     15195.242  JD:    16555.17587  days:    60.00002
+  25  displacement (mm)  date: 2015  5 12     15195.652  JD:    16567.17588  days:    72.00003
+  26  displacement (mm)  date: 2015  5 24     15196.577  JD:    16579.17589  days:    84.00004
+  27  displacement (mm)  date: 2015  6  5     15197.377  JD:    16591.17590  days:    96.00005
+  28  displacement (mm)  date: 2015  6 17     15197.996  JD:    16603.17590  days:   108.00006
+  29  displacement (mm)  date: 2015  8 28     15201.153  JD:    16675.17594  days:   180.00009
+  30  displacement (mm)  date: 2015  9 21     15201.899  JD:    16699.17595  days:   204.00010
+  31  displacement (mm)  date: 2015 10 15     15202.283  JD:    16723.17595  days:   228.00011
+  32  displacement (mm)  date: 2015 11 20     15201.842  JD:    16759.17595  days:   264.00010
+  33  displacement (mm)  date: 2015 12  2     15201.456  JD:    16771.17594  days:   276.00010
+  34  displacement (mm)  date: 2015 12 14     15201.061  JD:    16783.17594  days:   288.00009
+  35  displacement (mm)  date: 2015 12  2     15201.456  JD:    16771.17594  days:   276.00010
+  36  displacement (mm)  date: 2016  1  7     15200.135  JD:    16807.17593  days:   312.00008
+  37  displacement (mm)  date: 2016  2 12     15199.121  JD:    16843.17592  days:   348.00007
+  38  displacement (mm)  date: 2016  2 24     15199.163  JD:    16855.17592  days:   360.00007
+  39  displacement (mm)  date: 2016  3  7     15199.359  JD:    16867.17592  days:   372.00007
+  40  displacement (mm)  date: 2016  3 31     15199.943  JD:    16891.17593  days:   396.00008
+  41  displacement (mm)  date: 2016  4 12     15200.447  JD:    16903.17593  days:   408.00008
+  42  displacement (mm)  date: 2016  5  6     15201.391  JD:    16927.17594  days:   432.00010
+  43  displacement (mm)  date: 2016  5 18     15202.046  JD:    16939.17595  days:   444.00010
+  44  displacement (mm)  date: 2016  5 30     15202.807  JD:    16951.17596  days:   456.00011
+  45  displacement (mm)  date: 2016  8 22     15207.520  JD:    17035.17601  days:   540.00017
+  46  displacement (mm)  date: 2016  9  3     15207.829  JD:    17047.17602  days:   552.00017
+  47  displacement (mm)  date: 2016 10  9     15208.800  JD:    17083.17603  days:   588.00018
+  48  displacement (mm)  date: 2016 10 21     15208.721  JD:    17095.17603  days:   600.00018
+  49  displacement (mm)  date: 2016 11  2     15208.776  JD:    17107.17603  days:   612.00018
+  50  displacement (mm)  date: 2016 11 14     15208.614  JD:    17119.17603  days:   624.00018
+  51  displacement (mm)  date: 2016 11 26     15208.440  JD:    17131.17602  days:   636.00018
+  52  displacement (mm)  date: 2016 12  8     15208.013  JD:    17143.17602  days:   648.00017
+  53  displacement (mm)  date: 2016 12 20     15207.564  JD:    17155.17601  days:   660.00017
+
+reference point index: 222265
+reference point x,y pixel in the reference image: 811  2138
+reference point easting, northing (m):   629055.500  4883461.000
