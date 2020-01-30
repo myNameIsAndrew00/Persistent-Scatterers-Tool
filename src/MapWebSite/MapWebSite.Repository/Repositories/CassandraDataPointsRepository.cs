@@ -18,7 +18,7 @@ namespace MapWebSite.Repository
     {
         private CassandraExecutionInstance executionInstance = null;
 
-        public static  CassandraDataPointsRepository Instance { get; set; } 
+        public static CassandraDataPointsRepository Instance { get; set; }
 
         public static void Initialise()
         {
@@ -31,50 +31,98 @@ namespace MapWebSite.Repository
             {
                 this.executionInstance = new CassandraExecutionInstance(this.server, this.keyspace);
                 executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
+                executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<BasePointType>("base_point"));
             }
-            catch {
+            catch (Exception exception)
+            {
                 //TODO: log exception
             }
         }
 
-        public async Task<bool> InsertPointsDatasets(PointsDataSet originalDataSet, PointsDataSet[] zoomedDatasets)
+        public async Task<bool> InsertPointsDataset(PointsDataSet dataSet)
         {
-            bool success = await this.insertPointsDataset(originalDataSet);
+            bool success = await this.insertPointsDataset(dataSet);
 
             if (!success) return false;
 
-            //zoomed points are not necesary anymore
-            /*
-            foreach (var pointsDataset in zoomedDatasets)
+            foreach (var regionsLevel in dataSet.PointsRegions)
             {
-                success = await this.insertPointsDataset(pointsDataset);
+                if (regionsLevel.Regions.Count() == 0) continue;
+
+                success = await this.insertRegion(regionsLevel, dataSet.ID);
                 if (!success) return false;
             }
-            */
+
 
             //TODO: clear the data if not success
             return true;
         }
 
-        public IEnumerable<PointBase> GetDataPointsBasicInfo(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to)
-        { 
+        public IEnumerable<PointBase> GetBasePoints(int dataSetID, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to)
+        {
 
-            var dataRows = selectBasicPointsDataset(dataSetID, zoomLevel, from, to);
+            var dataRows = selectBasicPointsDataset(dataSetID, from, to);
 
             return convertRowSetToBasicPointList(dataRows);
         }
 
 
-        public Point GetPointDetails(int dataSetID, int zoomLevel, PointBase basicPoint)
+        public Point GetPointDetails(int dataSetID, PointBase basicPoint)
         {
-            var dataRows = selectPointDetails(dataSetID, zoomLevel, basicPoint);
+            var dataRows = selectPointDetails(dataSetID, basicPoint);
 
             return convertRowSetToPointList(dataRows).FirstOrDefault();
         }
 
+        public IEnumerable<PointsRegion> GetRegions(int datasetId, Tuple<int, int> from, Tuple<int, int> to, int zoomLevel)
+        {
+            var dataRows = selectRegions(datasetId, from, to, zoomLevel);
 
+            return convertRowSetToPointsRegions(dataRows);
+        }
+
+
+        public PointsRegion GetRegion(int datasetId, int row, int column, int zoomLevel)
+        {
+            var dataRows = selectRegion(datasetId, row, column, zoomLevel);
+
+            return convertRowSetToPointsRegions(dataRows)?.FirstOrDefault();
+        }
 
         #region Private
+
+        private async Task<bool> insertRegion(PointsRegionsLevel regionLevel, int datasetId)
+        {
+            IEnumerable<PointsRegionType> regionTypes = PointsRegionType.GetRegions(regionLevel, datasetId);
+
+            CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder();
+            queryBuilder.TableName = "points_region_zoom_" + regionLevel.ZoomLevel;
+            queryBuilder.Type = typeof(PointsRegionType);
+            queryBuilder.QueryType = CassandraQueryBuilder.QueryTypes.InsertFromType;
+
+            this.executionInstance.PrepareQuery(queryBuilder);
+
+            try
+            {
+                await regionTypes.ParallelForEachAsync(async regionType =>
+                {
+                    await executionInstance.ExecuteNonQuery(new
+                    {
+                        regionType.dataset_id,
+                        regionType.column,
+                        regionType.row,
+                        regionType.points
+                    });
+                });
+            }
+            catch (Exception exception)
+            {
+                return false;
+                //todo: log exception
+            }
+
+            return true;
+        }
 
 
         private async Task<bool> insertPointsDataset(PointsDataSet pointsDataset)
@@ -85,7 +133,7 @@ namespace MapWebSite.Repository
             queryBuilder.TableName = "points_by_dataset";
             queryBuilder.Type = typeof(PointType);
             queryBuilder.QueryType = CassandraQueryBuilder.QueryTypes.InsertFromType;
-           // if (pointsDataset.ZoomLevel != 0) queryBuilder.IgnoredColumnNames = new List<string>() { "displacements" };
+            // if (pointsDataset.ZoomLevel != 0) queryBuilder.IgnoredColumnNames = new List<string>() { "displacements" };
 
 
 
@@ -120,20 +168,20 @@ namespace MapWebSite.Repository
             return true;
         }
 
-        private List<Row> selectBasicPointsDataset(int dataSetID, int zoomLevel, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to)
+        private List<Row> selectBasicPointsDataset(int dataSetID, Tuple<decimal, decimal> from, Tuple<decimal, decimal> to)
         {
             CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder()
             {
                 QueryType = CassandraQueryBuilder.QueryTypes.Select
             };
-            queryBuilder.TableName = zoomLevel == 0 ? "points_by_dataset" : $"points_by_dataset_zoom_{zoomLevel}";
-            queryBuilder.SelectColumnNames = new List<string>() { "latitude", 
-                                                                  "longitude", 
-                                                                  "number", 
-                                                                  "height", 
-                                                                  "deformation_rate", 
-                                                                  "standard_deviation", 
-                                                                  "estimated_height", 
+            queryBuilder.TableName = "points_by_dataset";
+            queryBuilder.SelectColumnNames = new List<string>() { "latitude",
+                                                                  "longitude",
+                                                                  "number",
+                                                                  "height",
+                                                                  "deformation_rate",
+                                                                  "standard_deviation",
+                                                                  "estimated_height",
                                                                   "estimated_deformation_rate" };
             queryBuilder.ClausesList.Add(new BuilderTuple("dataSetID", "dataset_id", CassandraQueryBuilder.Clauses.Equals));
             queryBuilder.ClausesList.Add(new BuilderTuple("leftLatitude", "latitude", CassandraQueryBuilder.Clauses.GreaterOrEqual));
@@ -156,7 +204,7 @@ namespace MapWebSite.Repository
 
         }
 
-        private List<Row> selectPointDetails(int dataSetID, int zoomLevel, PointBase basicPoint)
+        private List<Row> selectPointDetails(int dataSetID, PointBase basicPoint)
         {
             CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder()
             {
@@ -165,7 +213,7 @@ namespace MapWebSite.Repository
 
             //update: do not use latitude and longitude to search for points details
 
-            queryBuilder.TableName = zoomLevel == 0 ? "points_by_dataset" : $"points_by_dataset_zoom_{zoomLevel}";
+            queryBuilder.TableName = "points_by_dataset";
             queryBuilder.ClausesList.Add(new BuilderTuple("dataSetID", "dataset_id", CassandraQueryBuilder.Clauses.Equals));
             queryBuilder.ClausesList.Add(new BuilderTuple("number", "number", CassandraQueryBuilder.Clauses.Equals));
 
@@ -182,10 +230,88 @@ namespace MapWebSite.Repository
 
         }
 
+        private List<Row> selectRegion(int datasetId, int row, int column, int zoomLevel)
+        {
+            CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder()
+            {
+                QueryType = CassandraQueryBuilder.QueryTypes.Select
+            };
+
+            queryBuilder.TableName = "points_region_zoom_" + zoomLevel;
+            queryBuilder.SelectColumnNames = new List<string>() { "row",
+                                                                  "column",
+                                                                  "points" };
+            queryBuilder.ClausesList.Add(new BuilderTuple("datasetId", "dataset_id", CassandraQueryBuilder.Clauses.Equals));
+            queryBuilder.ClausesList.Add(new BuilderTuple("row", "row", CassandraQueryBuilder.Clauses.Equals));
+            queryBuilder.ClausesList.Add(new BuilderTuple("column", "column", CassandraQueryBuilder.Clauses.Equals));
+
+            executionInstance.PrepareQuery(queryBuilder);
+
+            return executionInstance.ExecuteQuery(new
+            {
+                datasetId,
+                row,
+                column
+            });
+        }
+
+        private List<Row> selectRegions(int datasetId, Tuple<int, int> from, Tuple<int, int> to, int zoomLevel)
+        {
+
+            CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder()
+            {
+                QueryType = CassandraQueryBuilder.QueryTypes.Select
+            };
+
+            queryBuilder.TableName = "points_region_zoom_" + zoomLevel;
+            queryBuilder.SelectColumnNames = new List<string>() { "row",
+                                                                  "column",
+                                                                  "points" };
+            queryBuilder.ClausesList.Add(new BuilderTuple("datasetId", "dataset_id", CassandraQueryBuilder.Clauses.Equals));
+            queryBuilder.ClausesList.Add(new BuilderTuple("fromRow", "row", CassandraQueryBuilder.Clauses.GreaterOrEqual));
+            queryBuilder.ClausesList.Add(new BuilderTuple("fromColumn", "column", CassandraQueryBuilder.Clauses.GreaterOrEqual));
+            queryBuilder.ClausesList.Add(new BuilderTuple("toRow", "row", CassandraQueryBuilder.Clauses.LessOrEqual));
+            queryBuilder.ClausesList.Add(new BuilderTuple("toColumn", "column", CassandraQueryBuilder.Clauses.LessOrEqual));
+
+            executionInstance.PrepareQuery(queryBuilder);
+
+            return executionInstance.ExecuteQuery(new
+            {
+                datasetId,
+                fromRow = from.Item1,
+                fromColumn = from.Item2,
+                toRow = to.Item1,
+                toColumn = to.Item2
+            });
+
+        }
+
+
+
+
+
+
+        private IEnumerable<PointsRegion> convertRowSetToPointsRegions(List<Row> rowSet)
+        {
+            ConcurrentBag<PointsRegion> result = new ConcurrentBag<PointsRegion>();
+
+            Parallel.ForEach(rowSet, row =>
+            {
+                result.Add(new PointsRegion()
+                {
+                    Column = Convert.ToInt32(row["column"]),
+                    Row = Convert.ToInt32(row["row"]),
+                    Points = convertBasePoints(row["points"] as BasePointType[])
+                });
+            });
+
+            return result;
+        }
+
 
         private IEnumerable<PointBase> convertRowSetToBasicPointList(List<Row> rowSet)
         {
-             
+
             ConcurrentBag<PointBase> result = new ConcurrentBag<PointBase>();
             Parallel.ForEach(rowSet, row =>
             {
@@ -244,7 +370,28 @@ namespace MapWebSite.Repository
             return result;
         }
 
-         
+
+        private IEnumerable<PointBase> convertBasePoints(BasePointType[] basePoints)
+        {
+            List<PointBase> result = new List<PointBase>();
+
+            foreach (var basePoint in basePoints)
+                result.Add(new PointBase()
+                {
+                    DeformationRate = basePoint.deformation_rate,
+                    EstimatedDeformationRate = basePoint.estimated_deformation_rate,
+                    Height = basePoint.height,
+                    EstimatedHeight = basePoint.estimated_height,
+                    Latitude = basePoint.latitude,
+                    Longitude = basePoint.longitude,
+                    Number = basePoint.number,
+                    Observations = basePoint.observations,
+                    StandardDeviation = basePoint.standard_deviation
+                });
+
+            return result;
+        }
+
 
         #endregion
     }

@@ -33,6 +33,7 @@ class HubRouter {
         longitudeFrom,
         latitudeTo,
         longitudeTo,
+        zoomLevel,
         existingRegions,
         username,
         datasetName) {
@@ -45,6 +46,7 @@ class HubRouter {
             longitudeFrom,
             latitudeTo,
             longitudeTo,
+            zoomLevel,
             existingRegions,
             username,
             datasetName);

@@ -18,6 +18,7 @@ namespace MapWebSite.Hubs
                                       decimal longitudeFrom, 
                                       decimal latitudeTo, 
                                       decimal longitudeTo, 
+                                      int zoomLevel,
                                       dynamic[] existingRegions,
                                       string username,
                                       string datasetName)
@@ -48,6 +49,7 @@ namespace MapWebSite.Hubs
 
             databaseInteractionHandler.RequestPoints(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
                                       new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
+                                      zoomLevel,
                                       username,
                                       datasetName, 
                                        existingRegionsDictionary, 

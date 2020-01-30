@@ -38,7 +38,7 @@ export function DisplayHubProcessing(display) {
  */
 var mapView = new ol.View({
     center: ol.proj.fromLonLat([28.652880, 44.177269], 'EPSG:3857'),
-    zoom: 16,
+    zoom: 20,
     minZoom: 3,
     maxZoom: 20
 })

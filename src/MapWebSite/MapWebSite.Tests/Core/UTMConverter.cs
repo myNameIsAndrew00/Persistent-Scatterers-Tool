@@ -13,6 +13,14 @@ namespace MapWebSite.Tests.Core
     [TestClass]
     public class UTMConverter
     {
+
+        [TestMethod]
+        public void UTMConverterTest()
+        {
+            Helper.UTMConverter converter = new Helper.UTMConverter();
+            var result = converter.ToLatLong(35, 'T', 632353.875m, 4919262.500m);
+        }
+
         [TestMethod]
         public void ConvertPoints()
         {

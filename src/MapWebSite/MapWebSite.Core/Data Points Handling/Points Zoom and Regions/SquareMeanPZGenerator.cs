@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 namespace MapWebSite.Core.DataPoints
 {
      
-    [Obsolete("Points intermediate values are not generated anymore")]
+    [Obsolete("Points number reduction (based on mean of a region of points) is not generated anymore")]
     /// <summary>
     /// Use this class to generate zoom levels points for a certain DataSet of Points
     /// This class create points dividing provided points in certains squares of fixed dimension
     /// </summary>
-    public class SquareMeanPZGenerator : IDataPointsZoomLevelsGenerator
+    public class SquareMeanPZGenerator : IDataPointsZoomLevelsSource
     {
         private struct Coordinate
         {

@@ -9,13 +9,26 @@ namespace MapWebSite.Core
 {
     public static class Helper
     {
-   
+
+        /// <summary>
+        /// Use this method to a get fraction of a number
+        /// </summary>
+        /// <param name="percent">The percentage representing a ratio expressed as a fraction of 100 </param>
+        /// <param name="totalCount">Number of total units from which will be retrieved the fraction</param>
+        /// <returns>Amount of items representing a fraction of totalCount based on percent</returns>
+        public static int GetFraction(decimal percent, int totalAmount)
+        {
+            if (percent < 0m || percent > 100m) throw new ArgumentException("The percent must be a value between 0 and 100");
+
+            return (int)((decimal)totalAmount * percent / 100m);
+        }
+
         public static byte[] GenerateRandomBytes(int bytesCount)
         {
-           if (bytesCount == 0) return null;
+            if (bytesCount == 0) return null;
 
-           byte[] result = new byte[bytesCount];
-           
+            byte[] result = new byte[bytesCount];
+
             using (var randomProvider = new RNGCryptoServiceProvider())
                 randomProvider.GetNonZeroBytes(result);
 
@@ -38,21 +51,21 @@ namespace MapWebSite.Core
             using (SHA256 sha256Instance = SHA256.Create())
             {
                 sha256Instance.ComputeHash(hashInput, 0, Data.Length + Salt.Length);
-                digest = sha256Instance.Hash;             
+                digest = sha256Instance.Hash;
             }
 
             return digest;
         }
 
         /// <summary>
-        /// This class provide method to convert 
+        /// This class provide method to convert geographic coordinates
         /// </summary>
         public class UTMConverter
         {
             private readonly decimal PI = 3.1415926535897931m;
 
             private readonly decimal k0 = 0.9996m;
-             
+
             private readonly decimal e = 0.0818191913108701855043250591190036654364021844723924m;
 
             private readonly decimal ePow2div4 = 0.001673595016691193816151969727945394843836788900874815961m;
@@ -122,12 +135,12 @@ namespace MapWebSite.Core
                     decimal ca = 3 * ei / 2 - 27 * ei.Pow(3) / 32;
                     decimal cb = 21 * ei.Pow(2) / 16 - 55 * ei.Pow(4) / 32;
                     decimal cc = 151 * ei.Pow(3) / 96;
-                    decimal cd = 1097 *  ei.Pow(4) / 512;
+                    decimal cd = 1097 * ei.Pow(4) / 512;
 
-                    phi[0] =           ((decimal)mu 
-                                    + ca * (decimal)Math.Sin((double)(2 * mu)) 
-                                    + cb * (decimal)Math.Sin((double)(4 * mu)) 
-                                    + cc * (decimal)Math.Sin((double)(6 * mu)) 
+                    phi[0] = ((decimal)mu
+                                    + ca * (decimal)Math.Sin((double)(2 * mu))
+                                    + cb * (decimal)Math.Sin((double)(4 * mu))
+                                    + cc * (decimal)Math.Sin((double)(6 * mu))
                                     + cd * (decimal)Math.Sin((double)(8 * mu)));
                 };
 
@@ -154,14 +167,14 @@ namespace MapWebSite.Core
 
                     decimal lof1 = (500000 - easting) / (n0 * k0);
                     decimal lof2 = (1 + 2 * t0 + Q0) * dd0.Pow(3) / 6;
-                 
+
                     decimal lof3 = (5 - 2 * Q0 + 28 * t0 - 3 * Q0.Pow(2) + 8 * e1sq + 24 * t0.Pow(2))
                                  * dd0.Pow(5) / 120;
                     decimal _a2 = (lof1 - lof2 + lof3) / (decimal)Math.Cos((double)phi[0]);
 
                     phi[1] = _a2 * 180 / PI;
                 };
-                              
+
                 setFirstPhi();
                 setFact();
             }

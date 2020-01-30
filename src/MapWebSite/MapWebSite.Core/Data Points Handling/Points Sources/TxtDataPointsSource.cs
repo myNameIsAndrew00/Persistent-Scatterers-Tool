@@ -18,8 +18,14 @@ namespace MapWebSite.Core.DataPoints
 
         readonly Helper.UTMConverter utmConverter = new Helper.UTMConverter();
 
+        /// <summary>
+        /// Represents a file which contains metadata about points format
+        /// </summary>
         public string HeaderFile { get; set; } = null;
 
+        /// <summary>
+        /// Represents a file which contains the points which must be read
+        /// </summary>
         public string DisplacementsFile { get; set; } = null;
 
         public int Zone { get; set; } = int.MinValue;
@@ -55,9 +61,7 @@ namespace MapWebSite.Core.DataPoints
                     }
                 });
 
-                if (exceptions.Count > 0) throw new Exception("Failed to parse with success the file");
-            
-                //TODO: create regions of interest
+                if (exceptions.Count > 0) throw new Exception("Failed to parse with success the file");            
             
             }
             catch(Exception exception)

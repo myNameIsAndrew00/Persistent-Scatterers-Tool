@@ -9,15 +9,14 @@ using System.Threading.Tasks;
 
 namespace MapWebSite.Domain
 {
-    using Coordinates = Tuple<
-                Tuple<decimal, decimal>,
-                Tuple<decimal, decimal>>;
+    using Region = Tuple<int, int, int>;
 
     using PointsZonePair = Tuple<IEnumerable<PointBase>, string, bool>;
+   
     /// <summary>
     /// A cache which manages the points
     /// Cache flow:
-    ///     -user asks for a set of points starting from <startLatitude><startLongitude> to <endLatitude><endLongitude>
+    ///     -user asks for a set of points starting from a row and column (based on zoom level)
     ///     -find the regions which contains the points
     ///     -if the regions are contained in cache with the status 'Created' then return the datapoints
     ///     -if the regions are not contained in cache, request them, and create an entry in cache with status 'Creating'
@@ -28,21 +27,21 @@ namespace MapWebSite.Domain
         const decimal latitudeSide = 0.05m;
         const decimal longitudeSide = 0.10m;
 
-        internal static string GenerateKey(decimal fromLatitude, decimal fromLongitude, decimal toLatitude, decimal toLongitude, int datasetId)
-                => string.Format("{0:0.00}_{1:0.00}_{2:0.00}_{3:0.00}_{4}", fromLatitude, fromLongitude,toLatitude, toLongitude, datasetId);
+        internal static string GenerateKey(int row, int column, int zoomLevel, int datasetId)
+                => string.Format("{0}_{1}_{2}_{3}", row, column, zoomLevel, datasetId);
 
 
         /// <summary>
         /// Update an existing entry in the cache
         /// </summary>
-        /// <param name="from">Start position (Latitude and longitude) of the area which contains data points</param>
-        /// <param name="to">End position (Latitude and longitude) of the area which contains data points</param>
+        /// <param name="row">The row of the area which contains data points</param>
+        /// <param name="column">The column of the area which contains data points</param>
         /// <param name="datasetId">Id of the dataset which contains the points</param>
         /// <param name="dataPoints">Datapoints which must be cached</param>
         /// <returns>A string which represents the key generated for the cached zone</returns>
-        internal static string Write(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId, IEnumerable<PointBase> dataPoints)
+        internal static string Write(int row, int column, int zoomLevel, int datasetId, IEnumerable<PointBase> dataPoints)
         {
-            string key = GenerateKey(from.Item1, from.Item2, to.Item1, to.Item2, datasetId);
+            string key = GenerateKey(row, column, zoomLevel, datasetId);
             MemoryCache.Default.Set(key,
                 new CacheEntry
                 {
@@ -56,13 +55,13 @@ namespace MapWebSite.Domain
         /// <summary>
         /// Create a new empty entry in the cache
         /// </summary>
-        /// <param name="from">Start position (Latitude and longitude) of the area which contains data points</param>
-        /// <param name="to">End position (Latitude and longitude) of the area which contains data points</param>
+        /// <param name="row">The row of the area which contains data points</param>
+        /// <param name="column">The column of the area which contains data points</param>
         /// <param name="datasetId">Id of the dataset which contains the points</param>
-        internal static void Create(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId)
+        internal static void Create(int row, int column, int zoomLevel, int datasetId)
         {
-            string key = GenerateKey(from.Item1, from.Item2, to.Item1, to.Item2, datasetId);
-            
+            string key = GenerateKey(row, column, zoomLevel, datasetId);
+
             MemoryCache.Default.Add(key,
                              new CacheEntry()
                              {
@@ -75,12 +74,12 @@ namespace MapWebSite.Domain
         /// <summary>
         /// Remove a entry from the cache
         /// </summary>
-        /// <param name="from">Start position (Latitude and longitude) of the area which contains data points</param>
-        /// <param name="to">End position (Latitude and longitude) of the area which contains data points</param>
+        /// <param name="row">The row of the area which contains data points</param>
+        /// <param name="column">The column of the area which contains data points</param>
         /// <param name="datasetId">Id of the dataset which contains the points</param>
-        internal static void Remove(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId)
+        internal static void Remove(int row, int column, int zoomLevel, int datasetId)
         {
-            string key = GenerateKey(from.Item1, from.Item2, to.Item1, to.Item2, datasetId);
+            string key = GenerateKey(row, column, zoomLevel, datasetId);
             MemoryCache.Default.Remove(key);
         }
 
@@ -94,13 +93,14 @@ namespace MapWebSite.Domain
         /// <param name="datasetId">Id of the dataset which contains the points</param>
         /// <param name="coordinates">A parameter which contains which region was not found in the cache</param>
         /// <returns></returns>
-        internal static IEnumerable<PointsZonePair> Get(Tuple<decimal, decimal> from, 
-                                                        Tuple<decimal, decimal> to, 
+        internal static IEnumerable<PointsZonePair> Get(Tuple<int, int> from, 
+                                                        Tuple<int, int> to, 
+                                                        int zoomLevel,
                                                         int datasetId,
                                                         Dictionary<string,int> regionsPointsCount,
-                                                        out List<Coordinates> coordinates)
+                                                        out List<Region> coordinates)
         {         
-            List<string> cacheInfo = getCacheKeys(from, to, datasetId, out List<Coordinates> requiredPoints);
+            List<string> cacheInfo = getCacheKeys(from, to, zoomLevel, datasetId,  out List<Region> requiredPoints);
 
             var result = new List<PointsZonePair>();
 
@@ -124,14 +124,8 @@ namespace MapWebSite.Domain
                 if (cacheEntryValue == null || 
                    (regionsPointsCount.Keys.Contains(cacheKey) && cacheEntryValue.Count() == regionsPointsCount[cacheKey]))                  
                     continue; 
-
-                IEnumerable<PointBase> points = (cacheEntryValue).Where
-                    (item => item.Latitude >= from.Item1 &&
-                             item.Longitude >= from.Item2 &&
-                             item.Latitude <= to.Item1 &&
-                             item.Longitude <= to.Item2);
-
-                result.Add(new PointsZonePair(points, cacheKey, points.Count() == cacheEntryValue.Count()));
+                 
+                result.Add(new PointsZonePair(cacheEntryValue, cacheKey, false));
             }
 
             coordinates = requiredPoints.Count > 0 ? requiredPoints : null;
@@ -141,71 +135,34 @@ namespace MapWebSite.Domain
 
         #region Private
 
-        private static List<string> getCacheKeys(Tuple<decimal, decimal> from, Tuple<decimal, decimal> to, int datasetId, out List<Coordinates> requiredPoints)
+        private static List<string> getCacheKeys(Tuple<int, int> from, Tuple<int, int> to, int zoomLevel, int datasetId, out List<Region> requiredPoints)
         {
-            getCacheSearchingLimits(from,
-                                   to,
-                                   out decimal fromLat,
-                                   out decimal fromLong,
-                                   out decimal toLat,
-                                   out decimal toLong);
         
             List<string> result = new List<string>();
 
-            requiredPoints = new List<Coordinates>();
+            requiredPoints = new List<Region>();
 
-            for (decimal i = fromLat; i <= toLat; i += latitudeSide)
-                for (decimal j = fromLong; j <= toLong; j += longitudeSide)
+            for (int i = from.Item1; i <= to.Item1; i += 1)
+                for (int j = from.Item2; j <= to.Item2; j += 1)
                 {
-                    if (
-                        //TODO: check if region exists. A new entry must be added in database
-                        !(i >= 44m &&
-                        i <= 45m &&
-                        j >= 28 &&
-                        j <= 30m))
-                        continue;
-
-                    string key = GenerateKey(i, j, i + latitudeSide, j + longitudeSide, datasetId);
+                  
+                    string key = GenerateKey(i, j, zoomLevel, datasetId);
                     var cacheValue = MemoryCache.Default.Get(key);
 
                     //if the key was not found as entry in cache, request the points and create an entry
                     //which is identified as 'creating'
                     if (cacheValue == null )
                     {
-                        var startCoordinates = new Tuple<decimal, decimal>(i, j);
-                        var endCoordinates = new Tuple<decimal, decimal>(i + latitudeSide, j + longitudeSide);
-                        requiredPoints.Add(new Coordinates( startCoordinates, endCoordinates));
+                        
+                        requiredPoints.Add(new Region(i, j, zoomLevel));
 
-                        PointsCacheManager.Create(startCoordinates, endCoordinates, datasetId);
+                        PointsCacheManager.Create(i, j, zoomLevel, datasetId);
                     }
                     else result.Add(key);
                 }
 
             return result;
-        }
-
-        private static void getCacheSearchingLimits(
-            Tuple<decimal,decimal> from,
-            Tuple<decimal,decimal> to,
-            out decimal fromLat, 
-            out decimal fromLong, 
-            out decimal toLat,
-            out decimal toLong)
-        {
-            int latSideInt = decimal.ToInt32(latitudeSide * 100);
-            int longSideInt = decimal.ToInt32(longitudeSide * 100);
-
-            int fromLatInt = decimal.ToInt32(from.Item1 * 100);
-            int fromLongInt = decimal.ToInt32(from.Item2 * 100);
-            int toLatInt = decimal.ToInt32(to.Item1 * 100);
-            int toLongInt = decimal.ToInt32(to.Item1 * 100);
-
-            fromLat = Convert.ToDecimal((fromLatInt - fromLatInt % latSideInt)) / 100;
-            fromLong = Convert.ToDecimal((fromLongInt - fromLongInt % longSideInt)) / 100;
-            toLat = Convert.ToDecimal((toLatInt + (latSideInt - toLatInt % latSideInt))) / 100;
-            toLong = Convert.ToDecimal((toLongInt + (longSideInt - toLongInt % longSideInt))) / 100;
-
-        }
+        } 
 
         #endregion
     }

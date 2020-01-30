@@ -1,4 +1,5 @@
-﻿using MapWebSite.Types;
+﻿using MapWebSite.Model;
+using MapWebSite.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,7 @@ namespace MapWebSite.Repository.Entities
     {
 
         [UserDefinedTypeColumn("number")]
-        public int point_number { get; set; }
-
-        public decimal reference_image_x { get; set; }
-
-        public decimal reference_image_y { get; set; }
-
+        public int number { get; set; }
 
         [UserDefinedTypeColumn("longitude")]
         public decimal longitude { get; set; }
@@ -50,5 +46,21 @@ namespace MapWebSite.Repository.Entities
         [UserDefinedTypeColumn("observations")]
         public string observations { get; set; }
 
+
+        public static explicit operator BasePointType(PointBase point)
+        {
+            return new BasePointType()
+            {
+                deformation_rate = point.DeformationRate,
+                estimated_deformation_rate = point.EstimatedDeformationRate,
+                estimated_height = point.EstimatedHeight,
+                height = point.Height,
+                latitude = point.Latitude,
+                longitude = point.Longitude,
+                number = point.Number,
+                observations = point.Observations,
+                standard_deviation = point.StandardDeviation
+            };
+        }
     }
 }

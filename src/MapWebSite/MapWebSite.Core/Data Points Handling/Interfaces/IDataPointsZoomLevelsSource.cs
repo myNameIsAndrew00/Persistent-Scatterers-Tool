@@ -3,7 +3,8 @@ using System;
 
 namespace MapWebSite.Core.DataPoints
 { 
-    public interface IDataPointsZoomLevelsGenerator
+    [Obsolete("This mechanism is not longer needed")]
+    public interface IDataPointsZoomLevelsSource
     {
         PointsDataSet[] CreateDataSetsZoomSets(PointsDataSet originalDataSet, int minZoomLevel, int maxZoomLevel);
 

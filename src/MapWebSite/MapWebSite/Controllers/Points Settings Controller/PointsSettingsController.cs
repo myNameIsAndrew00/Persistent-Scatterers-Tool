@@ -113,7 +113,7 @@ namespace MapWebSite.Controllers
                     ChoseDatasetViewModel.DataPointsPerPage
                 )?.Select(dataset => new
                 {
-                    dataset.DatasetName,
+                    dataset.Name,
                     dataset.ID,
                     dataset.Username,
                     Status = dataset.Status.GetEnumString(),

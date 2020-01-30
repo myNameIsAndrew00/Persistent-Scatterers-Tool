@@ -15,7 +15,8 @@ namespace MapWebSite.Core.Database
     {
         None = -1,
         DataSetName = 1,
-        Username = 2
+        Username = 2,
+        //todo: add State = 3
     }
 
     /// <summary>

@@ -63,9 +63,9 @@ namespace MapWebSite.CassandraAccess
             
                 await currentSession.ExecuteAsync(boundStatement);
             }
-            catch
+            catch(Exception exception)
             {
-
+                //todo: log exception
             }
         }
 
@@ -74,14 +74,21 @@ namespace MapWebSite.CassandraAccess
             if (string.IsNullOrEmpty(this.query)) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
             if (this.currentSession == null) createConnection();
 
-            var statement = currentSession.Prepare(this.query);
+            try
+            {
+                var statement = currentSession.Prepare(this.query);
 
-            var boundStatement = statement.Bind(parameters);
+                var boundStatement = statement.Bind(parameters);
 
-            RowSet result = currentSession.Execute(boundStatement);
+                RowSet result = currentSession.Execute(boundStatement);
 
-            return result.GetRows().ToList();
-        
+                return result.GetRows().ToList();
+            }
+            catch (Exception exception)
+            {
+                //todo: log exception
+                return new List<Row>();
+            }
         }
 
 

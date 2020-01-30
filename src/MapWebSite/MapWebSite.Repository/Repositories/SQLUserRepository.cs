@@ -303,7 +303,7 @@ namespace MapWebSite.Repository
                     result.Add(new PointsDataSetBase()
                     {
                         Username = (string)row["username"],
-                        DatasetName = (string)row["dataset_name"],
+                        Name = (string)row["dataset_name"],
                         ID = (int)row["dataset_id"],
                         Status = row["status_id"] == DBNull.Value ? DatasetStatus.None : (DatasetStatus) ((int)row["status_id"])
                     }); ;

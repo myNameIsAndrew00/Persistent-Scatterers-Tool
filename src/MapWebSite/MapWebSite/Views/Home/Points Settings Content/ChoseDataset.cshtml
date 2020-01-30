@@ -29,14 +29,14 @@
 
             @foreach (var item in Model.Datasets)
             {
-        <tr id="user_dataset_@(item.Username)_@(item.DatasetName)">
+        <tr id="user_dataset_@(item.Username)_@(item.Name)">
 
             <td>@item.Username</td>
-            <td>@item.DatasetName</td>
+            <td>@item.Name</td>
             <td>@item.Status.GetEnumString()</td>
             <td>
-                <input type="hidden" id="user_dataset_@(item.Username)_@(item.DatasetName)_id" value="@item.ID" />
-                <button class="use" disabled="@(!item.IsValid)" onclick="useDataset('@item.Username','@item.DatasetName')">@TextDictionary.HPSCDUseButton</button>
+                <input type="hidden" id="user_dataset_@(item.Username)_@(item.Name)_id" value="@item.ID" />
+                <button class="use" disabled="@(!item.IsValid)" onclick="useDataset('@item.Username','@item.Name')">@TextDictionary.HPSCDUseButton</button>
             </td>
         </tr>
             }

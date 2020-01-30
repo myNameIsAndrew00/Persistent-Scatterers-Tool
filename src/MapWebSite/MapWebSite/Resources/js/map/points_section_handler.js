@@ -121,6 +121,7 @@ class PointsSectionHandler {
             coordinates.topCorner.longitude,
             coordinates.bottomCorner.latitude,
             coordinates.bottomCorner.longitude,
+            this.map.getView().getZoom(),
             existingRegions,
             SelectedDataset.username,
             SelectedDataset.datasetName
@@ -220,25 +221,25 @@ class PointsSectionHandler {
     getCornerCoordinates() {
         var viewBox = this.map.getView().calculateExtent(this.map.getSize());
         var cornerCoordinates = ol.proj.transformExtent(viewBox, 'EPSG:3857', 'EPSG:4326');
-        console.log('latitude from: ' + cornerCoordinates[1]);
+        console.log('latitude from: ' + cornerCoordinates[3]);
         console.log('longitude from: ' + cornerCoordinates[0]);
-        console.log('latitude to: ' + cornerCoordinates[3]);
+        console.log('latitude to: ' + cornerCoordinates[1]);
         console.log('longitude to: ' + cornerCoordinates[2]);
 
-        //formula: latide(or longidue) = [ (latitudeDown - latitudeTop) / rowsCount ] * rowIndex + latTop;
+        //formula: latide(or longidue) = [ (latitudeTop - latitudeDown) / rowsCount ] * rowIndex + latTop;
         var sectionLength = {
             oX: (cornerCoordinates[3] - cornerCoordinates[1]) / SectionsRowsCount,
             oY: (cornerCoordinates[2] - cornerCoordinates[0]) / SectionsRowsCount
         };
         var topCorner = {
-            latitude: sectionLength.oX * this.rowIndex + cornerCoordinates[1],
+            latitude: sectionLength.oX * this.rowIndex + cornerCoordinates[3],
             longitude: sectionLength.oY * this.columnIndex + cornerCoordinates[0]
         };
 
         return {
             topCorner,
             bottomCorner: {
-                latitude: topCorner.latitude + sectionLength.oX,
+                latitude: topCorner.latitude - sectionLength.oX,
                 longitude: topCorner.longitude + sectionLength.oY
             }
         }

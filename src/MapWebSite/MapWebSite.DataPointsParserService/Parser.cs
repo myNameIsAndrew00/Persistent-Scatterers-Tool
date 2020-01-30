@@ -3,10 +3,10 @@ using MapWebSite.Core.DataPoints;
 using MapWebSite.Model;
 using MapWebSite.Repository;
 using System;
-using System.Configuration; 
+using System.Configuration;
 using System.Diagnostics;
-using System.IO; 
-using System.ServiceProcess; 
+using System.IO;
+using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -35,7 +35,7 @@ namespace MapWebSite.DataPointsParserService
             InitializeComponent();
             CassandraDataPointsRepository.Initialise();
 
-            this.userRepository = new SQLUserRepository();           
+            this.userRepository = new SQLUserRepository();
             this.dataPointsRepository = CassandraDataPointsRepository.Instance;
 
             if (!EventLog.Exists(ConfigurationManager.AppSettings["LogEntryName"]))
@@ -81,27 +81,32 @@ namespace MapWebSite.DataPointsParserService
 
                     foreach (var unprocessedDirectory in unprocessedDirectories)
                     {
+                        logData($"Starting to process the directory {unprocessedDirectory}", EventLogEntryType.Information);
                         try
                         {
-                             
+
                             processFile(Path.Combine(unprocessedDirectory,
                                                      ConfigurationManager.AppSettings["DataPointsSourceFileName"]),
                                         username,
                                         Path.GetFileName(unprocessedDirectory));
-                            
-                            string processedDirectory = Path.Combine(ConfigurationManager.AppSettings["PointsDatasetsParsedFolder"], 
+
+                            string processedDirectory = Path.Combine(ConfigurationManager.AppSettings["PointsDatasetsParsedFolder"],
                                                                      username,
                                                                      Path.GetFileName(unprocessedDirectory));
- 
+
+                            if (!Directory.Exists(Path.GetDirectoryName(processedDirectory)))
+                                Directory.CreateDirectory(Path.GetDirectoryName(processedDirectory));
 
                             Directory.Move(unprocessedDirectory,
-                                           processedDirectory);
+                                       processedDirectory);
+
+                            logData($"Successufuly parsed directory {unprocessedDirectory}", EventLogEntryType.Information);
                         }
                         catch (Exception exception)
                         {
                             logData(
                                 "Failed to parse: " + unprocessedDirectory + "\n" +
-                                exception.Message + "\n" + exception.StackTrace, EventLogEntryType.Error);                            
+                                exception.Message + "\n" + exception.StackTrace, EventLogEntryType.Error);
                         }
                     }
 
@@ -121,10 +126,10 @@ namespace MapWebSite.DataPointsParserService
             (pointsSource as TxtDataPointsSource).DisplacementsFile = fileName;
             (pointsSource as TxtDataPointsSource).LatitudeZone = 'T'; //TODO: modify here. This can be read from database
             (pointsSource as TxtDataPointsSource).Zone = 35;          //TODO: modify here. This can be read from database
-           
+
             PointsDataSet dataset = pointsSource.CreateDataSet(datasetName);
 
-            if(dataset == null)
+            if (dataset == null)
             {
                 this.userRepository.UpdateDatasetStatus(datasetName, DatasetStatus.GenerateFail, username);
                 return;
@@ -137,7 +142,10 @@ namespace MapWebSite.DataPointsParserService
             //IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
             //PointsDataSet[] zoomedDataSets = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
 
-            Task insertTask = this.dataPointsRepository.InsertPointsDatasets(dataset, null);
+            IDataPointsRegionsSource regionSource = new PowerOfTwoRegionsSource();
+            regionSource.GenerateRegions(dataset);
+
+            Task insertTask = this.dataPointsRepository.InsertPointsDataset(dataset);
 
             insertTask.Wait();
 

@@ -15,7 +15,7 @@ namespace MapWebSite.Model
 
         public string Username { get; set; }
 
-        public string DatasetName { get; set; }
+        public string Name { get; set; }
 
         public DatasetStatus Status { get; set; }
 
@@ -26,14 +26,11 @@ namespace MapWebSite.Model
     /// Model used for points data set
     /// </summary>
     public class PointsDataSet : PointsDataSetBase
-    {
-
-        public string Name { get; set; }
-
+    {         
 
         public IEnumerable<Point> Points { get; set; }
 
-        public IEnumerable<PointsRegion> PointsRegions { get; set; }
+        public IEnumerable<PointsRegionsLevel> PointsRegions { get; set; }
 
     }
 
@@ -41,9 +38,10 @@ namespace MapWebSite.Model
     [DataContract]
     public class PointBase : ICloneable
     {
+        [Obsolete("Base points contain now all the information represented by this enum")]
         /// <summary>
         /// An enum which describes the meaning of OptionalField
-        /// </summary>
+        /// </summary>       
         public enum BasicInfoOptionalField
         {
             [EnumString("Height")]
@@ -152,6 +150,7 @@ namespace MapWebSite.Model
                 Number = this.Number,
                 Observations = this.Observations,
                 StandardDeviation = this.StandardDeviation,
+                //Displacements must not be cloned
                 Displacements = this.Displacements,
                 ReferenceImageX = this.ReferenceImageX,
                 ReferenceImageY = this.ReferenceImageY

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json; 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Reflection;
@@ -14,6 +15,22 @@ namespace MapWebSite.Core
     /// </summary>
     public static class ExtensionMethods
     {
+        /// <summary>
+        /// Clone a IEnumerable container
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="listToClone">The container which must be cloned</param>
+        /// <returns>A clone of the parameter</returns>
+        public static IEnumerable<T> Clone<T>(this IEnumerable<T> listToClone) where T : ICloneable
+        {
+            List<T> result = new List<T>();
+
+            foreach (var item in listToClone)
+                result.Add((T)item.Clone());
+            
+            return result;
+        }
+
         /// <summary>
         /// Use this extension method to map an object with a DataTable. <br></br>
         /// DataTable columns will be the properties of the object which are decorated with UserDefinedTypeColumn attribute

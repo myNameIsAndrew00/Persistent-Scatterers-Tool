@@ -33,8 +33,8 @@ namespace MapWebSite.Tests.Database
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
             IDataPointsSource pointsSource = new TxtDataPointsSource();
 
-            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\header.txt";
-            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\docs\Data points\Constanta\displacements.txt";
+            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\git\docs\Data points\Constanta\header.txt";
+            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\git\docs\Data points\Constanta\displacements.txt";
             (pointsSource as TxtDataPointsSource).LatitudeZone = 'T';   
             (pointsSource as TxtDataPointsSource).Zone = 35;
             PointsDataSet dataset = pointsSource.CreateDataSet("fourthTest");
@@ -59,12 +59,12 @@ namespace MapWebSite.Tests.Database
             PointsDataSet dataset = pointsSource.CreateDataSet("Test");
              
 
-            IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
+            IDataPointsZoomLevelsSource zoomGenerator = new SquareMeanPZGenerator();
 
             PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
 
             CassandraDataPointsRepository repository = CassandraDataPointsRepository.Instance;
-            Task<bool> result = repository.InsertPointsDatasets(dataset, set);
+            Task<bool> result = repository.InsertPointsDataset(dataset);
 
             result.Wait();
         }
