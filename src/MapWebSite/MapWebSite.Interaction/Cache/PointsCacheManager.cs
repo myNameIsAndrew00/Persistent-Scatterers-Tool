@@ -11,7 +11,7 @@ namespace MapWebSite.Domain
 {
     using Region = Tuple<int, int, int>;
 
-    using PointsZonePair = Tuple<IEnumerable<PointBase>, string, bool>;
+    using PointsZonePair = Tuple<IEnumerable<PointBase>, string>;
    
     /// <summary>
     /// A cache which manages the points
@@ -27,7 +27,7 @@ namespace MapWebSite.Domain
         const decimal latitudeSide = 0.05m;
         const decimal longitudeSide = 0.10m;
 
-        internal static string GenerateKey(int row, int column, int zoomLevel, int datasetId)
+        private static string generateKey(int row, int column, int zoomLevel, int datasetId)
                 => string.Format("{0}_{1}_{2}_{3}", row, column, zoomLevel, datasetId);
 
 
@@ -41,7 +41,7 @@ namespace MapWebSite.Domain
         /// <returns>A string which represents the key generated for the cached zone</returns>
         internal static string Write(int row, int column, int zoomLevel, int datasetId, IEnumerable<PointBase> dataPoints)
         {
-            string key = GenerateKey(row, column, zoomLevel, datasetId);
+            string key = generateKey(row, column, zoomLevel, datasetId);
             MemoryCache.Default.Set(key,
                 new CacheEntry
                 {
@@ -60,7 +60,7 @@ namespace MapWebSite.Domain
         /// <param name="datasetId">Id of the dataset which contains the points</param>
         internal static void Create(int row, int column, int zoomLevel, int datasetId)
         {
-            string key = GenerateKey(row, column, zoomLevel, datasetId);
+            string key = generateKey(row, column, zoomLevel, datasetId);
 
             MemoryCache.Default.Add(key,
                              new CacheEntry()
@@ -79,7 +79,7 @@ namespace MapWebSite.Domain
         /// <param name="datasetId">Id of the dataset which contains the points</param>
         internal static void Remove(int row, int column, int zoomLevel, int datasetId)
         {
-            string key = GenerateKey(row, column, zoomLevel, datasetId);
+            string key = generateKey(row, column, zoomLevel, datasetId);
             MemoryCache.Default.Remove(key);
         }
 
@@ -90,22 +90,28 @@ namespace MapWebSite.Domain
         /// </summary>
         /// <param name="from">Starting position for requested interval</param>
         /// <param name="to">End position for requested interval</param>
-        /// <param name="datasetId">Id of the dataset which contains the points</param>
-        /// <param name="coordinates">A parameter which contains which region was not found in the cache</param>
+        /// <param name="zoomLevel">The zoom level of the required regions</param>
+        /// <param name="datasetId">Id of the dataset which contains the points</param> 
+        /// <param name="clientCachedRegions">A list of regions which are cached on browser</param>
+        /// <param name="uncachedRegions">A list of regions which are not cached by server</param>
         /// <returns></returns>
         internal static IEnumerable<PointsZonePair> Get(Tuple<int, int> from, 
                                                         Tuple<int, int> to, 
                                                         int zoomLevel,
                                                         int datasetId,
-                                                        Dictionary<string,int> regionsPointsCount,
-                                                        out List<Region> coordinates)
+                                                        string[] clientCachedRegions,
+                                                        out List<Region> uncachedRegions)
         {         
-            List<string> cacheInfo = getCacheKeys(from, to, zoomLevel, datasetId,  out List<Region> requiredPoints);
+            List<string> cacheInfo = getCacheKeys(from, to, zoomLevel, datasetId,  out List<Region> requiredRegions);
 
-            var result = new List<PointsZonePair>();
+            //a variable which contains a list of cached regions on server
+            var cachedRegions = new List<PointsZonePair>();
 
+            //check if all regions are in cache. If some regions are not in cache, return them in out parameter
             foreach (var cacheKey in cacheInfo)
             {
+                if (clientCachedRegions.Contains(cacheKey)) continue;
+
                 CacheEntry cacheEntry = null;
                 int attempts = 10;
                 do //busyWaiting
@@ -121,14 +127,34 @@ namespace MapWebSite.Domain
 
 
                 //if the entry is not valid or if the points where already fully requested, ignore the entry
-                if (cacheEntryValue == null || 
-                   (regionsPointsCount.Keys.Contains(cacheKey) && cacheEntryValue.Count() == regionsPointsCount[cacheKey]))                  
-                    continue; 
-                 
-                result.Add(new PointsZonePair(cacheEntryValue, cacheKey, false));
+                if (cacheEntryValue == null)         
+                    continue;
+
+                cachedRegions.Add(new PointsZonePair(cacheEntryValue, cacheKey));
             }
 
-            coordinates = requiredPoints.Count > 0 ? requiredPoints : null;
+            uncachedRegions = requiredRegions.Count > 0 ? requiredRegions : null;
+            return cachedRegions;
+        }
+
+        /// <summary>
+        /// Returns a list of server cache keys 
+        /// </summary>
+        /// <param name="from">Starting position for requested interval</param>
+        /// <param name="to">End position for requested interval</param>
+        /// <param name="datasetId">Id of the dataset which contains the points</param>
+        /// <param name="zoomLevel">The zoom level of the required regions</param>
+        /// <returns></returns>
+        public static List<string> GetKeys(Tuple<int, int> from, Tuple<int, int> to, int zoomLevel, int datasetId)
+        {
+            List<string> result = new List<string>();
+
+            for (int i = from.Item1; i <= to.Item1; i += 1)
+                for (int j = from.Item2; j <= to.Item2; j += 1)
+                {
+                    result.Add(generateKey(i, j, zoomLevel, datasetId));                    
+                }
+
             return result;
         }
 
@@ -146,7 +172,7 @@ namespace MapWebSite.Domain
                 for (int j = from.Item2; j <= to.Item2; j += 1)
                 {
                   
-                    string key = GenerateKey(i, j, zoomLevel, datasetId);
+                    string key = generateKey(i, j, zoomLevel, datasetId);
                     var cacheValue = MemoryCache.Default.Get(key);
 
                     //if the key was not found as entry in cache, request the points and create an entry

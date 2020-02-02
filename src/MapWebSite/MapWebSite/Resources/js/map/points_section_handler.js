@@ -5,7 +5,9 @@
 
 
 import { DisplayHubProcessing, ProcessingEnabled, PointsProcessedNotificationHandler } from './map.js';
+import { PointsRegionsManager } from '../api/cache/points_regions_manager.js';
 import { colorPalette } from '../home.js';
+import { Router, endpoints } from '../api/api_router.js';
 import { PointsLayer } from './points_layer.js';
 import { HubRouter } from '../api/hub_router.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
@@ -17,11 +19,13 @@ export class PointsSectionsContainer {
 
     constructor(map) {
         this.sections = [];
+        this.cache = new PointsRegionsManager();
+
         var sectionsCount = 0;
 
         for (var i = 0; i < SectionsRowsCount; i++)
             for (var j = 0; j < SectionsColumnsCount; j++)
-                this.sections[sectionsCount++] = new PointsSectionHandler(i, j, map);
+                this.sections[sectionsCount++] = new PointsSectionHandler(i, j, map, this.cache);
     }
 
     LoadPoints() {
@@ -38,7 +42,7 @@ export class PointsSectionsContainer {
 
 class PointsSectionHandler {
 
-    constructor(rowIndex, columnIndex, map) {
+    constructor(rowIndex, columnIndex, map, localCache) {
         this.previousDisplayedPoints = null;
 
         var caller = this;
@@ -46,7 +50,7 @@ class PointsSectionHandler {
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
 
-        /*initialise the router*/
+        /*initialise the router and the local cache*/
         this.hubRouter = new HubRouter();
 
         /*
@@ -58,7 +62,8 @@ class PointsSectionHandler {
         }); */
 
 
-        this.hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) { caller.processPoints(receivedInfo) });
+        this.hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) { caller.processPoints(receivedInfo, false) });
+       
         this.hubRouter.SetCallback('PointsProcessedNotification', PointsProcessedNotificationHandler);
 
         /**Use two vector sources to display the data. Alternate this layers when displaying something on map*/
@@ -80,52 +85,66 @@ class PointsSectionHandler {
         this.map = map;
         this.map.addLayer(this.mainVector);
         this.map.addLayer(this.secondaryVector);
+
+        this.localCache = localCache;
     }
 
 
     LoadPoints() {
-
-        this.secondaryVectorSource.clear(true);
-
-        /*switch the displayed layers*/
-        this.switchLayers();
-
         if (SelectedDataset.username === null && SelectedDataset.datasetName === null) return;
 
 
-        /*var existingRegions = pointsRegionsManager.GetRegions(
-            {
-                lat: pLatitudeFrom,
-                long: pLongitudeFrom
-            },
-            {
-                lat: pLatitudeTo,
-                long: pLongitudeTo
-            },
-            SelectedDataset.identifier);
-
-        //*cache and check the data here*
-        if (existingRegions === 'cached') {
-       //     return;
-        }*/
-        //this can be used with caching
-        var existingRegions = [];
+        this.secondaryVectorSource.clear(true);
+        /*switch the displayed layers*/
+        this.switchLayers();
 
         DisplayHubProcessing(true);
 
-
         var coordinates = this.getCornerCoordinates();
+        var caller = this;
 
-        this.hubRouter.RequestDataPoints(
-            coordinates.topCorner.latitude,
-            coordinates.topCorner.longitude,
-            coordinates.bottomCorner.latitude,
-            coordinates.bottomCorner.longitude,
-            this.map.getView().getZoom(),
-            existingRegions,
-            SelectedDataset.username,
-            SelectedDataset.datasetName
+        /*request the regions keys from server*/
+        Router.Get(endpoints.Home.RequestRegionsKeys,
+            {
+                latitudeFrom: coordinates.topCorner.latitude,
+                longitudeFrom: coordinates.topCorner.longitude,
+                latitudeTo: coordinates.bottomCorner.latitude,
+                longitudeTo: coordinates.bottomCorner.longitude,
+                zoomLevel: this.map.getView().getZoom(),
+                username: SelectedDataset.username,
+                datasetName: SelectedDataset.datasetName
+            }, function (regionsKeys) {
+                 
+                var cachedRegionsKeys = caller.localCache.GetRegionsKeys(regionsKeys);
+
+                /*if there are any cached regions on client side*/
+                if (cachedRegionsKeys.length > 0) {
+                    /*process them*/
+                    var cachedPoints = caller.localCache.GetRegions(cachedRegionsKeys);
+                    caller.processPoints(cachedPoints, true);
+
+                    /*if the required data is cached, return */
+                    if (regionsKeys.length == cachedRegionsKeys.length) {
+                        PointsProcessedNotificationHandler();
+                        return;
+                    }
+                }              
+
+                caller.hubRouter.RequestDataPoints(
+                    coordinates.topCorner.latitude,
+                    coordinates.topCorner.longitude,
+                    coordinates.bottomCorner.latitude,
+                    coordinates.bottomCorner.longitude,
+                    caller.map.getView().getZoom(),
+                    cachedRegionsKeys,
+                    SelectedDataset.username,
+                    SelectedDataset.datasetName
+                );
+            }
         );
+            
+        
+      
     }
 
     UpdatePointsLayer(points) {
@@ -148,7 +167,7 @@ class PointsSectionHandler {
 
     /*private methods*/
 
-    async processPoints(receivedInfo) {
+    async processPoints(receivedInfo, fromCache) {
 
         function buildStyleFromPalette(featureValue) {
 
@@ -195,25 +214,37 @@ class PointsSectionHandler {
 
         var points = [];
         var index = 0;
+        var pointsData = null;
 
-        var requestedPoints = JSON.parse(receivedInfo);
-        console.log('Hub result: ' + requestedPoints.length);
+        //check if data was received from hub or cache
+        if (fromCache) {
+            pointsData = receivedInfo;
 
+            console.log('From cache' + pointsData);
+        }
+        else {
 
-        for (var i = 0; i < requestedPoints.length; i++) { // requestedPoints.length; i++) {
-            points[i + index] = new ol.Feature({
-                'geometry': new ol.geom.Point(
-                    ol.proj.fromLonLat([requestedPoints[i].Longitude, requestedPoints[i].Latitude], 'EPSG:3857')),
-                'colorCriteria': requestedPoints[i].Height
-            });
-            points[i + index].setId(requestedPoints[i].Number);
-            points[i + index].ID = requestedPoints[i].Number;
-            points[i + index].longitude = requestedPoints[i].Longitude;
-            points[i + index].latitude = requestedPoints[i].Latitude;
-            points[i + index].color = buildStyleFromPalette(requestedPoints[i].Height);
+            var requestedData = JSON.parse(receivedInfo);
+            this.localCache.AddRegion(requestedData.regionKey, requestedData.pointsData);
+
+            pointsData = requestedData.pointsData;
+            console.log('Hub result: ' + requestedData.length);
         }
 
-        requestedPoints.splice(0, requestedPoints.length);
+
+        for (var i = 0; i < pointsData.length; i++) { // requestedPoints.length; i++) {
+            points[i + index] = new ol.Feature({
+                'geometry': new ol.geom.Point(
+                    ol.proj.fromLonLat([pointsData[i].Longitude, pointsData[i].Latitude], 'EPSG:3857')),
+                'colorCriteria': pointsData[i].Height
+            });
+            points[i + index].setId(pointsData[i].Number);
+            points[i + index].ID = pointsData[i].Number;
+            points[i + index].longitude = pointsData[i].Longitude;
+            points[i + index].latitude = pointsData[i].Latitude;
+            points[i + index].color = buildStyleFromPalette(pointsData[i].Height);
+        }
+         
         this.UpdatePointsLayer(points);
     }
 

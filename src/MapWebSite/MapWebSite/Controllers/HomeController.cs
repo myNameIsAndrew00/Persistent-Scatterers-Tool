@@ -7,10 +7,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Http;
+using System.Net.Http;
 
 namespace MapWebSite.Controllers
 {
-    [Authorize]  
+    [System.Web.Mvc.Authorize]
     public class HomeController : Controller
     {
 
@@ -19,7 +21,8 @@ namespace MapWebSite.Controllers
             return View();
         }
 
-        [HttpGet]
+
+        [System.Web.Mvc.HttpGet]
         public ActionResult RequestSettingsLayerContent(string settingsPageName)
         {
             switch (settingsPageName)
@@ -34,21 +37,36 @@ namespace MapWebSite.Controllers
                     return View((string)"Settings Content/ColorPicker");
             }
         }
-           
-            
-        [HttpGet]
-        public JsonResult RequestPointDetails(decimal latitude, 
-                                              decimal longitude, 
-                                              int identifier, 
-                                              decimal zoomLevel,
-                                              string username,
-                                              string datasetName)
-        { 
+
+     
+
+        [System.Web.Mvc.HttpGet]
+        public ActionResult Logout()
+        {
+            var AuthenticationManager = HttpContext.GetOwinContext().Authentication;
+            AuthenticationManager.SignOut();
+
+            return RedirectToAction("Index", "Login");
+        }
+    }
+
+
+    [System.Web.Http.Authorize]
+    public class HomeApiController : ApiController
+    {
+        [System.Web.Http.HttpGet]
+        public HttpResponseMessage RequestPointDetails(decimal latitude,
+                                             decimal longitude,
+                                             int identifier,
+                                             decimal zoomLevel,
+                                             string username,
+                                             string datasetName)
+        {
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
-            
+
             //*zoomLevel is not required anymore
             var point = databaseInteractionHandler.RequestPointDetails(datasetName,
-                                                                       username, 
+                                                                       username,
                                                                        0,
                                                                        new PointBase()
                                                                        {
@@ -56,17 +74,37 @@ namespace MapWebSite.Controllers
                                                                            Longitude = longitude,
                                                                            Number = identifier
                                                                        });
-        
-            return Json(new { data = point.JSONSerialize() }, JsonRequestBehavior.AllowGet);
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent( point.JSONSerialize() );
+            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            return response;
+             
         }
 
-        [HttpGet]
-        public ActionResult Logout()
-        {
-            var AuthenticationManager = HttpContext.GetOwinContext().Authentication;
-            AuthenticationManager.SignOut();
 
-            return RedirectToAction("Index", "Login");
+        [System.Web.Http.HttpGet]
+        public HttpResponseMessage RequestRegionsKeys(decimal latitudeFrom,
+                                     decimal longitudeFrom,
+                                     decimal latitudeTo,
+                                     decimal longitudeTo,
+                                     int zoomLevel,
+                                     string username,
+                                     string datasetName)
+        {
+            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+            var keys = databaseInteractionHandler.RequestPointsRegionsKeys(
+                                      new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
+                                      new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
+                                      zoomLevel,
+                                      username,
+                                      datasetName);
+            
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent(keys.JSONSerialize());
+            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            return response;
         }
     }
 }

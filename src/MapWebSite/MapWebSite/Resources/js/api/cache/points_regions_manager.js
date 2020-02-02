@@ -2,124 +2,51 @@
 class PointsRegionsManager {
 
     constructor() {
-        //constants related to server points cache manager
-        this.latitudeSide = 0.05;
-        this.longitudeSide = 0.10;
-
+        //constants related to server points cache manager 
         this.pointsRegions = {};
     }
 
     ResetCache() {
         this.pointsRegions = {};
+        //todo: create a policy to handle points
     }
 
-    AddRegion(cacheKey, pointsCount, filled) {
-        if (this.pointsRegions.hasOwnProperty(cacheKey)) {
-            if (this.pointsRegions[cacheKey].pointsCount < pointsCount)
-                this.pointsRegions[cacheKey] = { pointsCount, filled };
-        }
-        else this.pointsRegions[cacheKey] = { pointsCount, filled };
-    }
-
-    GetCachedPoints(from, to, datasetId) {
-        var result = [];
-        var limits = this.getCacheSearchingLimits(from, to);
-        var cacheKey = null;
-
-        for (var i = limits.from.lat; i <= limits.to.lat; i += this.latitudeSide)
-            for (var j = limits.from.long; j <= limits.to.long; j += this.longitudeSide) {
-                cacheKey = this.getCacheKey({
-                    lat: i.toFixed(2),
-                    long: j.toFixed(2)
-                }, {
-                    lat: (i + this.latitudeSide).toFixed(2),
-                    long: (j + this.longitudeSide).toFixed(2)
-                },
-                    datasetId);
-                result = result.concat(this.pointsRegions[cacheKey]);
-            }
-
-        return result;
+    AddRegion(cacheKey, points) {
+        this.pointsRegions[cacheKey] = points;
     }
 
     /**
-     * Get the regions which are not cached
-     * @param {any} from latitude and longitude of the top left offset
-     * @param {any} to latitude and longitude of the bottom right offset
-     * @param {any} datasetId id of the dataset
+     * Get the regions keys available in cache
+     * @param {any} regionsKeys If the parameter is set, get the cached regions keys from a range of keys
      */
-    GetRegions(from, to, datasetId) {
+    GetRegionsKeys(regionsKeys) {
         var result = [];
-        var resultIndex = 0;
 
-        var cached = true;
+        if (regionsKeys == null)
+            Object.keys(this.pointsRegions)
+                .forEach(key => result.push(key));
+        else
+            for (var i = 0; i < regionsKeys.length; i++)
+                if (Object.prototype.hasOwnProperty.call(this.pointsRegions, regionsKeys[i]))
+                    result.push(regionsKeys[i]);
 
-        var limits = this.getCacheSearchingLimits(from, to);
-        var cacheKey = null;
-
-        for (var i = limits.from.lat; i <= limits.to.lat; i += this.latitudeSide)
-            for (var j = limits.from.long; j <= limits.to.long; j += this.longitudeSide) {
-                cacheKey = this.getCacheKey({
-                        lat: i.toFixed(2),
-                        long: j.toFixed(2)
-                    },{
-                        lat: (i + this.latitudeSide).toFixed(2),
-                        long: (j + this.longitudeSide).toFixed(2)
-                    },
-                    datasetId);
-                if (this
-                    .pointsRegions
-                    .hasOwnProperty(cacheKey)) {
-
-                    if (!this.pointsRegions[cacheKey].filled) cached = false;
-
-                    result[resultIndex++] =
-                        {
-                            RegionKey: cacheKey,
-                            RegionPointsCount: this.pointsRegions[cacheKey].pointsCount
-                        }
-                }
-                else cached = false;
-
-            }
-
-        if (cached) return 'cached';
         return result;
     }
 
     /**
-     *     
-    /*internal purpose functions bellow */
-    /*
-     **/
+     * Get the regions which are cached
+     * @param {any} regionsKeys If the parameter is set, get the cached regions with the keys from a range of keys 
+     */
+    GetRegions(regionsKeys) {
+        var result = [];           
+        //todo: return all if need
+        for (var i = 0; i < regionsKeys.length; i++)
+            result.push(...this.pointsRegions[regionsKeys[i]]);
 
-    getCacheSearchingLimits(from, to) {
-        var latSideInt = Math.floor(this.latitudeSide * 100);
-        var longSideInt = Math.floor(this.longitudeSide * 100);
-
-        var fromLatInt = Math.floor(from.lat * 100);
-        var fromLongInt = Math.floor(from.long * 100);
-        var toLatInt = Math.floor(to.lat * 100);
-        var toLongInt = Math.floor(to.long * 100);
-
-        return {
-            from: {
-                lat: ((fromLatInt - fromLatInt % latSideInt)).toFixed(6) / 100,
-                long: ((fromLongInt - fromLongInt % longSideInt)).toFixed(6) / 100
-            },
-            to: {
-                lat: ((toLatInt + (latSideInt - toLatInt % latSideInt))).toFixed(6) / 100,
-                long: ((toLongInt + (longSideInt - toLongInt % longSideInt))).toFixed(6) / 100
-            }
-        }
+        return result;
     }
 
-    getCacheKey(from, to, datasetId) {
-        return from.lat.toString() + '_' + from.long.toString() +
-            '_' + to.lat.toString() + '_' + to.long.toString() +
-            '_' + datasetId.toString();
-    }
-
+   
 }
 
 

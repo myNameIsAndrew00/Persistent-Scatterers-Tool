@@ -123,9 +123,8 @@ function handleClickFunction(point) {
             identifier: point.ID,
             username: SelectedDataset.username,
             datasetName: SelectedDataset.datasetName
-        }, function (receivedInfo) {
-            var point = JSON.parse(receivedInfo.data);
-            SetPointInfoData(point);
+        }, function (receivedInfo) { 
+            SetPointInfoData(receivedInfo);
         }
     )
      

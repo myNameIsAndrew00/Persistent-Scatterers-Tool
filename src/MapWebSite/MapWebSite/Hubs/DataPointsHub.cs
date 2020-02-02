@@ -14,49 +14,41 @@ namespace MapWebSite.Hubs
     [Authorize]
     public class DataPointsHub : Hub
     {
-        public void RequestDataPoints(decimal latitudeFrom, 
-                                      decimal longitudeFrom, 
-                                      decimal latitudeTo, 
-                                      decimal longitudeTo, 
+        public void RequestDataPoints(decimal latitudeFrom,
+                                      decimal longitudeFrom,
+                                      decimal latitudeTo,
+                                      decimal longitudeTo,
                                       int zoomLevel,
-                                      dynamic[] existingRegions,
+                                      string[] cachedRegions,
                                       string username,
                                       string datasetName)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(datasetName)) return;
 
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
-             
-            Action<IEnumerable<PointBase>, Tuple<string,int>, bool> callback = (pointsData, regionData, filled) =>
-            {
-                if(pointsData != null)
-                    Clients.Caller.ProcessPoints(pointsData.DataContractJSONSerialize());
-                if(regionData != null)
-                    Clients.Caller.UpdateRegionsData( new
-                    {
-                        Region = regionData.Item1,
-                        PointsCount = regionData.Item2,
-                        Filled = filled
-                    }.JSONSerialize());
-            };
 
-            Dictionary<string, int> existingRegionsDictionary = new Dictionary<string, int>();
+            Action<IEnumerable<PointBase>, string> callback = (pointsData, regionKey) =>
+             {
+                 Clients.Caller.ProcessPoints(new
+                 {
+                     pointsData,
+                     regionKey
+                 }.JSONSerialize());
+                  
+             };
 
-            foreach (var region in existingRegions)
-                existingRegionsDictionary.Add((string)region.RegionKey.Value,
-                                              (int)region.RegionPointsCount.Value);
-             
 
-            databaseInteractionHandler.RequestPoints(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
+            databaseInteractionHandler.RequestPointsRegions(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
                                       new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
                                       zoomLevel,
                                       username,
-                                      datasetName, 
-                                       existingRegionsDictionary, 
+                                      datasetName,
+                                      cachedRegions,
                                       callback);
 
             Clients.Caller.PointsProcessedNotification();
         }
 
+      
     }
 }

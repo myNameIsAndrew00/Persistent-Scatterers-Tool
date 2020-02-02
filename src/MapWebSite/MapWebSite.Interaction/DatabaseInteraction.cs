@@ -14,8 +14,7 @@ namespace MapWebSite.Domain
     using Pair = Tuple<decimal, decimal>;
     using Coordinates = Tuple<int, int, int>;
 
-    using PointsZonePair = Tuple<IEnumerable<PointBase>, string, bool>;
-
+    using PointsZonePair = Tuple<IEnumerable<PointBase>, string>;
 
 
     /// <summary>
@@ -84,33 +83,25 @@ namespace MapWebSite.Domain
         }
 
         /// <summary>
-        /// Returns data points which are inside a specific area of screen for a zoom level. Limits unit of measure with latitude/longitude.
+        /// Returns data points regions which are inside a specific area of screen for a zoom level. Limits unit of measure with latitude/longitude.
         /// </summary>
         /// <param name="topLeftCorner"></param>
         /// <param name="bottomRightCorner"></param>
         /// <param name="username"></param>
         /// <param name="dataSet"></param>
-        /// <param name="regionsPointsCount">Contains a list of regions which can be ignored for processing if the 
-        /// number of points inside that region is valid. Could be optimized</param>
+        /// <param name="cachedRegions">A list of regions keys which are cached on browser</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public void RequestPoints(Pair topLeftCorner,
+        public void RequestPointsRegions(Pair topLeftCorner,
                                                      Pair bottomRightCorner,
                                                      int zoomLevel,
                                                      string username,
                                                      string dataSet,
-                                                     Dictionary<string, int> regionsPointsCount,
-                                                     Action<IEnumerable<PointBase>, Tuple<string, int>, bool> callback)
-        {
-            Action<IEnumerable<PointBase>, string, bool> triggerCallback = (points, regionKey, filled) =>
-            {
-                callback(null, new Tuple<string, int>(regionKey, points.Count()), filled);
-                callback(points , null, filled);
-                //for (int i = 0; i < points.Count() / pointsPerBlock; i++)
-                //    callback(points.Skip(i * pointsPerBlock).Take(pointsPerBlock), null, filled);
-            };
-
-            //todo: cache the datasetId and request maximum/minimum lat/long for optimizations
+                                                     string[] cachedRegions,
+                                                     Action<IEnumerable<PointBase>, string> callback)
+        {          
+            //todo: get the datasetId and request maximum/minimum lat/long for optimizations
+          
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
             if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
@@ -121,11 +112,11 @@ namespace MapWebSite.Domain
                                                                                     bottomRightCorner.Item2,
                                                                                     zoomLevel);
 
-            var pointsZonePairs = PointsCacheManager.Get(topLeftIndexes,
+            var serverCachedRegions = PointsCacheManager.Get(topLeftIndexes,
                                                          bottomRightIndexes,
                                                          zoomLevel,
                                                          dataSetID,
-                                                         regionsPointsCount,
+                                                         cachedRegions,
                                                          out List<Coordinates> requiredRegions);
 
             if (requiredRegions != null)
@@ -140,7 +131,7 @@ namespace MapWebSite.Domain
                         if (result != null)
                             regionKey = PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, coordinate.Item3, dataSetID, result.Points);
 
-                        triggerCallback(result == null ? new List<PointBase>() : result.Points, regionKey, true);
+                        callback(result == null ? new List<PointBase>() : result.Points, regionKey);                         
                     }
                     catch (Exception exception)
                     { //TODO: log exception
@@ -150,12 +141,31 @@ namespace MapWebSite.Domain
                 });
             }
 
-            foreach (var pointsZonePair in pointsZonePairs)
+            foreach (var pointsZonePair in serverCachedRegions)
             {
-                triggerCallback(pointsZonePair.Item1, pointsZonePair.Item2, pointsZonePair.Item3);
+                callback(pointsZonePair.Item1, pointsZonePair.Item2);
             }
 
 
+        }
+
+        public List<string> RequestPointsRegionsKeys(Pair topLeftCorner,
+                                                     Pair bottomRightCorner,
+                                                     int zoomLevel,
+                                                     string username,
+                                                     string dataSet)
+        {
+            int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
+            if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
+
+            var topLeftIndexes = this.dataPointsRegionSource.GetRegionIndexes(topLeftCorner.Item1,
+                                                                                    topLeftCorner.Item2,
+                                                                                    zoomLevel);
+            var bottomRightIndexes = this.dataPointsRegionSource.GetRegionIndexes(bottomRightCorner.Item1,
+                                                                                    bottomRightCorner.Item2,
+                                                                                    zoomLevel);
+
+            return PointsCacheManager.GetKeys(topLeftIndexes, bottomRightIndexes, zoomLevel, dataSetID);
         }
 
         public Point RequestPointDetails(string dataSet, string username, int zoomLevel, PointBase basicPoint)

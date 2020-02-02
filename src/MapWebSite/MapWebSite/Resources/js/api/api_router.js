@@ -9,9 +9,9 @@ const apiUrl = '/api';
 
 export const endpoints = {
     Home: {
-        RequestSettingsLayerContent: '/Home/RequestSettingsLayerContent',
-        RequestDataPoints: '/Home/RequestDataPoints',
-        RequestPointDetails: '/Home/RequestPointDetails'
+        RequestSettingsLayerContent: '/Home/RequestSettingsLayerContent',      
+        RequestPointDetails: apiUrl + '/HomeApi/RequestPointDetails',
+        RequestRegionsKeys: apiUrl + '/HomeApi/RequestRegionsKeys'
     },
     PointsSettings: {
         GetColorPalettePage: apiUrl + '/PointsSettings/GetColorPalettePage',

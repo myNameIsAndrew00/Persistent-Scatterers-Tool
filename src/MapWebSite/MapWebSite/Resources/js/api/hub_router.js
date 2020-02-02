@@ -34,7 +34,7 @@ class HubRouter {
         latitudeTo,
         longitudeTo,
         zoomLevel,
-        existingRegions,
+        cachedRegions,
         username,
         datasetName) {
 
@@ -47,11 +47,33 @@ class HubRouter {
             latitudeTo,
             longitudeTo,
             zoomLevel,
-            existingRegions,
+            cachedRegions,
             username,
             datasetName);
     }
 
+    GetRegionKeys( latitudeFrom,
+         longitudeFrom,
+         latitudeTo,
+         longitudeTo,
+         zoomLevel,
+         username,
+         datasetName) {
+
+
+        if (username == null || datasetName == null) return;
+        if (!this.enabled) return;
+
+        this.hubProxy.invoke('GetRegionKeys',
+            latitudeFrom,
+            longitudeFrom,
+            latitudeTo,
+            longitudeTo,
+            zoomLevel, 
+            username,
+            datasetName);
+
+    }
 }
 
 export { HubRouter };
