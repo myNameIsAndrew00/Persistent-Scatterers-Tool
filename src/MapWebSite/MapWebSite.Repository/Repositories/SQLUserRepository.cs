@@ -105,12 +105,13 @@ namespace MapWebSite.Repository
             } 
         }
 
+
     
         public int GetDatasetID(string username, string datasetName)
         {
             try
             {
-                return Convert.ToInt32(SqlExecutionInstance.ExecuteScalar(new SqlCommand("GetUserPointsDataset")
+                return Convert.ToInt32(SqlExecutionInstance.ExecuteScalar(new SqlCommand("GetUserPointsDatasetID")
                 {
                     CommandType = System.Data.CommandType.StoredProcedure
                 },
@@ -126,6 +127,37 @@ namespace MapWebSite.Repository
                 return -1;
             }
         }
+
+        public PointsDataSetHeader GetDatasetHeader(string username, string datasetName)
+        {
+            using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUserPointsDataset") 
+                                                { CommandType = CommandType.StoredProcedure },
+                                                   new SqlParameter[]
+                                                   {
+                                                           new SqlParameter("username", username),
+                                                           new SqlParameter("dataset_name", datasetName),                                                          
+                                                   },
+                                                   new SqlConnection(this.connectionString)))
+                    {
+                if (userCredentialsInfo.Tables[0].Rows.Count == 0) return null;
+                var resultRow = userCredentialsInfo.Tables[0].Rows[0];
+
+                return new PointsDataSetHeader()
+                {
+                    Username = username,
+                    Name = datasetName,
+                    ID = (int)resultRow["data_set_id"],
+                    MaximumLatitude = resultRow["maximum_latitude"] is DBNull ? null : (decimal?)resultRow["maximum_latitude"],
+                    MaximumLongitude = resultRow["maximum_longitude"] is DBNull ? null : (decimal?)resultRow["maximum_longitude"],
+                    MinimumLatitude = resultRow["minimum_latitude"] is DBNull ? null : (decimal?)resultRow["minimum_latitude"],
+                    MinimumLongitude = resultRow["minimum_longitude"] is DBNull ? null : (decimal?)resultRow["minimum_longitude"],
+
+                    Status = (DatasetStatus) ((int)resultRow["data_set_id"])
+                };
+
+            };
+        }
+
 
         public bool InsertUser(User user)
         {
@@ -283,9 +315,9 @@ namespace MapWebSite.Repository
 
         }
 
-        public IEnumerable<PointsDataSetBase> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
+        public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
         {
-            List<PointsDataSetBase> result = new List<PointsDataSetBase>();
+            List<PointsDataSetHeader> result = new List<PointsDataSetHeader>();
 
             using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetDataSetsFiltered")
             { CommandType = System.Data.CommandType.StoredProcedure },
@@ -300,7 +332,7 @@ namespace MapWebSite.Repository
             {
                 foreach (DataRow row in colorMapsResult.Tables[0].Rows)
                 {
-                    result.Add(new PointsDataSetBase()
+                    result.Add(new PointsDataSetHeader()
                     {
                         Username = (string)row["username"],
                         Name = (string)row["dataset_name"],
@@ -336,5 +368,31 @@ namespace MapWebSite.Repository
             }
             return true;
         }
+
+        public bool UpdateDatasetLimits(string datasetName, string username, decimal? minimumLatitude, decimal? minimumLongitude, decimal? maximumLatitude, decimal? maximumLongitude)
+        {
+            try
+            {
+                SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("UpdatePointsDatasetLimits")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                   new SqlParameter[]{
+                                                        new SqlParameter("datasetName", datasetName), 
+                                                        new SqlParameter("username",username),
+                                                        new SqlParameter("minimum_latitude", minimumLatitude),
+                                                        new SqlParameter("minimum_longitude", minimumLongitude),
+                                                        new SqlParameter("maximum_latitude", maximumLatitude),
+                                                        new SqlParameter("maximum_longitude", maximumLongitude)
+                                                   },
+                                                   new SqlConnection(this.connectionString));
+            }
+            catch(Exception exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
     }
 }

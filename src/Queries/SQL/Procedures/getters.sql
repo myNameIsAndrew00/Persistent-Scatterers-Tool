@@ -52,10 +52,10 @@ begin
 end
 
 go
-if object_id('GetUserPointsDataset','P') is not null
-	drop procedure GetUserPointsDataset
+if object_id('GetUserPointsDatasetID','P') is not null
+	drop procedure GetUserPointsDatasetID
 go
-create procedure GetUserPointsDataset
+create procedure GetUserPointsDatasetID
 	@username as varchar(100),
 	@dataset_name as varchar(100)
 as
@@ -69,6 +69,31 @@ begin
 end
 
 go
+ 
+if object_id('GetUserPointsDataset','P') is not null
+	drop procedure GetUserPointsDataset
+go
+create procedure GetUserPointsDataset
+	@username as varchar(100),
+	@dataset_name as varchar(100)
+as
+begin
+	select DS.data_set_id,
+		   DS.dataset_name,
+		   DS.maximum_latitude,
+		   DS.maximum_longitude,
+		   DS.minimum_latitude,
+		   DS.minimum_longitude,
+		   DS.status_id 
+	from DataSets as DS
+		inner join Users as U
+		on DS.user_id = U.user_id and U.username = @username
+	where DS.dataset_name = @dataset_name
+
+end
+
+go
+
 
 
 /*Color palettes*/

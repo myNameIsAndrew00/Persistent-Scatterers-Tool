@@ -21,8 +21,7 @@ namespace MapWebSite.Domain
     /// Provides methods for interacting with the database 
     /// </summary>
     public class DatabaseInteractionHandler
-    {
-        private readonly int pointsPerBlock = 1000;
+    { 
 
         private readonly IUserRepository userRepository;
 
@@ -46,11 +45,11 @@ namespace MapWebSite.Domain
         }
 
         /// <summary>
-        /// Create a dataset in the database. Created dataset will wave status Pending 
+        /// Create an empty dataset in the database. Created dataset will wave status Pending 
         /// </summary>
-        /// <param name="datasetName"></param>
-        /// <param name="username"></param>
-        /// <returns></returns>
+        /// <param name="datasetName">Name of the dataset</param>
+        /// <param name="username">The username of the user which create the dataset</param>
+        /// <returns>A boolean which indicates if the insert was succesufully</returns>
         public bool CreateDataSet(string datasetName, string username)
         {
             int datasetId = this.userRepository.CreateUserPointsDataset(username, datasetName);
@@ -62,25 +61,7 @@ namespace MapWebSite.Domain
             return this.userRepository.UpdateDatasetStatus(datasetName, status, username);
         }
 
-        [Obsolete("This method is implemented in service")]
-        /// <summary>
-        /// Insert a dataset for a user. Inserted data will contain zoomed versions of points
-        /// </summary>
-        /// <param name="pointsDataSet"></param>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        public async Task<bool> InsertDataSet(PointsDataSet pointsDataSet, string username)
-        {
-            pointsDataSet.ID = this.userRepository.CreateUserPointsDataset(username, pointsDataSet.Name);
-
-            if (pointsDataSet.ID == -1) return false;
-
-            IDataPointsZoomLevelsSource zoomGenerator = new SquareMeanPZGenerator();
-            PointsDataSet[] zoomedDataSets = zoomGenerator.CreateDataSetsZoomSets(pointsDataSet, 3, 19);
-
-
-            return await this.dataPointsRepository.InsertPointsDataset(pointsDataSet);
-        }
+       
 
         /// <summary>
         /// Returns data points regions which are inside a specific area of screen for a zoom level. Limits unit of measure with latitude/longitude.
@@ -99,23 +80,26 @@ namespace MapWebSite.Domain
                                                      string dataSet,
                                                      string[] cachedRegions,
                                                      Action<IEnumerable<PointBase>, string> callback)
-        {          
-            //todo: get the datasetId and request maximum/minimum lat/long for optimizations
-          
-            int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
-            if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
+        {
+            //todo: cache the header
+            PointsDataSetHeader dataSetHeader = this.userRepository.GetDatasetHeader(username, dataSet);
+            if (dataSetHeader == null) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
-            var topLeftIndexes = this.dataPointsRegionSource.GetRegionIndexes(topLeftCorner.Item1,
-                                                                                    topLeftCorner.Item2,
-                                                                                    zoomLevel);
-            var bottomRightIndexes = this.dataPointsRegionSource.GetRegionIndexes(bottomRightCorner.Item1,
-                                                                                    bottomRightCorner.Item2,
-                                                                                    zoomLevel);
+            //set the requested latitude and longitude coordinates of corners in the available limits of the dataset
+            var topLeftIndexes = this.dataPointsRegionSource.GetRegionIndexes(
+                                                    topLeftCorner.Item1 < (dataSetHeader.MaximumLatitude ?? 90m) ? topLeftCorner.Item1 : dataSetHeader.MaximumLatitude ?? 90m,
+                                                    topLeftCorner.Item2 > (dataSetHeader.MinimumLongitude ?? -180m) ? topLeftCorner.Item2 : dataSetHeader.MinimumLongitude ?? -180m,
+                                                    zoomLevel);
+
+            var bottomRightIndexes = this.dataPointsRegionSource.GetRegionIndexes(
+                                                    bottomRightCorner.Item1 > (dataSetHeader.MinimumLatitude ?? -90m) ? bottomRightCorner.Item1 : (dataSetHeader.MinimumLatitude ?? -90m),
+                                                    bottomRightCorner.Item2 < (dataSetHeader.MaximumLongitude ?? 180m) ? bottomRightCorner.Item2 : (dataSetHeader.MaximumLongitude ?? 180m),
+                                                    zoomLevel);
 
             var serverCachedRegions = PointsCacheManager.Get(topLeftIndexes,
                                                          bottomRightIndexes,
                                                          zoomLevel,
-                                                         dataSetID,
+                                                         dataSetHeader.ID,
                                                          cachedRegions,
                                                          out List<Coordinates> requiredRegions);
 
@@ -125,18 +109,18 @@ namespace MapWebSite.Domain
                 {
                     try
                     {
-                        var result = this.dataPointsRepository.GetRegion(dataSetID, coordinate.Item1, coordinate.Item2, zoomLevel);
+                        var result = this.dataPointsRepository.GetRegion(dataSetHeader.ID, coordinate.Item1, coordinate.Item2, zoomLevel);
 
                         string regionKey = null;
                         if (result != null)
-                            regionKey = PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, coordinate.Item3, dataSetID, result.Points);
+                            regionKey = PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, coordinate.Item3, dataSetHeader.ID, result.Points);
 
                         callback(result == null ? new List<PointBase>() : result.Points, regionKey);                         
                     }
                     catch (Exception exception)
                     { //TODO: log exception
                         //if a error ocurs, the created entry must be deleted from the cache
-                        PointsCacheManager.Remove(coordinate.Item1, coordinate.Item2, coordinate.Item3, dataSetID);
+                        PointsCacheManager.Remove(coordinate.Item1, coordinate.Item2, coordinate.Item3, dataSetHeader.ID);
                     }
                 });
             }
@@ -155,17 +139,22 @@ namespace MapWebSite.Domain
                                                      string username,
                                                      string dataSet)
         {
-            int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
-            if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
+            //todo: cache the header
+            PointsDataSetHeader dataSetHeader = this.userRepository.GetDatasetHeader(username, dataSet);
+            if (dataSetHeader == null) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
+  
+            //set the requested latitude and longitude coordinates of corners in the available limits of the dataset
+            var topLeftIndexes = this.dataPointsRegionSource.GetRegionIndexes(
+                                                    topLeftCorner.Item1 < (dataSetHeader.MaximumLatitude ?? 90m) ? topLeftCorner.Item1 : dataSetHeader.MaximumLatitude ?? 90m,
+                                                    topLeftCorner.Item2 > (dataSetHeader.MinimumLongitude ?? -180m) ? topLeftCorner.Item2 : dataSetHeader.MinimumLongitude ?? -180m,                                                    
+                                                    zoomLevel);
+           
+            var bottomRightIndexes = this.dataPointsRegionSource.GetRegionIndexes(
+                                                    bottomRightCorner.Item1 > (dataSetHeader.MinimumLatitude ?? -90m) ? bottomRightCorner.Item1 : (dataSetHeader.MinimumLatitude ?? -90m),
+                                                    bottomRightCorner.Item2 < (dataSetHeader.MaximumLongitude ?? 180m) ? bottomRightCorner.Item2 : (dataSetHeader.MaximumLongitude ?? 180m),
+                                                    zoomLevel);
 
-            var topLeftIndexes = this.dataPointsRegionSource.GetRegionIndexes(topLeftCorner.Item1,
-                                                                                    topLeftCorner.Item2,
-                                                                                    zoomLevel);
-            var bottomRightIndexes = this.dataPointsRegionSource.GetRegionIndexes(bottomRightCorner.Item1,
-                                                                                    bottomRightCorner.Item2,
-                                                                                    zoomLevel);
-
-            return PointsCacheManager.GetKeys(topLeftIndexes, bottomRightIndexes, zoomLevel, dataSetID);
+            return PointsCacheManager.GetKeys(topLeftIndexes, bottomRightIndexes, zoomLevel, dataSetHeader.ID);
         }
 
         public Point RequestPointDetails(string dataSet, string username, int zoomLevel, PointBase basicPoint)
@@ -190,7 +179,7 @@ namespace MapWebSite.Domain
             return this.userRepository.GetColorMapsFiltered(filter, filterValue, pageIndex, itemsPerPage);
         }
 
-        public IEnumerable<PointsDataSetBase> GetDataSets(DataSetsFilters filter, string filterValue, int pageIndex = 0, int itemsPerPage = 10)
+        public IEnumerable<PointsDataSetHeader> GetDataSets(DataSetsFilters filter, string filterValue, int pageIndex = 0, int itemsPerPage = 10)
         {
             //TODO: handle errors or do more checks if needed
             return this.userRepository.GetDataSetsFiltered(filter, filterValue, pageIndex, itemsPerPage);

@@ -13,9 +13,9 @@ namespace MapWebSite.Domain.ViewModel
     { 
         public static readonly int DataPointsPerPage = 10;
 
-        public IEnumerable<PointsDataSetBase> Datasets { get; } = null;
+        public IEnumerable<PointsDataSetHeader> Datasets { get; } = null;
 
-        public ChoseDatasetViewModel(IEnumerable<PointsDataSetBase> usersDatasets)
+        public ChoseDatasetViewModel(IEnumerable<PointsDataSetHeader> usersDatasets)
         {
             this.Datasets = usersDatasets;
         }

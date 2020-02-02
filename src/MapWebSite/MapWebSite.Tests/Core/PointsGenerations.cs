@@ -24,7 +24,7 @@ namespace MapWebSite.Tests
             (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\git\docs\Data points\Constanta\displacements.txt";
             (pointsSource as TxtDataPointsSource).LatitudeZone = 'T';
             (pointsSource as TxtDataPointsSource).Zone = 35;
-            PointsDataSet dataset = pointsSource.CreateDataSet("Test");
+            PointsDataSet dataset = pointsSource.CreateDataSet("Test", CoordinateSystem.UTM);
 
             bool regionsGenerationResult = regionSource.GenerateRegions(dataset);
 

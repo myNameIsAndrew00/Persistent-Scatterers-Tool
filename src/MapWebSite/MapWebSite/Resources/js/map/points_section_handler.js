@@ -110,7 +110,7 @@ class PointsSectionHandler {
                 longitudeFrom: coordinates.topCorner.longitude,
                 latitudeTo: coordinates.bottomCorner.latitude,
                 longitudeTo: coordinates.bottomCorner.longitude,
-                zoomLevel: this.map.getView().getZoom(),
+                zoomLevel: Math.floor(this.map.getView().getZoom()),
                 username: SelectedDataset.username,
                 datasetName: SelectedDataset.datasetName
             }, function (regionsKeys) {
@@ -135,7 +135,7 @@ class PointsSectionHandler {
                     coordinates.topCorner.longitude,
                     coordinates.bottomCorner.latitude,
                     coordinates.bottomCorner.longitude,
-                    caller.map.getView().getZoom(),
+                    Math.floor(caller.map.getView().getZoom()),
                     cachedRegionsKeys,
                     SelectedDataset.username,
                     SelectedDataset.datasetName

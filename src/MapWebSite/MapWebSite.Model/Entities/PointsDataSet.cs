@@ -7,9 +7,9 @@ using System.Runtime.Serialization;
 namespace MapWebSite.Model
 {
     /// <summary>
-    /// Model used for basic data of points data set
+    /// Model used for the header of points data set
     /// </summary>
-    public class PointsDataSetBase
+    public class PointsDataSetHeader
     {
         public int ID { get; set; }
 
@@ -20,12 +20,20 @@ namespace MapWebSite.Model
         public DatasetStatus Status { get; set; }
 
         public bool IsValid => Status == DatasetStatus.Generated;
+
+        public decimal? MinimumLatitude { get; set; }
+
+        public decimal? MaximumLatitude { get; set; }
+
+        public decimal? MinimumLongitude { get; set; }
+
+        public decimal? MaximumLongitude { get; set; }
     }
 
     /// <summary>
     /// Model used for points data set
     /// </summary>
-    public class PointsDataSet : PointsDataSetBase
+    public class PointsDataSet : PointsDataSetHeader
     {         
 
         public IEnumerable<Point> Points { get; set; }

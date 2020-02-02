@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using MapWebSite.Model;
 
@@ -16,7 +17,7 @@ namespace MapWebSite.Core.DataPoints
     {
         readonly int headerUnusedLinesCount  = 10;
 
-        readonly Helper.UTMConverter utmConverter = new Helper.UTMConverter();
+        readonly Helper.UTMConverter utmConverter = new Helper.UTMConverter();      
 
         /// <summary>
         /// Represents a file which contains metadata about points format
@@ -32,10 +33,10 @@ namespace MapWebSite.Core.DataPoints
 
         public char LatitudeZone { get; set; } = '0';
 
-        public PointsDataSet CreateDataSet(string datasetName)
+        public PointsDataSet CreateDataSet(string datasetName, CoordinateSystem coordinateSystem)
         {
             if (HeaderFile == null || DisplacementsFile == null) return null;
-            if (Zone == int.MinValue || LatitudeZone == '0') throw new ArgumentException("Zone and Latitude properties must be set");
+            if (coordinateSystem == CoordinateSystem.UTM && (Zone == int.MinValue || LatitudeZone == '0')) throw new ArgumentException("Zone and Latitude properties must be set");
 
             ConcurrentBag<Point> points = new ConcurrentBag<Point>();
             PointsDataSet pointsDataSet = new PointsDataSet() { Name = datasetName, Points = points};
@@ -52,7 +53,7 @@ namespace MapWebSite.Core.DataPoints
                     try
                     {
                         IDictionary<string, decimal> lineInfo = generateDictionary(dataLine, out decimal[] lineDisplacements);
-                        points.Add(generatePoint(lineInfo, lineDisplacements, headerData));
+                        points.Add(generatePoint(lineInfo, lineDisplacements, headerData, coordinateSystem));
                     }
                     catch(Exception exception)
                     {
@@ -69,6 +70,13 @@ namespace MapWebSite.Core.DataPoints
                 //TODO: parse exception here
                 pointsDataSet = null;
             }
+
+            //set the maximum and minimum latitude / longitude
+            pointsDataSet.MinimumLatitude = pointsDataSet.Points.Min(point => point.Latitude);
+            pointsDataSet.MinimumLongitude = pointsDataSet.Points.Min(point => point.Longitude);
+            pointsDataSet.MaximumLatitude = pointsDataSet.Points.Max(point => point.Latitude);
+            pointsDataSet.MaximumLongitude = pointsDataSet.Points.Max(point => point.Latitude);
+
             return pointsDataSet;
         }
 
@@ -77,7 +85,7 @@ namespace MapWebSite.Core.DataPoints
 
         #region Private
 
-        private Point generatePoint(IDictionary<string, decimal> lineInfo, decimal[] lineDisplacements, HeaderData[] headerData)
+        private Point generatePoint(IDictionary<string, decimal> lineInfo, decimal[] lineDisplacements, HeaderData[] headerData, CoordinateSystem coordinateSystem)
         {
             Point point = new Point()
             {
@@ -92,11 +100,23 @@ namespace MapWebSite.Core.DataPoints
                 StandardDeviation            = lineInfo["StandardDeviation"],
                 Observations = "Generated from file" // TODO:add information to observations                
             };
-            Tuple<decimal, decimal> coordinatesPair = utmConverter.ToLatLong(this.Zone, this.LatitudeZone, 
-                                                                            lineInfo["EastingProjection"], 
-                                                                            lineInfo["NorthingProjection"]);
-            point.Latitude = coordinatesPair.Item1;
-            point.Longitude = coordinatesPair.Item2;
+
+            //todo: create switch if there will be more
+            if (coordinateSystem == CoordinateSystem.UTM)
+            {
+                Tuple<decimal, decimal> coordinatesPair = utmConverter.ToLatLong(this.Zone, this.LatitudeZone,
+                                                                                lineInfo["ProjectionX"],
+                                                                                lineInfo["ProjectionY"]);
+                point.Latitude = coordinatesPair.Item1;
+                point.Longitude = coordinatesPair.Item2;
+            }
+            else
+            {
+                point.Longitude = lineInfo["ProjectionX"];
+                point.Latitude = lineInfo["ProjectionY"];
+            }
+            
+         
 
             for (int index = 0; index < lineDisplacements.Length; index++)
                 point.Displacements.Add(new Point.Displacement()
@@ -123,8 +143,8 @@ namespace MapWebSite.Core.DataPoints
             tasks[0] = Task.Run(() => result["PointNumber"] = decimal.Parse(tokens[0]));
             tasks[1] = Task.Run(() => result["ReferenceImageX"] = decimal.Parse(tokens[1]));
             tasks[2] = Task.Run(() => result["ReferenceImageY"] = decimal.Parse(tokens[2]));
-            tasks[3] = Task.Run(() => result["EastingProjection"] = decimal.Parse(tokens[3]));
-            tasks[4] = Task.Run(() => result["NorthingProjection"] = decimal.Parse(tokens[4]));
+            tasks[3] = Task.Run(() => result["ProjectionX"] = decimal.Parse(tokens[3]));
+            tasks[4] = Task.Run(() => result["ProjectionY"] = decimal.Parse(tokens[4]));
             tasks[5] = Task.Run(() => result["Height"] = decimal.Parse(tokens[5]));
             tasks[6] = Task.Run(() => result["DeformationRate"] = decimal.Parse(tokens[6]));
             tasks[7] = Task.Run(() => result["StandardDeviation"] = decimal.Parse(tokens[7]));

@@ -124,11 +124,11 @@ namespace MapWebSite.DataPointsParserService
 
             (pointsSource as TxtDataPointsSource).HeaderFile = ConfigurationManager.AppSettings["DataSetsHeaderFile"];
             (pointsSource as TxtDataPointsSource).DisplacementsFile = fileName;
-            (pointsSource as TxtDataPointsSource).LatitudeZone = 'T'; //TODO: modify here. This can be read from database
-            (pointsSource as TxtDataPointsSource).Zone = 35;          //TODO: modify here. This can be read from database
+         //   (pointsSource as TxtDataPointsSource).LatitudeZone = 'T'; //TODO: modify here. This can be read from database
+         //   (pointsSource as TxtDataPointsSource).Zone = 35;          //TODO: modify here. This can be read from database
 
-            PointsDataSet dataset = pointsSource.CreateDataSet(datasetName);
-
+            PointsDataSet dataset = pointsSource.CreateDataSet(datasetName, CoordinateSystem.Default);
+            
             if (dataset == null)
             {
                 this.userRepository.UpdateDatasetStatus(datasetName, DatasetStatus.GenerateFail, username);
@@ -150,7 +150,14 @@ namespace MapWebSite.DataPointsParserService
             insertTask.Wait();
 
             //update the status of the dataset which has been processed
+            this.userRepository.UpdateDatasetLimits(dataset.Name,
+                                                    username,
+                                                    dataset.MinimumLatitude,
+                                                    dataset.MinimumLongitude,
+                                                    dataset.MaximumLatitude,
+                                                    dataset.MaximumLongitude);
             this.userRepository.UpdateDatasetStatus(dataset.Name, DatasetStatus.Generated, username);
+            
         }
 
 

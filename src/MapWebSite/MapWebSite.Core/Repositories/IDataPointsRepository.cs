@@ -56,5 +56,6 @@ namespace MapWebSite.Core.Database
         /// <param name="zoomLevel">The zoom level of the region requested</param>
         /// <returns>Desired region</returns>
         PointsRegion GetRegion(int datasetId, int row, int column, int zoomLevel);
+      
     }
 }

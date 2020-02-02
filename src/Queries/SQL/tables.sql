@@ -72,10 +72,10 @@ create table DataSets(
 	status_id int,
 	
 	/*this fields are used for optimizations*/
-	minimum_latitude decimal, 
-	minimum_longitude decimal, 
-	maximum_latitude decimal, 
-	maximum_longitude decimal
+	minimum_latitude decimal(18,14), 
+	minimum_longitude decimal(18,14), 
+	maximum_latitude decimal(18,14), 
+	maximum_longitude decimal(18,14)
 	
 	unique nonclustered (user_id,dataset_name),
 

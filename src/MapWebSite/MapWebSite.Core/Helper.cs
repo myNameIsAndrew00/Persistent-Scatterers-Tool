@@ -58,7 +58,7 @@ namespace MapWebSite.Core
         }
 
         /// <summary>
-        /// This class provide method to convert geographic coordinates
+        /// This class provide a method to convert geographic coordinates
         /// </summary>
         public class UTMConverter
         {

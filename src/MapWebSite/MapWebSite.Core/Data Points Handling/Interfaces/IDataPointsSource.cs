@@ -9,7 +9,14 @@ namespace MapWebSite.Core.DataPoints
      /// </summary>
     public interface IDataPointsSource
     {
-        PointsDataSet CreateDataSet(string datasetName);
 
+        PointsDataSet CreateDataSet(string datasetName, CoordinateSystem coordinateSystem);
+
+    }
+
+    public enum CoordinateSystem
+    {
+        Default,
+        UTM
     }
 }

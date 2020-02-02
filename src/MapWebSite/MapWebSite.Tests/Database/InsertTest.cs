@@ -30,7 +30,7 @@ namespace MapWebSite.Tests.Database
         [TestMethod]
         public void InsertDataPoints()
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+           /* DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
             IDataPointsSource pointsSource = new TxtDataPointsSource();
 
             (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\git\docs\Data points\Constanta\header.txt";
@@ -43,7 +43,7 @@ namespace MapWebSite.Tests.Database
 
             result.Wait();
 
-            Assert.IsTrue(result.Result);
+            Assert.IsTrue(result.Result);*/
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@ namespace MapWebSite.Tests.Database
 
             
 
-            PointsDataSet dataset = pointsSource.CreateDataSet("Test");
+            PointsDataSet dataset = pointsSource.CreateDataSet("Test", CoordinateSystem.UTM);
              
 
             IDataPointsZoomLevelsSource zoomGenerator = new SquareMeanPZGenerator();
