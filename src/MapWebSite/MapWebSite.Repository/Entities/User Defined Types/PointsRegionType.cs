@@ -25,19 +25,21 @@ namespace MapWebSite.Repository.Entities
         [UserDefinedTypeColumn("points")]
         public IEnumerable<BasePointType> points { get; set; }
 
-        public static IEnumerable<PointsRegionType> GetRegions(PointsRegionsLevel pointsRegionsModel, int datasetId)
+        public static IEnumerable<SectionedPointsRegionType> GetRegions(PointsRegionsLevel pointsRegionsModel, int datasetId)
         {
-            ConcurrentBag<PointsRegionType> result = new ConcurrentBag<PointsRegionType>();
+            ConcurrentBag<SectionedPointsRegionType> result = new ConcurrentBag<SectionedPointsRegionType>();
 
             Parallel.ForEach(pointsRegionsModel.Regions, regionModel =>
             {
-                var region = new PointsRegionType()
-                {
-                    row = regionModel.Row,
-                    column = regionModel.Column,
-                    dataset_id = datasetId,
-                    points = new ConcurrentBag<BasePointType>()                    
-                };
+                var region =   
+                    new SectionedPointsRegionType()
+                    {            
+                        section = pointsRegionsModel.Section,
+                        row = regionModel.Row,
+                        column = regionModel.Column,
+                        dataset_id = datasetId,
+                        points = new ConcurrentBag<BasePointType>()                    
+                    };
 
                 var pointsBag = region.points as ConcurrentBag<BasePointType>;
 
@@ -51,5 +53,12 @@ namespace MapWebSite.Repository.Entities
 
             return result;
         }
+    }
+
+    [UserDefinedType]
+    internal class SectionedPointsRegionType : PointsRegionType
+    {
+        [UserDefinedTypeColumn("section")]
+        public int section { get; set; }
     }
 }

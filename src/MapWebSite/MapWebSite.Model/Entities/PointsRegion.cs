@@ -21,6 +21,11 @@ namespace MapWebSite.Model
     /// </summary>
     public class PointsRegionsLevel
     {
+        /// <summary>
+        /// Use this property to identify the section number of this region
+        /// </summary>
+        public int Section { get; set; }
+
         public int ZoomLevel { get; set; }
 
         public IEnumerable<PointsRegion> Regions { get; set; }

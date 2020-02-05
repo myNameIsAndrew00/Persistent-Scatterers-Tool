@@ -32,6 +32,7 @@ namespace MapWebSite
                 "~/Resources/css/plot.scss",
                 "~/Resources/css/home.scss",
                 "~/Resources/css/card.scss",
+                "~/Resources/css/popup.scss",
                 "~/Resources/css/small_loading_spinner.scss");
 
             homeStyleBundle.Orderer = new NullOrderer();
@@ -95,7 +96,8 @@ namespace MapWebSite
                 "~/Resources/js/menu.js"));
 
             bundles.Add(new ScriptBundle("~/scripts/settings").Include(
-                "~/Resources/js/settings/settings.js"));
+                "~/Resources/js/settings/settings.js",
+                "~/Resources/js/points settings/points_settings.js"));
 
             bundles.Add(new ScriptBundle("~/scripts/color_picker").Include(
                 "~/Resources/js/color_picker_color_list.js",

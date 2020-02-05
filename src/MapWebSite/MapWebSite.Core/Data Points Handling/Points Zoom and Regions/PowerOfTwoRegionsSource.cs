@@ -40,11 +40,11 @@ namespace MapWebSite.Core.DataPoints
 
 
 
-        public bool GenerateRegions(PointsDataSet pointsDataset)
+        public bool GenerateRegions(PointsDataSet pointsDataset, int sectionIndex)
         {
             try
             {
-                pointsDataset.PointsRegions = this.generateRegions(pointsDataset.Points);
+                pointsDataset.PointsRegions = this.generateRegions(pointsDataset.Points, sectionIndex);
                 return true;
             }
             catch
@@ -54,9 +54,9 @@ namespace MapWebSite.Core.DataPoints
 
         }
 
-        public IEnumerable<PointsRegionsLevel> GenerateRegions(IEnumerable<PointBase> dataPoints)
+        public IEnumerable<PointsRegionsLevel> GenerateRegions(IEnumerable<PointBase> dataPoints, int sectionIndex = 0)
         {
-            return this.generateRegions(dataPoints);
+            return this.generateRegions(dataPoints, sectionIndex);
         }
 
 
@@ -76,7 +76,7 @@ namespace MapWebSite.Core.DataPoints
 
         #region Private
 
-        IEnumerable<PointsRegionsLevel> generateRegions(IEnumerable<PointBase> dataPoints)
+        IEnumerable<PointsRegionsLevel> generateRegions(IEnumerable<PointBase> dataPoints, int sectionIndex)
         {
 
             List<PointsRegionsLevel> result = new List<PointsRegionsLevel>();
@@ -93,7 +93,7 @@ namespace MapWebSite.Core.DataPoints
             dataPoints = dataPoints.OrderBy(item => item.Latitude).ThenBy(item => item.Longitude);
 
             //get the base regions (zoom level 20)
-            PointsRegionsLevel baseRegion = generateBaseRegions(dataPoints);
+            PointsRegionsLevel baseRegion = generateBaseRegions(dataPoints, sectionIndex);
 
             result.Add(baseRegion);
 
@@ -103,7 +103,7 @@ namespace MapWebSite.Core.DataPoints
             return result;
         }
 
-        PointsRegionsLevel generateBaseRegions(IEnumerable<PointBase> sortedDataPoints)
+        PointsRegionsLevel generateBaseRegions(IEnumerable<PointBase> sortedDataPoints, int sectionIndex)
         {
             List<PointsRegion> regions = new List<PointsRegion>();
 
@@ -165,6 +165,7 @@ namespace MapWebSite.Core.DataPoints
             return new PointsRegionsLevel()
             {
                 Regions = regions,
+                Section = sectionIndex,
                 ZoomLevel = 20
             };
         }

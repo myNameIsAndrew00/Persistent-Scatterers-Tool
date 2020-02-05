@@ -56,7 +56,7 @@ namespace MapWebSite.Tests.Database
 
             
 
-            PointsDataSet dataset = pointsSource.CreateDataSet("Test", CoordinateSystem.UTM);
+            PointsDataSet dataset = pointsSource.CreateDataSet("Test", CoordinateSystem.UTM).First();
              
 
             IDataPointsZoomLevelsSource zoomGenerator = new SquareMeanPZGenerator();

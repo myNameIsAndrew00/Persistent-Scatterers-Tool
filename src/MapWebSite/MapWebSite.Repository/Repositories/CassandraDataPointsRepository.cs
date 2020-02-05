@@ -93,11 +93,11 @@ namespace MapWebSite.Repository
 
         private async Task<bool> insertRegion(PointsRegionsLevel regionLevel, int datasetId)
         {
-            IEnumerable<PointsRegionType> regionTypes = PointsRegionType.GetRegions(regionLevel, datasetId);
+            IEnumerable<SectionedPointsRegionType> regionTypes = PointsRegionType.GetRegions(regionLevel, datasetId);
 
             CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder();
             queryBuilder.TableName = "points_region_zoom_" + regionLevel.ZoomLevel;
-            queryBuilder.Type = typeof(PointsRegionType);
+            queryBuilder.Type = regionLevel.ZoomLevel == 20 ? typeof(SectionedPointsRegionType) : typeof(PointsRegionType);
             queryBuilder.QueryType = CassandraQueryBuilder.QueryTypes.InsertFromType;
 
             this.executionInstance.PrepareQuery(queryBuilder);
@@ -111,7 +111,8 @@ namespace MapWebSite.Repository
                         regionType.dataset_id,
                         regionType.column,
                         regionType.row,
-                        regionType.points
+                        regionType.points,
+                        regionType.section
                     });
                 });
             }
@@ -287,17 +288,18 @@ namespace MapWebSite.Repository
         }
 
 
-
-
-
-
         private IEnumerable<PointsRegion> convertRowSetToPointsRegions(List<Row> rowSet)
         {
-            ConcurrentBag<PointsRegion> result = new ConcurrentBag<PointsRegion>();
+            ConcurrentDictionary<string, PointsRegion> result = new ConcurrentDictionary<string, PointsRegion>();
 
             Parallel.ForEach(rowSet, row =>
             {
-                result.Add(new PointsRegion()
+                if (result.ContainsKey($"{row["row"]}_{row["column"]}"))
+                    (result[$"{row["row"]}_{row["column"]}"].Points as List<PointBase>).AddRange(
+                        convertBasePoints(row["points"] as BasePointType[])
+                        );
+                else
+                result.TryAdd($"{row["row"]}_{row["column"]}", new PointsRegion()
                 {
                     Column = Convert.ToInt32(row["column"]),
                     Row = Convert.ToInt32(row["row"]),
@@ -305,7 +307,7 @@ namespace MapWebSite.Repository
                 });
             });
 
-            return result;
+            return result.Values;
         }
 
 

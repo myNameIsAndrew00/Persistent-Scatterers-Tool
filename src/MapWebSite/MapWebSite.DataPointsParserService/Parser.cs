@@ -6,6 +6,7 @@ using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using System.Timers;
@@ -120,44 +121,61 @@ namespace MapWebSite.DataPointsParserService
             IDataPointsSource pointsSource = new TxtDataPointsSource();
 
             int datasetId = this.userRepository.GetDatasetID(username, datasetName);
-            if (datasetId == -1) throw new Exception($"Failed to find create / dataset with the name {datasetName} for user {username} ");
+            if (datasetId == -1) throw new Exception($"Failed to find / create dataset with the name {datasetName} for user {username} ");
 
             (pointsSource as TxtDataPointsSource).HeaderFile = ConfigurationManager.AppSettings["DataSetsHeaderFile"];
             (pointsSource as TxtDataPointsSource).DisplacementsFile = fileName;
-         //   (pointsSource as TxtDataPointsSource).LatitudeZone = 'T'; //TODO: modify here. This can be read from database
-         //   (pointsSource as TxtDataPointsSource).Zone = 35;          //TODO: modify here. This can be read from database
+            (pointsSource as TxtDataPointsSource).LatitudeZone = 'T'; //TODO: modify here. This can be read from database
+            (pointsSource as TxtDataPointsSource).Zone = 35;          //TODO: modify here. This can be read from database
 
-            PointsDataSet dataset = pointsSource.CreateDataSet(datasetName, CoordinateSystem.Default);
-            
-            if (dataset == null)
+            decimal minimumLatitude = 90, 
+                    minimumLongitude = 180, 
+                    maximumLatitude = -90, 
+                    maximumLongitude = -180;
+            int sectionIndex = 1;
+
+            ///The source file must be looped, because a full read in memory of the file could throw a OutOfMemoryException.
+            ///This means that the file will be read and parsed in chunks and multiple datasets with the same ID will be created 
+            ///and stored in repository.
+            foreach(var dataset in pointsSource.CreateDataSet(datasetName, CoordinateSystem.UTM))
             {
-                this.userRepository.UpdateDatasetStatus(datasetName, DatasetStatus.GenerateFail, username);
-                return;
+
+                if (dataset == null)
+                {
+                    this.userRepository.UpdateDatasetStatus(datasetName, DatasetStatus.GenerateFail, username);
+                    //todo: cleanup the repository?
+                    return;
+                }
+                dataset.ID = datasetId;
+
+                IDataPointsRegionsSource regionSource = new PowerOfTwoRegionsSource();
+                regionSource.GenerateRegions(dataset, sectionIndex++);
+
+
+                Task insertTask = this.dataPointsRepository.InsertPointsDataset(dataset);
+
+                insertTask.Wait();
+
+                minimumLatitude = Math.Min(minimumLatitude, dataset.MinimumLatitude ?? 90);
+                maximumLatitude = Math.Max(maximumLatitude, dataset.MaximumLatitude ?? -90);
+                minimumLongitude = Math.Min(minimumLongitude, dataset.MinimumLongitude ?? 180);
+                maximumLongitude = Math.Max(maximumLongitude, dataset.MaximumLongitude ?? -180);
+                //update the status of the dataset which has been processed
+
             }
-            dataset.ID = datasetId;
 
-            //get the id of the dataset which has been processed
+            this.userRepository.UpdateDatasetLimits(datasetName,
+                                                      username,
+                                                      minimumLatitude,
+                                                      minimumLongitude,
+                                                      maximumLatitude,
+                                                      maximumLongitude);
 
-            //UPDATE:zoom is not required for now
-            //IDataPointsZoomLevelsGenerator zoomGenerator = new SquareMeanPZGenerator();
-            //PointsDataSet[] zoomedDataSets = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
+            this.userRepository.UpdateDatasetStatus(datasetName, DatasetStatus.Generated, username);
 
-            IDataPointsRegionsSource regionSource = new PowerOfTwoRegionsSource();
-            regionSource.GenerateRegions(dataset);
 
-            Task insertTask = this.dataPointsRepository.InsertPointsDataset(dataset);
 
-            insertTask.Wait();
 
-            //update the status of the dataset which has been processed
-            this.userRepository.UpdateDatasetLimits(dataset.Name,
-                                                    username,
-                                                    dataset.MinimumLatitude,
-                                                    dataset.MinimumLongitude,
-                                                    dataset.MaximumLatitude,
-                                                    dataset.MaximumLongitude);
-            this.userRepository.UpdateDatasetStatus(dataset.Name, DatasetStatus.Generated, username);
-            
         }
 
 

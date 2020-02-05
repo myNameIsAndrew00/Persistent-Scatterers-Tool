@@ -90,12 +90,16 @@
 
     <div id="top-menu" class="top-menu box">
         <div class="pre-text-area">
-            <button>
+            <button id="map_criteria_button">
+                @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "25px", width = "28px" })
+            </button>
+            <button id="notification_button">
                 @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "25px", width = "25px" })
             </button>
-            <button>
+            <button id="map_type_button">
                 @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "25px", width = "25px" })
             </button>
+
         </div>
         <div class="text-area">
             @if (RouteConfig.CurrentUser != null)

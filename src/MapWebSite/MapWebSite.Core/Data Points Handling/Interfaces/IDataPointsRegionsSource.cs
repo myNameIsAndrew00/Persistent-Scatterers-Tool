@@ -13,15 +13,16 @@ namespace MapWebSite.Core.DataPoints
         /// Use this method to add 'zoom' regions to a dataset of points. An invalid set of points can generate undefined regions.       
         /// </summary>
         /// <param name="pointsDataset">The dataset which contains the points used to generate regions</param>
+        /// <param name="sectionIndex">Use this parameter as a indexer for the sections. Can be used if the dataset is contained in multiple objects</param>
         /// <returns>Returns true if regions were generated with success</returns>
-        bool GenerateRegions(PointsDataSet pointsDataset);
+        bool GenerateRegions(PointsDataSet pointsDataset, int sectionIndex = 0);
 
         /// <summary>
         /// Use this method to generate 'zoom' regions for a dataset of points.
         /// </summary>
         /// <param name="dataPoints">The dataset which contains the points used to generate regions</param>
         /// <returns></returns>
-        IEnumerable<PointsRegionsLevel> GenerateRegions(IEnumerable<PointBase> dataPoints);
+        IEnumerable<PointsRegionsLevel> GenerateRegions(IEnumerable<PointBase> dataPoints, int sectionIndex = 0);
 
         /// <summary>
         /// Use this method to map a latitude/longitude coordinate to a top-left corner of a region

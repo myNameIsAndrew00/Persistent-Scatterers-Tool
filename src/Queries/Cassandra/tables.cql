@@ -24,9 +24,11 @@ create table points_region_zoom_20(
 	row int,
 	column int,
 	
+	section int,
+	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_19(

@@ -35,6 +35,7 @@ namespace MapWebSite.Model
     /// </summary>
     public class PointsDataSet : PointsDataSetHeader
     {         
+     
 
         public IEnumerable<Point> Points { get; set; }
 

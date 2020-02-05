@@ -326,6 +326,7 @@
     <Content Include="Resources\css\card.scss" />
     <Content Include="Resources\css\small_loading_spinner.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
+    <Content Include="Resources\css\popup.scss" />
     <None Include="Resources\css\settings_points_upload.scss" />
     <Content Include="Resources\js\api\api_router.js" />
     <Content Include="Resources\js\api\cache\points_regions_manager.js" />
@@ -338,6 +339,7 @@
     <Content Include="Resources\js\points settings\chose_dataset.js" />
     <Content Include="Resources\js\points settings\chose_palette.js" />
     <Content Include="Resources\js\map\points_source_manager.js" />
+    <Content Include="Resources\js\points settings\points_settings.js" />
     <Content Include="Resources\js\popup.js" />
     <Content Include="Resources\js\settings\settings.js" />
     <Content Include="Resources\js\settings\settings_color_picker.js" />
@@ -355,6 +357,7 @@
     <Content Include="Resources\resources\icons\bar_plot_icon.svg" />
     <Content Include="Resources\resources\icons\bell_icon.svg" />
     <Content Include="Resources\resources\icons\close_icon.svg" />
+    <Content Include="Resources\resources\icons\eye_icon.svg" />
     <Content Include="Resources\resources\icons\first_gliph.svg" />
     <Content Include="Resources\resources\icons\info_icon.svg" />
     <Content Include="Resources\resources\icons\loading_icon.svg" />

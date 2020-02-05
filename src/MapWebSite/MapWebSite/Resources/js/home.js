@@ -5,6 +5,7 @@
  * */
 
 import { HidePointInfo, CreatePopupWindow } from './point info/point_info.js';
+ 
 
 window.HidePointInfo = HidePointInfo;
 window.CreatePopupWindow = CreatePopupWindow;
@@ -25,8 +26,8 @@ window.getScript = function getScript(node, scriptServerPath) {
 
     $(node).append(script);
 }
-
-
+ 
+ 
 /*colorPalette used default*/
 export var colorPalette = [{
     Color: '#33ff00',
