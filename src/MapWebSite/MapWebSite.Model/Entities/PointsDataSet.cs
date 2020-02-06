@@ -47,11 +47,10 @@ namespace MapWebSite.Model
     [DataContract]
     public class PointBase : ICloneable
     {
-        [Obsolete("Base points contain now all the information represented by this enum")]
-        /// <summary>
-        /// An enum which describes the meaning of OptionalField
+         /// <summary>
+        /// An enum which describes the fields which can be used as visualisation criteria
         /// </summary>       
-        public enum BasicInfoOptionalField
+        public enum VisualisationCriteria
         {
             [EnumString("Height")]
             Height,

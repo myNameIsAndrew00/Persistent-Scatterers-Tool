@@ -1,0 +1,13 @@
+﻿@model  List<string> 
+@{
+    Layout = null;
+}
+
+    <ul class="chose-criteria-list">
+        @foreach (var criteria in Model)
+        {
+            <li>
+                @Html.Raw(criteria)
+            </li>
+        }
+    </ul>

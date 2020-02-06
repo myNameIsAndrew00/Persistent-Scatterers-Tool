@@ -8,6 +8,7 @@ import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
 import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
 import { UpdateSelectedDatasetLayout } from './points settings/chose_dataset.js';
 import { Router, endpoints } from './api/api_router.js';
+import { PopupBuilderInstance } from './popup.js';
 
 /**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE DOWN-LEFT MENU******************/
 /*************************************************************************************************/
@@ -68,7 +69,7 @@ window.changeMenuContent = function changeMenuContent(direction, display = false
 function hideIcon(innerImage, innerText, currentMenuList) {
     /*reset elements transition timer*/
     /*animation for side menu*/
-    if(currentMenuList != null) currentMenuList.style.margin = '0 0 0 -50px';
+    if (currentMenuList != null) currentMenuList.style.margin = '0 0 0 -50px';
 
     /*animation for main menu*/
     innerImage.style.transition = '0.5s';
@@ -170,8 +171,44 @@ window.displayPointsLayerPage = async function displayPointsLayerPage(display, r
     if (!display)
         displayPage(display, '');
     else
-        await $.get("/PointsSettings/" + requestMethodName, await function (data) {
-            displayPage(false, '');
-            setTimeout(function () { displayPage(true, data) }, 150);
-        });
+        Router.Get(endpoints.PointsSettings[requestMethodName],
+            await function (data) {
+                displayPage(false, '');
+                setTimeout(function () { displayPage(true, data) }, 150);
+            });
+
 }
+
+function displayPopup(buttonId, url) {
+    const buttonPosition = $('#' + buttonId).offset();
+    const buttonWidth = parseInt($('#' + buttonId).width(), 10);
+
+    Router.Get(url,
+        function (data) {
+            function htmlToElement(html) {
+                var template = document.createElement('template');
+                template.innerHTML = html.trim();
+
+                return template.content.firstChild;
+            }
+
+            PopupBuilderInstance.Create('map-container',
+                { X: buttonPosition.left + buttonWidth / 2, Y: buttonPosition.top + 30 },
+                htmlToElement(data));
+        });
+
+}
+
+//todo: remove in all html files 'onclick' and add click handling in js (like in the example bellow)
+$('#notification_button').click(function (event) {
+    displayPopup('notification_button', endpoints.Miscellaneous.GetNotificationsPage);
+});
+
+//handle the click for selecting map type button
+$('#map_type_button').click(function (event) {
+    displayPopup('map_type_button', endpoints.Miscellaneous.GetChoseMapTypePage);
+});
+
+$('#map_criteria_button').click(function (event) {
+    displayPopup('map_criteria_button', endpoints.PointsSettings.GetChoseDisplayCriteriaPage);
+});

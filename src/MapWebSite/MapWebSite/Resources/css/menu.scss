@@ -234,8 +234,11 @@
                 padding: 0;
                 background: none;
 
-
                 svg {
+                    .cls-2, .cls-4, .cls-13, .e_cls-1 {
+                        transition: fill .3s linear;
+                    }
+
                     margin: 3px;
                     filter: drop-shadow(3px 1px 3px get_color(strongTransparentBlue));
                 }

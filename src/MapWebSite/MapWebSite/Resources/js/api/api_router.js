@@ -13,9 +13,14 @@ export const endpoints = {
         RequestPointDetails: apiUrl + '/HomeApi/RequestPointDetails',
         RequestRegionsKeys: apiUrl + '/HomeApi/RequestRegionsKeys'
     },
+    Miscellaneous: {
+        GetNotificationsPage: '/Miscellaneous/GetNotificationsPage',
+        GetChoseMapTypePage: '/Miscellaneous/GetChoseMapTypePage'
+    },
     PointsSettings: {
-        GetColorPalettePage: apiUrl + '/PointsSettings/GetColorPalettePage',
-        GetChoseDatasetPage: apiUrl + '/PointsSettings/GetChoseDatasetPage'
+        GetColorPalettePage: '/PointsSettings/GetColorPalettePage',
+        GetChoseDatasetPage: '/PointsSettings/GetChoseDatasetPage',
+        GetChoseDisplayCriteriaPage: '/PointsSettings/GetChoseDisplayCriteriaPage'
     },
     PointsSettingsApi: {
         GetColorPalette: apiUrl + '/PointsSettingsApi/GetColorPalette',
@@ -28,7 +33,6 @@ export const endpoints = {
         ClearFileChunks: apiUrl + '/settings/ClearFileChunks',
         MergeFileChunks: apiUrl +'/settings/MergeFileChunks',
         CheckDatasetExistance: apiUrl +'/settings/CheckDatasetExistance'
-
     }
 
 };

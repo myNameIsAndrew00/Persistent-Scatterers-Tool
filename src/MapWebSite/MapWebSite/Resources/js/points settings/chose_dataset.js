@@ -104,7 +104,7 @@ function fillTable(datasets, table) {
         var hiddenInput = document.createElement('input');
 
 
-        row.id = 'user_dataset_' + datasets[i].Username + '_' + datasets[i].DatasetName;
+        row.id = 'user_dataset_' + datasets[i].Username + '_' + datasets[i].Name;
         hiddenInput.id = row.id + '_id';
         hiddenInput.name = hiddenInput.id;     
         hiddenInput.value = datasets[i].ID; //store the value of dataset
@@ -114,13 +114,13 @@ function fillTable(datasets, table) {
         usernameColumn.innerText = datasets[i].Username;
           
         var datasetNameColumn = document.createElement('td');
-        datasetNameColumn.innerText = datasets[i].DatasetName;
+        datasetNameColumn.innerText = datasets[i].Name;
 
         var statusColumn = document.createElement('td');
         statusColumn.innerText = datasets[i].Status;
 
         var buttonsColumn = document.createElement('td');
-        var buttons = buildButtonsColumn(datasets[i].Username, datasets[i].DatasetName, datasets[i].IsValid);
+        var buttons = buildButtonsColumn(datasets[i].Username, datasets[i].Name, datasets[i].IsValid);
 
         
         buttonsColumn.appendChild(buttons.useButton); 
@@ -131,7 +131,7 @@ function fillTable(datasets, table) {
         row.appendChild(buttonsColumn);
 
         /*hover the row if the color palette is in use*/
-        if (SelectedDataset.username === datasets[i].Username && SelectedDataset.datasetName == datasets[i].DatasetName)
+        if (SelectedDataset.username === datasets[i].Username && SelectedDataset.datasetName == datasets[i].Name)
             row.classList.add('selected-row');
 
 

@@ -11,6 +11,7 @@ import { Router, endpoints } from '../api/api_router.js';
 import { PointsLayer } from './points_layer.js';
 import { HubRouter } from '../api/hub_router.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
+import { SelectedCriteria } from '../points settings/chose_criteria.js';
 
 export const SectionsRowsCount = 1;
 export const SectionsColumnsCount = 2;
@@ -242,7 +243,7 @@ class PointsSectionHandler {
             points[i + index].ID = pointsData[i].Number;
             points[i + index].longitude = pointsData[i].Longitude;
             points[i + index].latitude = pointsData[i].Latitude;
-            points[i + index].color = buildStyleFromPalette(pointsData[i].Height);
+            points[i + index].color = buildStyleFromPalette(pointsData[i][SelectedCriteria]);
         }
          
         this.UpdatePointsLayer(points);

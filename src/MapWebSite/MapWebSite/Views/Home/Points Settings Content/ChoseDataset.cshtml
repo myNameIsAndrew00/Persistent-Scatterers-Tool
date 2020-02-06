@@ -29,16 +29,16 @@
 
             @foreach (var item in Model.Datasets)
             {
-        <tr id="user_dataset_@(item.Username)_@(item.Name)">
+                <tr id="user_dataset_@(item.Username)_@(item.Name)">
 
-            <td>@item.Username</td>
-            <td>@item.Name</td>
-            <td>@item.Status.GetEnumString()</td>
-            <td>
-                <input type="hidden" id="user_dataset_@(item.Username)_@(item.Name)_id" value="@item.ID" />
-                <button class="use" disabled="@(!item.IsValid)" onclick="useDataset('@item.Username','@item.Name')">@TextDictionary.HPSCDUseButton</button>
-            </td>
-        </tr>
+                    <td>@item.Username</td>
+                    <td>@item.Name</td>
+                    <td>@item.Status.GetEnumString()</td>
+                    <td>
+                        <input type="hidden" id="user_dataset_@(item.Username)_@(item.Name)_id" value="@item.ID" />
+                        <button class="use" disabled="@(!item.IsValid)" onclick="useDataset('@item.Username','@item.Name')">@TextDictionary.HPSCDUseButton</button>
+                    </td>
+                </tr>
             }
 
         </table>
@@ -46,6 +46,4 @@
     <aside class="ps_right"></aside>
 </div>
 
-<script>
-    getScript('#points-settings-layer-container-content', '/Resources/js/points settings/chose_dataset.js');
-</script>
+ 

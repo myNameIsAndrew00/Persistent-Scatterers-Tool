@@ -251,6 +251,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\Miscellaneous Controller\MiscellaneousController.cs" />
     <Compile Include="Controllers\Points Settings Controller\PointsSettingsController.cs" />
     <Compile Include="Controllers\Settings Controller\SCAccountController.cs" />
     <Compile Include="Controllers\Settings Controller\SCUploadPoints.cs" />
@@ -327,6 +328,7 @@
     <Content Include="Resources\css\small_loading_spinner.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
     <Content Include="Resources\css\popup.scss" />
+    <Content Include="Resources\css\home_points_settings_popup.scss" />
     <None Include="Resources\css\settings_points_upload.scss" />
     <Content Include="Resources\js\api\api_router.js" />
     <Content Include="Resources\js\api\cache\points_regions_manager.js" />
@@ -336,6 +338,7 @@
     <Content Include="Resources\js\map\received_points_worker.js" />
     <Content Include="Resources\js\point info\card_drawer.js" />
     <Content Include="Resources\js\point info\cards_manager.js" />
+    <Content Include="Resources\js\points settings\chose_criteria.js" />
     <Content Include="Resources\js\points settings\chose_dataset.js" />
     <Content Include="Resources\js\points settings\chose_palette.js" />
     <Content Include="Resources\js\map\points_source_manager.js" />
@@ -515,6 +518,9 @@
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Resources\css\texts.scss" />
+    <Content Include="Views\Home\Points Settings Content\ChoseCriteria.cshtml" />
+    <Content Include="Views\Home\Miscellaneous Content\Notifications.cshtml" />
+    <Content Include="Views\Home\Miscellaneous Content\ChoseMapType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

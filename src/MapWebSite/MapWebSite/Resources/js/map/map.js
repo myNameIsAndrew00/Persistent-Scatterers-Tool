@@ -6,10 +6,8 @@
  
 import { DisplayPointInfo, SetPointInfoData } from '../point info/point_info.js';
 import { Router, endpoints } from '../api/api_router.js';
-import { HubRouter } from '../api/hub_router.js';
-import { PointsLayer } from './points_layer.js';
-import { PointsRegionsManager } from '../api/cache/points_regions_manager.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
+
 import { PointsSectionsContainer } from './points_section_handler.js';
     
 

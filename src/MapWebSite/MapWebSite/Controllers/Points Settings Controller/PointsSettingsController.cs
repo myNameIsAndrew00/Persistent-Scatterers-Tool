@@ -62,6 +62,20 @@ namespace MapWebSite.Controllers
                 return View();
             }
         }
+
+        public ActionResult GetChoseDisplayCriteriaPage()
+        {
+            List<string> model = new List<string>();
+
+            foreach (PointBase.VisualisationCriteria suit in (PointBase.VisualisationCriteria[])Enum.GetValues(typeof(PointBase.VisualisationCriteria)))
+                model.Add(suit.GetEnumString());
+                
+            return View("~/Views/Home/Points Settings Content/ChoseCriteria.cshtml",
+                            model);
+        }
+
+
+
     }
      
     /// <summary>

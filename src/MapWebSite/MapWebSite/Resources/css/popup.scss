@@ -5,11 +5,25 @@
     width: 0 !important;
     min-height: 0 !important;
     padding: 0 !important;
+
+    .popup-close-button {
+        opacity: 0;
+    }
+
+    .popup-content{
+        opacity: 0;
+        width: 0;
+    }
 }
 
 .popup {
     .popup-content {
         padding: initial;
+        transition: 0;
+    }
+
+    p {
+        font-size: 0.7em;
     }
 
     z-index: $critical_z_index;
@@ -29,6 +43,7 @@
         border: none;
         color: gray;
         top: 2px;
+        transition: 300ms;
     }
 }
 
@@ -37,7 +52,7 @@
     content: "";
     position: absolute;
     top: -5px;
-    left: 12%;
+    left: 20px;
     margin-right: -5px;
     border-width: 10px 10px 0 0;
     border-style: solid;
