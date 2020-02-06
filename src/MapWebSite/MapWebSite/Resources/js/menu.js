@@ -7,6 +7,7 @@
 import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
 import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
 import { UpdateSelectedDatasetLayout } from './points settings/chose_dataset.js';
+import { RefreshSelectedCriteria } from './points settings/chose_criteria.js';
 import { Router, endpoints } from './api/api_router.js';
 import { PopupBuilderInstance } from './popup.js';
 
@@ -179,7 +180,7 @@ window.displayPointsLayerPage = async function displayPointsLayerPage(display, r
 
 }
 
-function displayPopup(buttonId, url) {
+function displayPopup(buttonId, url, callbackHandler) {
     const buttonPosition = $('#' + buttonId).offset();
     const buttonWidth = parseInt($('#' + buttonId).width(), 10);
 
@@ -195,6 +196,8 @@ function displayPopup(buttonId, url) {
             PopupBuilderInstance.Create('map-container',
                 { X: buttonPosition.left + buttonWidth / 2, Y: buttonPosition.top + 30 },
                 htmlToElement(data));
+
+            callbackHandler();
         });
 
 }
@@ -210,5 +213,9 @@ $('#map_type_button').click(function (event) {
 });
 
 $('#map_criteria_button').click(function (event) {
-    displayPopup('map_criteria_button', endpoints.PointsSettings.GetChoseDisplayCriteriaPage);
+    displayPopup('map_criteria_button',
+        endpoints.PointsSettings.GetChoseDisplayCriteriaPage,
+        function () {
+            RefreshSelectedCriteria();
+        });   
 });
