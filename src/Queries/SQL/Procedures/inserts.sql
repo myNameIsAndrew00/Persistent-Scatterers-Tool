@@ -33,6 +33,8 @@ begin
 		values (@user_id, @default_role_id)
 							  
 		commit
+		
+		select 1
 		end try
 	begin catch	
 		rollback;

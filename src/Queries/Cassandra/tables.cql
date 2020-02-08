@@ -16,8 +16,6 @@ create table points_by_dataset(
 
 
 
-
-##NEW 
  
 create table points_region_zoom_20(
 	dataset_id int,

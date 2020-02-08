@@ -3,9 +3,8 @@ create type points_displacements (
 	jd decimal,
 	days_from_reference decimal,
 	value decimal
-)
-
-##NEW 
+);
+ 
  
 create type base_point (
 	number int,  
