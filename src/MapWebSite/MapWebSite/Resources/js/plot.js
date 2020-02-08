@@ -224,13 +224,15 @@ export class PlotDrawer {
 
         function drawCircles(object) {
             for (var index = 0; index < points.length; index++) {
+                var radius = Math.min( 8, 20 / Math.sqrt(points.length));
+
                 var circle = document.createElementNS('http://www.w3.org/2000/svg', "circle");
 
                 circle.setAttributeNS(null, 'cx', origin.X + object.transformToXAxisValue(points[index].X));
                 circle.setAttributeNS(null, 'cy', origin.Y - object.transformToYAxisValue(points[index].Y));
                 circle.setAttributeNS(null, "graphPoint", '{ "oY": ' + points[index].Y + ', "oX": ' + points[index].X + '}');
                 circle.setAttributeNS(null, "class", "graphPoint graphPointDot");
-                circle.setAttributeNS(null, 'r', 3);
+                circle.setAttributeNS(null, 'r', radius);
 
                 if (object.containerObject != null) object.containerObject.append(circle);
                 else $(object.containerID).append(circle);

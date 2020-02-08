@@ -59,13 +59,17 @@ function checkDataSetName(dataSetName) {
         });   
 }
 
-function enableUpload() {
-    $('#upload_points_container_form').children('#current_percent').removeClass('current-percent-hidden');
+function enableUpload(enabled) {
+
+    if(enabled)
+        $('#upload_points_container_form').children('#current_percent').removeClass('current-percent-hidden');
+    else $('#upload_points_container_form').children('#current_percent').addClass('current-percent-hidden');
+
     updatePercentText('0');
 }
 
 function updatePercentText(percent) {
-      $('#upload_points_container_form').children('#current_percent > h2').html(
+      $('#upload_points_container_form').children('#current_percent').children('h2').html(
         percent + '%');
 }
 
@@ -73,7 +77,7 @@ function updatePercentText(percent) {
 /*sending data functions*/
 
 function uploadFile(file, dataSetName) {
-    enableUpload();
+    enableUpload(true);
 
     var fileChunks = [];
 
@@ -135,5 +139,6 @@ function mergeChunks(dataSetName) {
         { fileName: dataSetName },
         function (serverResponse) {
             DisplayOverlay(serverResponse);
+            enableUpload(false);
         });
 }
