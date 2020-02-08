@@ -95,7 +95,7 @@ namespace MapWebSite.Controllers
             if (!Directory.Exists(directoryName))
                 return new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.InternalServerError };
 
-            var chunksFiles = Directory.GetFiles(directoryName).OrderBy(file => file);
+            var chunksFiles = Directory.GetFiles(directoryName).OrderBy(file => file.Length).ThenBy(file => file);
 
             using (FileStream finalFile = new FileStream($"{directoryName}\\{ConfigurationManager.AppSettings["DataPointsSourceFileName"]}", FileMode.Create))
                 foreach (var chunkFile in chunksFiles)

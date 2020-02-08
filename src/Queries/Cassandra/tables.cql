@@ -34,9 +34,10 @@ create table points_region_zoom_19(
 	row int,
 	column int,
 	
+	section int,
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_18(
@@ -44,29 +45,32 @@ create table points_region_zoom_18(
 	row int,
 	column int,
 	
+	section int,
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_17(
 	dataset_id int,
 	row int,
 	column int,
+	section int,
 	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_16(
 	dataset_id int,
 	row int,
 	column int,
+	section int,
 	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_15(
@@ -74,19 +78,21 @@ create table points_region_zoom_15(
 	row int,
 	column int,
 	
+	section int,
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_14(
 	dataset_id int,
 	row int,
 	column int,
+	section int,
 	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_13(
@@ -94,9 +100,10 @@ create table points_region_zoom_13(
 	row int,
 	column int,
 	
+	section int,
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_12(
@@ -104,9 +111,10 @@ create table points_region_zoom_12(
 	row int,
 	column int,
 	
+	section int,
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_11(
@@ -114,9 +122,10 @@ create table points_region_zoom_11(
 	row int,
 	column int,
 	
+	section int,
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_10(
@@ -124,9 +133,10 @@ create table points_region_zoom_10(
 	row int,
 	column int,
 	
+	section int,
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_9(
@@ -134,69 +144,76 @@ create table points_region_zoom_9(
 	row int,
 	column int,
 	
+	section int,
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_8(
 	dataset_id int,
 	row int,
 	column int,
+	section int,
 	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_7(
 	dataset_id int,
 	row int,
 	column int,
+	section int,
 	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_6(
 	dataset_id int,
 	row int,
 	column int,
+	section int,
 	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_5(
 	dataset_id int,
 	row int,
 	column int,
+	section int,
 	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_4(
 	dataset_id int,
 	row int,
 	column int,
+	section int,
 	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
 
 create table points_region_zoom_3(
 	dataset_id int,
 	row int,
 	column int,
+	section int,
 	
 	points list<FROZEN<base_point>>,
 	
-	PRIMARY KEY((dataset_id, row, column))
+	PRIMARY KEY((dataset_id, row, column), section)
 );
  
 

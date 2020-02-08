@@ -97,7 +97,9 @@ namespace MapWebSite.Repository
 
             CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder();
             queryBuilder.TableName = "points_region_zoom_" + regionLevel.ZoomLevel;
-            queryBuilder.Type = regionLevel.ZoomLevel == 20 ? typeof(SectionedPointsRegionType) : typeof(PointsRegionType);
+            queryBuilder.Type = typeof(SectionedPointsRegionType);
+            
+            //: typeof(PointsRegionType);
             queryBuilder.QueryType = CassandraQueryBuilder.QueryTypes.InsertFromType;
 
             this.executionInstance.PrepareQuery(queryBuilder);

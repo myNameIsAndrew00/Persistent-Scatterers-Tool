@@ -98,7 +98,7 @@ namespace MapWebSite.Core.DataPoints
             result.Add(baseRegion);
 
             for (int i = 19; i >= 3; i--)
-                result.Add(generateIntermediateRegions(baseRegion, i));
+                result.Add(generateIntermediateRegions(baseRegion, i, sectionIndex));
 
             return result;
         }
@@ -170,7 +170,7 @@ namespace MapWebSite.Core.DataPoints
             };
         }
 
-        private PointsRegionsLevel generateIntermediateRegions(PointsRegionsLevel baseRegions, int zoomLevel)
+        private PointsRegionsLevel generateIntermediateRegions(PointsRegionsLevel baseRegions, int zoomLevel, int sectionIndex)
         {
             Dictionary<Tuple<int,int>, PointsRegion> pointsRegions = new Dictionary<Tuple<int, int>, PointsRegion>();
 
@@ -215,6 +215,7 @@ namespace MapWebSite.Core.DataPoints
             return new PointsRegionsLevel()
             {
                 ZoomLevel = zoomLevel,
+                Section = sectionIndex,
                 Regions = pointsRegions.Values
             };
         }

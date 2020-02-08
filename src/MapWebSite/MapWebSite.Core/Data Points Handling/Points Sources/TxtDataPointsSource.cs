@@ -172,7 +172,11 @@ namespace MapWebSite.Core.DataPoints
             tasks[10] = Task.Run(() =>
             {
                 for (int index = headerUnusedLinesCount; index < tokens.Length; index++)
-                    localDisplacements[index - headerUnusedLinesCount] = decimal.Parse(tokens[index].Replace(" ",""));
+                {
+                    decimal number = 0;
+                    decimal.TryParse(tokens[index].Replace(" ", ""), out number);
+                    localDisplacements[index - headerUnusedLinesCount] = number;
+                }
             });
             Task.WaitAll(tasks);
 
