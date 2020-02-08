@@ -1,5 +1,33 @@
 @import 'colors.scss';
 
+
+.bar-loading-spinner {
+    display: inline-block;
+    position: relative;
+    width: 22px;
+    height: 2px;
+    background-color: black;
+    animation: bar-loading-spinner 1s cubic-bezier(0.5, 0.4, 0.7, 1) infinite;
+
+    @keyframes bar-loading-spinner {
+        0% {
+            background: black;
+            width: 0;
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 0.8;
+        }
+
+        100% {
+            width: 180px;
+            opacity: 0;
+        }
+    }
+}
+
+
 .small-loading-spinner {
     pointer-events: none;
     display: inline-block;
@@ -45,6 +73,6 @@
     }
 }
 
-.small-loading-spinner-hidden{
+.small-loading-spinner-hidden {
     visibility: hidden;
 }

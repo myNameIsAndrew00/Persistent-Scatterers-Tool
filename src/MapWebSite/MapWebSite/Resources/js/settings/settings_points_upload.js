@@ -65,7 +65,7 @@ function enableUpload() {
 }
 
 function updatePercentText(percent) {
-      $('#upload_points_container_form').children('#current_percent').html(
+      $('#upload_points_container_form').children('#current_percent > h2').html(
         percent + '%');
 }
 

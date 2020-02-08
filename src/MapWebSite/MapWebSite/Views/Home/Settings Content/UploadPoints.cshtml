@@ -8,9 +8,13 @@
             width="920px"
             height="460px"
             type="image/svg+xml"
-            data="~/Resources/resources/icons/upload_points_gliph.svg" )></object>    
+            data="~/Resources/resources/icons/upload_points_gliph.svg" )></object>
     <div id="upload_points_container_form" class="upload-points-container-text">
-        <h2 id="current_percent" class="current-percent-hidden">0%</h2>
+        <div id="current_percent" >
+            <h2>0%</h2>
+            <div class="bar-loading-spinner" style="top: -21px"></div>
+        </div>
+        
         <h1>@TextDictionary.HMenuUPTitle</h1>
         <small>
             @Html.Raw(TextDictionary.HMenuUPInstructionText)
