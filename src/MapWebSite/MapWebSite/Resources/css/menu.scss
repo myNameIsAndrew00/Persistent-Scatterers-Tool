@@ -21,17 +21,10 @@
     }
 
     .top-menu {
-
-        button {
-            opacity: 1;
-            background: get_color(chromaOrange);
+ 
+        button:hover:disabled {
+            cursor: default;
         }
-
-        button:hover {
-            background: orange;
-        }
-
-        
     }
 }
 
@@ -214,25 +207,30 @@
     }
 
     .top-menu {
-        display: grid;
-        grid-template-areas: "left right";
         z-index: $principal_z_index;
         position: fixed;
         top: 5px;
         right: 5px;
-        width: 325px;
         margin-left: -150px;
-        padding: 10px;
         transition: 0.3s;
+        display: inline-flex;
+        align-items: center;
 
         .pre-text-area {
-            position: absolute;
-            left: -135px;
-            top: 15px;
+            display: table;
+            padding: 10px;
+
+            .notification-button {
+                border-left: solid;
+                border-radius: 0;
+                margin-left: 10px;
+                padding-left: 7px;
+            }
 
             button {
                 padding: 0;
                 background: none;
+                vertical-align: middle;
 
                 svg {
                     .cls-2, .cls-4, .cls-13, .e_cls-1 {
@@ -258,50 +256,59 @@
             }
         }
 
-        .text-area {
-            display: table-cell;
-            grid-area: left;
-            font-size: 13px;
-            margin: auto 0;
-            vertical-align: middle;
+        .white-area {
+            display: grid;
+            grid-template-areas: "left right";
+            padding: 10px;
 
-            label {
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-                font-weight: 100;
-                margin: 0;
+            .text-area {
+                display: table-cell;
+                grid-area: left;
+                font-size: 13px;
+                margin: auto 0;
+                vertical-align: middle;
+
+                label {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    font-weight: 100;
+                    margin: 0;
+                }
+
+                .current-dataset-text {
+                    width: 100px;
+                }
             }
 
-            .current-dataset-text {
-                width: 100px;
-            }
-        }
+            .buttons-area {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                width: 70px;
+                grid-area: right;
 
-        .buttons-area {
-            grid-area: right;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
+                button {
+                    display: inline-flex !important;
+                    justify-content: center;
+                    align-items: center;
+                    width: 22px;
+                    height: 24px;
+                    margin: 1px 1px 1px 2px;
+                    cursor: pointer;
+                    opacity: 0.7;
+                    padding: 12px;
+                    border-radius: 5px;
+                }
+ 
 
-            button {
-                display: inline-flex !important;
-                justify-content: center;
-                align-items: center;
-                padding: 0;
-                width: 30px;
-                height: 30px;
-                margin: 5px;
-                cursor: pointer;
-                opacity: 0.7;
-            }
+                button-selected {
+                    background: orange;
+                }
 
-            button-selected {
-                background: orange;
-            }
-
-            object {
-                pointer-events: none;
+                object {
+                    pointer-events: none;
+                }
             }
         }
     }
