@@ -7,7 +7,8 @@
 import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
 import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
 import { UpdateSelectedDatasetLayout } from './points settings/chose_dataset.js';
-import { RefreshSelectedCriteria } from './points settings/chose_criteria.js';
+import { RefreshSelectCriteriaPopup } from './points settings/chose_criteria.js';
+import { RefreshSelectMapTypePopup } from './map/chose_map_type.js';
 import { Router, endpoints } from './api/api_router.js';
 import { PopupBuilderInstance } from './popup.js';
 
@@ -209,13 +210,17 @@ $('#notification_button').click(function (event) {
 
 //handle the click for selecting map type button
 $('#map_type_button').click(function (event) {
-    displayPopup('map_type_button', endpoints.Miscellaneous.GetChoseMapTypePage);
+    displayPopup('map_type_button',
+        endpoints.Miscellaneous.GetChoseMapTypePage,
+        function () {
+            RefreshSelectMapTypePopup();
+        });
 });
 
 $('#map_criteria_button').click(function (event) {
     displayPopup('map_criteria_button',
         endpoints.PointsSettings.GetChoseDisplayCriteriaPage,
         function () {
-            RefreshSelectedCriteria();
+            RefreshSelectCriteriaPopup();
         });   
 });

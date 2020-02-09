@@ -335,4 +335,11 @@
   <data name="HMenuAboutText" xml:space="preserve">
     <value>About application</value>
   </data>
+  <data name="CMTHybrid" xml:space="preserve">
+    <value>Hybrid map</value>
+    <comment>CMT --&gt; chose map type (the popup on home, top right)</comment>
+  </data>
+  <data name="CMTSatelitte" xml:space="preserve">
+    <value>Satellite map</value>
+  </data>
 </root>

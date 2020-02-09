@@ -1,5 +1,19 @@
-﻿@{
+﻿@using MapWebSite.Resources.text
+@{
     Layout = null;
 }
 
-@Html.Raw("<p>Nothing available<p>")
+<ul class="chose-map-list">
+    <li>
+        <button id="chose_map_hybrid"
+                onclick="changeMapType(this,'hybrid')">
+            @Html.Raw(TextDictionary.CMTHybrid)
+        </button>
+    </li>
+    <li>
+        <button id="chose_map_satelitte"
+                onclick="changeMapType(this,'satellite')">
+            @Html.Raw(TextDictionary.CMTSatelitte)
+        </button>
+    </li>
+</ul>

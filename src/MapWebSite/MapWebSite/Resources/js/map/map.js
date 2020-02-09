@@ -3,13 +3,13 @@
  * This map contains the logic used for map navigation and interaction with Map Server
  *
  * */
- 
+
 import { DisplayPointInfo, SetPointInfoData } from '../point info/point_info.js';
 import { Router, endpoints } from '../api/api_router.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
-
+import { MapType } from './chose_map_type.js';
 import { PointsSectionsContainer } from './points_section_handler.js';
-    
+
 
 var selectedPoints = [];
 export var ProcessingEnabled = 0;
@@ -41,29 +41,46 @@ var mapView = new ol.View({
     maxZoom: 20
 })
 
- 
+
 
 
 /**
  * Here the map is rendered 
  */
 
+//this variable contains the source tiles available to be displayed
+const sources = {
+    hybrid: new ol.layer.Tile({
+        visible: true,
+        source: new ol.source.OSM({
+            crossOrigin: 'anonymous',         
+        })
+    }),
+    satellite: new ol.layer.Tile({
+        visible: false,
+        source: new ol.source.TileJSON({
+            url: 'https://api.maptiler.com/maps/hybrid/256/tiles.json?key=UKuFFRYp8bMMxfqZFhKJ',
+            tileSize: 256,
+            crossOrigin: 'anonymous',
+        
+        })
+    })
+}
+
+export function SetMapType(chosenType) {
+    Object.keys(sources).forEach(function (type, typeIndex) {
+        sources[type].setVisible(type == chosenType);
+    });
+}
+
+
 export const map = new ol.Map({
     target: 'map',
     renderer: 'webgl',
     layers: [
-        new ol.layer.Tile({
-            source: new ol.source.OSM(
-                {
-                    crossOrigin: 'anonymous',
-                    /*Uncomment this to change the map*/
-                /*   "url": 'https://{1-4}.aerial.maps.cit.api.here.com' +
-                        '/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png' +
-                        '?app_id=oYZx6OXtO1hWKT2ztoeb&app_code=D7b7B1XOmHpFzAFWaaejIRrVqzdDjsJxZYUf_S0mzVA'*/
-                }
-            )
-        })
-    ], 
+        sources['satellite'],
+        sources['hybrid']
+    ],
     view: mapView,
     controls: []
 });
@@ -82,7 +99,7 @@ map.on('click', function (evt) {
     });
 });
 
- 
+
 
 
 
@@ -121,11 +138,11 @@ function handleClickFunction(point) {
             identifier: point.ID,
             username: SelectedDataset.username,
             datasetName: SelectedDataset.datasetName
-        }, function (receivedInfo) { 
+        }, function (receivedInfo) {
             SetPointInfoData(receivedInfo);
         }
     )
-     
+
 
     DisplayPointInfo();
 
@@ -143,11 +160,11 @@ export function UnselectFeatureOnMap(featureId) {
 /**
  * Section below contain the points request handling
  */
-export function UpdatePointsLayer(points) { 
+export function UpdatePointsLayer(points) {
     pointsSectionsContainer.UpdatePointsLayer(points);
-     
+
 }
- 
+
 function initialisePointsRequest(evt) {
     //code bellow handles zoomin-out
     /*var newZoom = map.getView().getZoom();
@@ -156,7 +173,7 @@ function initialisePointsRequest(evt) {
         console.log('zoom end, new zoom: ' + newZoom);
         currentZoom = newZoom;
     }*/
- 
+
 
     pointsSectionsContainer.LoadPoints();
 }

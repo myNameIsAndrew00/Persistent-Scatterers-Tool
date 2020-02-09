@@ -12,7 +12,7 @@ export var SelectedCriteria = 'Height';
 var selectedButtonId = 'chose_criteria_' + SelectedCriteria;
 
 
-export function RefreshSelectedCriteria() {
+export function RefreshSelectCriteriaPopup() {
     /*timeout is set to fix a problem with first selection (when the popup appeare first time)*/
     setTimeout(function () {
         $('#' + selectedButtonId).addClass('button-selected');

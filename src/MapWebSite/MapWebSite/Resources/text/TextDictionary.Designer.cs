@@ -61,6 +61,24 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hybrid map.
+        /// </summary>
+        public static string CMTHybrid {
+            get {
+                return ResourceManager.GetString("CMTHybrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Satellite map.
+        /// </summary>
+        public static string CMTSatelitte {
+            get {
+                return ResourceManager.GetString("CMTSatelitte", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello.
         /// </summary>
         public static string GreetingMessage {
