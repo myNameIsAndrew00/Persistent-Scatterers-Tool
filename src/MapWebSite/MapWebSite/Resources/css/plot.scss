@@ -99,6 +99,10 @@
 
     .plot-popup-hidden {
         visibility: hidden;
+
+        button{
+            opacity: 0;
+        }
     }
 
     h3 {

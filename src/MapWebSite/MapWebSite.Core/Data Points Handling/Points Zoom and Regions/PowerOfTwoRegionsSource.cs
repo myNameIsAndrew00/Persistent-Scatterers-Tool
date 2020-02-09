@@ -266,6 +266,7 @@ namespace MapWebSite.Core.DataPoints
                 case 10: return 70;
                 case 9: return 60;
                 case 8: return 50;
+                case 7:
                 case 6: return 40;
                 case 5: return 30;
                 case 4: return 20;

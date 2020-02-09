@@ -7,12 +7,14 @@
     <li>
         <button id="chose_map_hybrid"
                 onclick="changeMapType(this,'hybrid')">
+            <img src="@Url.Content("~/Resources/resources/hybrid.png")">
             @Html.Raw(TextDictionary.CMTHybrid)
         </button>
     </li>
     <li>
         <button id="chose_map_satelitte"
                 onclick="changeMapType(this,'satellite')">
+            <img src="@Url.Content("~/Resources/resources/terrain.png")">
             @Html.Raw(TextDictionary.CMTSatelitte)
         </button>
     </li>
