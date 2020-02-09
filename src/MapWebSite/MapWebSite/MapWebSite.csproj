@@ -354,6 +354,7 @@
     <Content Include="Resources\js\point info\point_info.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
+    <Content Include="Resources\resources\hybrid.png" />
     <Content Include="Resources\resources\icons\arrow_right_icon.svg" />
     <Content Include="Resources\resources\icons\bar_plot_icon.svg" />
     <Content Include="Resources\resources\icons\bell_icon.svg" />
@@ -378,7 +379,7 @@
     <Content Include="Resources\resources\icons\user_details_icon.svg" />
     <Content Include="Resources\resources\icons\user_palette_icon.svg" />
     <Content Include="Resources\resources\icons\window_icon.svg" />
-    <Content Include="Resources\resources\settings_background.png" />
+    <Content Include="Resources\resources\terrain.png" />
     <Content Include="Resources\resources\WebDisasterLogo.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
