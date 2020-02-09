@@ -137,7 +137,7 @@ namespace MapWebSite.DataPointsParserService
             ///The source file must be looped, because a full read in memory of the file could throw a OutOfMemoryException.
             ///This means that the file will be read and parsed in chunks and multiple datasets with the same ID will be created 
             ///and stored in repository.
-            foreach(var dataset in pointsSource.CreateDataSet(datasetName, CoordinateSystem.UTM))
+            foreach(var dataset in pointsSource.CreateDataSet(datasetName, CoordinateSystem.Default))
             {
 
                 if (dataset == null)

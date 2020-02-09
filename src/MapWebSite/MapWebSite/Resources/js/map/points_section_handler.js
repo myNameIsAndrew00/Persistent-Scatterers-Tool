@@ -232,20 +232,26 @@ class PointsSectionHandler {
             console.log('Hub result: ' + requestedData.length);
         }
 
+        var index = 0;
 
         for (var i = 0; i < pointsData.length; i++) { // requestedPoints.length; i++) {
-            points[i + index] = new ol.Feature({
+            if (pointsData[i] == null) continue;
+            points[index] = new ol.Feature({
                 'geometry': new ol.geom.Point(
                     ol.proj.fromLonLat([pointsData[i].Longitude, pointsData[i].Latitude], 'EPSG:3857')),
                 'colorCriteria': pointsData[i].Height
             });
-            points[i + index].setId(pointsData[i].Number);
-            points[i + index].ID = pointsData[i].Number;
-            points[i + index].longitude = pointsData[i].Longitude;
-            points[i + index].latitude = pointsData[i].Latitude;
-            points[i + index].color = buildStyleFromPalette(pointsData[i][SelectedCriteria]);
+            points[index].setId(pointsData[i].Number);
+            points[index].ID = pointsData[i].Number;
+            points[index].longitude = pointsData[i].Longitude;
+            points[index].latitude = pointsData[i].Latitude;
+            points[index].color = buildStyleFromPalette(pointsData[i][SelectedCriteria]);
+
+            index++;
         }
-         
+
+       
+
         this.UpdatePointsLayer(points);
     }
 

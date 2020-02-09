@@ -81,7 +81,7 @@ namespace MapWebSite.Controllers
             return Json(new { message = createTask.Result.Succeeded ? 
                                           TextDictionary.LRegisterSuccessMessage
                                         : TextDictionary.LRegisterFailMessage ,
-                               type = "Success" });
+                              type = createTask.Result.Succeeded ?  "Success" : "Failed" });
 
         }
 

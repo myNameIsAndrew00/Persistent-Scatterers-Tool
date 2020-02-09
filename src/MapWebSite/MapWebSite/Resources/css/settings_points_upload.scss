@@ -15,6 +15,10 @@
         margin-top: -100px;
         text-align: center;
 
+        .bar-loading-spinner{
+            top: -21px;
+        }
+        
         label {
             display: block;
             font-weight: 100;
@@ -25,7 +29,7 @@
             visibility: collapse;
         }
 
-        .current-percent-hidden{
+        .current-percent-hidden {
             visibility: hidden;
         }
 
@@ -33,13 +37,11 @@
             display: block;
             color: get_color(light);
             background: get_color(chromaPurple);
-            
             padding: 5px;
             padding-left: 35px;
             border-radius: 5px;
-            width: 200px; 
+            width: 200px;
             margin: 20px auto;
-            
             transition: 0.3s;
             cursor: pointer;
             text-overflow: ellipsis;
@@ -50,10 +52,8 @@
             display: inline-block;
             float: left;
             margin-left: -28px;
-
             content: ' ';
-            background-image: url(../resources/icons/upload_points_icon.svg);            
-
+            background-image: url(../resources/icons/upload_points_icon.svg);
             height: 23px;
             width: 23px;
             background-size: 23px 23px;
