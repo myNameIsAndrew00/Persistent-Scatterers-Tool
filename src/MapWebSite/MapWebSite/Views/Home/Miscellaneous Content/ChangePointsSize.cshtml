@@ -1,0 +1,17 @@
+﻿@using MapWebSite.Resources.text
+@{
+    Layout = null;
+
+    int defaultRange = 30;
+}
+
+    <div class="points-dimension-range">
+        <small>@Html.Raw(TextDictionary.CPSLabel)</small>
+        <small id="points_size_slider_label">@Html.Raw(defaultRange)</small>
+        <input id="points_size_slider" type="range" min="1" max="100" 
+                value="@Html.Raw(defaultRange)"
+               oninput="ChangePointsSize()" 
+               onmouseup="ResetPointsSize()"
+              >
+
+    </div>

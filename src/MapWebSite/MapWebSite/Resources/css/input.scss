@@ -1,13 +1,26 @@
+@import 'colors.scss';
 
+*:focus {
+    outline: none!important;
+}
 
-.default-input{
+input, button {
+    background: get_color(chromaOrange);
+    transition: 0.3s;
+    padding: 5px 15px 5px 15px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+}
+
+.default-input {
     background: rgba(255,255,255,0.05);
-    margin: 20px; 
+    margin: 20px;
     display: block;
     margin-right: auto;
     margin-left: auto;
     margin-top: 0;
-    border: none; 
+    border: none;
     border-color: white;
     color: white;
     padding: 10px 10px 0px 10px;
@@ -15,8 +28,7 @@
     text-align: center;
     width: 250px;
     transition: 0.3s;
-
-    
+    border-radius: 2px;
 }
 
 .default-input::placeholder{
@@ -42,12 +54,38 @@ input[type=submit]{
     margin-left: auto;
 }
 
-.input-border{ 
+input[type=range] {
+    -webkit-appearance: none;
+    background: get_color(easeGray);
+    padding: 0;
+    width: 100%;
+    height: 3px;
+    margin: 2px;
+
+    outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: get_color(chromaOrange);
+    cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: get_color(chromaOrange);
+    cursor: pointer;
+}
+
+.input-border {
     height: 2px;
-    width: 0px; 
+    width: 0px;
     margin-right: auto;
     margin-left: auto;
-
     transition: .3s width ease-in-out;
     position: relative;
     top: -21px;

@@ -342,4 +342,15 @@
   <data name="CMTSatelitte" xml:space="preserve">
     <value>Satellite map</value>
   </data>
+  <data name="LRegisterFailMessagePasswordLen" xml:space="preserve">
+    <value>Failder to create a new account. Your password length must be at least 6 characters</value>
+  </data>
+  <data name="CPSLabel" xml:space="preserve">
+    <value>Points size</value>
+    <comment>CPS --&gt; chose points size popup</comment>
+  </data>
+  <data name="SCPlaceholder" xml:space="preserve">
+    <value>search coordinates...</value>
+    <comment>SC --&gt; search coordinates (top right search from home)</comment>
+  </data>
 </root>

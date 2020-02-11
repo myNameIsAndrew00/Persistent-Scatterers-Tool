@@ -12,6 +12,7 @@ import { PointsLayer } from './points_layer.js';
 import { HubRouter } from '../api/hub_router.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
 import { SelectedCriteria } from '../points settings/chose_criteria.js';
+import { PointsDimensionScale } from '../points settings/points_settings.js';
 
 export const SectionsRowsCount = 1;
 export const SectionsColumnsCount = 2;
@@ -237,16 +238,16 @@ class PointsSectionHandler {
         for (var i = 0; i < pointsData.length; i++) { // requestedPoints.length; i++) {
             if (pointsData[i] == null) continue;
             points[index] = new ol.Feature({
-                'geometry': new ol.geom.Point(
+                geometry : new ol.geom.Point(
                     ol.proj.fromLonLat([pointsData[i].Longitude, pointsData[i].Latitude], 'EPSG:3857')),
-                'colorCriteria': pointsData[i].Height
+                
             });
             points[index].setId(pointsData[i].Number);
             points[index].ID = pointsData[i].Number;
             points[index].longitude = pointsData[i].Longitude;
             points[index].latitude = pointsData[i].Latitude;
             points[index].color = buildStyleFromPalette(pointsData[i][SelectedCriteria]);
-
+            points[index].size =  ( PointsDimensionScale() / 100 ) * 4.0
             index++;
         }
 

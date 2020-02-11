@@ -63,7 +63,7 @@ namespace MapWebSite.Controllers
                 return RedirectToAction("Index");
             if (username == AnonymousUser.Get.Username)
                 return RedirectToAction("Index");
-
+            
             var createTask = HttpContext.GetOwinContext()
                                     .GetUserManager<UserManager>().CreateAsync(Authentication.User.Create(username, firstName, lastName),
                                                                             password);
@@ -76,8 +76,10 @@ namespace MapWebSite.Controllers
             {
                 return Json(new { message = TextDictionary.LRegisterFailMessage , type = "Failed"});
             }
-            
 
+            if (createTask.Result.Errors?.FirstOrDefault()?.Contains("Passwords must be at least") ?? false)
+                return Json(new { message = TextDictionary.LRegisterFailMessagePasswordLen, type = "Failed" });
+           
             return Json(new { message = createTask.Result.Succeeded ? 
                                           TextDictionary.LRegisterSuccessMessage
                                         : TextDictionary.LRegisterFailMessage ,

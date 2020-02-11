@@ -2,10 +2,12 @@
 
 .popup {
     .popup-content {
+        font-size: 0.9em;
+
         .chose-criteria-list {
             list-style: none;
             text-align: left;
-            font-size: 0.7em;
+            font-size: 0.8em;
             margin: 0;
             padding: 0;
 
@@ -27,11 +29,11 @@
         .chose-map-list {
             list-style: none;
             text-align: left;
-            font-size: 0.7em;
+            font-size: 0.8em;
             margin: 0;
             padding: 0;
 
-            img{
+            img {
                 width: 15px;
             }
 
@@ -47,6 +49,23 @@
 
             .button-selected {
                 border-color: get_color(mediumGray);
+            }
+        }
+
+        .points-dimension-range {
+            display: flex;
+            align-items: center;
+
+            small {
+                font-size: 0.8em;
+                padding: 5px;
+                line-height: 14px;
+                max-width: 70px;
+                min-width: 28px;
+            }
+
+            input[type="range"] {
+                margin-top: 4px;
             }
         }
     }

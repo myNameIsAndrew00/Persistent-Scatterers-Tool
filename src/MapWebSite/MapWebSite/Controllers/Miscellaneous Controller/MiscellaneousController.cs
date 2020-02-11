@@ -28,7 +28,12 @@ namespace MapWebSite.Controllers
         {
             return View("~/Views/Home/Miscellaneous Content/ChoseMapType.cshtml");
         }
- 
+
+        [HttpGet]
+        public ActionResult GetChangePointsSizePage()
+        {
+            return View("~/Views/Home/Miscellaneous Content/ChangePointsSize.cshtml");
+        }
     }
 
      

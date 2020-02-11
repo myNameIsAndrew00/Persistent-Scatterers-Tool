@@ -525,6 +525,7 @@
     <Content Include="Views\Home\Points Settings Content\ChoseCriteria.cshtml" />
     <Content Include="Views\Home\Miscellaneous Content\Notifications.cshtml" />
     <Content Include="Views\Home\Miscellaneous Content\ChoseMapType.cshtml" />
+    <Content Include="Views\Home\Miscellaneous Content\ChangePointsSize.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

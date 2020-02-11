@@ -11,17 +11,16 @@ var selectedButtonId = 'chose_map_' + MapType;
 
 
 export function RefreshSelectMapTypePopup() {
-    /*timeout is set to fix a problem with first selection (when the popup appeare first time)*/
-    setTimeout(function () {
-        $('#' + selectedButtonId).addClass('button-selected');
-    }, 50);
+
+    $('#' + selectedButtonId).addClass('button-selected');
+
 }
 
 
 window.changeMapType = function changeMapType(button, selectedType) {
     MapType = selectedType;
     SetMapType(MapType);
-    
+
     $('#' + selectedButtonId).removeClass('button-selected');
 
     button.classList.add('button-selected');

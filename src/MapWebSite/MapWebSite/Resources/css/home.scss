@@ -8,6 +8,7 @@
 @import 'select.scss';
 @import 'colors.scss';
 @import 'texts.scss';
+@import 'input.scss';
 
 ::selection {
     background: none;
@@ -20,14 +21,6 @@ body, html {
     color: get_color(primary);
 }
 
-input, button { 
-    background: get_color(chromaOrange);   
-    transition: 0.3s;
-    padding: 5px 15px 5px 15px;
-    border: none;
-    border-radius: 8px;
-    color: white;
-}
 
 .box {
     border-radius: 5px;

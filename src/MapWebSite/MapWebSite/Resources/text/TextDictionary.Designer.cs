@@ -79,6 +79,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Points size.
+        /// </summary>
+        public static string CPSLabel {
+            get {
+                return ResourceManager.GetString("CPSLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hello.
         /// </summary>
         public static string GreetingMessage {
@@ -578,6 +587,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failder to create a new account. Your password length must be at least 6 characters.
+        /// </summary>
+        public static string LRegisterFailMessagePasswordLen {
+            get {
+                return ResourceManager.GetString("LRegisterFailMessagePasswordLen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register to use the application. Enter the credentials bellow.
         /// </summary>
         public static string LRegisterMessage {
@@ -691,6 +709,15 @@ namespace MapWebSite.Resources.text {
         public static string OverlayMFSuccesTitle {
             get {
                 return ResourceManager.GetString("OverlayMFSuccesTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to search coordinates....
+        /// </summary>
+        public static string SCPlaceholder {
+            get {
+                return ResourceManager.GetString("SCPlaceholder", resourceCulture);
             }
         }
     }

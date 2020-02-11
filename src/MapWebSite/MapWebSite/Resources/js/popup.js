@@ -82,7 +82,7 @@ class PopupBuilder {
             $(('#' + containerId)).children('#' + popupId).remove();
         })
 
-        $(('body')).append(popup.container);
+        $(('#'+ containerId)).append(popup.container);
 
         //display the popup
         setTimeout(() => {

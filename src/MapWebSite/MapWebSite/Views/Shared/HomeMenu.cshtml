@@ -3,8 +3,7 @@
 @using MapWebSite.Core
 
 @{
-    @*LINE BELLOW IS FOR FIXING: fix the bug with the id counter.. main-menu-icon-0 must be followed by main-menu-icon-1, and not main-menu-icon-2 (bug can be caused by role restriction)*@
-    @*Delete above comment on next commit*@
+    @*LINE BELLOW IS FOR FIXING: fix the bug with the id counter.. main-menu-icon-0 must be followed by main-menu-icon-1, and not main-menu-icon-2 (bug can be caused by role restriction)*@  
     int sectionsCount = 0;
 }
 
@@ -41,6 +40,7 @@
 
         </div>
     </div>
+     
 
     @{ sectionsCount = 0; }
 
@@ -90,6 +90,17 @@
 
     <div id="top-menu" class="top-menu">
         <div class="pre-text-area">
+
+            <button id="map_search_button" class="search-button">
+                @Html.SVG("~/Resources/resources/icons/zoom_dataset_icon.svg", new { height = "21px", width = "28px" })
+            </button>
+            
+            <input id="map_search_text" class="search-hidden" type="search" placeholder="@Html.Raw(TextDictionary.SCPlaceholder)" />
+
+            <button id="map_resize_points_button">
+                @Html.SVG("~/Resources/resources/icons/resize_point_icon.svg", new { height = "22px", width = "28px" })
+            </button>
+
             <button id="map_criteria_button">
                 @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "20px", width = "28px" })
             </button>

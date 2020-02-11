@@ -37,16 +37,25 @@ namespace MapWebSite.Hubs
                   
              };
 
+            try
+            {
 
-            databaseInteractionHandler.RequestPointsRegions(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
-                                      new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
-                                      zoomLevel,
-                                      username,
-                                      datasetName,
-                                      cachedRegions,
-                                      callback);
-
-            Clients.Caller.PointsProcessedNotification();
+                databaseInteractionHandler.RequestPointsRegions(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
+                                          new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
+                                          zoomLevel,
+                                          username,
+                                          datasetName,
+                                          cachedRegions,
+                                          callback);
+            }
+            catch (Exception exception)
+            {
+                //todo: log exception
+            }
+            finally
+            {
+                Clients.Caller.PointsProcessedNotification();
+            }
         }
 
       

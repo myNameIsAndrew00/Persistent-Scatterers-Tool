@@ -51,17 +51,21 @@ var mapView = new ol.View({
 //this variable contains the source tiles available to be displayed
 const sources = {
     hybrid: new ol.layer.Tile({
-        visible: true,
+        visible: true, 
         source: new ol.source.OSM({
-            crossOrigin: 'anonymous',         
+            crossOrigin: 'anonymous',
+            wrapX: false,
+            noWrap: true,      
         })
     }),
     satellite: new ol.layer.Tile({
-        visible: false,
+        visible: false, 
         source: new ol.source.TileJSON({
             url: 'https://api.maptiler.com/maps/hybrid/256/tiles.json?key=UKuFFRYp8bMMxfqZFhKJ',
             tileSize: 256,
             crossOrigin: 'anonymous',
+            wrapX: false,
+            noWrap: true
         
         })
     })
@@ -76,7 +80,7 @@ export function SetMapType(chosenType) {
 
 export const map = new ol.Map({
     target: 'map',
-    renderer: 'webgl',
+    renderer: 'webgl', 
     layers: [
         sources['satellite'],
         sources['hybrid']

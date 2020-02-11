@@ -8,6 +8,8 @@ import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
 import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
 import { UpdateSelectedDatasetLayout } from './points settings/chose_dataset.js';
 import { RefreshSelectCriteriaPopup } from './points settings/chose_criteria.js';
+import { InitialiseSlider } from './points settings/points_settings.js';
+
 import { RefreshSelectMapTypePopup } from './map/chose_map_type.js';
 import { Router, endpoints } from './api/api_router.js';
 import { PopupBuilderInstance } from './popup.js';
@@ -181,31 +183,39 @@ window.displayPointsLayerPage = async function displayPointsLayerPage(display, r
 
 }
 
-function displayPopup(buttonId, url, callbackHandler) {
+function displayPopup(buttonId, url, callbackHandler, additionalContent) {
     const buttonPosition = $('#' + buttonId).offset();
     const buttonWidth = parseInt($('#' + buttonId).width(), 10);
 
-    Router.Get(url,
-        function (data) {
-            function htmlToElement(html) {
-                var template = document.createElement('template');
-                template.innerHTML = html.trim();
+    function fillPopup(content) {
+        PopupBuilderInstance.Create('map-container',
+            { X: buttonPosition.left + buttonWidth / 2, Y: buttonPosition.top + 30 },
+            content);
 
-                return template.content.firstChild;
-            }
+        if (callbackHandler != null) callbackHandler();
+    }
 
-            PopupBuilderInstance.Create('map-container',
-                { X: buttonPosition.left + buttonWidth / 2, Y: buttonPosition.top + 30 },
-                htmlToElement(data));
+    //display content requested from server to fill the popup
+    if (url != null)
+        Router.Get(url,
+            function (data) {
+                function htmlToElement(html) {
+                    var template = document.createElement('template');
+                    template.innerHTML = html.trim();
 
-            callbackHandler();
-        });
+                    return template.content.firstChild;
+                }
 
+                fillPopup(htmlToElement(data))
+
+            });
+    //or fill the popup with content from caller
+    else fillPopup(additionalContent);
 }
 
 //todo: remove in all html files 'onclick' and add click handling in js (like in the example bellow)
 $('#notification_button').click(function (event) {
-    displayPopup('notification_button', endpoints.Miscellaneous.GetNotificationsPage);
+    displayPopup('notification_button', endpoints.Miscellaneous.GetNotificationsPage, null, null);
 });
 
 //handle the click for selecting map type button
@@ -213,14 +223,40 @@ $('#map_type_button').click(function (event) {
     displayPopup('map_type_button',
         endpoints.Miscellaneous.GetChoseMapTypePage,
         function () {
-            RefreshSelectMapTypePopup();
-        });
+            /*timeout is set to fix a problem with first selection (when the popup appeare first time)*/
+            setTimeout(function () {
+                RefreshSelectMapTypePopup();
+            }, 50);
+        },
+        null);
 });
 
 $('#map_criteria_button').click(function (event) {
     displayPopup('map_criteria_button',
         endpoints.PointsSettings.GetChoseDisplayCriteriaPage,
         function () {
-            RefreshSelectCriteriaPopup();
-        });   
+            /*timeout is set to fix a problem with first selection (when the popup appeare first time)*/
+            setTimeout(function () {
+                RefreshSelectCriteriaPopup();
+            }, 50);
+        },
+        null);   
+});
+
+$('#map_resize_points_button').click(function (event) {   
+    displayPopup('map_resize_points_button',
+        endpoints.Miscellaneous.GetChangePointsSizePage,
+        function () {
+            /*timeout is set to fix a problem with first selection (when the popup appeare first time)*/
+            setTimeout(function () {
+                InitialiseSlider();
+            }, 50);
+        },
+        null);
+});
+
+$('#map_search_button').click(function (event) {
+    $('#map_search_text').hasClass('search-hidden') ?
+        $('#map_search_text').removeClass('search-hidden') :
+        $('#map_search_text').addClass('search-hidden');
 });
