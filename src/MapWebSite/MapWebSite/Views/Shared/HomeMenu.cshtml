@@ -88,43 +88,55 @@
 
 
 
-    <div id="top-menu" class="top-menu box">
+    <div id="top-menu" class="top-menu">
         <div class="pre-text-area">
             <button id="map_criteria_button">
-                @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "25px", width = "28px" })
+                @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "20px", width = "28px" })
             </button>
-            <button id="notification_button">
-                @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "25px", width = "25px" })
-            </button>
+
             <button id="map_type_button">
-                @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "25px", width = "25px" })
+                @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "20px", width = "25px" })
             </button>
 
-        </div>
-        <div class="text-area">
-            @if (RouteConfig.CurrentUser != null)
+            @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
             {
-                <div class="top-menu-item">
-                    @TextDictionary.GreetingMessage,
-                    <b>
-                        @RouteConfig.CurrentUser.FirstName
-                    </b>
-                </div>
+                <button id="notification_button" class="notification-button">
+                    @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "20px", width = "25px" })
+                </button>
             }
-            @Html.Label(TextDictionary.HTMSelectedDataset, new { @class = "top-menu-item" })
-            @Html.Label(TextDictionary.HTMDefaultDataset, new { @class = "top-menu-item current-dataset-text", id = "current-dataset-text" })
-
         </div>
 
-        <div class="buttons-area">
-            <button onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
-                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/set_icon.svg"></object>
-            </button>
-            <button onclick="displayPointsLayerPage(true,'GetColorPalettePage')" class="top-menu-item">
-                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/simple_palette_icon.svg"></object>
-            </button>
-        </div>
+        <div class="white-area box">
+            <div class="text-area">
+                @if (RouteConfig.CurrentUser != null)
+                {
+                    <div class="top-menu-item">
+                        @TextDictionary.GreetingMessage,
+                        <b>
+                            @RouteConfig.CurrentUser.FirstName
+                        </b>
+                    </div>
+                }
+                @Html.Label(TextDictionary.HTMSelectedDataset, new { @class = "top-menu-item" })
+                @Html.Label(TextDictionary.HTMDefaultDataset, new { @class = "top-menu-item current-dataset-text", id = "current-dataset-text" })
 
+            </div>
+
+            <div class="buttons-area">
+                <button onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
+                    <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/set_icon.svg"></object>
+                </button>
+                <button onclick="displayPointsLayerPage(true,'GetColorPalettePage')" class="top-menu-item">
+                    <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/simple_palette_icon.svg"></object>
+                </button>
+                <button  class="top-menu-item" disabled="true">
+                    <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/cluster_icon.svg"></object>
+                </button>
+                <button  class="top-menu-item" disabled="true">
+                    <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/reload_icon.svg"></object>
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
