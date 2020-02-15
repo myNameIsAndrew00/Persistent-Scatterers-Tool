@@ -11,7 +11,7 @@ export class ColorNode{
         this.nextColor = null;
         this.prevColor = null;
     }
-}
+} 
 
 /*use this class to modelate the slider
 *  Internals components: a list -> which manages the order of the hashmap

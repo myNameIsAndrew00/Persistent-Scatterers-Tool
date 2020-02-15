@@ -350,7 +350,7 @@
     <comment>CPS --&gt; chose points size popup</comment>
   </data>
   <data name="SCPlaceholder" xml:space="preserve">
-    <value>search coordinates...</value>
+    <value>search for a place...</value>
     <comment>SC --&gt; search coordinates (top right search from home)</comment>
   </data>
 </root>

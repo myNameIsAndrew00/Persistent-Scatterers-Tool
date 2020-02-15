@@ -713,7 +713,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to search coordinates....
+        ///   Looks up a localized string similar to search for a place....
         /// </summary>
         public static string SCPlaceholder {
             get {

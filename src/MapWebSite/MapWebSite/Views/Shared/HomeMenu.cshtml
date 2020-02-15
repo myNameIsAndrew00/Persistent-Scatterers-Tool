@@ -95,7 +95,12 @@
                 @Html.SVG("~/Resources/resources/icons/zoom_dataset_icon.svg", new { height = "21px", width = "28px" })
             </button>
             
-            <input id="map_search_text" class="search-hidden" type="search" placeholder="@Html.Raw(TextDictionary.SCPlaceholder)" />
+            <div id="map_autocomplete" class="autocomplete autocomplete-hidden">
+                <input id="map_search_text" type="search" placeholder="@Html.Raw(TextDictionary.SCPlaceholder)" />
+                <input id="reset_button" type="button" value="X" />
+                <div id="map_suggestions" class="suggestions">                   
+                </div>
+            </div>
 
             <button id="map_resize_points_button">
                 @Html.SVG("~/Resources/resources/icons/resize_point_icon.svg", new { height = "22px", width = "28px" })

@@ -9,7 +9,7 @@ import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
 import { UpdateSelectedDatasetLayout } from './points settings/chose_dataset.js';
 import { RefreshSelectCriteriaPopup } from './points settings/chose_criteria.js';
 import { InitialiseSlider } from './points settings/points_settings.js';
-
+import { LoadSuggestions } from './map/points_search.js';
 import { RefreshSelectMapTypePopup } from './map/chose_map_type.js';
 import { Router, endpoints } from './api/api_router.js';
 import { PopupBuilderInstance } from './popup.js';
@@ -149,7 +149,7 @@ function requestCss(cssServerPath) {
 }
 
 
-/**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE TOP-MIDDLE MENU******************/
+/**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE TOP-RIGHT MENU******************/
 /*****************************************************************************************/
 
 /*functions used for points setting overlay*/
@@ -218,6 +218,8 @@ $('#notification_button').click(function (event) {
     displayPopup('notification_button', endpoints.Miscellaneous.GetNotificationsPage, null, null);
 });
 
+///Functions bellow handles interactions with buttons
+
 //handle the click for selecting map type button
 $('#map_type_button').click(function (event) {
     displayPopup('map_type_button',
@@ -231,6 +233,8 @@ $('#map_type_button').click(function (event) {
         null);
 });
 
+
+//handle the click for changing the criteria of selecting points color
 $('#map_criteria_button').click(function (event) {
     displayPopup('map_criteria_button',
         endpoints.PointsSettings.GetChoseDisplayCriteriaPage,
@@ -243,6 +247,7 @@ $('#map_criteria_button').click(function (event) {
         null);   
 });
 
+//handle the click for resizing the displayed points
 $('#map_resize_points_button').click(function (event) {   
     displayPopup('map_resize_points_button',
         endpoints.Miscellaneous.GetChangePointsSizePage,
@@ -255,8 +260,27 @@ $('#map_resize_points_button').click(function (event) {
         null);
 });
 
+//display the input for searching locations on map
 $('#map_search_button').click(function (event) {
-    $('#map_search_text').hasClass('search-hidden') ?
-        $('#map_search_text').removeClass('search-hidden') :
-        $('#map_search_text').addClass('search-hidden');
+    $('#map_autocomplete').hasClass('autocomplete-hidden') ?
+        $('#map_autocomplete').removeClass('autocomplete-hidden') :
+        $('#map_autocomplete').addClass('autocomplete-hidden');
 });
+
+//handle the event when user search something on map
+var bouncer = 0;
+$('#map_search_text').keyup(function (event) {
+    const localBouncer = ++bouncer;
+
+    setTimeout(function () {
+        if (localBouncer != bouncer) return;
+        $('#map_suggestions').empty();
+        LoadSuggestions($('#map_search_text').val(), '#map_suggestions');
+    }, 300);
+});
+
+//reset the input for the search (above)
+$('#reset_button').click(function (event) {
+    $('#map_search_text').val('');
+    $('#map_suggestions').empty();
+})

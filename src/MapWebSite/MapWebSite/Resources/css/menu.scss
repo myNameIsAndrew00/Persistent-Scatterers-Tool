@@ -27,8 +27,10 @@
         }
 
         .pre-text-area {
-            input[type=search] {
-                background: get_color(strongTransparentBlue);
+            .autocomplete {
+                input[type=search] {
+                    background: get_color(strongTransparentBlue);
+                }
             }
         }
     }
@@ -240,21 +242,100 @@
                 padding-right: 6px;
             }
 
-            .search-hidden{
-                width: 0!important;  
-                padding: 0;
+            .autocomplete-hidden {
+
+                input[type=search], input[type=button], .suggestions {
+                    width: 0 !important;
+                    padding: 0;
+                    opacity: 0;
+                }
+
+                .suggestions {
+                    display: none;
+
+                    .outer-suggestions-item {
+                        .suggestions-item {
+                            width: 0;
+                            height: 0;
+                        }
+                    }
+                }
             }
 
-            input[type=search] {
-                background: get_color(transparentBlue);
-                transition: 0.3s;
-                border-radius: 2px;
-                width: 160px;
+            .autocomplete {
+                display: contents;
+                position: relative;
+
+                input[type=search] {
+                    background: get_color(transparentBlue);
+                    transition: 0.3s;
+                    border-radius: 2px;
+                    width: 250px;
+                }
+
+                input[type=button] {
+                    background: none;
+                    margin-left: -22px;
+                    font-variant-caps: all-petite-caps;
+                    font-size: 16px;
+                    padding: 1px;
+                    margin-right: 10px;
+                }
+
+                .suggestions {
+                    transition: 0.3s;
+                    position: absolute;
+                    background: get_color(white);
+                    top: 68%;
+                    left: 60px;
+                    right: 0;
+                    width: 250px;
+
+                    .outer-suggestions-item:hover {
+                        background-color: get_color(chromaLightOrange);
+                    }
+
+                    .outer-suggestions-item {
+                        display: grid;
+                        padding: 3px;
+
+                        .suggestions-item {
+                            padding: 3px;
+                            display: inline-flex;
+                            align-items: center;
+                            text-align: left;
+
+                            img {
+                                margin: 3px;
+                                height: 14px;
+                                width: 10px;
+                                text-align: center;
+                            }
+
+                            label {
+                                line-height: 12px;
+                                margin: 2px;
+                                padding: 3px;
+                                font-size: 0.7em;
+                                width: 220px;
+                            }
+                        }
+
+                        .info-label {
+                            color: get_color(mediumGray);
+                            font-size: 0.55em;
+                            margin: 0;
+                            padding-left: 25px;
+                            margin-top: -5px;
+                        }
+                    }
+                }
             }
 
             input[type=search]:focus, input[type=search]:hover {
                 background: get_color(strongTransparentBlue);
             }
+
 
             button {
                 padding: 0;
@@ -316,6 +397,7 @@
                 flex-wrap: wrap;
                 width: 70px;
                 grid-area: right;
+                justify-content: center;
 
                 button {
                     display: inline-flex !important;
@@ -326,7 +408,7 @@
                     margin: 1px 1px 1px 2px;
                     cursor: pointer;
                     opacity: 0.7;
-                    padding: 12px;
+                    padding: 0;
                     border-radius: 5px;
                 }
 

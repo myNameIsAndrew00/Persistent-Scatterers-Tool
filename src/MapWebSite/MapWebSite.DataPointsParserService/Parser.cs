@@ -33,6 +33,8 @@ namespace MapWebSite.DataPointsParserService
 
         public Parser()
         {
+            Console.WriteLine("Created...");
+
             InitializeComponent();
             CassandraDataPointsRepository.Initialise();
 
@@ -69,6 +71,8 @@ namespace MapWebSite.DataPointsParserService
 
         public void ParserAction(object sender, ElapsedEventArgs e)
         {
+            Console.WriteLine("Starting parsing...");
+
             lock (actionLock)
             {
                 var userDirectories = Directory.GetDirectories(
@@ -142,6 +146,7 @@ namespace MapWebSite.DataPointsParserService
 
                 if (dataset == null)
                 {
+                    logData("Failed to read the dataset", EventLogEntryType.Error);
                     this.userRepository.UpdateDatasetStatus(datasetName, DatasetStatus.GenerateFail, username);
                     //todo: cleanup the repository?
                     return;
@@ -151,10 +156,13 @@ namespace MapWebSite.DataPointsParserService
                 IDataPointsRegionsSource regionSource = new PowerOfTwoRegionsSource();
                 regionSource.GenerateRegions(dataset, sectionIndex++);
 
+                logData($"Starting to parse an entry of {dataset.Points.Count()} points count", EventLogEntryType.Information);
 
-                Task insertTask = this.dataPointsRepository.InsertPointsDataset(dataset);
-
+                Task<bool> insertTask = this.dataPointsRepository.InsertPointsDataset(dataset);
+                
                 insertTask.Wait();
+
+                if (insertTask.IsFaulted || !insertTask.Result) throw new Exception("Failed to insert data in the database");
 
                 minimumLatitude = Math.Min(minimumLatitude, dataset.MinimumLatitude ?? 90);
                 maximumLatitude = Math.Max(maximumLatitude, dataset.MaximumLatitude ?? -90);
@@ -180,5 +188,7 @@ namespace MapWebSite.DataPointsParserService
 
 
         #endregion
+
+        
     }
 }

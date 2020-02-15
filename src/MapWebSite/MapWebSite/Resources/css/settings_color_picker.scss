@@ -64,12 +64,11 @@ html, body {
 }
 
 .color-picker-info-container {
-    position: relative;
-    top: 130px;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
+    position: absolute;     
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -35%);
+    width: 100%;
 
     h1 {
         text-align: center;

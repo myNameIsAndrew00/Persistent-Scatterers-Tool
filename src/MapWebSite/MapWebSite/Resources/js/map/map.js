@@ -75,8 +75,15 @@ export function SetMapType(chosenType) {
     Object.keys(sources).forEach(function (type, typeIndex) {
         sources[type].setVisible(type == chosenType);
     });
-}
+} 
 
+export function GoTo(latitude, longitude) {
+    map.getView().animate({
+        center: new ol.proj.fromLonLat([longitude, latitude], 'EPSG:3857'),
+        duration: 1000
+    });
+
+}
 
 export const map = new ol.Map({
     target: 'map',
@@ -88,6 +95,8 @@ export const map = new ol.Map({
     view: mapView,
     controls: []
 });
+
+
 
 map.on('moveend', initialisePointsRequest);
 map.on('click', function (evt) {

@@ -1,17 +1,18 @@
 ﻿/*! MODULE: ApiRouter
  * 
  * This module is responsable for api requests handling.
- * Do not use the api without using this component
+ * Do not use any api without using this component
  * 
  * */
 
-const apiUrl = '/api';
+const applicationApiUrl = '/api';
+const geolocationApiUrl = 'https://nominatim.openstreetmap.org/search/';
 
 export const endpoints = {
     Home: {
         RequestSettingsLayerContent: '/Home/RequestSettingsLayerContent',      
-        RequestPointDetails: apiUrl + '/HomeApi/RequestPointDetails',
-        RequestRegionsKeys: apiUrl + '/HomeApi/RequestRegionsKeys'
+        RequestPointDetails: applicationApiUrl + '/HomeApi/RequestPointDetails',
+        RequestRegionsKeys: applicationApiUrl + '/HomeApi/RequestRegionsKeys'
     },
     Miscellaneous: {
         GetNotificationsPage: '/Miscellaneous/GetNotificationsPage',
@@ -24,16 +25,16 @@ export const endpoints = {
         GetChoseDisplayCriteriaPage: '/PointsSettings/GetChoseDisplayCriteriaPage'
     },
     PointsSettingsApi: {
-        GetColorPalette: apiUrl + '/PointsSettingsApi/GetColorPalette',
-        GetColorPaletteList: apiUrl +'/PointsSettingsApi/GetColorPaletteList',
-        GetDatasetsList: apiUrl +'/PointsSettingsApi/GetDatasetsList'
+        GetColorPalette: applicationApiUrl + '/PointsSettingsApi/GetColorPalette',
+        GetColorPaletteList: applicationApiUrl +'/PointsSettingsApi/GetColorPaletteList',
+        GetDatasetsList: applicationApiUrl +'/PointsSettingsApi/GetDatasetsList'
     },
     Settings: {
-        SaveColorsPalette: apiUrl +'/settings/SaveColorsPalette',
-        UploadFileChunk: apiUrl + '/settings/UploadFileChunk',
-        ClearFileChunks: apiUrl + '/settings/ClearFileChunks',
-        MergeFileChunks: apiUrl +'/settings/MergeFileChunks',
-        CheckDatasetExistance: apiUrl +'/settings/CheckDatasetExistance'
+        SaveColorsPalette: applicationApiUrl +'/settings/SaveColorsPalette',
+        UploadFileChunk: applicationApiUrl + '/settings/UploadFileChunk',
+        ClearFileChunks: applicationApiUrl + '/settings/ClearFileChunks',
+        MergeFileChunks: applicationApiUrl +'/settings/MergeFileChunks',
+        CheckDatasetExistance: applicationApiUrl +'/settings/CheckDatasetExistance'
     }
 
 };
@@ -59,6 +60,18 @@ export class Router {
         });
     }
  
+}
+
+export class GeolocationRouter {
+
+    static Get(location, callback) {
+        $.ajax({
+            type: "GET",
+            url: geolocationApiUrl + location + '?format=json&limit=5',
+            dataType: "json",
+            success: function (data) { callback(data) }
+        });
+    }
 
 }
  

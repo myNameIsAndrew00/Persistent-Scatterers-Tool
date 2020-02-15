@@ -333,6 +333,7 @@
     <Content Include="Resources\js\api\hub_router.js" />
     <Content Include="Resources\js\map\chose_map_type.js" />
     <Content Include="Resources\js\map\points_layer.js" />
+    <Content Include="Resources\js\map\points_search.js" />
     <Content Include="Resources\js\map\points_section_handler.js" />
     <Content Include="Resources\js\map\received_points_worker.js" />
     <Content Include="Resources\js\point info\card_drawer.js" />
