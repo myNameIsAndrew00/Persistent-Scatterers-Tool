@@ -21,8 +21,7 @@ function createInputLabel(text, iconUrl, latitude, longitude) {
     latLongLabel.innerHTML = `latitude: ${latitude.toFixed(5)}, longitude: ${longitude.toFixed(5)}`; 
     latLongLabel.classList.add('info-label');
     icon.src = iconUrl;
-    icon.alt = '|';
-
+   
     input.classList.add('suggestions-item');
     input.appendChild(icon);
     input.appendChild(label);

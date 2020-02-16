@@ -162,6 +162,12 @@ namespace MapWebSite.DataPointsParserService
                 
                 insertTask.Wait();
 
+                logData("Finished to insert the current dataset", EventLogEntryType.Information); 
+
+                if(sectionIndex == 21)
+                {
+
+                }
                 if (insertTask.IsFaulted || !insertTask.Result) throw new Exception("Failed to insert data in the database");
 
                 minimumLatitude = Math.Min(minimumLatitude, dataset.MinimumLatitude ?? 90);

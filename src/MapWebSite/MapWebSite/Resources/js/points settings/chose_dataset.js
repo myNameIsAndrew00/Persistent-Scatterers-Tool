@@ -152,7 +152,7 @@ window.loadMorePointsDatasets = function loadMorePointsDatasets(resetPageIndex) 
             var table = $(settingsLayerContainerId).find('#ps_left')[0];
             if (resetPageIndex) resetTable(table);
 
-            if (table.offsetHeight + table.scrollTop == table.scrollHeight) {
+            if (table.offsetHeight + table.scrollTop >= table.scrollHeight - 5) {
                 var filterValue = $(settingsLayerContainerId).find('#datasetSearchValue')[0];
                 var pageIndex = $(settingsLayerContainerId).find('#currentDatasetIndex')[0];
                 var filter = $(settingsLayerContainerId).find('#datasetFilterValue')[0];

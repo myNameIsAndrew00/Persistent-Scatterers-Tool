@@ -97,26 +97,34 @@ namespace MapWebSite.Repository
 
             CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder();
             queryBuilder.TableName = "points_region_zoom_" + regionLevel.ZoomLevel;
-            queryBuilder.Type = typeof(SectionedPointsRegionType);
-            
-            //: typeof(PointsRegionType);
+            queryBuilder.Type = typeof(SectionedPointsRegionType);             
             queryBuilder.QueryType = CassandraQueryBuilder.QueryTypes.InsertFromType;
 
             this.executionInstance.PrepareQuery(queryBuilder);
 
             try
             {
+                ConcurrentQueue<Exception> exceptions = new ConcurrentQueue<Exception>();
+
                 await regionTypes.ParallelForEachAsync(async regionType =>
                 {
-                    await executionInstance.ExecuteNonQuery(new
+                    try
                     {
-                        regionType.dataset_id,
-                        regionType.column,
-                        regionType.row,
-                        regionType.points,
-                        regionType.section
-                    });
+                        await executionInstance.ExecuteNonQuery(new
+                        {
+                            regionType.dataset_id,
+                            regionType.column,
+                            regionType.row,
+                            regionType.points,
+                            regionType.section
+                        });
+                    }
+                    catch(Exception exception)
+                    {
+                        exceptions.Enqueue(exception);
+                    }
                 });
+                if (exceptions.Count > 0) throw new Exception("Exceptions catched in tasks", exceptions.First());
             }
             catch (Exception exception)
             {

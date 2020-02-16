@@ -4,6 +4,22 @@
     outline: none!important;
 }
 
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: get_color(transparentWhite);
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+    color: get_color(transparentWhite);
+}
+
+:-ms-input-placeholder { /* IE 10+ */
+    color: get_color(transparentWhite);
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    color: get_color(transparentWhite);
+}
+
 input, button {
     background: get_color(chromaOrange);
     transition: 0.3s;
@@ -31,9 +47,6 @@ input, button {
     border-radius: 2px;
 }
 
-.default-input::placeholder{
-    color: rgba(255,255,255,0.3);
-}
 
 .default-input:hover, .default-input:hover{
     background-color: rgba(255,255,255,0.2);
@@ -71,12 +84,14 @@ input[type=range]::-webkit-slider-thumb {
     width: 12px;
     height: 12px;
     background: get_color(chromaOrange);
+    border-radius: 12px;
     cursor: pointer;
 }
 
 input[type=range]::-moz-range-thumb {
     width: 12px;
     height: 12px;
+    border-radius: 12px;
     background: get_color(chromaOrange);
     cursor: pointer;
 }

@@ -136,7 +136,7 @@ window.loadMorePalettes = function loadMorePalettes(resetPageIndex) {
         var table = $(settingsLayerContainerId).find('#ps_left')[0];
         if (resetPageIndex) resetTable(table);
 
-        if (table.offsetHeight + table.scrollTop == table.scrollHeight) {
+        if (table.offsetHeight + table.scrollTop >= table.scrollHeight - 5) {
             var filterValue = $(settingsLayerContainerId).find('#colorPaletteSearchValue')[0];
             var pageIndex = $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0];
             var filter = $(settingsLayerContainerId).find('#colorPaletteFilterValue')[0];

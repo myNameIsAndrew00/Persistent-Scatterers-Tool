@@ -231,8 +231,8 @@
             .notification-button {
                 border-left: solid;
                 border-radius: 0;
-                margin-left: 10px;
-                padding-left: 7px;
+                margin-left: 14px;
+                padding-left: 5px;
             }
 
             .search-button {
@@ -275,18 +275,18 @@
 
                 input[type=button] {
                     background: none;
-                    margin-left: -22px;
+                    margin-left: -20px;
                     font-variant-caps: all-petite-caps;
                     font-size: 16px;
                     padding: 1px;
-                    margin-right: 10px;
+                    margin-right: 16px;
                 }
 
                 .suggestions {
                     transition: 0.3s;
                     position: absolute;
                     background: get_color(white);
-                    top: 68%;
+                    top: 50px;
                     left: 60px;
                     right: 0;
                     width: 250px;
@@ -304,6 +304,10 @@
                             display: inline-flex;
                             align-items: center;
                             text-align: left;
+
+                            img[src=undefined]{
+                                opacity: 0;
+                            }
 
                             img {
                                 margin: 3px;

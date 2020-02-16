@@ -43,55 +43,55 @@ namespace MapWebSite.Core.DataPoints
             if (HeaderFile == null || DisplacementsFile == null) yield return null;
             if (coordinateSystem == CoordinateSystem.UTM && (Zone == int.MinValue || LatitudeZone == '0')) throw new ArgumentException("Zone and Latitude properties must be set");
 
-            
+
             HeaderData[] headerData = parseHeaderData();
-
+            StreamReader reader = File.OpenText(this.DisplacementsFile);
             ///The displacements file must be read in chunks (or a OutOfMemoryException could be thrown)
-            using (StreamReader reader = File.OpenText(this.DisplacementsFile))
+
+            bool reading = true;
+            while (reading)
             {
-                bool reading = true;
-                while (reading)
+                ConcurrentBag<Point> points = new ConcurrentBag<Point>();
+                PointsDataSet pointsDataSet = null;
+
+                try
                 {
-                    ConcurrentBag<Point> points = new ConcurrentBag<Point>();
-                    PointsDataSet pointsDataSet = null;
+                    pointsDataSet = new PointsDataSet() { Name = datasetName, Points = points };
 
-                    try
-                    {                      
-                        pointsDataSet = new PointsDataSet() { Name = datasetName, Points = points };
-                     
-                        reading = readBlob(reader);
-                         
-                        ConcurrentQueue<Exception> exceptions = new ConcurrentQueue<Exception>();
+                    reading = readBlob(reader);
 
-                        Parallel.ForEach(dataBlob, (dataLine) =>
-                        {
-                            try
-                            {
-                                IDictionary<string, decimal> lineInfo = generateDictionary(dataLine, out decimal[] lineDisplacements);
-                                points.Add(generatePoint(lineInfo, lineDisplacements, headerData, coordinateSystem));
-                            }
-                            catch (Exception exception)
-                            {
-                            //TODO: log exception
-                            exceptions.Enqueue(exception);
-                            }
-                            if (exceptions.Count > 0) throw new Exception("Failed to parse with success the file");
-                        });
+                    ConcurrentQueue<Exception> exceptions = new ConcurrentQueue<Exception>();
 
-                        //set the maximum and minimum latitude / longitude
-                        pointsDataSet.MinimumLatitude = pointsDataSet.Points.Min(point => point.Latitude);
-                        pointsDataSet.MinimumLongitude = pointsDataSet.Points.Min(point => point.Longitude);
-                        pointsDataSet.MaximumLatitude = pointsDataSet.Points.Max(point => point.Latitude);
-                        pointsDataSet.MaximumLongitude = pointsDataSet.Points.Max(point => point.Longitude);
-                    }
-                    catch (Exception exception)
+                    Parallel.ForEach(dataBlob, (dataLine) =>
                     {
-                        //TODO: parse exception here
-                        pointsDataSet = null;
-                    }
-                    yield return pointsDataSet;
+                        try
+                        {
+                            IDictionary<string, decimal> lineInfo = generateDictionary(dataLine, out decimal[] lineDisplacements);
+                            points.Add(generatePoint(lineInfo, lineDisplacements, headerData, coordinateSystem));
+                        }
+                        catch (Exception exception)
+                        {
+                                //TODO: log exception
+                                exceptions.Enqueue(exception);
+                        }
+                        if (exceptions.Count > 0) throw new Exception("Failed to parse with success the file");
+                    });
+
+                    //set the maximum and minimum latitude / longitude
+                    pointsDataSet.MinimumLatitude = pointsDataSet.Points.Min(point => point.Latitude);
+                    pointsDataSet.MinimumLongitude = pointsDataSet.Points.Min(point => point.Longitude);
+                    pointsDataSet.MaximumLatitude = pointsDataSet.Points.Max(point => point.Latitude);
+                    pointsDataSet.MaximumLongitude = pointsDataSet.Points.Max(point => point.Longitude);
                 }
+                catch (Exception exception)
+                {
+                    //TODO: parse exception here
+                    pointsDataSet = null;
+                }
+                yield return pointsDataSet;
             }
+
+            reader.Dispose();
 
         }
 

@@ -126,7 +126,7 @@ namespace MapWebSite.Core.DataPoints
             {
                 SortedList<decimal, PointBase> sameLatitudePoints = new SortedList<decimal, PointBase>(new DuplicateKeyComparer<decimal>());
 
-                while (sortedPointsIndex < sortedPoints.Length && sortedPoints[sortedPointsIndex].Latitude < coordinateIndex.Latitude + rectangleSize.Latitude)
+                while (sortedPointsIndex < sortedPoints.Length && sortedPoints[sortedPointsIndex].Latitude <= coordinateIndex.Latitude + rectangleSize.Latitude)
                 {
                     sameLatitudePoints.Add(sortedPoints[sortedPointsIndex].Longitude, sortedPoints[sortedPointsIndex]);
                     sortedPointsIndex++;
@@ -134,7 +134,7 @@ namespace MapWebSite.Core.DataPoints
 
                 while (coordinateIndex.Longitude < topRightCorner.Longitude)
                 {
-                    var areaPoints = sameLatitudePoints.TakeWhile(item => item.Key < coordinateIndex.Longitude + rectangleSize.Longitude);
+                    var areaPoints = sameLatitudePoints.TakeWhile(item => item.Key <= coordinateIndex.Longitude + rectangleSize.Longitude);
                     if (areaPoints.Count() > 0)
                     {
                         regions.Add(new PointsRegion()
