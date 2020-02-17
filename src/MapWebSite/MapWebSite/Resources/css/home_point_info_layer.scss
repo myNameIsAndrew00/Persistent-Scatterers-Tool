@@ -13,12 +13,17 @@
     overflow-x: hidden;
     overflow-y: hidden;
     visibility: hidden;
+    display: flex;
+    align-items: center;
 
     .close-button {
         float: right;
         margin: 20px;
-        pointer-events: initial; 
+        pointer-events: initial;
         background: transparent;
+        position: absolute;
+        top: 0;
+        right: 0;
 
         button {
             background: none;
@@ -47,6 +52,12 @@
             border-width: 1px;
         }
 
+        .plot-area {
+            display: flex;
+            align-items: center;
+            height: 55%;
+        }
+
         .text {
             display: grid;
             grid-template-columns: 1fr 5fr;
@@ -63,9 +74,10 @@
         }
 
         width: 58%;
+        height: 100%;
         margin: 0 auto;
-        margin-top: 50px;
-        margin-bottom: 50px;
+        margin-right: 100px;
+        margin-top: 100px;
         color: white;
         cursor: default;
 
@@ -74,7 +86,7 @@
             grid-area: right;
             list-style: none;
 
-            li {               
+            li {
                 padding-bottom: 5px;
                 height: 30px;
                 white-space: nowrap;
@@ -100,10 +112,19 @@
 
 .point-info-popup {
     .popup-body {
-        display: flex;
+        display: grid;
+        height: 100%;
+        grid-template-columns: auto 100px;
+
+        svg {
+            grid-column: 1;
+            grid-row: 1;
+        }
 
         .popup-data-container {
-            padding: 8px; 
+            grid-column: 2;
+            grid-row: 1;
+            padding: 8px;
             display: block;
 
             p {
