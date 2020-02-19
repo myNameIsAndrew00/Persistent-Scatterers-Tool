@@ -22,12 +22,20 @@ class CardDrawer {
         this.manager = manager;
     }
 
-    Draw(id, container, info, closeHandler, hidden) {
+    /**
+     * Use this method to create and draw a window (card) on screen
+     * @param {any} id Id of the card
+     * @param {any} container The partent of the card
+     * @param {any} info Info contained in the card
+     * @param {any} closeHandler A handler which will be called when the window will be closed
+     * @param {any} hidden This parameter can be used to disable the drawing of the window (on creation)
+     * @param {any} resizeHandler A handler which will be called when the window will be resized
+     */
+    Draw(id, container, info, closeHandler, hidden, resizeHandler) {
         this.id = id;
-        this.closeHandler = closeHandler;
+        this.closeHandler = closeHandler; 
 
-
-        var popup = this.drawPopup(hidden);
+        var popup = this.drawPopup(hidden, resizeHandler);
         this.drawPopupHeader(popup);
 
         container.appendChild(popup);
@@ -65,7 +73,7 @@ class CardDrawer {
         popup.appendChild(header);
     }
 
-    drawPopup(hidden) {
+    drawPopup(hidden, resizeHandler) {
         var self = this;
         var popup = document.createElement('div');
 
@@ -128,6 +136,7 @@ class CardDrawer {
                     if (sign.height == -1 && self.ValidHeight(height))
                         popup.style.top = initialY + (e.pageY - initialMouseY) + 'px';
 
+                    if (resizeHandler != null) resizeHandler();
                 }
 
                 function stopResize(initialTransition) {

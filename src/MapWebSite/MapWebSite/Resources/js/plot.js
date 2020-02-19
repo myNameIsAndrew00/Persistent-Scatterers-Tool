@@ -160,6 +160,10 @@ export class PlotDrawer {
         this.graphColor = this.initialGraphColor;
     }
 
+    Clear() {
+        $(this.containerID).empty();
+    }
+
     /*
     *   Private methods 
     */

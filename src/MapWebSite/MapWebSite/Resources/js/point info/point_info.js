@@ -99,28 +99,41 @@ export function HidePointInfo(showTopMenu) {
 
 export function CreatePopupWindow() {
 
-    var cardContentId = cardsManager.Draw(true);
+    const minPlotDimensions = { height: 250, width: 400 };
 
-    function drawPlot() {
-        var svgPlot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    //use the last drawer created when a point was clicked on map
+    var popupPlotDrawer = currentDrawer;
+
+    //when the popup is resized, the plot must be redrawed
+    var cardContentId = cardsManager.Draw(true, drawPlot);
+    var svgPlot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+    function initPlot() {
         svgPlot.id = 'window-plot';
         svgPlot.classList.add('plot');
-        svgPlot.setAttributeNS(null, 'width', 300);
-        svgPlot.setAttributeNS(null, 'height', 200);
-
+        svgPlot.setAttributeNS(null, 'width', '100%');
+        svgPlot.setAttributeNS(null, 'height', '100%');
         svgPlot.style.display = 'block';
+    }
 
-        currentDrawer.SetContainerObject(svgPlot);
-        currentDrawer.SetGraphColor('black');
-        currentDrawer.SetFontSize(10);
-        currentDrawer.SetOrigin(30, 180);
-        currentDrawer.SetLength(230, 150);
+    function drawPlot() {       
+        popupPlotDrawer.SetContainerObject(svgPlot);
+        svgPlot.innerHTML = '';
+        popupPlotDrawer.SetGraphColor('black');
 
-        currentDrawer.DrawReferences();
-        currentDrawer.DrawAxis(true);
-        currentDrawer.RedrawPoints(true);
+        const height = Math.max(minPlotDimensions.height, $(cardContentId).height());
+        const width = Math.max(minPlotDimensions.width, $(cardContentId).width());
+
+        popupPlotDrawer.SetFontSize(10);
+        popupPlotDrawer.SetOrigin(30, height - 50);
+        popupPlotDrawer.SetLength( width - 155 , height - 80);
+
+        popupPlotDrawer.DrawReferences();
+        popupPlotDrawer.DrawAxis(true);
+        popupPlotDrawer.RedrawPoints(true);
         
-        currentDrawer.ResetSetters();
+        popupPlotDrawer.ResetSetters();
+         
 
         $(cardContentId).append(svgPlot);
     }
@@ -156,7 +169,7 @@ export function CreatePopupWindow() {
         $(cardContentId).append(textContent);
     }
 
-
+    initPlot();
     //delay for animation
     setTimeout(function () {
         drawPlot();
