@@ -14,15 +14,13 @@ namespace MapWebSite.DataPointsParserService
         /// </summary>
         static void Main()
         {
-            //  ServiceBase[] ServicesToRun;
-            //  ServicesToRun = new ServiceBase[]
-            //  {
-            //      new Parser()
-            //  };
-            //   ServiceBase.Run(ServicesToRun);
-
-            Parser parser = new Parser();
-            parser.ParserAction(null, null);
+              ServiceBase[] ServicesToRun;
+              ServicesToRun = new ServiceBase[]
+              {
+                  new Parser()
+              };
+              ServiceBase.Run(ServicesToRun);
+             
             
 
         }

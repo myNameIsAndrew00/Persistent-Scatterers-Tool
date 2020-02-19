@@ -32,9 +32,7 @@ namespace MapWebSite.DataPointsParserService
         private static object actionLock = new object();
 
         public Parser()
-        {
-            Console.WriteLine("Created...");
-
+        {          
             InitializeComponent();
             CassandraDataPointsRepository.Initialise();
 
@@ -50,9 +48,12 @@ namespace MapWebSite.DataPointsParserService
 
         protected override void OnStart(string[] args)
         {
-            logData("Service starting", EventLogEntryType.Information);
 
-            timer.Interval = Convert.ToInt32(ConfigurationManager.AppSettings["ServiceTimer"]) * 1000;
+            int timerPeriod = Convert.ToInt32(ConfigurationManager.AppSettings["ServiceTimer"]) * 1000;
+
+            logData("Service starting", EventLogEntryType.Information);
+            logData($"Timer is set to {timerPeriod} miliseconds", EventLogEntryType.SuccessAudit);
+            timer.Interval = timerPeriod;
             timer.Elapsed += ParserAction;
             timer.Enabled = true;
         }
@@ -70,11 +71,11 @@ namespace MapWebSite.DataPointsParserService
         }
 
         public void ParserAction(object sender, ElapsedEventArgs e)
-        {
-            Console.WriteLine("Starting parsing...");
-
+        { 
             lock (actionLock)
             {
+                logData("Starting parsing method.", EventLogEntryType.Information);
+
                 var userDirectories = Directory.GetDirectories(
                                       ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]);
                 foreach (var directory in userDirectories)
