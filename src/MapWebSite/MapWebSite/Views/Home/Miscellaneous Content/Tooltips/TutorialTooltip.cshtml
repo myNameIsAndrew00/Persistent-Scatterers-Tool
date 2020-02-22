@@ -1,0 +1,11 @@
+﻿@model  MapWebSite.Domain.ViewModel.TutorialTooltipViewModel
+@{
+    Layout = null;
+}
+
+<div class="tutorial-content-tooltip">
+        <img src="@Model.GifPath" />
+        <div class="tooltip-text">
+            <small>@Model.DisplayedMessage</small>
+        </div>
+</div>

@@ -1,0 +1,47 @@
+@import '../colors.scss';
+
+.tooltip {
+    position: absolute;
+    padding: 0;
+    width: 190px;
+    min-height: 20px;
+    pointer-events: none;
+    opacity: 1;
+    margin-left: 20px; 
+    
+    z-index: $critical_z_index;
+
+    .tooltip-body {
+        pointer-events: none;
+    }
+
+    transition: 0.3s;
+}
+
+.tooltip-hidden{
+    opacity: 0;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+
+.tooltip-overlay {
+    background: get_color(black);
+    opacity: 0.2;
+    height: 100%;
+    width: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: $low_priority_z_index;
+
+    transition: 0.3s;
+}
+
+.tooltip-overlay-hidden{
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+}

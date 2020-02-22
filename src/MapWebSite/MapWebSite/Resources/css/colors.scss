@@ -25,10 +25,13 @@ $colors: (
     easeGray: rgba(200,200,200,1),
     easeStrongGray: rgba(180,180,180,1),
     white: white,
+    black: black,
     transparentWhite: rgba(255,255,255,0.7),
     primary: black
 );
 
-$principal_z_index : 100000;
 $critical_z_index: 100010;
+$principal_z_index: 100000;
 $overflow_z_index: 99000;
+$low_priority_z_index: 10;
+$background_z_index: -10;

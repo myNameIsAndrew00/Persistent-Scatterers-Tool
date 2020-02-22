@@ -479,6 +479,24 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chose the type of the displayed map by selecting an option from the dropdown .
+        /// </summary>
+        public static string HTM_TOOLTIP_MapType {
+            get {
+                return ResourceManager.GetString("HTM_TOOLTIP_MapType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drag the range input to change the size of the displayed points.
+        /// </summary>
+        public static string HTM_TOOLTIP_PointsSize {
+            get {
+                return ResourceManager.GetString("HTM_TOOLTIP_PointsSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unselected.
         /// </summary>
         public static string HTMDefaultDataset {

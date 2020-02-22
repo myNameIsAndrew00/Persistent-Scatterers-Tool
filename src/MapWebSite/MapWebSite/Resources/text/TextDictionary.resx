@@ -362,4 +362,10 @@
   <data name="LRegisterFailMessageUppercase" xml:space="preserve">
     <value>Failed to create a new account.  Your password must contain at least one uppercase letter.</value>
   </data>
+  <data name="HTM_TOOLTIP_MapType" xml:space="preserve">
+    <value>Chose the type of the displayed map by selecting an option from the dropdown </value>
+  </data>
+  <data name="HTM_TOOLTIP_PointsSize" xml:space="preserve">
+    <value>Drag the range input to change the size of the displayed points</value>
+  </data>
 </root>

@@ -67,7 +67,7 @@ class Popup {
 
 }
 
-class PopupBuilder {
+class PopupManager {
     constructor() {
         this.popupIdentifier = 0;
     }
@@ -103,4 +103,4 @@ class PopupBuilder {
     }
 }
 
-export const PopupBuilderInstance = new PopupBuilder();
+export const PopupBuilderInstance = new PopupManager();

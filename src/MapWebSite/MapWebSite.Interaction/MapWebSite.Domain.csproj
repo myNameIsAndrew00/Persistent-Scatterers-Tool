@@ -76,6 +76,7 @@
     <Compile Include="SiteUser.cs" />
     <Compile Include="Views Models\ChoseDatasetViewModel.cs" />
     <Compile Include="Views Models\ChosePaletteViewModel.cs" />
+    <Compile Include="Views Models\TooltipViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MapWebSite.Authentication\MapWebSite.Authentication.csproj">

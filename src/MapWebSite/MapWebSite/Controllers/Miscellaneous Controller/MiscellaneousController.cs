@@ -1,13 +1,8 @@
 ﻿using MapWebSite.Core;
-using MapWebSite.HtmlHelpers;
-using MapWebSite.Domain;
-using MapWebSite.Model; 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Web;
+using MapWebSite.Domain.ViewModel;
 using System.Web.Mvc; 
 using System.Net.Http;
+using MapWebSite.Types;
 
 namespace MapWebSite.Controllers
 {
@@ -17,6 +12,17 @@ namespace MapWebSite.Controllers
     [System.Web.Mvc.Authorize] 
     public class MiscellaneousController : Controller
     {
+        /// <summary>
+        /// Handles the tooltips available in the application. Each enum value is decorated with strings which can provide resources
+        /// </summary>
+        public enum Tooltip
+        {             
+            [EnumString("HTM_TOOLTIP_MapType")]
+            ChoseMapTypeTooltip,
+            [EnumString("HTM_TOOLTIP_PointsSize")]
+            ChosePointsSizeTooltip
+        }
+
         [HttpGet]
         public ActionResult GetNotificationsPage()
         {
@@ -33,6 +39,27 @@ namespace MapWebSite.Controllers
         public ActionResult GetChangePointsSizePage()
         {
             return View("~/Views/Home/Miscellaneous Content/ChangePointsSize.cshtml");
+        }
+
+        /// <summary>
+        /// Return a view containing a tooltip
+        /// </summary>
+        /// <param name="tooltip"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult GetTooltip(Tooltip tooltip)
+        {
+            return PartialView("~/Views/Home/Miscellaneous Content/Tooltips/TutorialTooltip.cshtml",
+                new TutorialTooltipViewModel()
+                {
+                    DisplayedMessage = 
+                        Resources.text.TextDictionary.ResourceManager.GetString(
+                            tooltip.GetEnumString(),
+                            Resources.text.TextDictionary.Culture),
+                    GifPath =
+                        $"Resources/resources/gifs/{tooltip.GetEnumString()}.gif"
+                }
+                );
         }
     }
 

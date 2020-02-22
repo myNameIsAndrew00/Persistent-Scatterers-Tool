@@ -9,6 +9,8 @@
 @import 'colors.scss';
 @import 'texts.scss';
 @import 'input.scss';
+@import './tooltips/tooltip.scss';
+@import './tooltips/customizations.scss';
 
 ::selection {
     background: none;
@@ -16,7 +18,7 @@
 }
 
 body, html {
-    height: 100%; 
+    height: 100%;
     overflow: hidden;
     color: get_color(primary);
 }
@@ -25,10 +27,18 @@ body, html {
 .box {
     border-radius: 5px;
     box-shadow: 3px 8px 11px -2px get_color(strongTransparentBlue), -1px -1px 6px get_color(easeGray);
-    
     background: get_color(white);
-    color: get_color(mediumGray); 
+    color: get_color(mediumGray);
     border: solid 1px #ececec;
+
+    small {
+        font-size: 0.8em;
+        line-height: 14px;
+    }
+
+    button {
+        font-size: 0.9em;
+    }
 }
 
 button:disabled {
@@ -42,4 +52,3 @@ button:disabled:hover {
 input:hover, button:hover {
     background: orange;
 }
-

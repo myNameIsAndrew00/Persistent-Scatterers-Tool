@@ -13,6 +13,8 @@ import { LoadSuggestions } from './map/points_search.js';
 import { RefreshSelectMapTypePopup } from './map/chose_map_type.js';
 import { Router, endpoints } from './api/api_router.js';
 import { PopupBuilderInstance } from './utilities/Popup/popup.js';
+import { TooltipManagerInstance } from './utilities/Tooltip/tooltip_manager.js';
+import { HtmlToElement } from './utilities/utils.js';
 
 /**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE DOWN-LEFT MENU******************/
 /*************************************************************************************************/
@@ -199,14 +201,8 @@ function displayPopup(buttonId, url, callbackHandler, additionalContent) {
     if (url != null)
         Router.Get(url,
             function (data) {
-                function htmlToElement(html) {
-                    var template = document.createElement('template');
-                    template.innerHTML = html.trim();
 
-                    return template.content.firstChild;
-                }
-
-                fillPopup(htmlToElement(data))
+                fillPopup(HtmlToElement(data))
 
             });
     //or fill the popup with content from caller
@@ -244,11 +240,11 @@ $('#map_criteria_button').click(function (event) {
                 RefreshSelectCriteriaPopup();
             }, 50);
         },
-        null);   
+        null);
 });
 
 //handle the click for resizing the displayed points
-$('#map_resize_points_button').click(function (event) {   
+$('#map_resize_points_button').click(function (event) {
     displayPopup('map_resize_points_button',
         endpoints.Miscellaneous.GetChangePointsSizePage,
         function () {
@@ -284,3 +280,37 @@ $('#reset_button').click(function (event) {
     $('#map_search_text').val('');
     $('#map_suggestions').empty();
 })
+
+
+/**************FUNCTIONS BELOW ARE USED TO ENABLE TOOLTIPS******************/
+/*****************************************************************************************/
+
+var displayedElement = document.createElement('small');
+displayedElement.innerHTML = 'in development...';
+
+TooltipManagerInstance.Register({
+    containerId: 'map_type_button',
+    delay: 2000,
+    useRouter: true, 
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetTooltip,
+        tooltipId: 0
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});
+
+TooltipManagerInstance.Register({
+    containerId: 'map_resize_points_button',
+    delay: 2000,
+    useRouter: true,
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetTooltip,
+        tooltipId: 1
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});
+ 

@@ -1,11 +1,10 @@
-﻿
-/*sample for map*/
+﻿@import 'colors.scss';
 
 .map-container {
     padding: 0 !important;
     width: 100% !important;
     height: 100%;
-    z-index: -10;
+    z-index: $background_z_index;
 }
 
 .map {

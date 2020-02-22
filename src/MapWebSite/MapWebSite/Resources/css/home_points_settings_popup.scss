@@ -12,7 +12,6 @@
             padding: 0;
 
             button {
-                font-size: 0.9em;
                 border-radius: 0;
                 background: none;
                 color: get_color(mediumGray);
@@ -37,8 +36,7 @@
                 width: 15px;
             }
 
-            button {
-                font-size: 0.9em;
+            button { 
                 border-radius: 0;
                 background: none;
                 color: get_color(mediumGray);
@@ -57,7 +55,6 @@
             align-items: center;
 
             small {
-                font-size: 0.8em;
                 padding: 5px;
                 line-height: 14px;
                 max-width: 70px;
