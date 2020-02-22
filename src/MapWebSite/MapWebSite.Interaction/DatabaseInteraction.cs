@@ -18,7 +18,7 @@ namespace MapWebSite.Domain
 
 
     /// <summary>
-    /// Provides methods for interacting with the database 
+    /// Provides methods for interacting with the databases
     /// </summary>
     public class DatabaseInteractionHandler
     { 
@@ -82,24 +82,24 @@ namespace MapWebSite.Domain
                                                      Action<IEnumerable<PointBase>, string> callback)
         {
             //todo: cache the header
-            PointsDataSetHeader dataSetHeader = this.userRepository.GetDatasetHeader(username, dataSet);
-            if (dataSetHeader == null) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
+            PointsDataSetHeader datasetHeader = this.userRepository.GetDatasetHeader(username, dataSet);
+            if (datasetHeader == null) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
             //set the requested latitude and longitude coordinates of corners in the available limits of the dataset
             var topLeftIndexes = this.dataPointsRegionSource.GetRegionIndexes(
-                                                    topLeftCorner.Item1 < (dataSetHeader.MaximumLatitude ?? 90m) ? topLeftCorner.Item1 : dataSetHeader.MaximumLatitude ?? 90m,
-                                                    topLeftCorner.Item2 > (dataSetHeader.MinimumLongitude ?? -180m) ? topLeftCorner.Item2 : dataSetHeader.MinimumLongitude ?? -180m,
+                                                    topLeftCorner.Item1 < (datasetHeader.MaximumLatitude ?? 90m) ? topLeftCorner.Item1 : datasetHeader.MaximumLatitude ?? 90m,
+                                                    topLeftCorner.Item2 > (datasetHeader.MinimumLongitude ?? -180m) ? topLeftCorner.Item2 : datasetHeader.MinimumLongitude ?? -180m,
                                                     zoomLevel);
 
             var bottomRightIndexes = this.dataPointsRegionSource.GetRegionIndexes(
-                                                    bottomRightCorner.Item1 > (dataSetHeader.MinimumLatitude ?? -90m) ? bottomRightCorner.Item1 : (dataSetHeader.MinimumLatitude ?? -90m),
-                                                    bottomRightCorner.Item2 < (dataSetHeader.MaximumLongitude ?? 180m) ? bottomRightCorner.Item2 : (dataSetHeader.MaximumLongitude ?? 180m),
+                                                    bottomRightCorner.Item1 > (datasetHeader.MinimumLatitude ?? -90m) ? bottomRightCorner.Item1 : (datasetHeader.MinimumLatitude ?? -90m),
+                                                    bottomRightCorner.Item2 < (datasetHeader.MaximumLongitude ?? 180m) ? bottomRightCorner.Item2 : (datasetHeader.MaximumLongitude ?? 180m),
                                                     zoomLevel);
 
             var serverCachedRegions = PointsCacheManager.Get(topLeftIndexes,
                                                          bottomRightIndexes,
                                                          zoomLevel,
-                                                         dataSetHeader.ID,
+                                                         datasetHeader.ID,
                                                          cachedRegions,
                                                          out List<Coordinates> requiredRegions);
 
@@ -109,18 +109,18 @@ namespace MapWebSite.Domain
                 {
                     try
                     {
-                        var result = this.dataPointsRepository.GetRegion(dataSetHeader.ID, coordinate.Item1, coordinate.Item2, zoomLevel);
+                        var result = this.dataPointsRepository.GetRegion(datasetHeader.ID, coordinate.Item1, coordinate.Item2, zoomLevel);
 
                         string regionKey = null;
                         if (result != null)
-                            regionKey = PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, coordinate.Item3, dataSetHeader.ID, result.Points);
+                            regionKey = PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, coordinate.Item3, datasetHeader.ID, result.Points);
 
                         callback(result == null ? new List<PointBase>() : result.Points, regionKey);                         
                     }
                     catch (Exception exception)
                     { //TODO: log exception
                         //if a error ocurs, the created entry must be deleted from the cache
-                        PointsCacheManager.Remove(coordinate.Item1, coordinate.Item2, coordinate.Item3, dataSetHeader.ID);
+                        PointsCacheManager.Remove(coordinate.Item1, coordinate.Item2, coordinate.Item3, datasetHeader.ID);
                     }
                 });
             }

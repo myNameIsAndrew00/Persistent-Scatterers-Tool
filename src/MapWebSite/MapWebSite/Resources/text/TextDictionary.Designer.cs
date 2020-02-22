@@ -587,11 +587,38 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create a new account. Your password must contain at least one digit..
+        /// </summary>
+        public static string LRegisterFailMessageDigit {
+            get {
+                return ResourceManager.GetString("LRegisterFailMessageDigit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create a new account. Your password must contain at least one non letter character or digit..
+        /// </summary>
+        public static string LRegisterFailMessageLetterOrDigit {
+            get {
+                return ResourceManager.GetString("LRegisterFailMessageLetterOrDigit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failder to create a new account. Your password length must be at least 6 characters.
         /// </summary>
         public static string LRegisterFailMessagePasswordLen {
             get {
                 return ResourceManager.GetString("LRegisterFailMessagePasswordLen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create a new account.  Your password must contain at least one uppercase letter..
+        /// </summary>
+        public static string LRegisterFailMessageUppercase {
+            get {
+                return ResourceManager.GetString("LRegisterFailMessageUppercase", resourceCulture);
             }
         }
         

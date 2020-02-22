@@ -109,23 +109,23 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
 /*****************************************************************************************/
 /*functions used for interaction with setting overlay*/
 
-window.requestSettingsPage = async function requestSettingsPage(pageName, cssServerPath) {
+window.requestSettingsPage = async function requestSettingsPage(pageIdentifier, cssServerPath) {
     ChangeSpinnerVisibility(true);
 
     setTimeout(DisplayPage, 50, true);
 
-    await requestPage(pageName, cssServerPath);
+    await requestPage(pageIdentifier, cssServerPath);
 
 }
 
 
-async function requestPage(pageName, cssServerPath) {
+async function requestPage(pageIdentifier, cssServerPath) {
 
 
     if (cssServerPath != null) requestCss(cssServerPath);
 
     Router.Get(endpoints.Home.RequestSettingsLayerContent,
-        { settingsPageName: pageName },
+        { settingsPage: pageIdentifier },
         await function (data) {
             setTimeout(function () {
                 ChangeSpinnerVisibility(false);

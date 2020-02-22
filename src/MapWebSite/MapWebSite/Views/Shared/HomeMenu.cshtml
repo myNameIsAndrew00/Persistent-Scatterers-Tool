@@ -1,10 +1,11 @@
 ﻿@using MapWebSite.Resources.text
 @using MapWebSite.Model
 @using MapWebSite.Core
+@using MapWebSite.Controllers
 
 @{
     @*LINE BELLOW IS FOR FIXING: fix the bug with the id counter.. main-menu-icon-0 must be followed by main-menu-icon-1, and not main-menu-icon-2 (bug can be caused by role restriction)*@  
-    int sectionsCount = 0;
+int sectionsCount = 0;
 }
 
 @*Summary: partial view used for Menu.
@@ -53,12 +54,12 @@
             {
                 <li class="secondary-menu-item">
                     <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
-                    <button onclick="requestSettingsPage('account-settings','/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuSettingsText</button>
+                    <button onclick="requestSettingsPage(@Html.Raw( (int)SettingsController.Page.Account) ,'/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuSettingsText</button>
                 </li>
             }
             <li class="secondary-menu-item">
                 <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/info_icon.svg"></object>
-                @Html.ActionLink(TextDictionary.HMenuAboutText, "Logout", "Home", null)
+                <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.About), null)">@TextDictionary.HMenuAboutText</button>                
             </li>
             <li class="secondary-menu-item">
                 <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
@@ -73,11 +74,11 @@
             <ul id="secondary-menu-items-@(sectionsCount++)">
                 <li class="secondary-menu-item">
                     <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/upload_points_icon.svg"></object>
-                    <button onclick="requestSettingsPage('upload-points','/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuUploadPointsText</button>
+                    <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.UploadPoints),'/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuUploadPointsText</button>
                 </li>
                 <li class="secondary-menu-item">
                     <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/palette_icon.svg"></object>
-                    <button onclick="requestSettingsPage('create-palette-color','/Resources/css/settings_color_picker.scss')">@TextDictionary.HMenuCreatePaletteText</button>
+                    <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.ColorPicker),'/Resources/css/settings_color_picker.scss')">@TextDictionary.HMenuCreatePaletteText</button>
                 </li>
             </ul>
         }

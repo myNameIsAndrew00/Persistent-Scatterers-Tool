@@ -14,5 +14,15 @@ namespace MapWebSite.Controllers
     [Authorize]
     public partial class SettingsController : ApiController
     { 
+        /// <summary>
+        /// Handle the setting pages names
+        /// </summary>
+        public enum Page
+        {
+            About,
+            Account,
+            ColorPicker,
+            UploadPoints
+        }
     }
 }

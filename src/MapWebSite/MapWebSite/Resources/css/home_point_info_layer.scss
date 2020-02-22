@@ -113,7 +113,7 @@
 .point-info-popup {
     .popup-body {
         display: grid;
-        height: 100%;
+        height: calc(100% - 20px);
         grid-template-columns: auto 100px;
 
         svg {

@@ -12,7 +12,7 @@ namespace MapWebSite.Authentication
     { 
         public UserManager(IUserStore<User, string> store)
          : base(store)
-        {
+        { 
         }
 
         public static UserManager Create(IdentityFactoryOptions<UserManager> options, IOwinContext context, IUserRepository userRepository)
@@ -20,9 +20,17 @@ namespace MapWebSite.Authentication
             
             var manager = new UserManager(new Store(userRepository))
             { 
-                PasswordHasher = new Authentication.PasswordHasher()                
+                PasswordHasher = new Authentication.PasswordHasher(),        
+                PasswordValidator = new PasswordValidator()
+                {
+                    RequiredLength = 6,
+                    RequireDigit = true,
+                    RequireLowercase = true,
+                    RequireNonLetterOrDigit = true,
+                    RequireUppercase = true
+                }
+                
             };
-
 
             manager.UserLockoutEnabledByDefault = false;
 

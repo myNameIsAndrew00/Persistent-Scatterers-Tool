@@ -23,16 +23,18 @@ namespace MapWebSite.Controllers
 
 
         [System.Web.Mvc.HttpGet]
-        public ActionResult RequestSettingsLayerContent(string settingsPageName)
+        public ActionResult RequestSettingsLayerContent(SettingsController.Page settingsPage)
         {
-            switch (settingsPageName)
+            switch (settingsPage)
             {
-                case "create-palette-color":
+                case SettingsController.Page.ColorPicker:
                     return View((string)"Settings Content/ColorPicker");
-                case "upload-points":
+                case SettingsController.Page.UploadPoints:
                     return View((string)"Settings Content/UploadPoints");
-                case "account-settings":
-                    return View((string)"Settings Content/AccountSettings"); 
+                case SettingsController.Page.Account:
+                    return View((string)"Settings Content/AccountSettings");
+                case SettingsController.Page.About:
+                    return View((string)"Settings Content/About");
                 default:
                     return View((string)"Settings Content/ColorPicker");
             }

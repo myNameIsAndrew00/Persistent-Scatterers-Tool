@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MapWebSite.Authentication
@@ -159,6 +160,7 @@ namespace MapWebSite.Authentication
 
         public Task<bool> HasPasswordAsync(User user)
         {
+
             return Task.FromResult(user.PasswordHash != null);
         }
 

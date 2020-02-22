@@ -353,4 +353,13 @@
     <value>search for a place...</value>
     <comment>SC --&gt; search coordinates (top right search from home)</comment>
   </data>
+  <data name="LRegisterFailMessageDigit" xml:space="preserve">
+    <value>Failed to create a new account. Your password must contain at least one digit.</value>
+  </data>
+  <data name="LRegisterFailMessageLetterOrDigit" xml:space="preserve">
+    <value>Failed to create a new account. Your password must contain at least one non letter character or digit.</value>
+  </data>
+  <data name="LRegisterFailMessageUppercase" xml:space="preserve">
+    <value>Failed to create a new account.  Your password must contain at least one uppercase letter.</value>
+  </data>
 </root>

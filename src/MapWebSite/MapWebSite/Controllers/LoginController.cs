@@ -79,7 +79,14 @@ namespace MapWebSite.Controllers
 
             if (createTask.Result.Errors?.FirstOrDefault()?.Contains("Passwords must be at least") ?? false)
                 return Json(new { message = TextDictionary.LRegisterFailMessagePasswordLen, type = "Failed" });
-           
+            if (createTask.Result.Errors?.FirstOrDefault()?.Contains("one non letter or digit") ?? false)
+                return Json(new { message = TextDictionary.LRegisterFailMessageLetterOrDigit, type = "Failed" });
+            if (createTask.Result.Errors?.FirstOrDefault()?.Contains("one digit ('0'-'9')") ?? false)
+                return Json(new { message = TextDictionary.LRegisterFailMessageDigit, type = "Failed" });
+            if (createTask.Result.Errors?.FirstOrDefault()?.Contains("one uppercase") ?? false)
+                return Json(new { message = TextDictionary.LRegisterFailMessageUppercase, type = "Failed" });
+
+
             return Json(new { message = createTask.Result.Succeeded ? 
                                           TextDictionary.LRegisterSuccessMessage
                                         : TextDictionary.LRegisterFailMessage ,
