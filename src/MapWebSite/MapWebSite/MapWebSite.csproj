@@ -20,7 +20,7 @@
     <AssemblyName>MapWebSite</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress>true</Use64BitIISExpress>
     <IISExpressSSLPort>44312</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
@@ -339,14 +339,14 @@
     <Content Include="Resources\js\map\points_search.js" />
     <Content Include="Resources\js\map\points_section_handler.js" />
     <Content Include="Resources\js\map\received_points_worker.js" />
-    <Content Include="Resources\js\point info\card_drawer.js" />
-    <Content Include="Resources\js\point info\cards_manager.js" />
+    <Content Include="Resources\js\utilities\Card\card_drawer.js" />
+    <Content Include="Resources\js\utilities\Card\cards_manager.js" />
     <Content Include="Resources\js\points settings\chose_criteria.js" />
     <Content Include="Resources\js\points settings\chose_dataset.js" />
     <Content Include="Resources\js\points settings\chose_palette.js" />
     <Content Include="Resources\js\map\points_source_manager.js" />
     <Content Include="Resources\js\points settings\points_settings.js" />
-    <Content Include="Resources\js\popup.js" />
+    <Content Include="Resources\js\utilities\Popup\popup.js" />
     <Content Include="Resources\js\settings\settings.js" />
     <Content Include="Resources\js\settings\settings_color_picker.js" />
     <Content Include="Resources\js\settings\color_picker_color_list.js" />
@@ -354,9 +354,10 @@
     <Content Include="Resources\js\login.js" />
     <Content Include="Resources\js\map\map.js" />
     <Content Include="Resources\js\menu.js" />
-    <Content Include="Resources\js\plot.js" />
+    <Content Include="Resources\js\utilities\Plot\plot.js" />
     <Content Include="Resources\js\settings\settings_points_upload.js" />
     <Content Include="Resources\js\point info\point_info.js" />
+    <Content Include="Resources\js\utilities\Tooltip\tooltip_manager.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
     <Content Include="Resources\resources\hybrid.png" />
@@ -531,6 +532,7 @@
     <Content Include="Views\Home\Miscellaneous Content\ChoseMapType.cshtml" />
     <Content Include="Views\Home\Miscellaneous Content\ChangePointsSize.cshtml" />
     <Content Include="Views\Home\Settings Content\About.cshtml" />
+    <Content Include="Resources\css\tooltip.scss" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

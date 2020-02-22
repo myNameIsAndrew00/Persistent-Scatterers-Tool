@@ -4,7 +4,7 @@
  *
  * */
 
-import { PopupBuilderInstance } from '../popup.js';
+import { PopupBuilderInstance } from '../utilities/Popup/popup.js';
 import { UpdatePointsLayer } from '../map/map.js';
 
 const sliderId = '#points_size_slider';

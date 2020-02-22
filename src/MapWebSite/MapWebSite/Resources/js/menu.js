@@ -12,7 +12,7 @@ import { InitialiseSlider } from './points settings/points_settings.js';
 import { LoadSuggestions } from './map/points_search.js';
 import { RefreshSelectMapTypePopup } from './map/chose_map_type.js';
 import { Router, endpoints } from './api/api_router.js';
-import { PopupBuilderInstance } from './popup.js';
+import { PopupBuilderInstance } from './utilities/Popup/popup.js';
 
 /**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE DOWN-LEFT MENU******************/
 /*************************************************************************************************/

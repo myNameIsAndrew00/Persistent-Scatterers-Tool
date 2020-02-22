@@ -4,8 +4,8 @@
  *
  * */
 
-import { PlotDrawer } from '../plot.js';
-import { CardsManager } from './cards_manager.js';
+import { PlotDrawer } from '../utilities/Plot/plot.js';
+import { CardsManager } from '../utilities/Card/cards_manager.js';
 import { UnselectFeatureOnMap } from '../map/map.js';
 
 var cardsManager = new CardsManager('map-container');

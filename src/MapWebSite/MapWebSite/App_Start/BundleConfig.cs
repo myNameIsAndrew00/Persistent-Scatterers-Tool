@@ -84,7 +84,7 @@ namespace MapWebSite
 
             bundles.Add(new ScriptBundle("~/scripts/home").Include(
                 "~/Resources/js/home.js",
-                "~/Resources/js/plot.js",
+                "~/Resources/js/utilities/Plot/plot.js",
                 "~/Resources/js/point info/point_info.js",
                 "~/Resources/js/map.js"               
                ));
