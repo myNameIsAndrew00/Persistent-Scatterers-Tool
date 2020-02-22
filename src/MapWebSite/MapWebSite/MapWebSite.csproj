@@ -360,6 +360,7 @@
     <Content Include="Resources\js\utilities\Tooltip\tooltip_manager.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
+    <Content Include="Resources\resources\gifs\map_type_tutorial.gif" />
     <Content Include="Resources\resources\hybrid.png" />
     <Content Include="Resources\resources\icons\arrow_right_icon.svg" />
     <Content Include="Resources\resources\icons\bar_plot_icon.svg" />
