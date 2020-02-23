@@ -313,4 +313,31 @@ TooltipManagerInstance.Register({
     cursorSide: 'left',
     displayOverlay: true
 });
- 
+
+
+TooltipManagerInstance.Register({
+    containerId: 'map_criteria_button',
+    delay: 2000,
+    useRouter: true,
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetTooltip,
+        tooltipId: 2
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});
+
+
+TooltipManagerInstance.Register({
+    containerId: 'map_search_button',
+    delay: 2000,
+    useRouter: true,
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetTooltip,
+        tooltipId: 3
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});

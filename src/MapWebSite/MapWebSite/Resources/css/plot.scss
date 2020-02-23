@@ -56,8 +56,7 @@
         }
 
         button:hover {
-           background: rgba(0,0,0,0.3);
-
+            background: rgba(0,0,0,0.3);
         }
     }
 
@@ -100,13 +99,13 @@
     .plot-popup-hidden {
         visibility: hidden;
 
-        button{
+        button {
             opacity: 0;
         }
     }
 
     h3 {
-        text-align: center;
-        margin-top: 150px;
+        position: absolute;
+        left: 50%;
     }
 }

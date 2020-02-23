@@ -11,7 +11,7 @@ class CardDrawer {
 
     //todo: function which reset zIndex to 100 for all popups
 
-    defaultDimensions = { oX: 400, oY: 250 };
+    defaultDimensions = { oX: 400, oY: 260 };
 
     maxDimensions = { oX: 800, oY: 600 };
 

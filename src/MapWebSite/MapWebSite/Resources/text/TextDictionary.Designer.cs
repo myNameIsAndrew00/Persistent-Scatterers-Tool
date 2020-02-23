@@ -479,6 +479,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chose the criterium of points color visualisation.
+        /// </summary>
+        public static string HTM_TOOLTIP_ColorCriteria {
+            get {
+                return ResourceManager.GetString("HTM_TOOLTIP_ColorCriteria", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chose the type of the displayed map by selecting an option from the dropdown .
         /// </summary>
         public static string HTM_TOOLTIP_MapType {
@@ -493,6 +502,15 @@ namespace MapWebSite.Resources.text {
         public static string HTM_TOOLTIP_PointsSize {
             get {
                 return ResourceManager.GetString("HTM_TOOLTIP_PointsSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter an adress or details about a place and move the map view on that place.
+        /// </summary>
+        public static string HTM_TOOLTIP_Search {
+            get {
+                return ResourceManager.GetString("HTM_TOOLTIP_Search", resourceCulture);
             }
         }
         

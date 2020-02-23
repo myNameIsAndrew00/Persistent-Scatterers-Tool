@@ -368,4 +368,10 @@
   <data name="HTM_TOOLTIP_PointsSize" xml:space="preserve">
     <value>Drag the range input to change the size of the displayed points</value>
   </data>
+  <data name="HTM_TOOLTIP_ColorCriteria" xml:space="preserve">
+    <value>Chose the criterium of points color visualisation</value>
+  </data>
+  <data name="HTM_TOOLTIP_Search" xml:space="preserve">
+    <value>Enter an adress or details about a place and move the map view on that place</value>
+  </data>
 </root>

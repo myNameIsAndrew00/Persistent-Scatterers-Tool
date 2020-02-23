@@ -20,7 +20,11 @@ namespace MapWebSite.Controllers
             [EnumString("HTM_TOOLTIP_MapType")]
             ChoseMapTypeTooltip,
             [EnumString("HTM_TOOLTIP_PointsSize")]
-            ChosePointsSizeTooltip
+            ChosePointsSizeTooltip,
+            [EnumString("HTM_TOOLTIP_ColorCriteria")]
+            ChoseColorCriteriumTooltip,
+            [EnumString("HTM_TOOLTIP_Search")]
+            SearchTooltip
         }
 
         [HttpGet]
