@@ -44,7 +44,7 @@
         <div class="main-color-list">
             @foreach (ColorPickerViewModel.PaletteColorsHue color in Enum.GetValues(typeof(ColorPickerViewModel.PaletteColorsHue)))
             {
-                <span onclick="changeActivePalette(@Html.Raw((int)color))" style="background-color: @Model.GetColor(color.GetEnumString())"></span>
+                <span onclick="changeActivePalette(@Html.Raw((int)color))" style="background-color: @Model.GetColor(color)"></span>
             }
         </div>
         <button onclick="changeColorPickerVisibility(false)">@TextDictionary.HMenuCPClosePicker</button>
