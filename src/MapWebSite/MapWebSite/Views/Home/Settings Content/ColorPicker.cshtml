@@ -1,4 +1,6 @@
-﻿@using MapWebSite.Resources.text
+﻿@model MapWebSite.Domain.ViewModel.ColorPickerViewModel
+
+@using MapWebSite.Resources.text
 @{
     Layout = null;
 }
@@ -21,29 +23,30 @@
 <div id="color-picker" class="color-picker color-picker-hidden">
     <div class="color-picker-tumb"></div>
     <div class="color-container">
-        <table>
-            <tr>
-                <th onclick="changeSpanColor('#b9475b')" style="background: #b9475b" />
-                <th onclick="changeSpanColor('#4947b9')" style="background: #4947b9" />
-                <th onclick="changeSpanColor('#53b947')" style="background: #53b947" />
-                <th onclick="changeSpanColor('#b98847')" style="background: #b98847" />
-                <th onclick="changeSpanColor('#b547b9')" style="background: #b547b9" />
-                <th onclick="changeSpanColor('#142564')" style="background: #142564" />
-                <th onclick="changeSpanColor('#1c6414')" style="background: #1c6414" />
-                <th onclick="changeSpanColor('#e3a134')" style="background: #e3a134" />
-            </tr>
-            <tr>
-                <th onclick="changeSpanColor('#575757')" style="background: #575757" />
-                <th onclick="changeSpanColor('#fffe00')" style="background: #fffe00" />
-                <th onclick="changeSpanColor('#18ac1e')" style="background: #18ac1e" />
-                <th onclick="changeSpanColor('#ec1717')" style="background: #ec1717" />
-                <th onclick="changeSpanColor('#3cb3ab')" style="background: #3cb3ab" />
-                <th onclick="changeSpanColor('#ffff63')" style="background: #ffff63" />
-                <th onclick="changeSpanColor('#e86751')" style="background: #e86751" />
-                <th onclick="changeSpanColor('#201d1d')" style="background: #201d1d" />
-            </tr>
-        </table>
+        @foreach (ColorPickerViewModel.PaletteColorsHue color in Enum.GetValues(typeof(ColorPickerViewModel.PaletteColorsHue)))
+        {
+            <table id="picker-@Html.Raw((int)color)" class="@Html.Raw(color == ColorPickerViewModel.PaletteColorsHue.Red ? "palette-active" : "")">
+                @{
+                    string[] colors = Model.GetColors(color).ToArray();
 
+                    for (int i = 0; i < 2; i++)
+                    {
+                        <tr>
+                            @for (int j = 0; j < colors.Length / 2; j++)
+                            {
+                                <th onclick="changeSpanColor('@colors[8 * i + j]')" style="background: @colors[8 * i + j]" />
+                            }
+                        </tr>
+                    }
+                }
+            </table>
+        }
+        <div class="main-color-list">
+            @foreach (ColorPickerViewModel.PaletteColorsHue color in Enum.GetValues(typeof(ColorPickerViewModel.PaletteColorsHue)))
+            {
+                <span onclick="changeActivePalette(@Html.Raw((int)color))" style="background-color: @Model.GetColor(color.GetEnumString())"></span>
+            }
+        </div>
         <button onclick="changeColorPickerVisibility(false)">@TextDictionary.HMenuCPClosePicker</button>
         <button class="close-button" onclick="removeSpan()">X</button>
     </div>
@@ -64,7 +67,7 @@
                     data="~/Resources/resources/icons/first_gliph.svg" )></object>
             <h4>@TextDictionary.HMenuCPSubtitle1</h4>
             <small>
-                @Html.Raw(TextDictionary.HMenuCPArticle1)        
+                @Html.Raw(TextDictionary.HMenuCPArticle1)
             </small>
         </article>
         <article id="name-info-card">

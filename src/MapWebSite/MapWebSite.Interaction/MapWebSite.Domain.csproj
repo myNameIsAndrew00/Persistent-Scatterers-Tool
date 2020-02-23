@@ -7,7 +7,7 @@
     <ProjectGuid>{A0E0898D-DD00-4BA7-803A-DCC9586B2836}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MapWebSite.Interaction</RootNamespace>
+    <RootNamespace>MapWebSite.Domain</RootNamespace>
     <AssemblyName>MapWebSite.Interaction</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -76,6 +76,7 @@
     <Compile Include="SiteUser.cs" />
     <Compile Include="Views Models\ChoseDatasetViewModel.cs" />
     <Compile Include="Views Models\ChosePaletteViewModel.cs" />
+    <Compile Include="Views Models\ColorPickerViewModel.cs" />
     <Compile Include="Views Models\TooltipViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +95,10 @@
     <ProjectReference Include="..\MapWebSite.Repository\MapWebSite.Repository.csproj">
       <Project>{0886d345-5858-4711-a80c-a08bbfee1e27}</Project>
       <Name>MapWebSite.Repository</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapWebSite.Types\MapWebSite.Types.csproj">
+      <Project>{EFE17CCE-7D2B-4FDD-B4A8-BF395FD34056}</Project>
+      <Name>MapWebSite.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

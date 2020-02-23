@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Http;
 using System.Net.Http;
+using MapWebSite.Domain.ViewModel;
 
 namespace MapWebSite.Controllers
 {
@@ -28,7 +29,7 @@ namespace MapWebSite.Controllers
             switch (settingsPage)
             {
                 case SettingsController.Page.ColorPicker:
-                    return View((string)"Settings Content/ColorPicker");
+                    return View((string)"Settings Content/ColorPicker", new ColorPickerViewModel());
                 case SettingsController.Page.UploadPoints:
                     return View((string)"Settings Content/UploadPoints");
                 case SettingsController.Page.Account:

@@ -132,12 +132,31 @@ html, body {
     .color-container {
         height: 120px;
         width: 170px;
+
+        .main-color-list {
+            display: flex;
+            align-content: center;
+            justify-content: center;
+
+            span {
+                cursor: pointer;
+                width: 10px;
+                height: 10px; 
+                margin: 3px;
+                border-radius: 10px;
+            }
+        }
+    }
+
+    .palette-active{
+        display: block;
     }
 
     table {
+        display: none;
         border-collapse: collapse;
         margin: 7px;
-        padding-top: 17px;
+        padding-top: 10px;
     }
 
     table, td, th {

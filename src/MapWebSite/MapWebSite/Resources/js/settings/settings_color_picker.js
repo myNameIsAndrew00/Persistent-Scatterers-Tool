@@ -64,6 +64,11 @@ window.changeSelectedDot = function changeSelectedDot(){
     showColorPicker(event.clientX);
 }
 
+window.changeActivePalette = function changeActivePalette(itemId) {
+    $("table[id^='picker']").removeClass('palette-active');
+    $(`#picker-${itemId}`).addClass('palette-active');
+}
+
 /*function which handles the points addition to the slider*/  
 window.addDot = function addDot() { 
     
