@@ -64,23 +64,22 @@ int sectionsCount = 0;
             <li class="secondary-menu-item">
                 <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
                 @Html.ActionLink(TextDictionary.HMenuLogoutText, "Logout", "Home", null)
-            </li>
-
+            </li>            
         </ul>
 
         @*Secondary menu: used for Manage data points*@
         @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
         {
-            <ul id="secondary-menu-items-@(sectionsCount++)">
-                <li class="secondary-menu-item">
-                    <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/upload_points_icon.svg"></object>
-                    <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.UploadPoints),'/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuUploadPointsText</button>
-                </li>
-                <li class="secondary-menu-item">
-                    <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/palette_icon.svg"></object>
-                    <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.ColorPicker),'/Resources/css/settings_color_picker.scss')">@TextDictionary.HMenuCreatePaletteText</button>
-                </li>
-            </ul>
+    <ul id="secondary-menu-items-@(sectionsCount++)">
+        <li class="secondary-menu-item">
+            <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/upload_points_icon.svg"></object>
+            <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.UploadPoints),'/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuUploadPointsText</button>
+        </li>
+        <li class="secondary-menu-item">
+            <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/palette_icon.svg"></object>
+            <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.ColorPicker),'/Resources/css/settings_color_picker.scss')">@TextDictionary.HMenuCreatePaletteText</button>
+        </li>        
+    </ul>
         }
 
     </nav>

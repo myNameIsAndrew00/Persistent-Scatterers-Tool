@@ -10,15 +10,19 @@ namespace MapWebSite.Domain.ViewModel
 {
     public class ColorPickerViewModel
     {
+        private readonly int defaultColorsCount = 16;
+        private readonly int defaultMinimumLuminosity = 45;
+        private readonly int defaultMaximumLuminosity = 157;
 
         public enum PaletteColorsHue
         {
             Red = 0,
-            Orange = 30,
-            Yellow = 38,
-            Green = 80,
-            Blue = 160,
-            Pink = 220,
+            Orange = 40,
+            Yellow = 56,
+            Green = 97,
+            LightBlue = 186,
+            Blue = 214,
+            Pink = 310,
             Black = -1
         }
 
@@ -37,7 +41,7 @@ namespace MapWebSite.Domain.ViewModel
 
             if((int)hue == -1)
             {
-                for (int luminosity = 240; luminosity >= 0; luminosity -= 240 / 16) {
+                for (int luminosity = 240; luminosity >= 0; luminosity -= 240 / defaultColorsCount) {
                     var color = Helper.ConvertHSLToRGB((double)hue, 0, ((double)luminosity) / 240);
                     result.Add(string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B));
                 }
@@ -45,7 +49,7 @@ namespace MapWebSite.Domain.ViewModel
             }
 
             foreach (var saturation in saturations)
-                for (int luminosity = 157; luminosity >= 45; luminosity -= 14)
+                for (int luminosity = defaultMaximumLuminosity; luminosity >= defaultMinimumLuminosity; luminosity -= 14)
                 {
                     var color = Helper.ConvertHSLToRGB((double)hue, saturation, ((double)luminosity) / 240);
                     result.Add(string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B));

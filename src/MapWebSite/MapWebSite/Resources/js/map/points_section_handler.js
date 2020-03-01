@@ -12,7 +12,7 @@ import { PointsLayer } from './points_layer.js';
 import { HubRouter } from '../api/hub_router.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
 import { SelectedCriteria } from '../points settings/chose_criteria.js';
-import { PointsDimensionScale } from '../points settings/points_settings.js';
+import { PointsDimensionScale } from '../points settings/chose_points_size.js';
 
 export const SectionsRowsCount = 1;
 export const SectionsColumnsCount = 2;

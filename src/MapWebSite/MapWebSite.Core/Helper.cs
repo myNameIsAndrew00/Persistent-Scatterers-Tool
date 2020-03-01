@@ -11,52 +11,44 @@ namespace MapWebSite.Core
     public static class Helper
     {
         /// <summary>
-        /// Use this method to convert a color in format HSL
-        /// /summary>
-        /// <param name="hue">The hue, a double between 0 and 240</param>
+        /// Use this method to convert a color which is in format HSL.
+        /// </summary>
+        /// <param name="hue">A double between 0 and 360</param>
         /// <param name="saturation">A value between 0 and 1</param>
         /// <param name="luminance">A value between 0 and 1</param>
         /// <returns></returns>
         public static Color ConvertHSLToRGB(double hue, double saturation, double luminance)
         {
+            if (saturation < 0 || saturation > 1) throw new ArgumentException("Saturation must be a value between 0 and 1");
+            if (luminance < 0 || luminance > 1) throw new ArgumentException("Luminance must be a value between 0 and 1");
 
-            Func<double, double, double, double> HueToRgb = (v1, v2, vH) =>
+            Func<double, double, double, double> hueToRgb = (v1, v2, vH) =>
                {
-                   if (vH < 0)
-                       vH += 1;
+                   if (vH < 0) vH += 1;
+                   if (vH > 1) vH -= 1;
 
-                   if (vH > 1)
-                       vH -= 1;
+                   if ( (6 * vH) < 1) return (v1 + (v2 - v1) * 6 * vH);
 
-                   if ( (6 * vH) < 1)
-                       return (v1 + (v2 - v1) * 6 * vH);
+                   if ( (2 * vH) < 1) return v2;
 
-                   if ( (2 * vH) < 1)
-                       return v2;
-
-                   if ( (3 * vH) < 2)
-                       return (v1 + (v2 - v1) * ((2.0f / 3) - vH) * 6);
+                   if ( (3 * vH) < 2) return (v1 + (v2 - v1) * ((2.0f / 3) - vH) * 6);
 
                    return v1;
                };
+            byte r, g, b;
 
-            byte r = 0, g = 0, b = 0;
-            
-            if (saturation == 0)
+            r = g = b = (saturation == 0) ? (byte)(luminance * 255) : (byte)0;
+
+            if(r == 0)
             {
-                r = g = b = (byte)(luminance * 255);
-            }
-            else
-            {
-                double v1, v2;
+                double v2 = (luminance < 0.5) ? (luminance * (1 + saturation)) : ((luminance + saturation) - (luminance * saturation));
+                double v1 = 2 * luminance - v2;
+
                 hue /= 360;
 
-                v2 = (luminance < 0.5) ? (luminance * (1 + saturation)) : ((luminance + saturation) - (luminance * saturation));
-                v1 = 2 * luminance - v2;
-
-                r = (byte)(255 * HueToRgb(v1, v2, hue + (1.0f / 3)));
-                g = (byte)(255 * HueToRgb(v1, v2, hue));
-                b = (byte)(255 * HueToRgb(v1, v2, hue - (1.0f / 3)));
+                r = (byte)(255 * hueToRgb(v1, v2, hue + (1.0f / 3)));
+                g = (byte)(255 * hueToRgb(v1, v2, hue));
+                b = (byte)(255 * hueToRgb(v1, v2, hue - (1.0f / 3)));
             }
 
             return Color.FromArgb(r, g, b);

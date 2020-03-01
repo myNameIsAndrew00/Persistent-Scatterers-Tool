@@ -21,7 +21,7 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
-    <Use64BitIISExpress>false</Use64BitIISExpress>
+    <Use64BitIISExpress>true</Use64BitIISExpress>
     <IISExpressSSLPort>44312</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -345,7 +345,7 @@
     <Content Include="Resources\js\points settings\chose_dataset.js" />
     <Content Include="Resources\js\points settings\chose_palette.js" />
     <Content Include="Resources\js\map\points_source_manager.js" />
-    <Content Include="Resources\js\points settings\points_settings.js" />
+    <Content Include="Resources\js\points settings\chose_points_size.js" />
     <Content Include="Resources\js\utilities\Popup\popup.js" />
     <Content Include="Resources\js\settings\settings.js" />
     <Content Include="Resources\js\settings\settings_color_picker.js" />

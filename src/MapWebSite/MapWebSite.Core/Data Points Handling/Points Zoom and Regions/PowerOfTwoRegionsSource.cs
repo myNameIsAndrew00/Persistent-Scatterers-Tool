@@ -199,14 +199,17 @@ namespace MapWebSite.Core.DataPoints
                 if (count <= maxRegionPointsCount) return;
 
                 // exceed = (count - this.maxRegionPointsCount);
-                Random random = new Random();
+                //Random random = new Random();
                
 
                 var points = pointsRegion.Points as List<PointBase>;
+                int index = 0;
 
                 while (pointsRegion.Points.Count() > maxRegionPointsCount)
                 {
-                    int index = random.Next(0, pointsRegion.Points.Count() - 1);
+                    count = pointsRegion.Points.Count();
+                    index %= count;
+                    index += count / 4; //random.Next(0, pointsRegion.Points.Count() - 1);
                     points.RemoveAt(index);                    
                 } 
                     
@@ -257,20 +260,20 @@ namespace MapWebSite.Core.DataPoints
                 case 19: 
                 case 18:
                 case 17: 
-                case 16: return 500;
-                case 15: return 400;
-                case 14: return 350;
-                case 13: return 250;
-                case 12: return 150;
-                case 11: return 100;
-                case 10: return 70;
-                case 9: return 60;
-                case 8: return 50;
+                case 16: return 2000;
+                case 15: return 1400;
+                case 14: return 1000;
+                case 13: return 1400;
+                case 12: return 1200;
+                case 11: return 800;
+                case 10: return 450;
+                case 9: return 400;
+                case 8: return 350;
                 case 7:
-                case 6: return 40;
-                case 5: return 30;
-                case 4: return 20;
-                case 3: return 10;
+                case 6: return 300;
+                case 5: return 200;
+                case 4: return 50;
+                case 3: return 20;
                 case 2: return 5;
                 default : return 1;
             }

@@ -69,7 +69,7 @@ export class PointsLayer extends ol.layer.Vector {
                 }
             ],
             vertexShader: `        
-                    precision mediump float;       
+                    precision lowp float;       
                     uniform mat4 u_projectionMatrix;      
                     uniform mat4 u_offsetScaleMatrix;        
                     attribute vec2 a_position;    
@@ -95,7 +95,7 @@ export class PointsLayer extends ol.layer.Vector {
                         v_color = vec4(a_red,a_green,a_blue,1.0);
                     }`,
             fragmentShader: 
-                   `precision mediump float;                    
+                   `precision lowp float;                    
                     varying vec4 v_color; 
 
                 
@@ -103,7 +103,7 @@ export class PointsLayer extends ol.layer.Vector {
                         gl_FragColor = v_color;     
                     }`,
             hitVertexShader: `        
-                    precision mediump float;       
+                    precision lowp float;       
                     uniform mat4 u_projectionMatrix;      
                     uniform mat4 u_offsetScaleMatrix;        
                     attribute vec2 a_position;    
@@ -131,7 +131,7 @@ export class PointsLayer extends ol.layer.Vector {
                         v_hitColor = a_hitColor;
                     }`,
             hitFragmentShader: `
-                    precision mediump float;    
+                    precision lowp float;    
 
                     varying vec4 v_color; 
                     varying vec4 v_hitColor;

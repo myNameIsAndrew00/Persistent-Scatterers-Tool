@@ -27,6 +27,10 @@ var SliderLeft = 30;
 /*color mapping list*/
 var colorList = new ColorList(new ColorNode('dot-1'), SliderWidth, '#361f9c');
 
+window.resetColorList = function resetColorList() {
+    colorList = new ColorList(new ColorNode('dot-1'), SliderWidth, '#361f9c');
+}
+
 window.changePosition = function changePosition() { 
     if(currentDot == 1) return;
     if(isMouseDown){

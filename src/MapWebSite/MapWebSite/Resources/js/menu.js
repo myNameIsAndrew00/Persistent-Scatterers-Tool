@@ -8,7 +8,7 @@ import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
 import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
 import { UpdateSelectedDatasetLayout } from './points settings/chose_dataset.js';
 import { RefreshSelectCriteriaPopup } from './points settings/chose_criteria.js';
-import { InitialiseSlider } from './points settings/points_settings.js';
+import { InitialiseSlider } from './points settings/chose_points_size.js';
 import { LoadSuggestions } from './map/points_search.js';
 import { RefreshSelectMapTypePopup } from './map/chose_map_type.js';
 import { Router, endpoints } from './api/api_router.js';

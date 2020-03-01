@@ -15,8 +15,7 @@
         <span draggable="false" id="dot-1" class="dot" onmousedown="changeSelectedDot()"></span>
         <label style="left:30px">0%</label>
         <label style="left:816px">100%</label>
-    </div>
-
+    </div> 
 </div>
 
 
@@ -99,4 +98,6 @@
 <script>
     getScript('#settings-layer', '/Resources/js/settings/color_picker_color_list.js');
     getScript('#settings-layer', '/Resources/js/settings/settings_color_picker.js');
+
+    if (window.resetColorList !== undefined) resetColorList();
 </script>
