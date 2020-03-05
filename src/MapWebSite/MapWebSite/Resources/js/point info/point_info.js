@@ -191,8 +191,8 @@ function drawPlot(values, oXLeft, oXRight, oYBottom, oYTop) {
             Bottom: Math.round(oYBottom) - 1,
             Top: Math.round(oYTop)
         },
-        'reference (days)',
-        'value');
+        'Time [days]',
+        'Deformation [mm]'));
 
 
     currentDrawer.DrawPoints(values);
