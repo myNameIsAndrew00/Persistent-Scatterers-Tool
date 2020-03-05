@@ -58,7 +58,7 @@ const sources = {
             noWrap: true,      
         })
     }),
-    satellite: new ol.layer.Tile({
+    satelitte: new ol.layer.Tile({
         visible: false, 
         source: new ol.source.TileJSON({
             url: 'https://api.maptiler.com/maps/hybrid/256/tiles.json?key=UKuFFRYp8bMMxfqZFhKJ',
@@ -89,7 +89,7 @@ export const map = new ol.Map({
     target: 'map',
     renderer: 'webgl', 
     layers: [
-        sources['satellite'],
+        sources['satelitte'],
         sources['hybrid']
     ],
     view: mapView,

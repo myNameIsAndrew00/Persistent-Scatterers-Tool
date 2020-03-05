@@ -35,8 +35,8 @@ export class PlotDrawer {
 
         this.initialOrigin = this.origin = { oX: 50, oY: 300 };
         this.initialLength = this.length = { oX: oXLength, oY: oYLength };
-        this.initialOriginAxesValue = this.originAxesValue = { oX: oXInterval.Left, oY: oYInterval.Bottom };
-        this.initialEndAxesValue = this.endAxesValue = { oX: oXInterval.Right, oY: oYInterval.Top };
+        this.initialOriginAxesValue = this.originAxesValue = { oX: oXInterval.Left, oY: -30 }; //oYInterval.Bottom };
+        this.initialEndAxesValue = this.endAxesValue = { oX: oXInterval.Right, oY: 30 }; //oYInterval.Top };
         this.initialOxLabel = this.oxLabel = oxLabel;
         this.initialOyLabel = this.oyLabel = oyLabel;
         this.initialPlotType = this.plotType = 'line';
