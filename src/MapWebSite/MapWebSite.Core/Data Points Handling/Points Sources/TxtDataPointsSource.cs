@@ -82,6 +82,14 @@ namespace MapWebSite.Core.DataPoints
                     pointsDataSet.MinimumLongitude = pointsDataSet.Points.Min(point => point.Longitude);
                     pointsDataSet.MaximumLatitude = pointsDataSet.Points.Max(point => point.Latitude);
                     pointsDataSet.MaximumLongitude = pointsDataSet.Points.Max(point => point.Longitude);
+
+                    //set the maximum and minimum from other informations
+                    pointsDataSet.MinimumHeight = pointsDataSet.Points.Min(point => point.DeformationRate);
+                    pointsDataSet.MinimumStdDev = pointsDataSet.Points.Min(point => point.StandardDeviation);
+                    pointsDataSet.MinimumDeformationRate = pointsDataSet.Points.Min(point => point.DeformationRate);
+                    pointsDataSet.MaximumDeformationRate = pointsDataSet.Points.Max(point => point.DeformationRate);
+                    pointsDataSet.MaximumHeight = pointsDataSet.Points.Max(point => point.DeformationRate);
+                    pointsDataSet.MaximumStdDev = pointsDataSet.Points.Max(point => point.StandardDeviation);
                 }
                 catch (Exception exception)
                 {

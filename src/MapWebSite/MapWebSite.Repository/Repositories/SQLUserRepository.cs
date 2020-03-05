@@ -43,7 +43,7 @@ namespace MapWebSite.Repository
         }
 
         public bool CreateColorMap(string username, ColorMap colorMap)
-        { 
+        {
             try
             {
                 SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("InsertColorPalette")
@@ -54,7 +54,7 @@ namespace MapWebSite.Repository
                                                     new SqlParameter("username", username),
                                                     new SqlParameter("palette_name", colorMap.Name),
                                                     new SqlParameter("palette_serialization", colorMap.Intervals.JSONSerialize())
-                                                    },                                                  
+                                                    },
                                                     new SqlConnection(this.connectionString));
             }
             catch (Exception exception)
@@ -89,24 +89,24 @@ namespace MapWebSite.Repository
             try
             {
                 return Convert.ToInt32(SqlExecutionInstance.ExecuteScalar(new SqlCommand("InsertPointsDataset")
-                                                    {
-                                                        CommandType = System.Data.CommandType.StoredProcedure
-                                                    },
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
                                                     new SqlParameter[]{
                                                          new SqlParameter("username", username),
                                                          new SqlParameter("dataset_name", datasetName) },
                                                     new SqlConnection(this.connectionString)));
-                                              
+
             }
             catch (Exception exception)
             {
                 //TODO: log exception
                 return -1;
-            } 
+            }
         }
 
 
-    
+
         public int GetDatasetID(string username, string datasetName)
         {
             try
@@ -130,15 +130,15 @@ namespace MapWebSite.Repository
 
         public PointsDataSetHeader GetDatasetHeader(string username, string datasetName)
         {
-            using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUserPointsDataset") 
-                                                { CommandType = CommandType.StoredProcedure },
+            using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUserPointsDataset")
+            { CommandType = CommandType.StoredProcedure },
                                                    new SqlParameter[]
                                                    {
                                                            new SqlParameter("username", username),
-                                                           new SqlParameter("dataset_name", datasetName),                                                          
+                                                           new SqlParameter("dataset_name", datasetName),
                                                    },
                                                    new SqlConnection(this.connectionString)))
-                    {
+            {
                 if (userCredentialsInfo.Tables[0].Rows.Count == 0) return null;
                 var resultRow = userCredentialsInfo.Tables[0].Rows[0];
 
@@ -152,7 +152,7 @@ namespace MapWebSite.Repository
                     MinimumLatitude = resultRow["minimum_latitude"] is DBNull ? null : (decimal?)resultRow["minimum_latitude"],
                     MinimumLongitude = resultRow["minimum_longitude"] is DBNull ? null : (decimal?)resultRow["minimum_longitude"],
 
-                    Status = (DatasetStatus) ((int)resultRow["data_set_id"])
+                    Status = (DatasetStatus)((int)resultRow["data_set_id"])
                 };
 
             };
@@ -168,7 +168,7 @@ namespace MapWebSite.Repository
                     CommandType = System.Data.CommandType.StoredProcedure
                 },
                                                     new SqlParameter[]{
-                                                    new SqlParameter("hashed_password", user.PasswordHash),                                                    
+                                                    new SqlParameter("hashed_password", user.PasswordHash),
                                                     new SqlParameter("username", user.Username),
                                                     new SqlParameter("first_name", user.FirstName),
                                                     new SqlParameter("last_name", user.LastName) },
@@ -188,7 +188,7 @@ namespace MapWebSite.Repository
             List<Tuple<string, ColorMap>> result = new List<Tuple<string, ColorMap>>();
 
             using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetColorPalettesFiltered")
-                                                                                { CommandType = System.Data.CommandType.StoredProcedure },
+            { CommandType = System.Data.CommandType.StoredProcedure },
                                                new SqlParameter[]
                                                {
                                                     new SqlParameter("@filter_id",(int)filter),
@@ -205,7 +205,7 @@ namespace MapWebSite.Repository
                         {
                             Name = (string)row["palette_name"],
                             Intervals = new List<Interval>().JSONDeserialize((string)row["palette_serialization"])
-                        }));                    
+                        }));
             }
 
             return result;
@@ -337,9 +337,9 @@ namespace MapWebSite.Repository
                         Username = (string)row["username"],
                         Name = (string)row["dataset_name"],
                         ID = (int)row["dataset_id"],
-                        Status = row["status_id"] == DBNull.Value ? DatasetStatus.None : (DatasetStatus) ((int)row["status_id"])
+                        Status = row["status_id"] == DBNull.Value ? DatasetStatus.None : (DatasetStatus)((int)row["status_id"])
                     }); ;
-                     
+
                 }
             }
 
@@ -378,7 +378,7 @@ namespace MapWebSite.Repository
                     CommandType = System.Data.CommandType.StoredProcedure
                 },
                                                    new SqlParameter[]{
-                                                        new SqlParameter("datasetName", datasetName), 
+                                                        new SqlParameter("datasetName", datasetName),
                                                         new SqlParameter("username",username),
                                                         new SqlParameter("minimum_latitude", minimumLatitude),
                                                         new SqlParameter("minimum_longitude", minimumLongitude),
@@ -387,7 +387,42 @@ namespace MapWebSite.Repository
                                                    },
                                                    new SqlConnection(this.connectionString));
             }
-            catch(Exception exception)
+            catch (Exception exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        public bool UpdateDatasetRepresentationLimits(string datasetName,
+                                 string username,
+                                 decimal? minimumHeight,
+                                 decimal? maximumHeight,
+                                 decimal? minimumDeformationRate,
+                                 decimal? maximumDeformationRate,
+                                 decimal? minimumStdDev,
+                                 decimal? maximumStdDev)
+        {
+            try
+            {
+                SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("UpdatePointsDatasetLimits")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                   new SqlParameter[]{
+                                                        new SqlParameter("datasetName", datasetName),
+                                                        new SqlParameter("username",username),
+                                                        new SqlParameter("minimum_height", minimumHeight),
+                                                        new SqlParameter("minimum_def_rate", minimumDeformationRate),
+                                                        new SqlParameter("minimum_std_dev", minimumStdDev),
+                                                        new SqlParameter("maximum_height", maximumHeight),
+                                                        new SqlParameter("maximum_def_rate", maximumDeformationRate),
+                                                        new SqlParameter("maximum_std_dev", maximumStdDev)
+                                                   },
+                                                   new SqlConnection(this.connectionString));
+            }
+            catch (Exception exception)
             {
                 return false;
             }

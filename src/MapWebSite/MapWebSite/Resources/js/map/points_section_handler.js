@@ -202,7 +202,7 @@ class PointsSectionHandler {
             }
 
             var rangeMin = -2;
-            var rangeMax = 80;
+            var rangeMax = 2;
 
             var paletteColor = binarySearch(
                 ((featureValue + Math.abs(rangeMin)) * 100) / (rangeMax + Math.abs(rangeMin)),

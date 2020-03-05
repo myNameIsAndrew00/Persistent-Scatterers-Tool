@@ -28,6 +28,18 @@ namespace MapWebSite.Model
         public decimal? MinimumLongitude { get; set; }
 
         public decimal? MaximumLongitude { get; set; }
+
+        public decimal? MinimumHeight { get; set; }
+
+        public decimal? MaximumHeight { get; set; }
+
+        public decimal? MinimumStdDev { get; set; }
+
+        public decimal? MaximumStdDev { get; set; }
+
+        public decimal? MinimumDeformationRate { get; set; }
+
+        public decimal? MaximumDeformationRate { get; set; }
     }
 
     /// <summary>

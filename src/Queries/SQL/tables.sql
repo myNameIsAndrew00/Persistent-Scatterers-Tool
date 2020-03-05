@@ -31,6 +31,23 @@ create table Roles(
 	primary key(role_id)
 )
 
+create table NotificationsType(
+	notification_type_id int not null,
+	name nvarchar(100) not null,
+	
+	Primary key(notification_type_id)
+)
+
+create table UserNotifications(
+	notification_id int identity(1,1) not null, 
+	message nvarchar(255) not null, 
+	notification_type_id int not null,
+	seen bit,
+	
+	primary key(notification_id),
+	foreign key(notification_type_id) references NotificationsType(notification_type_id)
+)
+
 /************/
 
 insert into Roles(role_name)
@@ -76,7 +93,15 @@ create table DataSets(
 	minimum_longitude decimal(18,14), 
 	maximum_latitude decimal(18,14), 
 	maximum_longitude decimal(18,14)
-	
+		
+	/*this fields are used for colors*/
+	minimum_height decimal(18,9),
+    maximum_height decimal(18,9),
+	minimum_def_rate decimal(18,9),
+	maximum_def_rate decimal(18,9),
+	minimum_std_dev decimal(18,9),
+	maximum_std_dev decimal(18,9),
+	  
 	unique nonclustered (user_id,dataset_name),
 
 	primary key (data_set_id),

@@ -44,3 +44,32 @@ begin
 	where DS.dataset_name = @datasetName
 	
 end
+
+  
+if object_id('UpdatePointsDatasetRepresentationLimits', 'P') is not null
+	drop procedure UpdatePointsDatasetRepresentationLimits
+go
+create procedure UpdatePointsDatasetRepresentationLimits
+	@datasetName as nvarchar(255),
+	@username as nvarchar(100),
+	@minimum_height decimal(18,9),
+    @maximum_height decimal(18,9),
+	@minimum_def_rate decimal(18,9),
+	@maximum_def_rate decimal(18,9),
+	@minimum_std_dev decimal(18,9),
+	@maximum_std_dev decimal(18,9)
+as 
+begin
+	update DataSets
+	set minimum_height = @minimum_height,
+		maximum_height = @maximum_height,
+		minimum_def_rate = @minimum_def_rate,
+		maximum_def_rate = @maximum_def_rate,
+		minimum_std_dev  = @minimum_std_dev,
+		maximum_std_dev = @maximum_std_dev
+	from DataSets as DS
+		inner join Users as U 
+		on DS.user_id = U.user_id and U.username = @username
+	where DS.dataset_name = @datasetName
+	
+end

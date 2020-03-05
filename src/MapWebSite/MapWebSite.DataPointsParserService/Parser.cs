@@ -32,7 +32,7 @@ namespace MapWebSite.DataPointsParserService
         private static object actionLock = new object();
 
         public Parser()
-        {          
+        {
             InitializeComponent();
             CassandraDataPointsRepository.Initialise();
 
@@ -71,7 +71,7 @@ namespace MapWebSite.DataPointsParserService
         }
 
         public void ParserAction(object sender, ElapsedEventArgs e)
-        { 
+        {
             lock (actionLock)
             {
                 logData("Starting parsing method.", EventLogEntryType.Information);
@@ -133,16 +133,22 @@ namespace MapWebSite.DataPointsParserService
             (pointsSource as TxtDataPointsSource).LatitudeZone = 'T'; //TODO: modify here. This can be read from database
             (pointsSource as TxtDataPointsSource).Zone = 35;          //TODO: modify here. This can be read from database
 
-            decimal minimumLatitude = 90, 
-                    minimumLongitude = 180, 
-                    maximumLatitude = -90, 
-                    maximumLongitude = -180;
+            decimal minimumLatitude = 90,
+                    minimumLongitude = 180,
+                    maximumLatitude = -90,
+                    maximumLongitude = -180,
+                    minimumHeight = decimal.MaxValue,
+                    maximumHeight = decimal.MinValue,
+                    minimumStdDev = decimal.MaxValue,
+                    maximumStdDev = decimal.MinValue,
+                    minimumDefRate = decimal.MaxValue,
+                    maximumDefRate = decimal.MinValue;
             int sectionIndex = 1;
 
             ///The source file must be looped, because a full read in memory of the file could throw a OutOfMemoryException.
             ///This means that the file will be read and parsed in chunks and multiple datasets with the same ID will be created 
             ///and stored in repository.
-            foreach(var dataset in pointsSource.CreateDataSet(datasetName, CoordinateSystem.Default))
+            foreach (var dataset in pointsSource.CreateDataSet(datasetName, CoordinateSystem.Default))
             {
 
                 if (dataset == null)
@@ -160,12 +166,12 @@ namespace MapWebSite.DataPointsParserService
                 logData($"Starting to parse an entry of {dataset.Points.Count()} points count", EventLogEntryType.Information);
 
                 Task<bool> insertTask = this.dataPointsRepository.InsertPointsDataset(dataset);
-                
+
                 insertTask.Wait();
 
-                logData("Finished to insert the current dataset", EventLogEntryType.Information); 
+                logData("Finished to insert the current dataset", EventLogEntryType.Information);
 
-                if(sectionIndex == 21)
+                if (sectionIndex == 21)
                 {
 
                 }
@@ -175,8 +181,15 @@ namespace MapWebSite.DataPointsParserService
                 maximumLatitude = Math.Max(maximumLatitude, dataset.MaximumLatitude ?? -90);
                 minimumLongitude = Math.Min(minimumLongitude, dataset.MinimumLongitude ?? 180);
                 maximumLongitude = Math.Max(maximumLongitude, dataset.MaximumLongitude ?? -180);
-                //update the status of the dataset which has been processed
 
+                minimumHeight = Math.Min(minimumHeight, dataset.MinimumHeight ?? minimumHeight);
+                maximumHeight = Math.Max(maximumHeight, dataset.MaximumHeight ?? maximumHeight);
+                minimumStdDev = Math.Min(minimumStdDev, dataset.MinimumStdDev ?? minimumStdDev);
+                maximumStdDev = Math.Max(maximumStdDev, dataset.MaximumStdDev ?? maximumStdDev);
+                minimumDefRate = Math.Min(minimumDefRate, dataset.MinimumDeformationRate ?? minimumDefRate);
+                maximumDefRate = Math.Max(maximumDefRate, dataset.MaximumDeformationRate ?? maximumDefRate); ;
+
+                //update the status of the dataset which has been processed
             }
 
             this.userRepository.UpdateDatasetLimits(datasetName,
@@ -185,6 +198,15 @@ namespace MapWebSite.DataPointsParserService
                                                       minimumLongitude,
                                                       maximumLatitude,
                                                       maximumLongitude);
+
+            this.userRepository.UpdateDatasetRepresentationLimits(datasetName,
+                                                    username,
+                                                    minimumHeight, 
+                                                    maximumHeight, 
+                                                    minimumDefRate, 
+                                                    maximumDefRate,
+                                                    minimumStdDev, 
+                                                    maximumStdDev);
 
             this.userRepository.UpdateDatasetStatus(datasetName, DatasetStatus.Generated, username);
 
@@ -196,6 +218,6 @@ namespace MapWebSite.DataPointsParserService
 
         #endregion
 
-        
+
     }
 }

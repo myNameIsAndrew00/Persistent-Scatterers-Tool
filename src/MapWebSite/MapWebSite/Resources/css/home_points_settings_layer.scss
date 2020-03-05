@@ -8,7 +8,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     transition: width 300ms ease-in-out 0.2s, height 0.3s, opacity 0.3s;
- 
+
 
     .close_points_setting_layer_button {
         position: fixed;
@@ -17,7 +17,7 @@
         background: none;
         border: none;
         transition: 0.2s;
-        padding: 4px 8px 0 8px;
+        padding: 2px 5px 0 5px;
         border-radius: 7px;
 
         object {

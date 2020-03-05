@@ -102,5 +102,27 @@ namespace MapWebSite.Core.Database
                                  decimal? minimumLongitude,
                                  decimal? maximumLatitude,
                                  decimal? maximumLongitude);
+
+        /// <summary>
+        /// Use this method to update the representation limits ( height, deformation rate, standard deviation ) of an existing dataset
+        /// </summary>
+        /// <param name="datasetName">The name of the dataset</param>
+        /// <param name="username">The owner of the dataset</param>
+        /// <param name="minimumLatitude">Minimum latitude value</param>
+        /// <param name="minimumLongitude">Minimum longitude value</param>
+        /// <param name="maximumLatitude">Maximum latitude value</param>
+        /// <param name="maximumLongitude">Maximum longitude value</param>
+        /// <param name="maximumLongitude">Maximum longitude value</param>
+        /// <param name="maximumLongitude">Maximum longitude value</param>
+        /// <returns>A boolean which indicates if the update was successfully</returns>
+        bool UpdateDatasetRepresentationLimits(string datasetName,
+                                 string username,
+                                 decimal? minimumHeight,
+                                 decimal? maximumHeight,
+                                 decimal? minimumDeformationRate,
+                                 decimal? maximumDeformationRate,
+                                 decimal? minimumStdDev,
+                                 decimal? maximumStdDev);
+
     }
 }

@@ -208,8 +208,10 @@ namespace MapWebSite.Core.DataPoints
                 while (pointsRegion.Points.Count() > maxRegionPointsCount)
                 {
                     count = pointsRegion.Points.Count();
-                    index %= count;
+                  
                     index += count / 4; //random.Next(0, pointsRegion.Points.Count() - 1);
+                    index %= count;
+
                     points.RemoveAt(index);                    
                 } 
                     
@@ -260,19 +262,19 @@ namespace MapWebSite.Core.DataPoints
                 case 19: 
                 case 18:
                 case 17: 
-                case 16: return 2000;
-                case 15: return 1400;
-                case 14: return 1000;
+                case 16: return 2500;
+                case 15: return 2000;
+                case 14: return 1700;
                 case 13: return 1400;
                 case 12: return 1200;
-                case 11: return 800;
-                case 10: return 450;
-                case 9: return 400;
-                case 8: return 350;
+                case 11: return 1000;
+                case 10: return 800;
+                case 9: return 600;
+                case 8: return 550;
                 case 7:
-                case 6: return 300;
-                case 5: return 200;
-                case 4: return 50;
+                case 6: return 400;
+                case 5: return 250;
+                case 4: return 100;
                 case 3: return 20;
                 case 2: return 5;
                 default : return 1;
