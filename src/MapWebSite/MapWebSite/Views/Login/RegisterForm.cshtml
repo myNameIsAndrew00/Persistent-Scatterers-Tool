@@ -1,29 +1,76 @@
 ﻿@using MapWebSite.Resources.text
 
 @*Register container*@
-<form class="form form-hidden" id="register-form">
+    <form class="form form-hidden" id="register-form">
 
-    <h1 class="main-title">@TextDictionary.LRegisterTitle</h1>
-    <p>
-        @Html.Label("register-message", TextDictionary.LRegisterMessage, new { id = "register-message", @class = "register-message" })
-    </p>
+        <h1 class="main-title">@TextDictionary.LRegisterTitle</h1>
+        <p>
+            @Html.Label("register-message", TextDictionary.LRegisterMessage, new { id = "register-message", @class = "register-message" })
+        </p>
 
-    <input class="default-input" placeholder="@TextDictionary.LUsernameInput" name="username" type="text" required>
-    <div class="input-border"></div>
-
-    <input class="default-input" placeholder="@TextDictionary.LFirstNameInput" name="firstName" type="text" required>
-    <div class="input-border"></div>
-
-    <input class="default-input" placeholder="@TextDictionary.LLastNameInput" name="lastName" type="text" required>
-    <div class="input-border"></div>
-
-    <input class="default-input" placeholder="@TextDictionary.LPasswordInput" name="password" type="password" minlength="6" required>
-    <div class="input-border"></div>
-
-    <div class="button-group">
-        <button class="default-button" onclick="changePage('Login')">@TextDictionary.LBackButton</button>
-        <button class="default-button" onclick="register('@this.Url.Action("Register", "Login")')">@TextDictionary.LSubmitRegisterButton</button>
-    </div>
+        <div class="register-content">
+            <div class="data-group username-group" id="name-section">
+                <label class="data-group-label">
+                    <object width="28px" height="12px" type="image/svg+xml" data="~/Resources/resources/icons/info_icon.svg"></object>
+                    @TextDictionary.LRegisterUsernameLabel
+                </label>
+                
+                <input class="default-input" placeholder="@TextDictionary.LUsernameInput" name="username" type="text" required>
+               
+            </div>
 
 
-</form>
+            <div class="data-group email-group">
+                <label class="data-group-label">
+                    <object width="28px" height="12px" type="image/svg+xml" data="~/Resources/resources/icons/info_icon.svg"></object>
+                    @TextDictionary.LRegisterEmailLabel
+                </label>
+                <input class="default-input" placeholder="@TextDictionary.LRegisterEmailInput" name="email" type="text" required>
+          
+            </div>
+
+            <div class="data-group name-group">
+
+                <label class="data-group-label">
+                    <object width="28px" height="12px" type="image/svg+xml" data="~/Resources/resources/icons/info_icon.svg"></object>
+                    @TextDictionary.LRegisterNameLabel
+                </label>
+
+                <input class="default-input" placeholder="@TextDictionary.LFirstNameInput" name="firstName" type="text" required>
+                <input class="default-input" placeholder="@TextDictionary.LLastNameInput" name="lastName" type="text" required>
+                 
+
+            </div>
+
+            <div class="data-group activation-link-group">
+                <label class="data-group-label">
+                    <object width="28px" height="12px" type="image/svg+xml" data="~/Resources/resources/icons/info_icon.svg"></object>
+                    @TextDictionary.LRegisterActivationLinkLabel
+                </label>
+
+                <input class="default-input" placeholder="@TextDictionary.LRegisterActivationLinkInput" name="activationLink" type="text" required>
+                
+            </div>
+
+            <div class="data-group password-group">
+                <label class="data-group-label">
+                    <object width="28px" height="12px" type="image/svg+xml" data="~/Resources/resources/icons/info_icon.svg"></object>
+                    @TextDictionary.LRegisterPasswordLabel
+                </label>
+
+                <input class="default-input" placeholder="@TextDictionary.LRegisterPasswordInput" name="password" type="password" minlength="6" required>
+             
+
+                <input class="default-input" placeholder="@TextDictionary.LRegisterPasswordConfirmInput" name="confirmPassword" type="password" minlength="6" required>
+                
+            </div>
+
+        </div>
+
+        <div class="button-group">
+            <button class="default-button" onclick="changePage('Login')">@TextDictionary.LBackButton</button>
+            <button class="default-button" onclick="register('@this.Url.Action("Register", "Login")')">@TextDictionary.LSubmitRegisterButton</button>
+        </div>
+
+
+    </form>

@@ -4,6 +4,8 @@
  * 
  * */
 
+import { ExpandMainMenu } from '../menu.js';
+
 /*functions used for spinner */
 var rotateSpinner = false;
 
@@ -64,6 +66,8 @@ export function DisplayOverlay(message) {
 
 export function DisplayPage(display) {
     $('#settings-layer').html('');
+
+    ExpandMainMenu(!display);
 
     function doAction(remove, id, className) {
         remove ? $(id).removeClass(className) : $(id).addClass(className);

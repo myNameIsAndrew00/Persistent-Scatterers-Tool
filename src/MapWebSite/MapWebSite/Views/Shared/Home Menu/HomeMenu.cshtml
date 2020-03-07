@@ -1,0 +1,143 @@
+﻿@using MapWebSite.Resources.text
+@using MapWebSite.Model
+@using MapWebSite.Core
+@using MapWebSite.Controllers
+
+@{
+    @*LINE BELLOW IS FOR FIXING: fix the bug with the id counter.. main-menu-icon-0 must be followed by main-menu-icon-1, and not main-menu-icon-2 (bug can be caused by role restrictions)*@
+    int sectionsCount = 0;
+}
+
+@*Summary: partial view used for Menu.
+    Menu is divided in three sections:
+        -main-menu (corner left) which manage the displayed secondary menu
+        -secondary-menu (left) which contains general interactions
+        -top-menu (top) which contains map-points interactions
+    Displayed features are provided based on user roles
+*@
+
+
+<div class="fixed-menu">
+
+    <div id="main-menu" class="main-select-menu main-select-menu-expanded">
+        <div class="main-select-menu-arrows">
+            <button onclick="changeMenuContent('up')" class="main-select-menu-arrow-up"></button>
+            <button onclick="changeMenuContent('down')" class="main-select-menu-arrow-down"></button>
+        </div>
+        <div id="main-select-menu-icon" class="main-select-menu-icon">
+            @*Principal Menu Item: User Details*@
+            <object class="current_displayed_icon" id="main-menu-icon-@(sectionsCount++)" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg"></object>
+
+            @*Principal Menu Item: Manage data points*@
+            @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+            {
+                <object class="" id="main-menu-icon-@(sectionsCount++)" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
+            }
+        </div>
+
+        @{ sectionsCount = 0; }
+         
+    <div id="main-select-menu-content" class="main-select-menu-content">
+
+
+        @*Secondary menu: used for User details*@
+        @{ Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/UserDetailsNavigationItems.cshtml", (sectionsCount++));}
+
+        @*Secondary menu: used for Manage data points*@
+        @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+        {
+            Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/ManageDatapointsNavigationItems.cshtml", (sectionsCount++));
+        }
+    </div>
+    </div>
+
+
+    @{ sectionsCount = 0; }
+
+    <nav id="secondary-menu" class="secondary-menu secondary-menu-hidden ">
+
+        @*Secondary menu: used for User details*@
+        @{ Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/UserDetailsNavigationItems.cshtml", (sectionsCount++));}
+
+        @*Secondary menu: used for Manage data points*@
+        @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+        {
+            Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/ManageDatapointsNavigationItems.cshtml", (sectionsCount++));
+        }
+
+    </nav>
+
+
+
+
+
+</div>
+
+<div id="top-menu" class="top-menu">
+    <div class="pre-text-area">
+
+        <button id="map_search_button" class="search-button">
+            @Html.SVG("~/Resources/resources/icons/zoom_dataset_icon.svg", new { height = "21px", width = "28px" })
+        </button>
+
+        <div id="map_autocomplete" class="autocomplete autocomplete-hidden">
+            <input id="map_search_text" type="search" placeholder="@Html.Raw(TextDictionary.SCPlaceholder)" />
+            <input id="reset_button" type="button" value="X" />
+            <div id="map_suggestions" class="suggestions">
+            </div>
+        </div>
+
+        <button id="map_resize_points_button">
+            @Html.SVG("~/Resources/resources/icons/resize_point_icon.svg", new { height = "22px", width = "28px" })
+        </button>
+
+        <button id="map_criteria_button">
+            @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "20px", width = "28px" })
+        </button>
+
+        <button id="map_type_button">
+            @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "20px", width = "25px" })
+        </button>
+
+        @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+        {
+            <button id="notification_button" class="notification-button">
+                @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "20px", width = "25px" })
+            </button>
+        }
+    </div>
+
+    <div class="white-area box">
+        <div class="text-area">
+            @if (RouteConfig.CurrentUser != null)
+            {
+                <div class="top-menu-item">
+                    @TextDictionary.GreetingMessage,
+                    <b>
+                        @RouteConfig.CurrentUser.FirstName
+                    </b>
+                </div>
+            }
+            @Html.Label(TextDictionary.HTMSelectedDataset, new { @class = "top-menu-item" })
+            @Html.Label(TextDictionary.HTMDefaultDataset, new { @class = "top-menu-item current-dataset-text", id = "current-dataset-text" })
+
+        </div>
+
+        <div class="buttons-area">
+            <button onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
+                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/set_icon.svg"></object>
+            </button>
+            <button onclick="displayPointsLayerPage(true,'GetColorPalettePage')" class="top-menu-item">
+                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/simple_palette_icon.svg"></object>
+            </button>
+            <button class="top-menu-item" disabled="true">
+                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/cluster_icon.svg"></object>
+            </button>
+            <button class="top-menu-item" disabled="true">
+                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/reload_icon.svg"></object>
+            </button>
+        </div>
+    </div>
+</div>
+
+@Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/menu")

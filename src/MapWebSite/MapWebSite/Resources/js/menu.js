@@ -22,6 +22,9 @@ import { HtmlToElement } from './utilities/utils.js';
 var currentMenuIconIndex = 0;
 var menuIconsCount = 0;
 
+const mainMenuId = '#main-menu';
+const secondaryMenuId = '#secondary-menu';
+
 window.onload = function () {
     menuIconsCount = $('#main-select-menu-icon').find('object').length;
 
@@ -42,7 +45,7 @@ window.onload = function () {
 
 window.changeMenuContent = function changeMenuContent(direction, display = false) {
     var currentMenuIcon = document.getElementById('main-menu-icon-' + currentMenuIconIndex);
-    var currentMenuList = document.getElementById('secondary-menu-items-' + currentMenuIconIndex);
+    var currentMenuList = $('[id^="secondary-menu-items-' + currentMenuIconIndex + '"]'); 
 
     var svgObject = currentMenuIcon.contentDocument;
 
@@ -63,7 +66,7 @@ window.changeMenuContent = function changeMenuContent(direction, display = false
 
         setTimeout(function () {
             currentMenuIcon.classList.remove("current_displayed_icon");
-            currentMenuList.classList.remove("current_displayed_menu");
+            currentMenuList.removeClass("current_displayed_menu");
 
             changeMenuContent('none', true);
         }, 500);
@@ -72,10 +75,15 @@ window.changeMenuContent = function changeMenuContent(direction, display = false
 
 }
 
+export function ExpandMainMenu(expand) {
+    expand ? $(mainMenuId).addClass('main-select-menu-expanded') : $(mainMenuId).removeClass('main-select-menu-expanded');
+    expand ? $(secondaryMenuId).addClass('secondary-menu-hidden') : $(secondaryMenuId).removeClass('secondary-menu-hidden')
+}
+
 function hideIcon(innerImage, innerText, currentMenuList) {
     /*reset elements transition timer*/
     /*animation for side menu*/
-    if (currentMenuList != null) currentMenuList.style.margin = '0 0 0 -50px';
+    if (currentMenuList != null) $(secondaryMenuId).css('margin','0 0 0 -50px');
 
     /*animation for main menu*/
     innerImage.style.transition = '0.5s';
@@ -93,12 +101,12 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
     hideIcon(innerImage, innerText, currentMenuList);
 
 
-    currentMenuList.classList.add('current_displayed_menu');
+    currentMenuList.addClass('current_displayed_menu');
     currentMenuIcon.classList.add("current_displayed_icon");
 
     setTimeout(function () {
         /*animation for side menu. Remove all the custom styles*/
-        currentMenuList.style = "";
+        $(secondaryMenuId).removeAttr("style");
 
         /*animation for main menu*/
         innerImage.style.transform = 'translate(0, 0) rotate(0)';
@@ -125,12 +133,14 @@ async function requestPage(pageIdentifier, cssServerPath) {
 
 
     if (cssServerPath != null) requestCss(cssServerPath);
+   
 
     Router.Get(endpoints.Home.RequestSettingsLayerContent,
         { settingsPage: pageIdentifier },
         await function (data) {
             setTimeout(function () {
                 ChangeSpinnerVisibility(false);
+
                 $('#settings-layer').html(data);
             }, 1200)
         }
@@ -171,6 +181,7 @@ window.displayPointsLayerPage = async function displayPointsLayerPage(display, r
         setTimeout(function () {
             display ? container.removeClass('points-settings-layer-container-hidden') : container.addClass('points-settings-layer-container-hidden');
             display ? container.addClass('points-settings-layer-sizes') : container.removeClass('points-settings-layer-sizes');
+         
         }, 10);
     }
 

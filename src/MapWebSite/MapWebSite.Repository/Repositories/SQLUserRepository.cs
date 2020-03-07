@@ -151,7 +151,13 @@ namespace MapWebSite.Repository
                     MaximumLongitude = resultRow["maximum_longitude"] is DBNull ? null : (decimal?)resultRow["maximum_longitude"],
                     MinimumLatitude = resultRow["minimum_latitude"] is DBNull ? null : (decimal?)resultRow["minimum_latitude"],
                     MinimumLongitude = resultRow["minimum_longitude"] is DBNull ? null : (decimal?)resultRow["minimum_longitude"],
-
+                    MinimumHeight = resultRow["minimum_height"] is DBNull ? null : (decimal?)resultRow["minimum_height"],
+                    MaximumHeight = resultRow["maximum_height"] is DBNull ? null : (decimal?)resultRow["maximum_height"],
+                    MinimumDeformationRate = resultRow["minimum_def_rate"] is DBNull ? null : (decimal?)resultRow["minimum_def_rate"],
+                    MaximumDeformationRate = resultRow["maximum_def_rate"] is DBNull ? null : (decimal?)resultRow["maximum_def_rate"],
+                    MinimumStdDev = resultRow["minimum_std_dev"] is DBNull ? null : (decimal?)resultRow["minimum_std_dev"],
+                    MaximumStdDev = resultRow["maximum_std_dev"] is DBNull ? null : (decimal?)resultRow["maximum_std_dev"],
+                     
                     Status = (DatasetStatus)((int)resultRow["data_set_id"])
                 };
 

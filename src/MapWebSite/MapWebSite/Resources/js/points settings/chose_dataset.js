@@ -9,7 +9,16 @@ import { UpdatePointsLayer } from '../map/map.js';
 
 const settingsLayerContainerId = '#points-settings-layer-container-content';
 const currentDatasetTextId = '#current-dataset-text';
- 
+
+//labels ids
+const infoSectionId = '#ps_right';
+const heightLimitLeftLabelId = '#height_limit_left';
+const heightLimitRightLabelId = '#height_limit_right';
+const stddevLimitLeftLabelId = '#stddev_limit_left';
+const stddevLimitRightLabelId = '#stddev_limit_right';
+const defrateLimitLeftLabelId = '#defrate_limit_left';
+const defrateLimitRightLabelId = '#defrate_limit_right';
+
 /** Dataset request to fill the table **/
 
 /** Use this class to model a dataset of points inside the table*/
@@ -29,6 +38,19 @@ class PointsDataset {
         return $(settingsLayerContainerId).find('[id=\'' + id + '\']')[0].value;
     }
 
+    setDatasetLimits() {
+        Router.Get(endpoints.PointsSettingsApi.GetDatasetLimits,
+            {
+                username: this.username,
+                datasetName: this.datasetName
+            },
+            function (response) {
+                //todo: process the response here
+                $(infoSectionId).removeClass('ps_right-hidden');
+            }
+        );
+        
+    }
 }
 
 var SelectedDataset = new PointsDataset(null,null);
@@ -49,6 +71,7 @@ function changeSelectedRowOnMenu(id, visible) {
  */
 window.useDataset = function useDataset(username, datasetName) {
 
+    SelectedDataset = new PointsDataset(username, datasetName);
    
     var previousDatasetRowId = 'user_dataset_' + SelectedDataset.username + '_' + SelectedDataset.datasetName;
     var datasetRowId = 'user_dataset_' + username + '_' + datasetName;
@@ -56,7 +79,7 @@ window.useDataset = function useDataset(username, datasetName) {
     changeSelectedRowOnMenu(previousDatasetRowId, false);
     changeSelectedRowOnMenu(datasetRowId, true);
 
-    SelectedDataset = new PointsDataset(username, datasetName);
+    SelectedDataset.setDatasetLimits();
     $(currentDatasetTextId).text(datasetName);
 
     UpdatePointsLayer();

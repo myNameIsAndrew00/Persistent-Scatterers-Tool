@@ -84,7 +84,13 @@ begin
 		   DS.maximum_longitude,
 		   DS.minimum_latitude,
 		   DS.minimum_longitude,
-		   DS.status_id 
+		   DS.status_id,
+		   DS.minimum_height,
+		   DS.maximum_height,
+		   DS.minimum_def_rate,
+		   DS.maximum_def_rate,
+		   DS.minimum_std_dev,
+		   DS.maximum_std_dev
 	from DataSets as DS
 		inner join Users as U
 		on DS.user_id = U.user_id and U.username = @username

@@ -1,0 +1,27 @@
+﻿@using MapWebSite.Resources.text
+@using MapWebSite.Model
+@using MapWebSite.Core
+@using MapWebSite.Controllers
+
+@*model is represented by section index, used to bind to javascript*@
+@model int
+
+@*Generate the id using a random guid to reuse this section*@
+<ul class="current_displayed_menu" id="secondary-menu-items-@Model-@Guid.NewGuid()">
+
+    @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+    {
+        <li class="secondary-menu-item">
+            <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
+            <button onclick="requestSettingsPage(@Html.Raw( (int)SettingsController.Page.Account) ,'/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuSettingsText</button>
+        </li>
+    }
+    <li class="secondary-menu-item">
+        <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/info_icon.svg"></object>
+        <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.About), null)">@TextDictionary.HMenuAboutText</button>
+    </li>
+    <li class="secondary-menu-item">
+        <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
+        @Html.ActionLink(TextDictionary.HMenuLogoutText, "Logout", "Home", null)
+    </li>
+</ul>

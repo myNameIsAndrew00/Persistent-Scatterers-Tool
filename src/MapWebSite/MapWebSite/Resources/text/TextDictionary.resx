@@ -240,7 +240,7 @@
   <data name="LLoginTitle" xml:space="preserve">
     <value>Login</value>
   </data>
-  <data name="LPasswordInput" xml:space="preserve">
+  <data name="LRegisterPasswordInput" xml:space="preserve">
     <value>password</value>
   </data>
   <data name="LRegisterButton" xml:space="preserve">
@@ -373,5 +373,41 @@
   </data>
   <data name="HTM_TOOLTIP_Search" xml:space="preserve">
     <value>Enter an adress or details about a place and move the map view on that place</value>
+  </data>
+  <data name="HPSCDDefRateLabel" xml:space="preserve">
+    <value>Deformation rate range</value>
+  </data>
+  <data name="HPSCDHeightLabel" xml:space="preserve">
+    <value>Height range</value>
+  </data>
+  <data name="HPSCDInfoTitleText" xml:space="preserve">
+    <value>Selected dataset info</value>
+  </data>
+  <data name="HPSCDStdDevLabel" xml:space="preserve">
+    <value>Standard deviation range</value>
+  </data>
+  <data name="LRegisterActivationLinkInput" xml:space="preserve">
+    <value>activation link</value>
+  </data>
+  <data name="LRegisterActivationLinkLabel" xml:space="preserve">
+    <value>Activation link</value>
+  </data>
+  <data name="LRegisterEmailInput" xml:space="preserve">
+    <value>email</value>
+  </data>
+  <data name="LRegisterEmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="LRegisterNameLabel" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="LRegisterPasswordConfirmInput" xml:space="preserve">
+    <value>confirm password</value>
+  </data>
+  <data name="LRegisterPasswordLabel" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="LRegisterUsernameLabel" xml:space="preserve">
+    <value>Username</value>
   </data>
 </root>

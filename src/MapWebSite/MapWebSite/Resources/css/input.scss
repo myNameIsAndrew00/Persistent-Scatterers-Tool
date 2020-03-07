@@ -20,10 +20,14 @@
     color: get_color(transparentWhite);
 }
 
-input, button {
-    background: get_color(chromaOrange);
+a, input, button {
     transition: 0.3s;
     padding: 5px 15px 5px 15px;
+}
+
+input, button {
+    background: get_color(chromaOrange);
+
     border: none;
     border-radius: 8px;
     color: white;
@@ -31,7 +35,7 @@ input, button {
 
 .default-input {
     background: rgba(255,255,255,0.05);
-    margin: 20px;
+    margin:  5px;
     display: block;
     margin-right: auto;
     margin-left: auto;

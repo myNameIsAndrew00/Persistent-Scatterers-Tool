@@ -380,6 +380,33 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deformation rate range.
+        /// </summary>
+        public static string HPSCDDefRateLabel {
+            get {
+                return ResourceManager.GetString("HPSCDDefRateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Height range.
+        /// </summary>
+        public static string HPSCDHeightLabel {
+            get {
+                return ResourceManager.GetString("HPSCDHeightLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected dataset info.
+        /// </summary>
+        public static string HPSCDInfoTitleText {
+            get {
+                return ResourceManager.GetString("HPSCDInfoTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
         public static string HPSCDPreviewButton {
@@ -394,6 +421,15 @@ namespace MapWebSite.Resources.text {
         public static string HPSCDSearchInput {
             get {
                 return ResourceManager.GetString("HPSCDSearchInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard deviation range.
+        /// </summary>
+        public static string HPSCDStdDevLabel {
+            get {
+                return ResourceManager.GetString("HPSCDStdDevLabel", resourceCulture);
             }
         }
         
@@ -596,11 +632,20 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to password.
+        ///   Looks up a localized string similar to activation link.
         /// </summary>
-        public static string LPasswordInput {
+        public static string LRegisterActivationLinkInput {
             get {
-                return ResourceManager.GetString("LPasswordInput", resourceCulture);
+                return ResourceManager.GetString("LRegisterActivationLinkInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activation link.
+        /// </summary>
+        public static string LRegisterActivationLinkLabel {
+            get {
+                return ResourceManager.GetString("LRegisterActivationLinkLabel", resourceCulture);
             }
         }
         
@@ -610,6 +655,24 @@ namespace MapWebSite.Resources.text {
         public static string LRegisterButton {
             get {
                 return ResourceManager.GetString("LRegisterButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to email.
+        /// </summary>
+        public static string LRegisterEmailInput {
+            get {
+                return ResourceManager.GetString("LRegisterEmailInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string LRegisterEmailLabel {
+            get {
+                return ResourceManager.GetString("LRegisterEmailLabel", resourceCulture);
             }
         }
         
@@ -668,6 +731,42 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string LRegisterNameLabel {
+            get {
+                return ResourceManager.GetString("LRegisterNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to confirm password.
+        /// </summary>
+        public static string LRegisterPasswordConfirmInput {
+            get {
+                return ResourceManager.GetString("LRegisterPasswordConfirmInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to password.
+        /// </summary>
+        public static string LRegisterPasswordInput {
+            get {
+                return ResourceManager.GetString("LRegisterPasswordInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string LRegisterPasswordLabel {
+            get {
+                return ResourceManager.GetString("LRegisterPasswordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You registered with success!.
         /// </summary>
         public static string LRegisterSuccessMessage {
@@ -682,6 +781,15 @@ namespace MapWebSite.Resources.text {
         public static string LRegisterTitle {
             get {
                 return ResourceManager.GetString("LRegisterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string LRegisterUsernameLabel {
+            get {
+                return ResourceManager.GetString("LRegisterUsernameLabel", resourceCulture);
             }
         }
         

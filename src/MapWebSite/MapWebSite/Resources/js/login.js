@@ -7,6 +7,8 @@
  document.getElementById('canvas').height = window.innerHeight;
  document.getElementById('canvas').width = window.innerWidth;
 
+const logoImageId = '#mainlogo';
+
  var canvasContext = document.getElementById('canvas').getContext("2d");
 
 /*Drawer for circles effect section*/
@@ -188,6 +190,8 @@ function changePage(pageName) {
     var current = pageName == 'Register' ? $('#register-form') : $('#login-form');
     var previous = pageName == 'Register' ? $('#login-form') : $('#register-form');
 
+    pageName == 'Register' ? $(logoImageId).addClass('main-logo-hidden') : $(logoImageId).removeClass('main-logo-hidden');
+
     current.removeClass('form-hidden');
     previous.addClass('form-hidden');
 
@@ -207,10 +211,10 @@ function register(registerPath) {
         url: registerPath,
         type: "POST",
         data: {
-            username: $('#register-form').children('input[name="username"]').val(),
-            firstName: $('#register-form').children('input[name="firstName"]').val(),
-            lastName: $('#register-form').children('input[name="lastName"]').val(),
-            password: $('#register-form').children('input[name="password"]').val()
+            username: $('#register-form').find('input[name="username"]').val(),
+            firstName: $('#register-form').find('input[name="firstName"]').val(),
+            lastName: $('#register-form').find('input[name="lastName"]').val(),
+            password: $('#register-form').find('input[name="password"]').val()
         },
         success: function (response) { 
             //change the visual color of the message and display the message

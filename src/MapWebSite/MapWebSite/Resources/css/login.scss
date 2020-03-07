@@ -1,17 +1,17 @@
-@import 'input'; 
+@import 'input';
 @import 'colors.scss';
 @import 'texts.scss';
 
-body, html{
+body, html {
     height: 100%;
     color: white;
 }
 
-body{
-    background-image: url("../resources/background.jpg"); 
+body {
+    background-image: url("../resources/background.jpg");
     background-repeat: no-repeat;
-    background-size: cover; 
-     
+    background-size: cover;
+    overflow-y: hidden;
 }
 
 .form-container {
@@ -39,6 +39,7 @@ body{
         }
 
         .register-message {
+            width: 400px;
             font-weight: 200;
         }
 
@@ -49,17 +50,68 @@ body{
         .register-error {
             color: get_color(chromaRed);
         }
+
+        .register-content {
+            display: grid;
+            grid-template-areas: "username name" "email name" "activation-link activation-link" "password password";
+
+            input {
+                width: 200px;
+                margin: 5px;
+                text-align: left;
+            }
+
+            .data-group {
+                margin: 5px;
+                text-align: left;
+
+                object {
+                    margin-top: 7px;
+                }
+            }
+
+            .username-group {
+                grid-area: username;
+            }
+
+            .email-group {
+                grid-area: email;
+            }
+
+            .name-group {
+                grid-area: name;
+            }
+
+            .activation-link-group {
+                grid-area: activation-link;
+
+                input {
+                    width: 400px;
+                }
+            }
+
+            .password-group {
+                grid-area: password;
+
+                input {
+                    width: 400px;
+                }
+            }
+        }
     }
 
     .button-group {
         text-align: center;
+        margin: 10px;
     }
 
     .form {
         display: inline-block;
-        transition: 1s;
+        transition: 2s;
+        transition-delay: 0.2s;
         overflow: hidden;
-        height: 285px;
+
+
 
         a {
             font-size: 11px;
@@ -74,6 +126,7 @@ body{
     .form-hidden {
         visibility: collapse;
         opacity: 0;
+        height: 0;
         width: 0;
     }
 
@@ -88,30 +141,40 @@ body{
     color: red;
 }
 
-.main-logo{
-    height: 400px;
-    width: 450px;
+.main-logo {
+    height: 370px;
+    width: 420px;
     opacity: 0.9;
     display: block;
-    margin: 0 auto; 
+    margin: 0 auto;
     margin-top: -20px;
     padding-left: 15px;
+    transition: 0.4s;
 }
 
-.main-title{
-    text-align: center;   
-    color: white;
+.main-logo-hidden {
+    height: 50px;
+    width: 50px;
+    opacity: 0;
+    visibility: hidden;
 }
 
-
-
-p{
+.main-title {
     text-align: center;
     color: white;
 }
- 
 
 
-#canvas{ 
+
+p {
+    text-align: center;
+    color: white;
+}
+
+
+
+#canvas {
     position: absolute;
+    height: 100%;
+    width: 100%;
 }

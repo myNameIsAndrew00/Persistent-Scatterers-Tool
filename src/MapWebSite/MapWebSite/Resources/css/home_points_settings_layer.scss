@@ -187,8 +187,54 @@
             height: 300px;
         }
 
+        .ps_right-hidden {
+            visibility: hidden;
+        }
+
         .ps_right {
             grid-area: right;
+            background: get_color(lightGray);
+            margin: 0px 0px 0px 5px;
+            padding: 11px;
+
+            p {
+                color: black;
+                font-family: Calibri;
+                font-size: 13px;
+                font-weight: bold;
+            }
+
+            ul {
+                margin: 0;
+                list-style: none;
+                padding: 0;
+
+                li {
+                    label {
+                        font-size: 0.7em;
+                    }
+
+                    .label-header {
+                        display: block;
+                        margin: 0;
+                        color: get_color(black);
+                        margin-bottom: -6px;
+                    }
+
+                    .limit {
+                        border-bottom: solid;
+                        padding: 3px;
+                    }
+
+                    .right-limit {
+                        border-color: get_color(chromaRed);
+                    }
+
+                    .left-limit {
+                        border-color: get_color(chromaBlue);
+                    }
+                }
+            }
         }
     }
 }

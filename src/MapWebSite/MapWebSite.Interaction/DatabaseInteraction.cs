@@ -186,6 +186,11 @@ namespace MapWebSite.Domain
         }
 
 
+        public PointsDataSetHeader GetDataSet(string username, string datasetName)
+        {
+            return this.userRepository.GetDatasetHeader(username, datasetName);
+        }
+
         public string GetColorPaletteSerialization(string username, string paletteName)
         {
             return this.userRepository.GetColorMapSerialization(username, paletteName);

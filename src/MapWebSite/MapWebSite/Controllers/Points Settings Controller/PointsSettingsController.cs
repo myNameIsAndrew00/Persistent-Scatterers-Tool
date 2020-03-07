@@ -115,6 +115,7 @@ namespace MapWebSite.Controllers
             return response;
         }
 
+
         public HttpResponseMessage GetDatasetsList(string filterValue, Core.Database.DataSetsFilters filter, int pageIndex)
         {
             var databaseInteractionHandler = new DatabaseInteractionHandler();
@@ -129,7 +130,7 @@ namespace MapWebSite.Controllers
                 {
                     dataset.Name,
                     dataset.ID,
-                    dataset.Username,
+                    dataset.Username,                   
                     Status = dataset.Status.GetEnumString(),
                     dataset.IsValid
                 });
@@ -138,6 +139,19 @@ namespace MapWebSite.Controllers
             response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
             return response;
+        }
+
+        [System.Web.Http.HttpGet]
+        public HttpResponseMessage GetDatasetLimits(string username, string datasetName)
+        {
+            var databaseInteractionHandler = new DatabaseInteractionHandler();
+            var response = new HttpResponseMessage();
+
+
+            response.Content = new StringContent(databaseInteractionHandler.GetDataSet(username, datasetName).JSONSerialize());
+            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            return response;             
         }
     }
 

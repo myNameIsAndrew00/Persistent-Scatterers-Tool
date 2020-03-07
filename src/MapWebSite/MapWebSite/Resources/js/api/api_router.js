@@ -28,7 +28,8 @@ export const endpoints = {
     PointsSettingsApi: {
         GetColorPalette: applicationApiUrl + '/PointsSettingsApi/GetColorPalette',
         GetColorPaletteList: applicationApiUrl +'/PointsSettingsApi/GetColorPaletteList',
-        GetDatasetsList: applicationApiUrl +'/PointsSettingsApi/GetDatasetsList'
+        GetDatasetsList: applicationApiUrl + '/PointsSettingsApi/GetDatasetsList',
+        GetDatasetLimits: applicationApiUrl + '/PointsSettingsApi/GetDatasetLimits'
     },
     Settings: {
         SaveColorsPalette: applicationApiUrl +'/settings/SaveColorsPalette',

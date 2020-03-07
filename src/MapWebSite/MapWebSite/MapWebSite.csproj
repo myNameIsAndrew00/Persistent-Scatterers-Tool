@@ -497,7 +497,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Resources\css\map.scss" />
     <Content Include="Resources\css\menu.scss" />
-    <Content Include="Views\Shared\HomeMenu.cshtml" />
+    <Content Include="Views\Shared\Home Menu\HomeMenu.cshtml" />
     <Content Include="Resources\css\home_point_info_layer.scss" />
     <Content Include="Views\Home\SettingsLayer.cshtml" />
     <Content Include="Views\Home\Settings Content\ColorPicker.cshtml" />
@@ -540,6 +540,8 @@
     <Content Include="Resources\css\tooltips\tooltip.scss" />
     <Content Include="Views\Home\Miscellaneous Content\Tooltips\TutorialTooltip.cshtml" />
     <Content Include="Resources\css\tooltips\customizations.scss" />
+    <Content Include="Views\Shared\Home Menu\Navigation Menus\UserDetailsNavigationItems.cshtml" />
+    <Content Include="Views\Shared\Home Menu\Navigation Menus\ManageDatapointsNavigationItems.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">
