@@ -12,7 +12,7 @@ namespace MapWebSite.HtmlHelpers
     /// </summary>
     public static class MessageBoxBuilder
     {
-        public static string Create(string title, string message)
+        public static string Create(string title, string message, bool closeSettingsPage = false)
         {
             StringWriter writer = new StringWriter();
             using (HtmlTextWriter htmlWriter = new HtmlTextWriter(writer))
@@ -31,7 +31,7 @@ namespace MapWebSite.HtmlHelpers
                 htmlWriter.RenderBeginTag(HtmlTextWriterTag.Br);
                 htmlWriter.RenderEndTag();
 
-                htmlWriter.AddAttribute(HtmlTextWriterAttribute.Onclick, "hideOverlay()");
+                htmlWriter.AddAttribute(HtmlTextWriterAttribute.Onclick, $"hideOverlay({closeSettingsPage.ToString().ToLower()})");
                 htmlWriter.RenderBeginTag(HtmlTextWriterTag.Button);
                 htmlWriter.Write("Ok");
                 htmlWriter.RenderEndTag();

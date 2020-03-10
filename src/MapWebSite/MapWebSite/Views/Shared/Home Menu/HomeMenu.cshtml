@@ -21,8 +21,12 @@
 
     <div id="main-menu" class="main-select-menu main-select-menu-expanded">
         <div class="main-select-menu-arrows">
-            <button onclick="changeMenuContent('up')" class="main-select-menu-arrow-up"></button>
-            <button onclick="changeMenuContent('down')" class="main-select-menu-arrow-down"></button>
+            <button onclick="changeMenuContent('up')" class="arrow-icon">
+                <object type="image/svg+xml" data="~/Resources/resources/icons/arrow_up_icon.svg"></object>
+            </button>
+            <button onclick="changeMenuContent('down')" class="arrow-icon">
+                <object type="image/svg+xml" data="~/Resources/resources/icons/arrow_down_icon.svg"></object>
+            </button>
         </div>
         <div id="main-select-menu-icon" class="main-select-menu-icon">
             @*Principal Menu Item: User Details*@

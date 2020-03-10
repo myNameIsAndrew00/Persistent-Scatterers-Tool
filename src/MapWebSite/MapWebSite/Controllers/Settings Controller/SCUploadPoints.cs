@@ -116,7 +116,8 @@ namespace MapWebSite.Controllers
             {
                 StatusCode = System.Net.HttpStatusCode.OK,
                 Content = new StringContent(MessageBoxBuilder.Create(TextDictionary.OverlayMFSuccesTitle, 
-                                                                     TextDictionary.OverlayMFSuccesText))
+                                                                     TextDictionary.OverlayMFSuccesText,
+                                                                     true))
             };
         }
 
@@ -130,7 +131,7 @@ namespace MapWebSite.Controllers
             var response = new HttpResponseMessage()
             {
                 Content = new StringContent(MessageBoxBuilder.Create(!directoryExists ? "Success" : TextDictionary.OverlayCDFailTitle,
-                                                                          !directoryExists ? "Success"
+                                                                     !directoryExists ? "Success"
                                                                                          : TextDictionary.OverlayCDFailText))
             };                 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");

@@ -193,6 +193,9 @@ namespace MapWebSite.Core.DataPoints
                 (pointsRegions[key].Points as List<PointBase>).AddRange(baseListPoints);
             }
 
+
+
+
             Parallel.ForEach(pointsRegions.Values, pointsRegion => {
                 int count = pointsRegion.Points.Count();
 
@@ -200,8 +203,11 @@ namespace MapWebSite.Core.DataPoints
 
                 // exceed = (count - this.maxRegionPointsCount);
                 //Random random = new Random();
-               
 
+                pointsRegion.Points = pointsRegion.Points.OrderBy(point => point.DeformationRate).Take(maxRegionPointsCount);
+
+                /*Deprecated after using another criteria for selection. Delete the code bellow in future commits*/
+                /*
                 var points = pointsRegion.Points as List<PointBase>;
                 int index = 0;
 
@@ -214,6 +220,7 @@ namespace MapWebSite.Core.DataPoints
 
                     points.RemoveAt(index);                    
                 } 
+                */
                     
             });
 

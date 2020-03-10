@@ -28,7 +28,8 @@ namespace MapWebSite.Controllers
             response.Content = new StringContent(MessageBoxBuilder.Create(result ? TextDictionary.OverlayCPSuccesTitle
                                                                                  : TextDictionary.OverlayCPFailedTitle, 
                                                                           result ? TextDictionary.OverlayCPSuccesText
-                                                                                 : TextDictionary.OverlayCPFailedText));
+                                                                                 : TextDictionary.OverlayCPFailedText,
+                                                                          result));
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
 
             return response;

@@ -366,7 +366,10 @@
     <Content Include="Resources\resources\gifs\HTM_TOOLTIP_PointsSize.gif" />
     <Content Include="Resources\resources\gifs\HTM_TOOLTIP_Search.gif" />
     <Content Include="Resources\resources\hybrid.png" />
+    <Content Include="Resources\resources\icons\arrow_down_icon.svg" />
+    <Content Include="Resources\resources\icons\arrow_left_icon.svg" />
     <Content Include="Resources\resources\icons\arrow_right_icon.svg" />
+    <Content Include="Resources\resources\icons\arrow_up_icon.svg" />
     <Content Include="Resources\resources\icons\bar_plot_icon.svg" />
     <Content Include="Resources\resources\icons\bell_icon.svg" />
     <Content Include="Resources\resources\icons\close_icon.svg" />

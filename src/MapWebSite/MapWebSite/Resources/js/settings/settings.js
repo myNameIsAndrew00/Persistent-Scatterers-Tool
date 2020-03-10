@@ -81,7 +81,13 @@ export function DisplayPage(display) {
 
 window.DisplayPage = DisplayPage;
 
-window.hideOverlay = function hideOverlay() {
+/**
+ * Use this function to hide the settings overlay modal (todo: createa generic modal)
+ * @param {any} closeSettingsPage set this parameter to true if closing settings page is required
+ */
+window.hideOverlay = function HideOverlay(closeSettingsPage) {
     $('#settings-layer-container').children('#settings-layer-overlay').addClass('message-overlay-hidden');
     $('#settings-layer-container').children('#settings-layer-overlay').empty();
+
+    if (closeSettingsPage === true) DisplayPage(false);
 }
