@@ -2,5 +2,13 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
- 
+
+<img class="main-logo" id="mainlogo" src="../Resources/resources/WebDisasterLogo.png">
+
+@{ Html.RenderPartial("~/Views/Login/LoginForm.cshtml"); }
+
+@{ Html.RenderPartial("~/Views/Login/RegisterForm.cshtml"); }
+
+
+@Scripts.Render("~/scripts/login")
 

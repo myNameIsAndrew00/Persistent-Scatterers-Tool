@@ -410,4 +410,24 @@
   <data name="LRegisterUsernameLabel" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="RegisterConfirmationEmailBody" xml:space="preserve">
+    <value>&lt;p&gt;Please confirm your account by clicking the following link: &lt;/p&gt; &lt;a href="{0}"&gt;Confirm your account&lt;/a&gt;</value>
+  </data>
+  <data name="RegisterConfirmationEmailSubject" xml:space="preserve">
+    <value>PSTOOL register - Confirm your account</value>
+    <comment>This is the subject of the mail send to confirm the register</comment>
+  </data>
+  <data name="LCEFailMessage" xml:space="preserve">
+    <value>There was a problem with email confirmation. Please try the link which you receive again, or contact the support.</value>
+  </data>
+  <data name="LCEGoToLoginLink" xml:space="preserve">
+    <value>Go back to login page</value>
+    <comment>LCE --&gt; Login Confirm Email</comment>
+  </data>
+  <data name="LCESuccessMessage" xml:space="preserve">
+    <value>You confirmed your email with success! Your account is enabled, it can be used to login in application.</value>
+  </data>
+  <data name="Strings" xml:space="preserve">
+    <value />
+  </data>
 </root>

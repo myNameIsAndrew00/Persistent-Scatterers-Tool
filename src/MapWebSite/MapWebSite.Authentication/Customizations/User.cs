@@ -15,14 +15,15 @@ namespace MapWebSite.Authentication
 
         public string UserName { get => Username; set => Username = value; }
 
-        public static User Create(string username, string firstName, string lastName)
+        public static User Create(string username, string firstName, string lastName, string email)
         {
             return new User()
             {
                 FirstName = firstName,
                 LastName = lastName,
                 Username = username,
-                SecurityStamp = null,
+                Email = email,
+                SecurityStamp = Guid.NewGuid().ToString("x"),
             };
         }
 

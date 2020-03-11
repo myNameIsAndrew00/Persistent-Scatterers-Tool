@@ -18,19 +18,11 @@
     @*Contains two container: one for login and one for register*@
 
     <div class="form-container">
-        <img class="main-logo" id="mainlogo" src="../Resources/resources/WebDisasterLogo.png">
 
         @RenderBody()
 
-
-        @{ Html.RenderPartial("~/Views/Login/LoginForm.cshtml"); }
-
-        @{ Html.RenderPartial("~/Views/Login/RegisterForm.cshtml"); }
-
-
-         
     </div>
 
-    @Scripts.Render("~/scripts/login")
+    @Scripts.Render("~/scripts/waves")
 </body>
 </html>

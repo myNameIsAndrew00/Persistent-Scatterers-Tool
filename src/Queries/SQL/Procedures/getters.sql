@@ -18,17 +18,20 @@ if object_id('GetUser','P') is not null
 	drop procedure GetUser
 go
 create procedure GetUser
-	@username as varchar(100)
+	@username as varchar(100),
+	@email as nvarchar(255)
 as
 begin
 	select U.username,
 		   UD.first_name,
 		   UD.last_name,
-		   UD.timestamp
+		   UD.timestamp,
+		   UD.email,
+		   UD.email_confirmed
 	from Users as U
 		inner join UsersDetails as UD
 		on UD.user_id = U.user_id
-	where U.username = @username
+	where U.username = @username or UD.email = @email
 
 end
 

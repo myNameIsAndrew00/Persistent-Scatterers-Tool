@@ -15,7 +15,9 @@ create table UsersDetails(
 
 	first_name varchar(100) not null,
 	last_name varchar(100) not null,
-
+	email nvarchar(255) not null unique,
+	email_confirmed bit,
+	
 	account_creation_date date not null,
 	timestamp nvarchar(255),
 	/*more data can be added here*/

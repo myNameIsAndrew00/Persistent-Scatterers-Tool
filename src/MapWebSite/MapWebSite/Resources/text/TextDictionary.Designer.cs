@@ -578,6 +578,33 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was a problem with email confirmation. Please try the link which you receive again, or contact the support..
+        /// </summary>
+        public static string LCEFailMessage {
+            get {
+                return ResourceManager.GetString("LCEFailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go back to login page.
+        /// </summary>
+        public static string LCEGoToLoginLink {
+            get {
+                return ResourceManager.GetString("LCEGoToLoginLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You confirmed your email with success! Your account is enabled, it can be used to login in application..
+        /// </summary>
+        public static string LCESuccessMessage {
+            get {
+                return ResourceManager.GetString("LCESuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to first name.
         /// </summary>
         public static string LFirstNameInput {
@@ -884,11 +911,38 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Please confirm your account by clicking the following link: &lt;/p&gt; &lt;a href=&quot;{0}&quot;&gt;Confirm your account&lt;/a&gt;.
+        /// </summary>
+        public static string RegisterConfirmationEmailBody {
+            get {
+                return ResourceManager.GetString("RegisterConfirmationEmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PSTOOL register - Confirm your account.
+        /// </summary>
+        public static string RegisterConfirmationEmailSubject {
+            get {
+                return ResourceManager.GetString("RegisterConfirmationEmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to search for a place....
         /// </summary>
         public static string SCPlaceholder {
             get {
                 return ResourceManager.GetString("SCPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Strings {
+            get {
+                return ResourceManager.GetString("Strings", resourceCulture);
             }
         }
     }

@@ -14,7 +14,8 @@ namespace MapWebSite.Authentication
                          IUserPasswordStore<User, string>,
                          IUserTwoFactorStore<User, string>  ,
                          IUserRoleStore<User,string>,
-                         IUserSecurityStampStore<User,string>
+                         IUserSecurityStampStore<User,string>,
+                         IUserEmailStore<User,string>
     {
         /*cached data used to not hit the database foreach request*/
         User user = null;
@@ -71,22 +72,7 @@ namespace MapWebSite.Authentication
                 return Task.FromResult(this.user);
             }
 
-            /*If the user was already intialised, do not create it again*/
-            if (this.user != null) return Task.FromResult(this.user);
-                
-            var userModel = userRepository.GetUser(username);
-            /*If the user do not exist, return null*/
-            if (userModel == null) return Task.FromResult<User>(null);
-
-            this.user = new User()
-            {
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                Username = userModel.Username,
-                SecurityStamp = userModel.SecurityStamp
-            };
-
-            return Task.FromResult(this.user);
+            return this.findUser(username, false);
         }
 
         #endregion
@@ -232,6 +218,67 @@ namespace MapWebSite.Authentication
         public Task<string> GetSecurityStampAsync(User user)
         {
             return Task.FromResult(user.SecurityStamp);
+        }
+
+        #endregion
+
+        #region IUserEmailStore
+
+        public Task<string> GetEmailAsync(User user)
+        {
+            return Task.FromResult(user.Email);
+        }
+
+        public Task<bool> GetEmailConfirmedAsync(User user)
+        {
+            return Task.FromResult(user.ConfirmedEmail);
+        }
+
+        public Task SetEmailAsync(User user, string email)
+        {
+            user.Email = email;
+            this.userRepository.SetEmail(user.Username, email);
+
+            return Task.FromResult(0);
+        }
+
+        public Task SetEmailConfirmedAsync(User user, bool confirmed)
+        {
+            this.userRepository.SetEmailConfirmed(user.Username, confirmed);
+
+            return Task.FromResult(0);
+        }
+
+        public Task<User> FindByEmailAsync(string email)
+        {
+            return this.findUser(email, true);
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private Task<User> findUser(string username, bool emailSearch)
+        {
+            /*If the user was already intialised, do not create it again*/
+            if (this.user != null) return Task.FromResult(this.user);
+
+            var userModel = emailSearch ? userRepository.GetUserByEmail(username) : userRepository.GetUser(username);
+
+            /*If the user do not exist, return null*/
+            if (userModel == null) return Task.FromResult<User>(null);
+
+            this.user = new User()
+            {
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Username = userModel.Username,
+                SecurityStamp = userModel.SecurityStamp,
+                ConfirmedEmail = userModel.ConfirmedEmail,
+                Email = userModel.Email
+            };
+
+            return Task.FromResult(this.user);
         }
 
         #endregion

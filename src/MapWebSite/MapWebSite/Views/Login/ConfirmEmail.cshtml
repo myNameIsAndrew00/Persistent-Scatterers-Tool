@@ -1,0 +1,9 @@
+﻿@model string
+@{
+    ViewBag.Title = "ConfirmEmail";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<p>@Html.Raw(Model)</p>
+
+@Html.ActionLink(TextDictionary.LCEGoToLoginLink, "Index", null, null)

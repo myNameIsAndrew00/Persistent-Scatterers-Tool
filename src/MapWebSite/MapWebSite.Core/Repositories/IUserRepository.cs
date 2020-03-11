@@ -30,6 +30,13 @@ namespace MapWebSite.Core.Database
 
         User GetUser(string username);
 
+        User GetUserByEmail(string email);
+
+        bool SetEmail(string username, string email);
+
+        bool SetEmailConfirmed(string username, bool confirmed);
+
+
         IList<UserRoles> GetUserRoles(string username);
 
         bool CheckUser(string username, string password);

@@ -25,17 +25,18 @@ namespace MapWebSite.Controllers
                 return RedirectToAction("Index");
 
             var signInManager = HttpContext.GetOwinContext().Get<SignInManager>();
+            var userManager = HttpContext.GetOwinContext().Get<UserManager>();
 
             var signInStatus = signInManager.PasswordSignIn(username, password, true, false);
 
+            if (!userManager.IsEmailConfirmedAsync(username).Result)
+                return RedirectToAction("Index");
+
             if (signInStatus == SignInStatus.Success)
-
-                //TODO: modify string with SecureString                      
-
-                return RedirectToAction("Index", "Home");
-
+            {
+                return RedirectToAction("Index", "Home");            
+            }
             else
-
                 return RedirectToAction("Index");
         }
 
@@ -57,15 +58,19 @@ namespace MapWebSite.Controllers
         public ActionResult Register(string username,
                                      string firstName,
                                      string lastName,
-                                     string password)
+                                     string password,
+                                     string email
+            )
         {
+            UserManager userManager = HttpContext.GetOwinContext()
+                                                  .GetUserManager<UserManager>();
+
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return RedirectToAction("Index");
             if (username == AnonymousUser.Get.Username)
                 return RedirectToAction("Index");
             
-            var createTask = HttpContext.GetOwinContext()
-                                    .GetUserManager<UserManager>().CreateAsync(Authentication.User.Create(username, firstName, lastName),
+            var createTask = userManager.CreateAsync(Authentication.User.Create(username, firstName, lastName, email),
                                                                             password);
             //if an exception has been throwned return a failure message
             try
@@ -87,11 +92,43 @@ namespace MapWebSite.Controllers
                 return Json(new { message = TextDictionary.LRegisterFailMessageUppercase, type = "Failed" });
 
 
-            return Json(new { message = createTask.Result.Succeeded ? 
-                                          TextDictionary.LRegisterSuccessMessage
-                                        : TextDictionary.LRegisterFailMessage ,
-                              type = createTask.Result.Succeeded ?  "Success" : "Failed" });
+            if (createTask.Result.Succeeded)
+            {
+                var user = userManager.FindAsync(username, password).Result;   
+                var confirmationCode = userManager.GenerateEmailConfirmationTokenAsync(user.Id).Result;
 
+                var callbackUrl = Url.Action("ConfirmEmail",
+                                             "Login",
+                                             new { userId = user.Id, code = confirmationCode },
+                                             protocol: Request.Url.Scheme);
+
+                userManager.SendEmailAsync(user.Id,
+                                           TextDictionary.RegisterConfirmationEmailSubject,
+                                           string.Format(TextDictionary.RegisterConfirmationEmailBody, callbackUrl)
+                                           );
+
+                return Json(TextDictionary.LRegisterSuccessMessage, "Success");
+            }
+
+            else return Json(TextDictionary.LRegisterFailMessage, "Failed");           
+        }
+
+        [HttpGet]
+        public ActionResult ConfirmEmail(string userId, string code)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
+                return View((object)TextDictionary.LCEFailMessage);
+
+            UserManager userManager = HttpContext.GetOwinContext()
+                                                 .GetUserManager<UserManager>();
+
+            var result = userManager.ConfirmEmailAsync(userId, code).Result;
+            if (result.Succeeded)
+            {
+                return View((object)TextDictionary.LCESuccessMessage);
+            }
+
+            return View((object)TextDictionary.LCEFailMessage);
         }
 
     }

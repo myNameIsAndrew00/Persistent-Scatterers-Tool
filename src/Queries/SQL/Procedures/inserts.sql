@@ -6,7 +6,9 @@ create procedure InsertUser
 	@hashed_password as varbinary(64),
 	@username as varchar(100),
 	@first_name as varchar(100),
-	@last_name as varchar(100)
+	@last_name as varchar(100),
+	@email as nvarchar(255),
+	@secure_stamp as nvarchar(255)
 as
 begin
 
@@ -20,8 +22,8 @@ begin
 		declare @user_id as int = SCOPE_IDENTITY();
 
 		--insert the user details
-		insert into UsersDetails(user_id, first_name, last_name, account_creation_date)
-		values (@user_id, @first_name, @last_name, GETDATE())
+		insert into UsersDetails(user_id, first_name, last_name, account_creation_date, email, email_confirmed, timestamp)
+		values (@user_id, @first_name, @last_name, GETDATE(), @email, 0, @secure_stamp)
 		
 		declare @default_role_id as int = 0;
 
@@ -44,40 +46,7 @@ begin
 end
 
  
-go
 
-
-create procedure UpdateUser 
-	@username as varchar(100),
-	@first_name as varchar(100),
-	@last_name as varchar(100),
-	@secure_stamp as varchar(255)
-as
-begin
-
-	begin try
-		begin transaction
-		
-		declare @user_id as int = -1;
-
-		select @user_id = U.user_id
-		from Users as U where U.username = @username
-
-		update UsersDetails
-		set first_name = @first_name,
-			last_name = @last_name,
-			timestamp = @secure_stamp
-		where user_id = @user_id
-
-		commit
-		end try
-	begin catch	
-		rollback;
-		throw;
-	end  catch
-
-end
-  
 go
 
 if object_id('InsertPointsDataset', 'P') is not null

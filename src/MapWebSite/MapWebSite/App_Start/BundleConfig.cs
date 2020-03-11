@@ -82,6 +82,9 @@ namespace MapWebSite
             bundles.Add(new ScriptBundle("~/scripts/login").Include(
                 "~/Resources/js/login.js"));
 
+            bundles.Add(new ScriptBundle("~/scripts/waves").Include(
+                "~/Resources/js/utilities/BackgroundWaves/waves.js"));
+
             bundles.Add(new ScriptBundle("~/scripts/home").Include(
                 "~/Resources/js/home.js",
                 "~/Resources/js/utilities/Plot/plot.js",

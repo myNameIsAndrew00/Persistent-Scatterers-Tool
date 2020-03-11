@@ -15,7 +15,9 @@ namespace MapWebSite.Authentication
         { 
         }
 
-        public static UserManager Create(IdentityFactoryOptions<UserManager> options, IOwinContext context, IUserRepository userRepository)
+        public static UserManager Create(IdentityFactoryOptions<UserManager> options, 
+                                         IOwinContext context, 
+                                         IUserRepository userRepository)
         {            
             
             var manager = new UserManager(new Store(userRepository))
@@ -28,7 +30,10 @@ namespace MapWebSite.Authentication
                     RequireLowercase = true,
                     RequireNonLetterOrDigit = true,
                     RequireUppercase = true
-                }
+                },
+                UserTokenProvider = new EmailTokenProvider<User>(),
+                EmailService = new EmailService(),
+                
                 
             };
 
