@@ -3,8 +3,10 @@
  * Handles the login page client logic
  *
  * */
+import { PopupBuilderInstance } from './utilities/Popup/popup.js';
+import { Router, endpoints } from './api/api_router.js';
 
-const logoImageId = '#mainlogo';
+const logoImageId = '#mainlogo';    
 
 var registerInputs = {
 
@@ -17,15 +19,38 @@ var registerInputs = {
         email: $('#register-form').find('input[name="email"]')
     },
 
-    changeBorderColor: function (inputName, display = true) {
+    /**
+     * Change the border color of an input
+     * @param {any} inputName the name of the input which must be changed
+     * @param {any} display set to true if the border must be displayed
+     * @param {any} invalid set to true if the border must represent an invalid input
+     */
+    changeBorderColor: function (inputName, display = true, invalid = false) {
+        
         if (!display) {
             this.fields[inputName].removeClass('input-error');
             this.fields[inputName].removeClass('input-valid');
             return;
         }
 
+        if (invalid) {
+            this.fields[inputName].removeClass('input-valid');
+            this.fields[inputName].addClass('input-error');
+            return;
+        }
+
         (this.fields[inputName].val().length == 0) ? this.fields[inputName].addClass('input-error') : this.fields[inputName].removeClass('input-error');
         (this.fields[inputName].val().length != 0) ? this.fields[inputName].addClass('input-valid') : this.fields[inputName].removeClass('input-valid');
+    },
+
+    validatePasswords: function () {
+        var isValid = this.fields.password.val().length != 0 &&
+            this.fields.confirmPassword.val().length != 0;
+
+        isValid = isValid &&
+            (this.fields.password.val() === this.fields.confirmPassword.val());
+
+        return isValid;
     },
 
     validateInputs: function () {
@@ -37,7 +62,7 @@ var registerInputs = {
             isValid = isValid && (self.fields[inputName].val().length != 0);
         });
 
-        isValid = isValid && (this.password.val() === this.confirmPassword.val());
+        isValid = isValid && this.validatePasswords();
 
         return isValid;
     },
@@ -52,21 +77,55 @@ var registerInputs = {
     },
 
     initialiseInputs: function () {
+
+        function displayPopup(fieldName, message) {
+            
+            const inputPosition = self.fields[fieldName].offset();
+            const inputWidth = parseInt(self.fields[fieldName].width(), 10);
+
+            var div = document.createElement('p');
+            div.innerHTML = message;
+
+            PopupBuilderInstance.Create('main-content',
+                    { X: inputPosition.left + inputWidth, Y: inputPosition.top + 30 },
+                    div);            
+        }
+
         var self = this;
+        var writingFlag = 0;
+
+
         this.fields.username.on('keyup', function () {
             self.changeBorderColor('username');
+            const tempWritingFlag = ++writingFlag;
+
+            setTimeout(function () {
+                if (tempWritingFlag != writingFlag) return;
+                Router.Get(endpoints.LoginApi.ValidateUsername,
+                    {
+                        username : self.fields.username.val()
+                    },
+                    function (response) {
+                        if (response.IsValid === false)
+                            displayPopup(response.Message);
+                    });
+            }, 300);
+
         });
+
         this.fields.firstName.on('keyup', function () {
             self.changeBorderColor('firstName');
         });
         this.fields.lastName.on('keyup', function () {
             self.changeBorderColor('lastName');
         });
-        this.fields.password.on('keyup', function () {
-            self.changeBorderColor('password');
+        this.fields.password.on('keyup', function () {              
+            self.changeBorderColor('confirmPassword', true, !(self.validatePasswords()));
+            self.changeBorderColor('password', true, !(self.validatePasswords()));            
         });
-        this.fields.confirmPassword.on('keyup', function () {
-            self.changeBorderColor('confirmPassword');            
+        this.fields.confirmPassword.on('keyup', function () {                  
+            self.changeBorderColor('confirmPassword', true, !(self.validatePasswords()));
+            self.changeBorderColor('password', true, !(self.validatePasswords()));             
         });
         this.fields.email.on('keyup', function () {
             self.changeBorderColor('email');
@@ -74,7 +133,20 @@ var registerInputs = {
     }
 }
 
+window.showPlainPassword = function showPlainPassword(inputName, button) {
+    registerInputs.fields[inputName].prop('type', 'text');
+
+    button.onmouseup = function () {
+        registerInputs.fields[inputName].prop('type', 'password');
+    }
+
+}
+
 registerInputs.initialiseInputs();
+
+
+
+
 
 /* Register / login handling section*/
 /**
@@ -82,27 +154,37 @@ registerInputs.initialiseInputs();
  * @param {string} pageName represents the page which must be displayed (posible values: 'Register' and 'Login')
  */
 
-function changePage(pageName) {
-    if(event !== undefined) event.preventDefault();
+window.changePage = function changePage(pageName) {
+    if (event !== undefined) event.preventDefault();
+    const pages = [{
+        pageName: 'Register',
+        id: '#register-form'
+    },
+    {
+        pageName: 'Login',
+        id: '#login-form'
+    },
+    {
+        pageName: 'Message',
+        id: '#messages-container'
+    }];
+  
+    registerInputs.resetInputs();     
+    pageName == 'Login' ? $(logoImageId).removeClass('main-logo-hidden') : $(logoImageId).addClass('main-logo-hidden');
 
-    registerInputs.resetInputs();
-
-    var current = pageName == 'Register' ? $('#register-form') : $('#login-form');
-    var previous = pageName == 'Register' ? $('#login-form') : $('#register-form');
-
-    pageName == 'Register' ? $(logoImageId).addClass('main-logo-hidden') : $(logoImageId).removeClass('main-logo-hidden');
-
-    current.removeClass('form-hidden');
-    previous.addClass('form-hidden');
+    for (var i = 0; i < pages.length; i++) {
+        pages[i].pageName == pageName ? $(pages[i].id).removeClass('form-hidden') : $(pages[i].id).addClass('form-hidden');        
+    }
 
 }
+
 
 /**
  * 
  * This function handles the register request on register button pressed
  * @param {string} registerPath the path to the uri which require register data
  */
-function register(registerPath) {
+window.register = function register(registerPath) {
     event.preventDefault();
 
       
@@ -125,6 +207,12 @@ function register(registerPath) {
         },
         success: function (response) { 
             //change the visual color of the message and display the message
+            if (response.type == 'Success') {
+                $('#message-content').text(response.message);
+                changePage('Message');
+                return;
+            }
+
             $('#register-message').addClass(response.type != 'Success' ? 'register-error' : 'register-success');
             $('#register-message').removeClass(response.type != 'Success' ? 'register-success' : 'register-error');
 

@@ -196,5 +196,10 @@ namespace MapWebSite.Domain
             return this.userRepository.GetColorMapSerialization(username, paletteName);
         }
 
+        public User GetUser(string username, bool useEmail)
+        {
+            return useEmail ? this.userRepository.GetUserByEmail(username) : this.userRepository.GetUser(username);
+        }
+
     }
 }

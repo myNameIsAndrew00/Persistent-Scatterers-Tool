@@ -6,7 +6,7 @@
 
 class Popup {
 
-    constructor(id, coordinates) {
+    constructor(id, position) {
 
         function buildContainer(divId) {
             var container = document.createElement('div');
@@ -17,8 +17,8 @@ class Popup {
             container.classList.add('popup-initial');
             container.classList.add('popup');
             container.classList.add('box');
-            container.style.top = coordinates.Y + indicatorHeight + 'px';
-            container.style.left = coordinates.X - indicatorWidth + 'px';
+            container.style.top = position.Y + indicatorHeight + 'px';
+            container.style.left = position.X - indicatorWidth + 'px';
             return container;
         }
 
@@ -72,11 +72,11 @@ class PopupManager {
         this.popupIdentifier = 0;
     }
 
-    Create(containerId = '', coordinates, content) {
+    Create(containerId = '', position, content) {
 
         //create the popup, add it inside the container, set the close button handler
         var popupId = 'popup-' + this.popupIdentifier++;
-        var popup = new Popup(popupId, coordinates);
+        var popup = new Popup(popupId, position);
         popup.SetCloseButtonHandle(function () {
             popup.Display(false);
             $(('#' + containerId)).children('#' + popupId).remove();

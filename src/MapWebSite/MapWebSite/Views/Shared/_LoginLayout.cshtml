@@ -17,10 +17,12 @@
     @*Main container*@
     @*Contains two container: one for login and one for register*@
 
-    <div class="form-container">
+    <div id="main-content">
+        <div id="form-container" class="form-container">
 
-        @RenderBody()
+            @RenderBody()
 
+        </div>
     </div>
 
     @Scripts.Render("~/scripts/waves")

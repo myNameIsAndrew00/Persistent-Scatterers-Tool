@@ -749,6 +749,69 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The format of your input is not a valid email format.
+        /// </summary>
+        public static string LRegisterInvalidEmailFormatInputMessage {
+            get {
+                return ResourceManager.GetString("LRegisterInvalidEmailFormatInputMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are trying to use an existing email.
+        /// </summary>
+        public static string LRegisterInvalidEmailInputMessage {
+            get {
+                return ResourceManager.GetString("LRegisterInvalidEmailInputMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input is not valid. It must contain at least one digit.
+        /// </summary>
+        public static string LRegisterInvalidPasswordInputMessage_Digit {
+            get {
+                return ResourceManager.GetString("LRegisterInvalidPasswordInputMessage_Digit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input is not valid. It must be at least 6 characters long.
+        /// </summary>
+        public static string LRegisterInvalidPasswordInputMessage_Length {
+            get {
+                return ResourceManager.GetString("LRegisterInvalidPasswordInputMessage_Length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input is not valid. It must contain at least a letter and a digit.
+        /// </summary>
+        public static string LRegisterInvalidPasswordInputMessage_LetterOrDigit {
+            get {
+                return ResourceManager.GetString("LRegisterInvalidPasswordInputMessage_LetterOrDigit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input is not valid. It must containt at least a uppercase letter.
+        /// </summary>
+        public static string LRegisterInvalidPasswordInputMessage_Uppercase {
+            get {
+                return ResourceManager.GetString("LRegisterInvalidPasswordInputMessage_Uppercase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are trying to use an existing username.
+        /// </summary>
+        public static string LRegisterInvalidUsernameInputMessage {
+            get {
+                return ResourceManager.GetString("LRegisterInvalidUsernameInputMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Register to use the application. Enter the credentials bellow.
         /// </summary>
         public static string LRegisterMessage {
@@ -911,6 +974,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You successufuly registered in application. An confirmation link has been send at {0} for activating the account..
+        /// </summary>
+        public static string RegisterCompleteMessage {
+            get {
+                return ResourceManager.GetString("RegisterCompleteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;Please confirm your account by clicking the following link: &lt;/p&gt; &lt;a href=&quot;{0}&quot;&gt;Confirm your account&lt;/a&gt;.
         /// </summary>
         public static string RegisterConfirmationEmailBody {
@@ -934,15 +1006,6 @@ namespace MapWebSite.Resources.text {
         public static string SCPlaceholder {
             get {
                 return ResourceManager.GetString("SCPlaceholder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string Strings {
-            get {
-                return ResourceManager.GetString("Strings", resourceCulture);
             }
         }
     }

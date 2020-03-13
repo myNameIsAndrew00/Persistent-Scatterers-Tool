@@ -427,7 +427,28 @@
   <data name="LCESuccessMessage" xml:space="preserve">
     <value>You confirmed your email with success! Your account is enabled, it can be used to login in application.</value>
   </data>
-  <data name="Strings" xml:space="preserve">
-    <value />
+  <data name="LRegisterInvalidPasswordInputMessage_Digit" xml:space="preserve">
+    <value>Input is not valid. It must contain at least one digit</value>
+  </data>
+  <data name="LRegisterInvalidEmailFormatInputMessage" xml:space="preserve">
+    <value>The format of your input is not a valid email format</value>
+  </data>
+  <data name="LRegisterInvalidEmailInputMessage" xml:space="preserve">
+    <value>You are trying to use an existing email</value>
+  </data>
+  <data name="LRegisterInvalidPasswordInputMessage_Length" xml:space="preserve">
+    <value>Input is not valid. It must be at least 6 characters long</value>
+  </data>
+  <data name="LRegisterInvalidPasswordInputMessage_LetterOrDigit" xml:space="preserve">
+    <value>Input is not valid. It must contain at least a letter and a digit</value>
+  </data>
+  <data name="LRegisterInvalidPasswordInputMessage_Uppercase" xml:space="preserve">
+    <value>Input is not valid. It must containt at least a uppercase letter</value>
+  </data>
+  <data name="LRegisterInvalidUsernameInputMessage" xml:space="preserve">
+    <value>You are trying to use an existing username</value>
+  </data>
+  <data name="RegisterCompleteMessage" xml:space="preserve">
+    <value>You successufuly registered in application. An confirmation link has been send at {0} for activating the account.</value>
   </data>
 </root>

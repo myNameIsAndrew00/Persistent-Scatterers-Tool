@@ -25,6 +25,7 @@ namespace MapWebSite
         private static void loadSassBundles(BundleCollection bundles)
         {
             var loginStyleBundle = new CustomStyleBundle("~/Content/login_sass").Include(
+                "~/Resources/css/popup.scss",
                 "~/Resources/css/login.scss");  
             loginStyleBundle.Orderer = new NullOrderer();
             

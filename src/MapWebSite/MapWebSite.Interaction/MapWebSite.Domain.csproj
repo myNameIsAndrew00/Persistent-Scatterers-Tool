@@ -75,9 +75,10 @@
     <Compile Include="Owin Components\ComponentsFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteUser.cs" />
-    <Compile Include="Views Models\ChoseDatasetViewModel.cs" />
-    <Compile Include="Views Models\ChosePaletteViewModel.cs" />
-    <Compile Include="Views Models\ColorPickerViewModel.cs" />
+    <Compile Include="Views Models\Home\ChoseDatasetViewModel.cs" />
+    <Compile Include="Views Models\Home\ChosePaletteViewModel.cs" />
+    <Compile Include="Views Models\Home\ColorPickerViewModel.cs" />
+    <Compile Include="Views Models\Login\RegisterValidationResult.cs" />
     <Compile Include="Views Models\TooltipViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,6 +9,6 @@
 
 @{ Html.RenderPartial("~/Views/Login/RegisterForm.cshtml"); }
 
+@{ Html.RenderPartial("~/Views/Login/MessageForm.cshtml"); }
 
-@Scripts.Render("~/scripts/login")
-
+@Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/login")

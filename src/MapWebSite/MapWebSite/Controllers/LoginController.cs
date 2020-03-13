@@ -5,9 +5,15 @@ using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
+using MapWebSite.Core;
+using MapWebSite.Domain.ViewModel;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNet.Identity;
 
 namespace MapWebSite.Controllers
 {
@@ -18,7 +24,7 @@ namespace MapWebSite.Controllers
             return View();
         }
 
-        [HttpPost]
+        [System.Web.Mvc.HttpPost]
         public ActionResult Login(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
@@ -40,7 +46,7 @@ namespace MapWebSite.Controllers
                 return RedirectToAction("Index");
         }
 
-        [HttpGet]
+        [System.Web.Mvc.HttpGet]
         public ActionResult LoginAnonymous()
         {
             var signInManager = HttpContext.GetOwinContext().Get<SignInManager>();
@@ -54,7 +60,7 @@ namespace MapWebSite.Controllers
 
         }
 
-        [HttpPost]
+        [System.Web.Mvc.HttpPost]
         public ActionResult Register(string username,
                                      string firstName,
                                      string lastName,
@@ -107,13 +113,14 @@ namespace MapWebSite.Controllers
                                            string.Format(TextDictionary.RegisterConfirmationEmailBody, callbackUrl)
                                            );
 
-                return Json(TextDictionary.LRegisterSuccessMessage, "Success");
+                return Json(string.Format(TextDictionary.RegisterCompleteMessage, email), "Success");
             }
 
             else return Json(TextDictionary.LRegisterFailMessage, "Failed");           
         }
 
-        [HttpGet]
+
+        [System.Web.Mvc.HttpGet]
         public ActionResult ConfirmEmail(string userId, string code)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
@@ -132,4 +139,133 @@ namespace MapWebSite.Controllers
         }
 
     }
+
+   
+    public class LoginApiController : ApiController
+    {
+
+        [System.Web.Http.HttpGet]
+        /// <summary>
+        /// Use this api method to check if a username is valid or not for registration
+        /// </summary>
+        /// <param name="username">Username which must be checked</param>
+        /// <returns></returns>
+        public HttpResponseMessage ValidateUsername(string username)
+        {
+            var response = new HttpResponseMessage();            
+
+            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+
+            if (handler.GetUser(username, false) != null)
+            {
+                response.Content = new StringContent(new RegisterValidationResult()
+                {
+                    IsValid = false,
+                    Message = Resources.text.TextDictionary.LRegisterInvalidUsernameInputMessage
+                }.JSONSerialize());
+
+                return response;
+            }
+
+            response.Content = new StringContent(new RegisterValidationResult()
+            {
+                IsValid = true
+            }.JSONSerialize());
+
+            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            return response;
+        }
+
+
+        [System.Web.Http.HttpGet]
+        /// <summary>
+        /// Use this api method to check if a email is valid or not for registration
+        /// </summary>
+        /// <param name="username">Username which must be checked</param>
+        /// <returns></returns>
+        public HttpResponseMessage ValidateEmail(string email)
+        {
+            var response = new HttpResponseMessage();
+
+            if (!new EmailAddressAttribute().IsValid(email))
+            {
+                response.Content = new StringContent(new RegisterValidationResult()
+                {
+                    IsValid = false,
+                    Message = TextDictionary.LRegisterInvalidEmailFormatInputMessage
+                }.JSONSerialize());
+
+                return response;
+            }
+
+            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            if (handler.GetUser(email, true) != null)
+            {
+                response.Content = new StringContent(new RegisterValidationResult()
+                {
+                    IsValid = false,
+                    Message = Resources.text.TextDictionary.LRegisterInvalidEmailInputMessage
+                }.JSONSerialize());
+
+                return response;
+            }
+
+
+            response.Content = new StringContent(new RegisterValidationResult()
+            {
+                IsValid = true
+            }.JSONSerialize());
+            
+            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            return response;
+        }
+
+
+        [System.Web.Http.HttpGet]
+        /// <summary>
+        /// Use this api method to check if a password is valid or not for registration
+        /// </summary>
+        /// <param name="username">Username which must be checked</param>
+        /// <returns></returns>
+        public HttpResponseMessage ValidatePassword(string password)
+        {
+            var response = new HttpResponseMessage();
+            response.Content = null;
+
+            UserManager userManager = HttpContext.Current.GetOwinContext()
+                                                  .GetUserManager<UserManager>();
+
+            var validationTask = userManager.PasswordValidator.ValidateAsync(password);
+            
+            if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("Passwords must be at least") ?? false)
+                response.Content = new StringContent(new RegisterValidationResult() {
+                    IsValid = false,
+                    Message = TextDictionary.LRegisterInvalidPasswordInputMessage_Length }.JSONSerialize());
+            if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("one non letter or digit") ?? false)
+                response.Content = new StringContent(new RegisterValidationResult()
+                {
+                    IsValid = false,
+                    Message = TextDictionary.LRegisterInvalidPasswordInputMessage_LetterOrDigit
+                }.JSONSerialize());
+            if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("one digit ('0'-'9')") ?? false)
+                response.Content = new StringContent(new RegisterValidationResult()
+                {
+                    IsValid = false,
+                    Message = TextDictionary.LRegisterInvalidPasswordInputMessage_Digit
+                }.JSONSerialize());
+            if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("one uppercase") ?? false)
+                response.Content = new StringContent(new RegisterValidationResult()
+                {
+                    IsValid = false,
+                    Message = TextDictionary.LRegisterInvalidPasswordInputMessage_Uppercase
+                }.JSONSerialize());
+
+            if (response.Content == null) response.Content = new StringContent(new RegisterValidationResult() { IsValid = true }.JSONSerialize());
+            
+            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            return response;
+        }
+
+    }
+
 }

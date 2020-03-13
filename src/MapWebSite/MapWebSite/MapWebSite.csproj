@@ -20,7 +20,7 @@
     <AssemblyName>MapWebSite</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress>true</Use64BitIISExpress>
     <IISExpressSSLPort>44312</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
@@ -551,6 +551,7 @@
     <Content Include="Resources\css\tooltips\customizations.scss" />
     <Content Include="Views\Shared\Home Menu\Navigation Menus\UserDetailsNavigationItems.cshtml" />
     <Content Include="Views\Shared\Home Menu\Navigation Menus\ManageDatapointsNavigationItems.cshtml" />
+    <Content Include="Views\Login\MessageForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

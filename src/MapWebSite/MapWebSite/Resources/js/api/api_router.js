@@ -10,7 +10,7 @@ const geolocationApiUrl = 'https://nominatim.openstreetmap.org/search/';
 
 export const endpoints = {
     Home: {
-        RequestSettingsLayerContent: '/Home/RequestSettingsLayerContent',      
+        RequestSettingsLayerContent: '/Home/RequestSettingsLayerContent',
         RequestPointDetails: applicationApiUrl + '/HomeApi/RequestPointDetails',
         RequestRegionsKeys: applicationApiUrl + '/HomeApi/RequestRegionsKeys'
     },
@@ -27,16 +27,21 @@ export const endpoints = {
     },
     PointsSettingsApi: {
         GetColorPalette: applicationApiUrl + '/PointsSettingsApi/GetColorPalette',
-        GetColorPaletteList: applicationApiUrl +'/PointsSettingsApi/GetColorPaletteList',
+        GetColorPaletteList: applicationApiUrl + '/PointsSettingsApi/GetColorPaletteList',
         GetDatasetsList: applicationApiUrl + '/PointsSettingsApi/GetDatasetsList',
         GetDatasetLimits: applicationApiUrl + '/PointsSettingsApi/GetDatasetLimits'
     },
     Settings: {
-        SaveColorsPalette: applicationApiUrl +'/settings/SaveColorsPalette',
+        SaveColorsPalette: applicationApiUrl + '/settings/SaveColorsPalette',
         UploadFileChunk: applicationApiUrl + '/settings/UploadFileChunk',
         ClearFileChunks: applicationApiUrl + '/settings/ClearFileChunks',
-        MergeFileChunks: applicationApiUrl +'/settings/MergeFileChunks',
-        CheckDatasetExistance: applicationApiUrl +'/settings/CheckDatasetExistance'
+        MergeFileChunks: applicationApiUrl + '/settings/MergeFileChunks',
+        CheckDatasetExistance: applicationApiUrl + '/settings/CheckDatasetExistance'
+    },
+    LoginApi: {
+        ValidateUsername: applicationApiUrl + '/LoginApi/ValidateUsername',
+        ValidateEmail: applicationApiUrl + '/LoginApi/ValidateEmail',
+        ValidatePassword: applicationApiUrl + '/LoginApi/ValidatePassword'
     }
 
 };

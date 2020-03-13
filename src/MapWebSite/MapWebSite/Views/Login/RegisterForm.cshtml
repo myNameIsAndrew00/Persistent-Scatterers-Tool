@@ -58,10 +58,18 @@
                     @TextDictionary.LRegisterPasswordLabel
                 </label>
 
-                <input class="default-input" placeholder="@TextDictionary.LRegisterPasswordInput" name="password" type="password" minlength="6" required>
-                
-                <input class="default-input" placeholder="@TextDictionary.LRegisterPasswordConfirmInput" name="confirmPassword" type="password" minlength="6" required>
-           
+                <div class="password-box">
+                    <input class="default-input" placeholder="@TextDictionary.LRegisterPasswordInput" name="password" type="password" minlength="6" required>
+                    <span onmousedown="showPlainPassword('password', this)">
+                        @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "13px", width = "20px" })
+                    </span>
+                </div>
+                <div class="password-box">
+                    <input class="default-input" placeholder="@TextDictionary.LRegisterPasswordConfirmInput" name="confirmPassword" type="password" minlength="6" required>
+                    <span onmousedown="showPlainPassword('confirmPassword', this)">
+                        @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "13px", width = "20px" })
+                    </span>
+                </div>
             </div>
 
         </div>

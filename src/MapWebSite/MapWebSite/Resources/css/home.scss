@@ -1,3 +1,7 @@
+/**
+    Css used for home layout
+*/
+
 @import 'map.scss';
 @import 'menu.scss';
 @import 'home_point_info_layer.scss';
@@ -11,6 +15,7 @@
 @import 'input.scss';
 @import './tooltips/tooltip.scss';
 @import './tooltips/customizations.scss';
+
 
 ::selection {
     background: none;

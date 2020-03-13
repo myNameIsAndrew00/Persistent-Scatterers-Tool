@@ -1,3 +1,7 @@
+/**
+    Css used for login layout
+*/
+
 @import 'input';
 @import 'colors.scss';
 @import 'texts.scss';
@@ -12,6 +16,12 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     overflow-y: hidden;
+}
+
+#main-content{
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 .form-container {
@@ -43,12 +53,12 @@ body {
             font-weight: 200;
         }
 
-        .input-error{
-            border-left: solid get_color(chromaRed) 2px!important;
+        .input-error {
+            border-left: solid get_color(chromaRed) 2px !important;
         }
 
-        .input-valid{
-            border-left: solid get_color(chromaGreen) 2px!important;
+        .input-valid {
+            border-left: solid get_color(chromaGreen) 2px !important;
         }
 
         .register-success {
@@ -102,8 +112,21 @@ body {
             .password-group {
                 grid-area: password;
 
-                input {
-                    width: 422px;
+                .password-box {
+                    display: flex;
+                    align-items: center;
+
+
+                    span {
+                        padding: 0;
+                        background: none;
+                        margin-left: -40px;
+                        margin-top: 5px;
+                    }
+
+                    input {
+                        width: 420px;
+                    }
                 }
             }
         }
