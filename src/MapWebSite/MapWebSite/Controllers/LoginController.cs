@@ -120,7 +120,7 @@ namespace MapWebSite.Controllers
                 return View((object)TextDictionary.LCEFailMessage);
 
             UserManager userManager = HttpContext.GetOwinContext()
-                                                 .GetUserManager<UserManager>();
+                                                 .GetUserManager<UserManager>(); 
 
             var result = userManager.ConfirmEmailAsync(userId, code).Result;
             if (result.Succeeded)

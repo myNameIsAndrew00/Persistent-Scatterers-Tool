@@ -43,6 +43,14 @@ body {
             font-weight: 200;
         }
 
+        .input-error{
+            border-left: solid get_color(chromaRed) 2px!important;
+        }
+
+        .input-valid{
+            border-left: solid get_color(chromaGreen) 2px!important;
+        }
+
         .register-success {
             color: get_color(chromaGreen);
         }
@@ -59,6 +67,7 @@ body {
                 width: 200px;
                 margin: 5px;
                 text-align: left;
+                border-left: solid transparent 2px;
             }
 
             .data-group {
@@ -86,7 +95,7 @@ body {
                 grid-area: activation-link;
 
                 input {
-                    width: 400px;
+                    width: 422px;
                 }
             }
 
@@ -94,7 +103,7 @@ body {
                 grid-area: password;
 
                 input {
-                    width: 400px;
+                    width: 422px;
                 }
             }
         }
