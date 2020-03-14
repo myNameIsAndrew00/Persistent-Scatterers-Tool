@@ -77,7 +77,7 @@ var registerInputs = {
     },
 
     initialiseInputs: function () {
-
+        const containerId = 'main-content';
         function displayPopup(fieldName, message) {
             
             const inputPosition = self.fields[fieldName].offset();
@@ -86,7 +86,7 @@ var registerInputs = {
             var div = document.createElement('p');
             div.innerHTML = message;
 
-            PopupBuilderInstance.Create('main-content',
+            PopupBuilderInstance.Create(containerId,
                     { X: inputPosition.left + inputWidth, Y: inputPosition.top + 30 },
                     div);            
         }
@@ -96,18 +96,20 @@ var registerInputs = {
 
 
         this.fields.username.on('keyup', function () {
-            self.changeBorderColor('username');
-            const tempWritingFlag = ++writingFlag;
+            PopupBuilderInstance.RemoveAll(containerId);
 
+            const tempWritingFlag = ++writingFlag;
             setTimeout(function () {
                 if (tempWritingFlag != writingFlag) return;
+
                 Router.Get(endpoints.LoginApi.ValidateUsername,
                     {
                         username : self.fields.username.val()
                     },
-                    function (response) {
+                    function (response) { 
                         if (response.IsValid === false)
-                            displayPopup(response.Message);
+                            displayPopup('username', response.Message);
+                        self.changeBorderColor('username', true, !response.IsValid);
                     });
             }, 300);
 
@@ -119,16 +121,50 @@ var registerInputs = {
         this.fields.lastName.on('keyup', function () {
             self.changeBorderColor('lastName');
         });
-        this.fields.password.on('keyup', function () {              
+        this.fields.password.on('keyup', function () {
+            PopupBuilderInstance.RemoveAll(containerId);
             self.changeBorderColor('confirmPassword', true, !(self.validatePasswords()));
             self.changeBorderColor('password', true, !(self.validatePasswords()));            
+
+            const tempWritingFlag = ++writingFlag;
+            setTimeout(function () {
+                if (tempWritingFlag != writingFlag) return;
+
+                Router.Get(endpoints.LoginApi.ValidatePassword,
+                    {
+                        password: self.fields.password.val()
+                    },
+                    function (response) {
+                        if (response.IsValid === false)
+                            displayPopup('password', response.Message);
+                        self.changeBorderColor('password', true, !response.IsValid);
+                    });
+            }, 300);
+
         });
         this.fields.confirmPassword.on('keyup', function () {                  
             self.changeBorderColor('confirmPassword', true, !(self.validatePasswords()));
             self.changeBorderColor('password', true, !(self.validatePasswords()));             
         });
         this.fields.email.on('keyup', function () {
+            PopupBuilderInstance.RemoveAll(containerId);
             self.changeBorderColor('email');
+
+            const tempWritingFlag = ++writingFlag;
+            setTimeout(function () {
+                if (tempWritingFlag != writingFlag) return;
+
+                Router.Get(endpoints.LoginApi.ValidateEmail,
+                    {
+                        email: self.fields.email.val()
+                    },
+                    function (response) {
+                        if (response.IsValid === false)
+                            displayPopup('email', response.Message);
+                        self.changeBorderColor('email', true, !response.IsValid);
+                    });
+            }, 300);
+
         });
     }
 }
@@ -187,23 +223,17 @@ window.changePage = function changePage(pageName) {
 window.register = function register(registerPath) {
     event.preventDefault();
 
-      
-
     if (!registerInputs.validateInputs()) return;
-
-
-    //todo: further checks for user credentials
-    if (!validateInputs()) return;
 
     $.ajax({
         url: registerPath,
         type: "POST",
         data: {
-            username: registerInputs.username.val(),
-            firstName: registerInputs.firstName.val(),
-            lastName: registerInputs.lastName.val(),
-            password: registerInputs.password.val(),
-            email: registerInputs.email.val()
+            username: registerInputs.fields.username.val(),
+            firstName: registerInputs.fields.firstName.val(),
+            lastName: registerInputs.fields.lastName.val(),
+            password: registerInputs.fields.password.val(),
+            email: registerInputs.fields.email.val()
         },
         success: function (response) { 
             //change the visual color of the message and display the message

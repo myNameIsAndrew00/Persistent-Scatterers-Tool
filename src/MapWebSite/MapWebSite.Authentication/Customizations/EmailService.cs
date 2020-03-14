@@ -13,6 +13,7 @@ namespace MapWebSite.Authentication
     {
         public async Task SendAsync(IdentityMessage message)
         {
+
             var client = new SendGrid.SendGridClient(ConfigurationManager.AppSettings["ApiKey"]);
 
             var emailMessage = new SendGridMessage();

@@ -256,6 +256,8 @@ namespace MapWebSite.Repository
 
         public User GetUser(string username)
         {
+            if (string.IsNullOrEmpty(username)) return null;
+
             return this.getUser(username, string.Empty);
         }
 
@@ -421,6 +423,8 @@ namespace MapWebSite.Repository
 
         public User GetUserByEmail(string email)
         {
+            if (string.IsNullOrEmpty(email)) return null;
+
             return this.getUser(string.Empty, email);
         }
 

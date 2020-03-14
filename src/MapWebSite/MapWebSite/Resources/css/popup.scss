@@ -24,6 +24,7 @@
 
     p {
         font-size: 0.7em;
+        color: get_color(mediumGray);
     }
 
     z-index: $critical_z_index;

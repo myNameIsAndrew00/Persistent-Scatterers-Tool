@@ -72,6 +72,10 @@ class PopupManager {
         this.popupIdentifier = 0;
     }
 
+    RemoveAll(containerId = '') {
+        $(('#' + containerId)).find('[id^="popup-"]').remove();
+    }
+
     Create(containerId = '', position, content) {
 
         //create the popup, add it inside the container, set the close button handler
@@ -95,7 +99,9 @@ class PopupManager {
         window.addEventListener('click', function (event) {
             if (!$(event.target).closest(".popup").length) {
                 popup.Display(false);
-                $(('#' + containerId)).children('#' + popupId).remove();
+                this.setTimeout(function () {
+                    $(('#' + containerId)).children('#' + popupId).remove();
+                },300);
             }
         })
 

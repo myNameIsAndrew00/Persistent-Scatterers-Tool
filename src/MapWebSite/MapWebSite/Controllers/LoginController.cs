@@ -108,15 +108,21 @@ namespace MapWebSite.Controllers
                                              new { userId = user.Id, code = confirmationCode },
                                              protocol: Request.Url.Scheme);
 
-                userManager.SendEmailAsync(user.Id,
-                                           TextDictionary.RegisterConfirmationEmailSubject,
-                                           string.Format(TextDictionary.RegisterConfirmationEmailBody, callbackUrl)
-                                           );
-
-                return Json(string.Format(TextDictionary.RegisterCompleteMessage, email), "Success");
+                try
+                {
+                    userManager.SendEmailAsync(user.Id,
+                                               TextDictionary.RegisterConfirmationEmailSubject,
+                                               string.Format(TextDictionary.RegisterConfirmationEmailBody, callbackUrl)
+                                               );
+                }
+                catch
+                {
+                    return Json(new { message = TextDictionary.RegisterConfirmationEmailFailed, type = "Failed" });
+                }
+                return Json(new { message = string.Format(TextDictionary.RegisterCompleteMessage, email), type = "Success" });
             }
 
-            else return Json(TextDictionary.LRegisterFailMessage, "Failed");           
+            else return Json(new { message = TextDictionary.LRegisterFailMessage, type = "Failed" });           
         }
 
 
@@ -152,7 +158,8 @@ namespace MapWebSite.Controllers
         /// <returns></returns>
         public HttpResponseMessage ValidateUsername(string username)
         {
-            var response = new HttpResponseMessage();            
+            var response = new HttpResponseMessage();
+            response.Content = null;
 
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
 
@@ -162,12 +169,10 @@ namespace MapWebSite.Controllers
                 {
                     IsValid = false,
                     Message = Resources.text.TextDictionary.LRegisterInvalidUsernameInputMessage
-                }.JSONSerialize());
-
-                return response;
+                }.JSONSerialize());                
             }
 
-            response.Content = new StringContent(new RegisterValidationResult()
+            if(response.Content == null) response.Content = new StringContent(new RegisterValidationResult()
             {
                 IsValid = true
             }.JSONSerialize());
@@ -187,6 +192,11 @@ namespace MapWebSite.Controllers
         {
             var response = new HttpResponseMessage();
 
+            Func<HttpResponseMessage, HttpResponseMessage> setContentType = (httpResponse) => {
+                httpResponse.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                return httpResponse;
+            };
+
             if (!new EmailAddressAttribute().IsValid(email))
             {
                 response.Content = new StringContent(new RegisterValidationResult()
@@ -195,7 +205,7 @@ namespace MapWebSite.Controllers
                     Message = TextDictionary.LRegisterInvalidEmailFormatInputMessage
                 }.JSONSerialize());
 
-                return response;
+                return setContentType(response);
             }
 
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
@@ -207,7 +217,7 @@ namespace MapWebSite.Controllers
                     Message = Resources.text.TextDictionary.LRegisterInvalidEmailInputMessage
                 }.JSONSerialize());
 
-                return response;
+                return setContentType(response);
             }
 
 
@@ -216,8 +226,7 @@ namespace MapWebSite.Controllers
                 IsValid = true
             }.JSONSerialize());
             
-            response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-            return response;
+            return setContentType(response);
         }
 
 
@@ -241,19 +250,19 @@ namespace MapWebSite.Controllers
                 response.Content = new StringContent(new RegisterValidationResult() {
                     IsValid = false,
                     Message = TextDictionary.LRegisterInvalidPasswordInputMessage_Length }.JSONSerialize());
-            if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("one non letter or digit") ?? false)
+            else if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("one non letter or digit") ?? false)
                 response.Content = new StringContent(new RegisterValidationResult()
                 {
                     IsValid = false,
                     Message = TextDictionary.LRegisterInvalidPasswordInputMessage_LetterOrDigit
                 }.JSONSerialize());
-            if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("one digit ('0'-'9')") ?? false)
+            else if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("one digit ('0'-'9')") ?? false)
                 response.Content = new StringContent(new RegisterValidationResult()
                 {
                     IsValid = false,
                     Message = TextDictionary.LRegisterInvalidPasswordInputMessage_Digit
                 }.JSONSerialize());
-            if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("one uppercase") ?? false)
+            else if (validationTask.Result.Errors?.FirstOrDefault()?.Contains("one uppercase") ?? false)
                 response.Content = new StringContent(new RegisterValidationResult()
                 {
                     IsValid = false,

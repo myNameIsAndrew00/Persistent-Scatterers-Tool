@@ -785,7 +785,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Input is not valid. It must contain at least a letter and a digit.
+        ///   Looks up a localized string similar to Input is not valid. It must contain at least a non letter and a digit.
         /// </summary>
         public static string LRegisterInvalidPasswordInputMessage_LetterOrDigit {
             get {
@@ -988,6 +988,15 @@ namespace MapWebSite.Resources.text {
         public static string RegisterConfirmationEmailBody {
             get {
                 return ResourceManager.GetString("RegisterConfirmationEmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create the account. The email which you introduced couldn&apos;t be used for account confirmation. Try again later..
+        /// </summary>
+        public static string RegisterConfirmationEmailFailed {
+            get {
+                return ResourceManager.GetString("RegisterConfirmationEmailFailed", resourceCulture);
             }
         }
         

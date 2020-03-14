@@ -440,7 +440,7 @@
     <value>Input is not valid. It must be at least 6 characters long</value>
   </data>
   <data name="LRegisterInvalidPasswordInputMessage_LetterOrDigit" xml:space="preserve">
-    <value>Input is not valid. It must contain at least a letter and a digit</value>
+    <value>Input is not valid. It must contain at least a non letter and a digit</value>
   </data>
   <data name="LRegisterInvalidPasswordInputMessage_Uppercase" xml:space="preserve">
     <value>Input is not valid. It must containt at least a uppercase letter</value>
@@ -450,5 +450,8 @@
   </data>
   <data name="RegisterCompleteMessage" xml:space="preserve">
     <value>You successufuly registered in application. An confirmation link has been send at {0} for activating the account.</value>
+  </data>
+  <data name="RegisterConfirmationEmailFailed" xml:space="preserve">
+    <value>Failed to create the account. The email which you introduced couldn't be used for account confirmation. Try again later.</value>
   </data>
 </root>
