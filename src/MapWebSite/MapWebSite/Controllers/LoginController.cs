@@ -19,9 +19,10 @@ namespace MapWebSite.Controllers
 {
     public class LoginController : Controller
     {
-        public ActionResult Index()
+
+        public ActionResult Index(LoginViewModel loginViewModel = null)
         {
-            return View();
+            return View(loginViewModel == null ? new LoginViewModel() : loginViewModel);
         }
 
         [System.Web.Mvc.HttpPost]
@@ -30,20 +31,24 @@ namespace MapWebSite.Controllers
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return RedirectToAction("Index");
 
+            DatabaseInteractionHandler databseHandler = new DatabaseInteractionHandler();
+            if (databseHandler.GetUser(username, false) == null)
+                return RedirectToAction("Index", new { LoginErrorMessage = TextDictionary.LLoginWrongUsernameOrPasswordMessage });
+
             var signInManager = HttpContext.GetOwinContext().Get<SignInManager>();
             var userManager = HttpContext.GetOwinContext().Get<UserManager>();
 
             var signInStatus = signInManager.PasswordSignIn(username, password, true, false);
 
             if (!userManager.IsEmailConfirmedAsync(username).Result)
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { LoginErrorMessage = TextDictionary.LLoginActivateAccountMessage });
 
             if (signInStatus == SignInStatus.Success)
             {
-                return RedirectToAction("Index", "Home");            
+                return RedirectToAction("Index", "Home");
             }
             else
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { LoginErrorMessage = TextDictionary.LLoginWrongUsernameOrPasswordMessage });
         }
 
         [System.Web.Mvc.HttpGet]

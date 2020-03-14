@@ -78,6 +78,7 @@
     <Compile Include="Views Models\Home\ChoseDatasetViewModel.cs" />
     <Compile Include="Views Models\Home\ChosePaletteViewModel.cs" />
     <Compile Include="Views Models\Home\ColorPickerViewModel.cs" />
+    <Compile Include="Views Models\Login\LoginViewModel.cs" />
     <Compile Include="Views Models\Login\RegisterValidationResult.cs" />
     <Compile Include="Views Models\TooltipViewModel.cs" />
   </ItemGroup>

@@ -36,6 +36,13 @@ body {
         box-shadow: none;
     }
 
+    .message-success {
+        color: get_color(chromaGreen);
+    }
+
+    .message-error {
+        color: get_color(chromaRed);
+    }
 
     #register-form {
         input[type="text"],
@@ -59,14 +66,6 @@ body {
 
         .input-valid {
             border-left: solid get_color(chromaGreen) 2px !important;
-        }
-
-        .register-success {
-            color: get_color(chromaGreen);
-        }
-
-        .register-error {
-            color: get_color(chromaRed);
         }
 
         .register-content {
