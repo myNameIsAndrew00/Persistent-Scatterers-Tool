@@ -623,6 +623,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to login. Your account was not activated, please check your email and activate the account..
+        /// </summary>
+        public static string LLoginActivateAccountMessage {
+            get {
+                return ResourceManager.GetString("LLoginActivateAccountMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have an account? Click here to use the application without account.
         /// </summary>
         public static string LLoginAnonymousLink {
@@ -655,6 +664,15 @@ namespace MapWebSite.Resources.text {
         public static string LLoginTitle {
             get {
                 return ResourceManager.GetString("LLoginTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to login. Please check the username or password.
+        /// </summary>
+        public static string LLoginWrongUsernameOrPasswordMessage {
+            get {
+                return ResourceManager.GetString("LLoginWrongUsernameOrPasswordMessage", resourceCulture);
             }
         }
         
@@ -731,7 +749,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failder to create a new account. Your password length must be at least 6 characters.
+        ///   Looks up a localized string similar to Failed to create a new account. Your password length must be at least 6 characters.
         /// </summary>
         public static string LRegisterFailMessagePasswordLen {
             get {

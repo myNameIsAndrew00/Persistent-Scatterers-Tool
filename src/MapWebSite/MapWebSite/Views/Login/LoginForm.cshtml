@@ -1,6 +1,7 @@
-﻿@using MapWebSite.Resources.text
- 
-   @*Login container*@
+﻿@model MapWebSite.Domain.ViewModel.LoginViewModel
+@using MapWebSite.Resources.text
+
+@*Login container*@
 @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { @class = "form", @id = "login-form" }))
 {
     <h1 class="main-title">@TextDictionary.LLoginTitle</h1>
@@ -9,11 +10,16 @@
         @Html.Raw(TextDictionary.LLoginMessage)
     </p>
 
+    if (!string.IsNullOrEmpty(Model.LoginErrorMessage))
+    {
+        <p class="message-error">@Model.LoginErrorMessage</p>
+    }
+
     <input class="default-input" placeholder="@TextDictionary.LUsernameInput" name="username" type="text" required>
-    
+
 
     <input class="default-input" placeholder="@TextDictionary.LRegisterPasswordInput" name="password" type="password" required>
-    
+
 
     <div class="button-group">
         <button class="default-button" onclick="changePage('Register')">@TextDictionary.LRegisterButton</button>
@@ -21,5 +27,5 @@
 
     </div>
 
-    @Html.ActionLink(TextDictionary.LLoginAnonymousLink, "LoginAnonymous", null, null); 
+    @Html.ActionLink(TextDictionary.LLoginAnonymousLink, "LoginAnonymous", null, null);
 }

@@ -20,6 +20,16 @@ var registerInputs = {
     },
 
     /**
+     * Use this field as a checking flag for writing
+     * */
+    writingFlag: 0,
+
+    /**
+     * Represents the id of the container which will contain popups
+     * */
+    popupsContainerId: 'main-content',
+
+    /**
      * Change the border color of an input
      * @param {any} inputName the name of the input which must be changed
      * @param {any} display set to true if the border must be displayed
@@ -43,7 +53,7 @@ var registerInputs = {
         (this.fields[inputName].val().length != 0) ? this.fields[inputName].addClass('input-valid') : this.fields[inputName].removeClass('input-valid');
     },
 
-    validatePasswords: function () {
+    validatePasswordsConfirmed: function () {
         var isValid = this.fields.password.val().length != 0 &&
             this.fields.confirmPassword.val().length != 0;
 
@@ -53,7 +63,46 @@ var registerInputs = {
         return isValid;
     },
 
-    validateInputs: function () {
+    /**
+     * General purpose function which check if a input is valid or not
+     * @param {any} inputName name of the input
+     * @param {any} apiEndpoint api endpoint which will make the checking
+     * @param {any} apiParameters the parameters required by api
+     */
+    validateInputFromApi: function (inputName, apiEndpoint, apiParameters, callback) {
+        const tempWritingFlag = ++this.writingFlag;
+        var self = this;
+
+        function displayPopup(fieldName, message) {
+
+            const inputPosition = self.fields[fieldName].offset();
+            const inputWidth = parseInt(self.fields[fieldName].width(), 10);
+
+            var div = document.createElement('p');
+            div.innerHTML = message;
+
+            PopupBuilderInstance.Create(self.popupsContainerId,
+                { X: inputPosition.left + inputWidth, Y: inputPosition.top + 30 },
+                div);
+        }
+
+        setTimeout(function () {
+            if (tempWritingFlag != self.writingFlag) return;
+
+            Router.Get(apiEndpoint,
+                apiParameters,
+                function (response) {
+                    if (response.IsValid === false)
+                        displayPopup(inputName, response.Message);
+                    self.changeBorderColor(inputName, true, !response.IsValid);
+
+                    if (callback !== undefined) callback(response.IsValid);
+                });           
+        }, 300);
+
+    },
+
+    validateInputsForSubmit: function () {
         var isValid = true;
         var self = this;
 
@@ -62,7 +111,17 @@ var registerInputs = {
             isValid = isValid && (self.fields[inputName].val().length != 0);
         });
 
-        isValid = isValid && this.validatePasswords();
+        isValid = isValid && this.validatePasswordsConfirmed();
+
+        this.checkUsernameInput(function (functionResponse) {
+            isValid = isValid && functionResponse;
+            self.checkEmailInput(function (functionResponse) {
+                isValid = isValid && functionResponse;
+                self.checkPasswordInput(function (functionResponse) {
+                    isValid = isValid && functionResponse;
+                }, true);
+            }, true);           
+        }, true);
 
         return isValid;
     },
@@ -74,45 +133,50 @@ var registerInputs = {
             self.changeBorderColor(inputName, false);
             self.fields[inputName].val('');
         });
+
+        PopupBuilderInstance.RemoveAll(this.popupsContainerId);
     },
 
-    initialiseInputs: function () {
-        const containerId = 'main-content';
-        function displayPopup(fieldName, message) {
-            
-            const inputPosition = self.fields[fieldName].offset();
-            const inputWidth = parseInt(self.fields[fieldName].width(), 10);
+    /**use this helper function to check the username input. Visual changes will be made if the input is invalid */
+    checkUsernameInput: function (responseCallback, keepPreviousPopups) {
+        if (keepPreviousPopups !== true) PopupBuilderInstance.RemoveAll(this.popupsContainerId);
 
-            var div = document.createElement('p');
-            div.innerHTML = message;
+        this.validateInputFromApi('username', endpoints.LoginApi.ValidateUsername,
+            {
+                username: this.fields.username.val()
+            },
+            responseCallback);
+    },
 
-            PopupBuilderInstance.Create(containerId,
-                    { X: inputPosition.left + inputWidth, Y: inputPosition.top + 30 },
-                    div);            
-        }
+    /**use this helper function to check the email input. Visual changes will be made if the input is invalid */
+    checkEmailInput: function (responseCallback, keepPreviousPopups) {
+        if (keepPreviousPopups !== true) PopupBuilderInstance.RemoveAll(this.popupsContainerId);
 
+        this.validateInputFromApi('email', endpoints.LoginApi.ValidateEmail,
+            {
+                email: this.fields.email.val()
+            }, responseCallback); 
+    },
+
+    /**use this helper function to check the passwords inputs. Visual changes will be made if the input is invalid */
+    checkPasswordInput: function (responseCallback, keepPreviousPopups) {
+        if (keepPreviousPopups !== true) PopupBuilderInstance.RemoveAll(this.popupsContainerId);
+
+        this.changeBorderColor('confirmPassword', true, !(this.validatePasswordsConfirmed()));
+        this.changeBorderColor('password', true, !(this.validatePasswordsConfirmed()));
+
+        this.validateInputFromApi('password', endpoints.LoginApi.ValidatePassword,
+            {
+                password: this.fields.password.val()
+            }, responseCallback);
+    },
+
+    initialiseInputs: function () { 
+      
         var self = this;
-        var writingFlag = 0;
-
 
         this.fields.username.on('keyup', function () {
-            PopupBuilderInstance.RemoveAll(containerId);
-
-            const tempWritingFlag = ++writingFlag;
-            setTimeout(function () {
-                if (tempWritingFlag != writingFlag) return;
-
-                Router.Get(endpoints.LoginApi.ValidateUsername,
-                    {
-                        username : self.fields.username.val()
-                    },
-                    function (response) { 
-                        if (response.IsValid === false)
-                            displayPopup('username', response.Message);
-                        self.changeBorderColor('username', true, !response.IsValid);
-                    });
-            }, 300);
-
+            self.checkUsernameInput();
         });
 
         this.fields.firstName.on('keyup', function () {
@@ -121,50 +185,15 @@ var registerInputs = {
         this.fields.lastName.on('keyup', function () {
             self.changeBorderColor('lastName');
         });
+
         this.fields.password.on('keyup', function () {
-            PopupBuilderInstance.RemoveAll(containerId);
-            self.changeBorderColor('confirmPassword', true, !(self.validatePasswords()));
-            self.changeBorderColor('password', true, !(self.validatePasswords()));            
-
-            const tempWritingFlag = ++writingFlag;
-            setTimeout(function () {
-                if (tempWritingFlag != writingFlag) return;
-
-                Router.Get(endpoints.LoginApi.ValidatePassword,
-                    {
-                        password: self.fields.password.val()
-                    },
-                    function (response) {
-                        if (response.IsValid === false)
-                            displayPopup('password', response.Message);
-                        self.changeBorderColor('password', true, !response.IsValid);
-                    });
-            }, 300);
-
-        });
+            self.checkPasswordInput();
+           });
         this.fields.confirmPassword.on('keyup', function () {                  
-            self.changeBorderColor('confirmPassword', true, !(self.validatePasswords()));
-            self.changeBorderColor('password', true, !(self.validatePasswords()));             
+            self.checkPasswordInput();
         });
         this.fields.email.on('keyup', function () {
-            PopupBuilderInstance.RemoveAll(containerId);
-            self.changeBorderColor('email');
-
-            const tempWritingFlag = ++writingFlag;
-            setTimeout(function () {
-                if (tempWritingFlag != writingFlag) return;
-
-                Router.Get(endpoints.LoginApi.ValidateEmail,
-                    {
-                        email: self.fields.email.val()
-                    },
-                    function (response) {
-                        if (response.IsValid === false)
-                            displayPopup('email', response.Message);
-                        self.changeBorderColor('email', true, !response.IsValid);
-                    });
-            }, 300);
-
+            self.checkEmailInput();
         });
     }
 }
@@ -205,7 +234,8 @@ window.changePage = function changePage(pageName) {
         id: '#messages-container'
     }];
   
-    registerInputs.resetInputs();     
+    registerInputs.resetInputs();
+     
     pageName == 'Login' ? $(logoImageId).removeClass('main-logo-hidden') : $(logoImageId).addClass('main-logo-hidden');
 
     for (var i = 0; i < pages.length; i++) {
@@ -223,7 +253,7 @@ window.changePage = function changePage(pageName) {
 window.register = function register(registerPath) {
     event.preventDefault();
 
-    if (!registerInputs.validateInputs()) return;
+    if (!registerInputs.validateInputsForSubmit()) return;
 
     $.ajax({
         url: registerPath,
@@ -237,14 +267,14 @@ window.register = function register(registerPath) {
         },
         success: function (response) { 
             //change the visual color of the message and display the message
-            if (response.type == 'Success') {
+            if (response.type == 'Success') {                
                 $('#message-content').text(response.message);
                 changePage('Message');
                 return;
             }
 
-            $('#register-message').addClass(response.type != 'Success' ? 'register-error' : 'register-success');
-            $('#register-message').removeClass(response.type != 'Success' ? 'register-success' : 'register-error');
+            $('#register-message').addClass(response.type != 'Success' ? 'message-error' : 'message-success');
+            $('#register-message').removeClass(response.type != 'Success' ? 'message-success' : 'message-error');
 
             $('#register-message').text(response.message);
         }        
