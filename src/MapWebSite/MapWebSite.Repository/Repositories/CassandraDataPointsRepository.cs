@@ -242,28 +242,34 @@ namespace MapWebSite.Repository
         }
 
         private List<Row> selectRegion(int datasetId, int row, int column, int zoomLevel)
-        {
-            CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder()
-            {
-                QueryType = CassandraQueryBuilder.QueryTypes.Select
-            };
+        {   
+            var preparedStatement = executionInstance.GetPreparedStatement("points_region_zoom_" + zoomLevel).Result;
 
-            queryBuilder.TableName = "points_region_zoom_" + zoomLevel;
-            queryBuilder.SelectColumnNames = new List<string>() { "row",
+            if (preparedStatement == null)
+            {
+                CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder()
+                {
+                    QueryType = CassandraQueryBuilder.QueryTypes.Select
+                };
+
+                queryBuilder.TableName = "points_region_zoom_" + zoomLevel;
+                queryBuilder.SelectColumnNames = new List<string>() { "row",
                                                                   "column",
                                                                   "points" };
-            queryBuilder.ClausesList.Add(new BuilderTuple("datasetId", "dataset_id", CassandraQueryBuilder.Clauses.Equals));
-            queryBuilder.ClausesList.Add(new BuilderTuple("row", "row", CassandraQueryBuilder.Clauses.Equals));
-            queryBuilder.ClausesList.Add(new BuilderTuple("column", "column", CassandraQueryBuilder.Clauses.Equals));
+                queryBuilder.ClausesList.Add(new BuilderTuple("datasetId", "dataset_id", CassandraQueryBuilder.Clauses.Equals));
+                queryBuilder.ClausesList.Add(new BuilderTuple("row", "row", CassandraQueryBuilder.Clauses.Equals));
+                queryBuilder.ClausesList.Add(new BuilderTuple("column", "column", CassandraQueryBuilder.Clauses.Equals));
 
-            executionInstance.PrepareQuery(queryBuilder);
+                preparedStatement = executionInstance.GetPreparedStatement("points_region_zoom_" + zoomLevel, queryBuilder).Result;
+            }
 
             return executionInstance.ExecuteQuery(new
             {
                 datasetId,
                 row,
                 column
-            });
+            },
+            preparedStatement);
         }
 
         private List<Row> selectRegions(int datasetId, Tuple<int, int> from, Tuple<int, int> to, int zoomLevel)

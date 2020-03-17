@@ -1,5 +1,6 @@
 ﻿using Cassandra;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -27,7 +28,10 @@ namespace MapWebSite.CassandraAccess
 
         //a boolean value which handle if a connection attempt is in progress
         private bool connecting = false;
-        
+
+        //a variables which stores prepared statements to optimise queries execution
+        public ConcurrentDictionary<string, PreparedStatement> CachedStatements { get; private set; } = new ConcurrentDictionary<string, PreparedStatement>();
+
         public UdtMappingDefinitions UserDefinedTypeMappings => currentSession?.UserDefinedTypes;
           
         public CassandraExecutionInstance(string server, string keyspace)
@@ -50,15 +54,16 @@ namespace MapWebSite.CassandraAccess
 
             GC.SuppressFinalize(this);
         }
-
-        public async Task ExecuteNonQuery(dynamic parameters)
+         
+         
+        public async Task ExecuteNonQuery(dynamic parameters, PreparedStatement statement = null)
         {
             if (string.IsNullOrEmpty(this.query)) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
             if (this.currentSession == null) createConnection();
 
             try
             {
-                var statement = await currentSession.PrepareAsync(this.query);
+                if(statement == null) statement = await currentSession.PrepareAsync(this.query);
                 var boundStatement = statement.Bind(parameters);
             
                 await currentSession.ExecuteAsync(boundStatement);
@@ -69,14 +74,14 @@ namespace MapWebSite.CassandraAccess
             }
         }
 
-        public List<Row> ExecuteQuery(dynamic parameters)
+        public List<Row> ExecuteQuery(dynamic parameters, PreparedStatement statement = null)
         {
             if (string.IsNullOrEmpty(this.query)) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
             if (this.currentSession == null) createConnection();
 
             try
             {
-                var statement = currentSession.Prepare(this.query);
+                if(statement == null) statement = currentSession.Prepare(this.query);
 
                 var boundStatement = statement.Bind(parameters);
 
@@ -95,6 +100,24 @@ namespace MapWebSite.CassandraAccess
         public void PrepareQuery(CassandraQueryBuilder builder)
         {
             this.query = builder.Build();
+        }
+
+        /// <summary>
+        /// Creates and caches a prepared statement. It can be used to optimise queries execution time
+        /// </summary>
+        /// <param name="builder">The builder which builds the query</param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public async Task<PreparedStatement> GetPreparedStatement(string key, CassandraQueryBuilder builder = null)
+        {
+            if (this.CachedStatements.ContainsKey(key)) return this.CachedStatements[key];
+
+            if (builder == null) return null;
+
+            PreparedStatement statement = await this.currentSession.PrepareAsync(builder.Build());
+            this.CachedStatements.TryAdd(key, statement);
+
+            return statement;
         }
 
 
