@@ -20,7 +20,7 @@
     <AssemblyName>MapWebSite</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress>true</Use64BitIISExpress>
     <IISExpressSSLPort>44312</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
@@ -331,6 +331,7 @@
     <Content Include="Resources\css\home_points_settings_layer.scss" />
     <Content Include="Resources\css\card.scss" />
     <Content Include="Resources\css\small_loading_spinner.scss" />
+    <Content Include="Resources\css\general\application.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
     <Content Include="Resources\css\popup.scss" />
     <Content Include="Resources\css\home_points_settings_popup.scss" />
@@ -404,6 +405,7 @@
     <Content Include="Resources\resources\icons\zoom_dataset_icon.svg" />
     <Content Include="Resources\resources\terrain.png" />
     <Content Include="Resources\resources\WebDisasterLogo.png" />
+    <Content Include="Resources\resources\WebDisasterLogoMBlack.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -497,7 +499,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_HomeLayout.cshtml" />
-    <Content Include="Resources\css\colors.scss" />
+    <Content Include="Resources\css\general\colors.scss" />
     <Content Include="Resources\css\home.scss" />
     <Content Include="Resources\css\input.scss" />
     <Content Include="Resources\css\login.scss" />
@@ -540,7 +542,7 @@
     <Content Include="Scripts\bootstrap.js.map" />
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
     <Content Include="Scripts\bootstrap.bundle.js.map" />
-    <Content Include="Resources\css\texts.scss" />
+    <Content Include="Resources\css\general\texts.scss" />
     <Content Include="Views\Home\Points Settings Content\ChoseCriteria.cshtml" />
     <Content Include="Views\Home\Miscellaneous Content\Notifications.cshtml" />
     <Content Include="Views\Home\Miscellaneous Content\ChoseMapType.cshtml" />

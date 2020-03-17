@@ -36,7 +36,10 @@ namespace MapWebSite.CassandraAccess
           
         public CassandraExecutionInstance(string server, string keyspace)
         {
-            this.cluster = Cluster.Builder().AddContactPoint(server).Build();
+            this.cluster = Cluster.Builder().AddContactPoint(server)
+                .WithSocketOptions(
+                    new SocketOptions().SetReadTimeoutMillis(60000))
+                .Build();
             this.server = server;
             this.keyspace = keyspace;
 
@@ -58,7 +61,7 @@ namespace MapWebSite.CassandraAccess
          
         public async Task ExecuteNonQuery(dynamic parameters, PreparedStatement statement = null)
         {
-            if (string.IsNullOrEmpty(this.query)) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
+            if (string.IsNullOrEmpty(this.query) && statement == null) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
             if (this.currentSession == null) createConnection();
 
             try
@@ -76,7 +79,7 @@ namespace MapWebSite.CassandraAccess
 
         public List<Row> ExecuteQuery(dynamic parameters, PreparedStatement statement = null)
         {
-            if (string.IsNullOrEmpty(this.query)) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
+            if (string.IsNullOrEmpty(this.query) && statement == null) throw new ArgumentNullException("Query is not set. Use the Prepare Query method to set the query first");
             if (this.currentSession == null) createConnection();
 
             try
@@ -135,7 +138,7 @@ namespace MapWebSite.CassandraAccess
             {
                 try
                 {
-                    this.currentSession = cluster.Connect(this.keyspace);
+                    this.currentSession = cluster.Connect(this.keyspace);                    
                 }
                 catch
                 {

@@ -2,6 +2,8 @@
     Css used for home layout
 */
 
+@import './general/application.scss';
+
 @import 'map.scss';
 @import 'menu.scss';
 @import 'home_point_info_layer.scss';
@@ -10,12 +12,10 @@
 @import 'home_points_settings_popup.scss';
 @import 'scrollbar.scss';
 @import 'select.scss';
-@import 'colors.scss';
-@import 'texts.scss';
+
 @import 'input.scss';
 @import './tooltips/tooltip.scss';
 @import './tooltips/customizations.scss';
-
 
 ::selection {
     background: none;
@@ -29,22 +29,6 @@ body, html {
 }
 
 
-.box {
-    border-radius: 5px;
-    box-shadow: 3px 8px 11px -2px get_color(strongTransparentBlue), -1px -1px 6px get_color(easeGray);
-    background: get_color(white);
-    color: get_color(mediumGray);
-    border: solid 1px #ececec;
-
-    small {
-        font-size: 0.8em;
-        line-height: 14px;
-    }
-
-    button {
-        font-size: 0.9em;
-    }
-}
 
 button:disabled {
     background-color: gray;

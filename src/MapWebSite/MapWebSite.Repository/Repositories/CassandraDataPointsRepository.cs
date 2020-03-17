@@ -7,6 +7,7 @@ using System;
 using System.Collections.Async;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -84,6 +85,11 @@ namespace MapWebSite.Repository
 
         public PointsRegion GetRegion(int datasetId, int row, int column, int zoomLevel)
         {
+
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+
             var dataRows = selectRegion(datasetId, row, column, zoomLevel);
 
             return convertRowSetToPointsRegions(dataRows)?.FirstOrDefault();
@@ -97,7 +103,7 @@ namespace MapWebSite.Repository
 
             CassandraQueryBuilder queryBuilder = new CassandraQueryBuilder();
             queryBuilder.TableName = "points_region_zoom_" + regionLevel.ZoomLevel;
-            queryBuilder.Type = typeof(SectionedPointsRegionType);             
+            queryBuilder.Type = typeof(SectionedPointsRegionType);
             queryBuilder.QueryType = CassandraQueryBuilder.QueryTypes.InsertFromType;
 
             this.executionInstance.PrepareQuery(queryBuilder);
@@ -119,7 +125,7 @@ namespace MapWebSite.Repository
                             regionType.section
                         });
                     }
-                    catch(Exception exception)
+                    catch (Exception exception)
                     {
                         exceptions.Enqueue(exception);
                     }
@@ -242,7 +248,7 @@ namespace MapWebSite.Repository
         }
 
         private List<Row> selectRegion(int datasetId, int row, int column, int zoomLevel)
-        {   
+        {
             var preparedStatement = executionInstance.GetPreparedStatement("points_region_zoom_" + zoomLevel).Result;
 
             if (preparedStatement == null)
@@ -311,16 +317,21 @@ namespace MapWebSite.Repository
             Parallel.ForEach(rowSet, row =>
             {
                 if (result.ContainsKey($"{row["row"]}_{row["column"]}"))
-                    (result[$"{row["row"]}_{row["column"]}"].Points as List<PointBase>).AddRange(
+                {
+                    lock (result[$"{row["row"]}_{row["column"]}"].Points)
+                    {
+                        (result[$"{row["row"]}_{row["column"]}"].Points as List<PointBase>).AddRange(
                         convertBasePoints(row["points"] as BasePointType[])
                         );
+                    }
+                }
                 else
-                result.TryAdd($"{row["row"]}_{row["column"]}", new PointsRegion()
-                {
-                    Column = Convert.ToInt32(row["column"]),
-                    Row = Convert.ToInt32(row["row"]),
-                    Points = convertBasePoints(row["points"] as BasePointType[])
-                });
+                    result.TryAdd($"{row["row"]}_{row["column"]}", new PointsRegion()
+                    {
+                        Column = Convert.ToInt32(row["column"]),
+                        Row = Convert.ToInt32(row["row"]),
+                        Points = convertBasePoints(row["points"] as BasePointType[])
+                    });
             });
 
             return result.Values;

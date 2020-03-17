@@ -204,7 +204,7 @@ namespace MapWebSite.Core.DataPoints
                 // exceed = (count - this.maxRegionPointsCount);
                 //Random random = new Random();
 
-                pointsRegion.Points = pointsRegion.Points.OrderBy(point => point.DeformationRate).Take(maxRegionPointsCount);
+                pointsRegion.Points = pointsRegion.Points.OrderByDescending(point => point.DeformationRate).Take(maxRegionPointsCount);
 
                 /*Deprecated after using another criteria for selection. Delete the code bellow in future commits*/
                 /*
@@ -269,21 +269,21 @@ namespace MapWebSite.Core.DataPoints
                 case 19: 
                 case 18:
                 case 17: 
-                case 16: return 2500;
-                case 15: return 2000;
-                case 14: return 1700;
-                case 13: return 1400;
-                case 12: return 1200;
-                case 11: return 1000;
-                case 10: return 800;
-                case 9: return 600;
-                case 8: return 550;
+                case 16: return 5000;
+                case 15: return 4000;
+                case 14: return 3400;
+                case 13: return 2800;
+                case 12: return 2400;
+                case 11: return 2000;
+                case 10: return 1600;
+                case 9: return 1200;
+                case 8: return 1100;
                 case 7:
-                case 6: return 400;
-                case 5: return 250;
-                case 4: return 100;
-                case 3: return 20;
-                case 2: return 5;
+                case 6: return 800;
+                case 5: return 500;
+                case 4: return 200;
+                case 3: return 40;
+                case 2: return 10;
                 default : return 1;
             }
         }

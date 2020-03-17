@@ -1,4 +1,5 @@
-@import 'colors.scss';
+@import 'general/colors.scss';
+
 
 *:focus {
     outline: none!important;
@@ -122,8 +123,8 @@ input[type=range]::-moz-range-thumb {
     color: white;
 }
 
-.default-button:hover{
-    background-color: orange;
+.default-button:hover {
+    background-color: get_color(chromaDarkOrange);
 }
 
 
