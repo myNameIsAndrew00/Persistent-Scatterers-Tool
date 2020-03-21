@@ -221,16 +221,14 @@ class PointsSectionHandler {
         //check if data was received from hub or cache
         if (fromCache) {
             pointsData = receivedInfo;
-
-            console.log('From cache' + pointsData);
+             
         }
         else {
 
             var requestedData = JSON.parse(receivedInfo);
             this.localCache.AddRegion(requestedData.regionKey, requestedData.pointsData);
 
-            pointsData = requestedData.pointsData;
-            console.log('Hub result: ' + requestedData.length);
+            pointsData = requestedData.pointsData; 
         }
 
         var index = 0;
@@ -260,11 +258,7 @@ class PointsSectionHandler {
     getCornerCoordinates() {
         var viewBox = this.map.getView().calculateExtent(this.map.getSize());
         var cornerCoordinates = ol.proj.transformExtent(viewBox, 'EPSG:3857', 'EPSG:4326');
-        console.log('latitude from: ' + cornerCoordinates[3]);
-        console.log('longitude from: ' + cornerCoordinates[0]);
-        console.log('latitude to: ' + cornerCoordinates[1]);
-        console.log('longitude to: ' + cornerCoordinates[2]);
-
+    
         //formula: latide(or longidue) = [ (latitudeTop - latitudeDown) / rowsCount ] * rowIndex + latTop;
         var sectionLength = {
             oX: (cornerCoordinates[3] - cornerCoordinates[1]) / SectionsRowsCount,

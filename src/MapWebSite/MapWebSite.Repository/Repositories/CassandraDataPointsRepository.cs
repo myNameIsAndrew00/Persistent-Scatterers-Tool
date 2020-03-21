@@ -85,11 +85,6 @@ namespace MapWebSite.Repository
 
         public PointsRegion GetRegion(int datasetId, int row, int column, int zoomLevel)
         {
-
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-
             var dataRows = selectRegion(datasetId, row, column, zoomLevel);
 
             return convertRowSetToPointsRegions(dataRows)?.FirstOrDefault();
@@ -217,7 +212,7 @@ namespace MapWebSite.Repository
                 leftLongitude = from.Item2,
                 rightLatitude = to.Item1,
                 rightLongitude = to.Item2
-            });
+            }).Result;
 
         }
 
@@ -236,20 +231,20 @@ namespace MapWebSite.Repository
 
             executionInstance.UserDefinedTypeMappings.Define(UdtMap.For<PointDisplacementType>("points_displacements"));
 
-            executionInstance.PrepareQuery(queryBuilder);
+            var preparedStatement = executionInstance.GetPreparedStatement("points_by_dataset", queryBuilder);
 
-            return executionInstance.ExecuteQuery(new
+            var result = executionInstance.ExecuteQuery(new
             {
                 dataSetID,
-
                 number = basicPoint.Number
-            });
+            }, preparedStatement).Result;
 
+            return result;
         }
-
+ 
         private List<Row> selectRegion(int datasetId, int row, int column, int zoomLevel)
         {
-            var preparedStatement = executionInstance.GetPreparedStatement("points_region_zoom_" + zoomLevel).Result;
+            var preparedStatement = executionInstance.GetPreparedStatement("points_region_zoom_" + zoomLevel);
 
             if (preparedStatement == null)
             {
@@ -266,16 +261,20 @@ namespace MapWebSite.Repository
                 queryBuilder.ClausesList.Add(new BuilderTuple("row", "row", CassandraQueryBuilder.Clauses.Equals));
                 queryBuilder.ClausesList.Add(new BuilderTuple("column", "column", CassandraQueryBuilder.Clauses.Equals));
 
-                preparedStatement = executionInstance.GetPreparedStatement("points_region_zoom_" + zoomLevel, queryBuilder).Result;
+                preparedStatement = executionInstance.GetPreparedStatement("points_region_zoom_" + zoomLevel, queryBuilder);            
             }
+         
 
-            return executionInstance.ExecuteQuery(new
+            var result = executionInstance.ExecuteQuery(new
             {
                 datasetId,
                 row,
                 column
             },
-            preparedStatement);
+            preparedStatement).Result;
+
+ 
+            return result;
         }
 
         private List<Row> selectRegions(int datasetId, Tuple<int, int> from, Tuple<int, int> to, int zoomLevel)
@@ -305,7 +304,7 @@ namespace MapWebSite.Repository
                 fromColumn = from.Item2,
                 toRow = to.Item1,
                 toColumn = to.Item2
-            });
+            }).Result;
 
         }
 
@@ -318,12 +317,12 @@ namespace MapWebSite.Repository
             {
                 if (result.ContainsKey($"{row["row"]}_{row["column"]}"))
                 {
-                    lock (result[$"{row["row"]}_{row["column"]}"].Points)
-                    {
-                        (result[$"{row["row"]}_{row["column"]}"].Points as List<PointBase>).AddRange(
-                        convertBasePoints(row["points"] as BasePointType[])
+                    var points = convertBasePoints(row["points"] as BasePointType[]);
+
+                    foreach (var point in points)
+                        (result[$"{row["row"]}_{row["column"]}"].Points as ConcurrentBag<PointBase>).Add(
+                               point
                         );
-                    }
                 }
                 else
                     result.TryAdd($"{row["row"]}_{row["column"]}", new PointsRegion()
@@ -402,7 +401,7 @@ namespace MapWebSite.Repository
 
         private IEnumerable<PointBase> convertBasePoints(BasePointType[] basePoints)
         {
-            List<PointBase> result = new List<PointBase>();
+            ConcurrentBag<PointBase> result = new ConcurrentBag<PointBase>();
 
             foreach (var basePoint in basePoints)
                 result.Add(new PointBase()

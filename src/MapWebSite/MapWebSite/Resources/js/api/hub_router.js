@@ -41,6 +41,8 @@ class HubRouter {
         if (username == null || datasetName == null) return;
         if (!this.enabled) return;
 
+        console.log('invoking hub method for ' + username + ':' + datasetName);
+
         this.hubProxy.invoke('RequestDataPoints',
             latitudeFrom,
             longitudeFrom,
@@ -62,7 +64,7 @@ class HubRouter {
 
 
         if (username == null || datasetName == null) return;
-        if (!this.enabled) return;
+        if (!this.enabled) return;        
 
         this.hubProxy.invoke('GetRegionKeys',
             latitudeFrom,

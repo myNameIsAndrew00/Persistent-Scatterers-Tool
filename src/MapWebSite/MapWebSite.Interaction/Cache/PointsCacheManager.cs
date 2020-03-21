@@ -14,7 +14,7 @@ namespace MapWebSite.Domain
     using PointsZonePair = Tuple<IEnumerable<PointBase>, string>;
    
     /// <summary>
-    /// A cache which manages the points
+    /// A cache which manages the points.
     /// Cache flow:
     ///     -user asks for a set of points starting from a row and column (based on zoom level)
     ///     -find the regions which contains the points

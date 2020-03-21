@@ -5,6 +5,7 @@ using MapWebSite.Model;
 using MapWebSite.Repository;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -114,12 +115,14 @@ namespace MapWebSite.Domain
                         string regionKey = null;
                         if (result != null)
                             regionKey = PointsCacheManager.Write(coordinate.Item1, coordinate.Item2, coordinate.Item3, datasetHeader.ID, result.Points);
-
+                         
                         callback(result == null ? new List<PointBase>() : result.Points, regionKey);                         
+                    
                     }
                     catch (Exception exception)
                     { //TODO: log exception
                         //if a error ocurs, the created entry must be deleted from the cache
+                       
                         PointsCacheManager.Remove(coordinate.Item1, coordinate.Item2, coordinate.Item3, datasetHeader.ID);
                     }
                 });

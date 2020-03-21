@@ -4,6 +4,7 @@ using MapWebSite.Model;
 using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Text.RegularExpressions;
@@ -36,7 +37,7 @@ namespace MapWebSite.Hubs
                  }.JSONSerialize());
                   
              };
-
+      
             try
             {
 
@@ -53,7 +54,7 @@ namespace MapWebSite.Hubs
                 //todo: log exception
             }
             finally
-            {
+            {              
                 Clients.Caller.PointsProcessedNotification();
             }
         }
