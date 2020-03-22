@@ -71,11 +71,11 @@ function changeSelectedRowOnMenu(id, visible) {
  */
 window.useDataset = function useDataset(username, datasetName) {
 
-    SelectedDataset = new PointsDataset(username, datasetName);
-   
     var previousDatasetRowId = 'user_dataset_' + SelectedDataset.username + '_' + SelectedDataset.datasetName;
     var datasetRowId = 'user_dataset_' + username + '_' + datasetName;
 
+    SelectedDataset = new PointsDataset(username, datasetName);
+   
     changeSelectedRowOnMenu(previousDatasetRowId, false);
     changeSelectedRowOnMenu(datasetRowId, true);
 

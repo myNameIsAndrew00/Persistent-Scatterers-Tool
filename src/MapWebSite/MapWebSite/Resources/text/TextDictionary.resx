@@ -451,6 +451,15 @@
   <data name="RegisterCompleteMessage" xml:space="preserve">
     <value>You successufuly registered in application. An confirmation link has been send at {0} for activating the account.</value>
   </data>
+  <data name="CMSCassandra" xml:space="preserve">
+    <value>Cassandra server</value>
+  </data>
+  <data name="CMSGeoserver" xml:space="preserve">
+    <value>Geoserver WMTS</value>
+  </data>
+  <data name="HTM_TOOLTIP_PointsSource" xml:space="preserve">
+    <value>Chose the data source for points layer. This option can enable/disable other functionalities available for data points.</value>
+  </data>
   <data name="LLoginActivateAccountMessage" xml:space="preserve">
     <value>Failed to login. Your account was not activated, please check your email and activate the account.</value>
   </data>

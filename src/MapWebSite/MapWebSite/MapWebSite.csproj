@@ -340,9 +340,10 @@
     <Content Include="Resources\js\api\cache\points_regions_manager.js" />
     <Content Include="Resources\js\api\hub_router.js" />
     <Content Include="Resources\js\map\chose_map_type.js" />
+    <Content Include="Resources\js\map\chose_points_source.js" />
     <Content Include="Resources\js\map\points_layer.js" />
     <Content Include="Resources\js\map\points_search.js" />
-    <Content Include="Resources\js\map\points_section_handler.js" />
+    <Content Include="Resources\js\map\points sources\cassandra_container.js" />
     <Content Include="Resources\js\map\received_points_worker.js" />
     <Content Include="Resources\js\utilities\BackgroundWaves\waves.js" />
     <Content Include="Resources\js\utilities\Card\card_drawer.js" />
@@ -350,7 +351,7 @@
     <Content Include="Resources\js\points settings\chose_criteria.js" />
     <Content Include="Resources\js\points settings\chose_dataset.js" />
     <Content Include="Resources\js\points settings\chose_palette.js" />
-    <Content Include="Resources\js\map\points_source_manager.js" />
+    <Content Include="Resources\js\map\points sources\geoserver_container.js" />
     <Content Include="Resources\js\points settings\chose_points_size.js" />
     <Content Include="Resources\js\utilities\Popup\popup.js" />
     <Content Include="Resources\js\settings\settings.js" />
@@ -389,6 +390,7 @@
     <Content Include="Resources\resources\icons\palette_icon.svg" />
     <Content Include="Resources\resources\icons\points_management_icon.svg" />
     <Content Include="Resources\resources\icons\points_plot_icon.svg" />
+    <Content Include="Resources\resources\icons\points_server_icon.svg" />
     <Content Include="Resources\resources\icons\reload_icon.svg" />
     <Content Include="Resources\resources\icons\resize_point_icon.svg" />
     <Content Include="Resources\resources\icons\second_gliph.svg" />
@@ -554,6 +556,7 @@
     <Content Include="Views\Shared\Home Menu\Navigation Menus\UserDetailsNavigationItems.cshtml" />
     <Content Include="Views\Shared\Home Menu\Navigation Menus\ManageDatapointsNavigationItems.cshtml" />
     <Content Include="Views\Login\MessageForm.cshtml" />
+    <Content Include="Views\Home\Miscellaneous Content\ChosePointsSource.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

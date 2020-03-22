@@ -5,7 +5,7 @@
     .popup-content {
         font-size: 0.9em;
 
-        .chose-criteria-list {
+        .chose-list {
             list-style: none;
             text-align: left;
             font-size: 0.8em;
@@ -24,31 +24,16 @@
             .button-selected {
                 border-color: get_color(mediumGray);
             }
-        }
-
-        .chose-map-list {
-            list-style: none;
-            text-align: left;
-            font-size: 0.8em;
-            margin: 0;
-            padding: 0;
 
             img {
                 width: 15px;
             }
+        }
 
-            button { 
-                border-radius: 0;
-                background: none;
-                color: get_color(mediumGray);
-                border-left: solid;
-                border-left-color: currentcolor;
-                border-color: get_color(lightGray);
-            }
+        .chose-criteria-list {
+        }
 
-            .button-selected {
-                border-color: get_color(mediumGray);
-            }
+        .chose-map-list {
         }
 
         .points-dimension-range {

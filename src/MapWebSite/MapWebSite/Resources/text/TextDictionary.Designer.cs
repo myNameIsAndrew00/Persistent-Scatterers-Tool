@@ -61,6 +61,24 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cassandra server.
+        /// </summary>
+        public static string CMSCassandra {
+            get {
+                return ResourceManager.GetString("CMSCassandra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Geoserver WMTS.
+        /// </summary>
+        public static string CMSGeoserver {
+            get {
+                return ResourceManager.GetString("CMSGeoserver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hybrid map.
         /// </summary>
         public static string CMTHybrid {
@@ -538,6 +556,15 @@ namespace MapWebSite.Resources.text {
         public static string HTM_TOOLTIP_PointsSize {
             get {
                 return ResourceManager.GetString("HTM_TOOLTIP_PointsSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chose the data source for points layer. This option can enable/disable other functionalities available for data points..
+        /// </summary>
+        public static string HTM_TOOLTIP_PointsSource {
+            get {
+                return ResourceManager.GetString("HTM_TOOLTIP_PointsSource", resourceCulture);
             }
         }
         

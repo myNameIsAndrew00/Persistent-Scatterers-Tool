@@ -1,0 +1,22 @@
+﻿@using MapWebSite.Resources.text
+@{
+    Layout = null;
+}
+
+<ul class="chose-list">
+    <li>
+        <button id="chose_points_source_cassandra"
+                onclick="ChangePointsSource(this,'cassandra')">
+            <img src="@Url.Content("~/Resources/resources/icons_images/cassandra.png")">
+            @Html.Raw(TextDictionary.CMSCassandra)
+        </button>
+    </li>
+    <li>
+        <button id="chose_points_source_geoserver"
+                onclick="ChangePointsSource(this,'geoserver')"
+                >
+            <img src="@Url.Content("~/Resources/resources/icons_images/geoserver.png")">
+            @Html.Raw(TextDictionary.CMSGeoserver)
+        </button>
+    </li>
+</ul>

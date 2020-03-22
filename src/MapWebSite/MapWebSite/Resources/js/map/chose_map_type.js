@@ -5,7 +5,7 @@
  * */
 import { SetMapType } from './map.js';
 
-export var MapType = 'hybrid';
+export var MapType = 'satelitte';
 
 var selectedButtonId = 'chose_map_' + MapType;
 

@@ -8,6 +8,7 @@ import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
 import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
 import { UpdateSelectedDatasetLayout } from './points settings/chose_dataset.js';
 import { RefreshSelectCriteriaPopup } from './points settings/chose_criteria.js';
+import { RefreshSelectPointsSourcePopup } from './map/chose_points_source.js';
 import { InitialiseSlider } from './points settings/chose_points_size.js';
 import { LoadSuggestions } from './map/points_search.js';
 import { RefreshSelectMapTypePopup } from './map/chose_map_type.js';
@@ -267,12 +268,25 @@ $('#map_resize_points_button').click(function (event) {
         null);
 });
 
+
+$('#points_server_button').click(function (event) {
+    displayPopup('points_server_button',
+        endpoints.Miscellaneous.GetChosePointsSourcePage,
+        function () {
+            setTimeout(function () {
+                RefreshSelectPointsSourcePopup();
+            }, 50);
+        },
+        null);
+});
+
 //display the input for searching locations on map
 $('#map_search_button').click(function (event) {
     $('#map_autocomplete').hasClass('autocomplete-hidden') ?
         $('#map_autocomplete').removeClass('autocomplete-hidden') :
         $('#map_autocomplete').addClass('autocomplete-hidden');
 });
+
 
 //handle the event when user search something on map
 var bouncer = 0;
@@ -348,6 +362,19 @@ TooltipManagerInstance.Register({
     {
         endpoint: endpoints.Miscellaneous.GetTooltip,
         tooltipId: 3
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});
+
+TooltipManagerInstance.Register({
+    containerId: 'points_server_button',
+    delay: 2000,
+    useRouter: true,
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetTooltip,
+        tooltipId: 4
     },
     cursorSide: 'left',
     displayOverlay: true

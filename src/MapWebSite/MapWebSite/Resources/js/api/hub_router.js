@@ -78,4 +78,5 @@ class HubRouter {
     }
 }
 
-export { HubRouter };
+export var HubRouterInstance = new HubRouter();
+ 

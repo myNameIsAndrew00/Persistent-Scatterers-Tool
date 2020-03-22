@@ -24,7 +24,9 @@ namespace MapWebSite.Controllers
             [EnumString("HTM_TOOLTIP_ColorCriteria")]
             ChoseColorCriteriumTooltip,
             [EnumString("HTM_TOOLTIP_Search")]
-            SearchTooltip
+            SearchTooltip,
+            [EnumString("HTM_TOOLTIP_PointsSource")]
+            PointsSource
         }
 
         [HttpGet]
@@ -43,6 +45,11 @@ namespace MapWebSite.Controllers
         public ActionResult GetChangePointsSizePage()
         {
             return View("~/Views/Home/Miscellaneous Content/ChangePointsSize.cshtml");
+        }
+
+        public ActionResult GetChosePointsSourcePage()
+        {
+            return View("~/Views/Home/Miscellaneous Content/ChosePointsSource.cshtml");
         }
 
         /// <summary>

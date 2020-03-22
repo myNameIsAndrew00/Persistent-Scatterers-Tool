@@ -8,8 +8,7 @@ import { DisplayPointInfo, SetPointInfoData } from '../point info/point_info.js'
 import { Router, endpoints } from '../api/api_router.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
 import { MapType } from './chose_map_type.js';
-import { PointsSectionsContainer } from './points_section_handler.js';
-
+import { PointsSectionsContainer, ChangePointsSource } from './chose_points_source.js';
 
 var selectedPoints = [];
 export var ProcessingEnabled = 0;
@@ -18,12 +17,12 @@ export var ProcessingEnabled = 0;
 //var receivedPointsWorker = new Worker('script.js', { type: "module" });
 
 export function PointsProcessedNotificationHandler() {
-    ProcessingEnabled--;
+    ProcessingEnabled = Math.max(0, ProcessingEnabled - 1);
     if (ProcessingEnabled == 0)
-        DisplayHubProcessing(false);
+        DisplayProcessing(false);
 }
 
-export function DisplayHubProcessing(display) {
+export function DisplayProcessing(display) {
     if (display) ProcessingEnabled++;
 
     if (display)
@@ -50,25 +49,25 @@ var mapView = new ol.View({
 
 //this variable contains the source tiles available to be displayed
 const sources = {
-    hybrid: new ol.layer.Tile({
-        visible: true, 
-        source: new ol.source.OSM({
-            crossOrigin: 'anonymous',
-            wrapX: false,
-            noWrap: true,      
-        })
-    }),
     satelitte: new ol.layer.Tile({
-        visible: false, 
+        visible: true,
         source: new ol.source.TileJSON({
             url: 'https://api.maptiler.com/maps/hybrid/256/tiles.json?key=UKuFFRYp8bMMxfqZFhKJ',
             tileSize: 256,
             crossOrigin: 'anonymous',
             wrapX: false,
             noWrap: true
-        
+
         })
-    })
+    }),
+    hybrid: new ol.layer.Tile({
+        visible: false, 
+        source: new ol.source.OSM({
+            crossOrigin: 'anonymous',
+            wrapX: false,
+            noWrap: true,      
+        })
+    })    
 }
 
 export function SetMapType(chosenType) {
@@ -89,8 +88,8 @@ export const map = new ol.Map({
     target: 'map',
     renderer: 'webgl', 
     layers: [
-        sources['satelitte'],
-        sources['hybrid']
+        sources['hybrid'],
+        sources['satelitte']
     ],
     view: mapView,
     controls: []
@@ -174,7 +173,7 @@ export function UnselectFeatureOnMap(featureId) {
  * Section below contain the points request handling
  */
 export function UpdatePointsLayer(points) {
-    pointsSectionsContainer.UpdatePointsLayer(points);
+    PointsSectionsContainer.UpdatePointsLayer(points);
 
 }
 
@@ -187,14 +186,13 @@ function initialisePointsRequest(evt) {
         currentZoom = newZoom;
     }*/
 
-
-    pointsSectionsContainer.LoadPoints();
+    PointsSectionsContainer.LoadPoints();
 }
 
 //initialise map interactions
 
 
-var pointsSectionsContainer = new PointsSectionsContainer(map);
+ChangePointsSource(null,'cassandra');
 
 /**********************************************/
 /*this section contains context menu functions*/

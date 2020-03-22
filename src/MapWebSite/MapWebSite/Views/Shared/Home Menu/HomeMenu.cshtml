@@ -91,24 +91,33 @@
             </div>
         </div>
 
-        <button id="map_resize_points_button">
-            @Html.SVG("~/Resources/resources/icons/resize_point_icon.svg", new { height = "22px", width = "28px" })
-        </button>
-
-        <button id="map_criteria_button">
-            @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "20px", width = "28px" })
-        </button>
-
-        <button id="map_type_button">
-            @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "20px", width = "25px" })
-        </button>
-
-        @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
-        {
-            <button id="notification_button" class="notification-button">
-                @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "20px", width = "25px" })
+        <div class="customizable-buttons">
+            <button id="map_resize_points_button">
+                @Html.SVG("~/Resources/resources/icons/resize_point_icon.svg", new { height = "22px", width = "28px" })
             </button>
-        }
+
+            <button id="map_criteria_button">
+                @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "20px", width = "28px" })
+            </button>
+        </div>
+
+        <div class="general-buttons">
+            <button id="map_type_button">
+                @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "20px", width = "25px" })
+            </button>
+
+            <button id="points_server_button">
+                @Html.SVG("~/Resources/resources/icons/points_server_icon.svg", new { height = "23px", width = "28px" })
+            </button>
+
+            @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+            {
+                <button id="notification_button" class="notification-button">
+                    @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "20px", width = "25px" })
+                </button>
+            }
+        </div>
+
     </div>
 
     <div class="white-area box">

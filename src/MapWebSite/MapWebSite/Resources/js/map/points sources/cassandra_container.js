@@ -1,23 +1,26 @@
 ﻿/*!
  * Component: PointsSection
- * This script contains code which manages a handler for an area of screen
+ * This script contains code which manages a points handler for an area of screen
+ * Points source is Cassandra database. Communication is made via websockets - signalR
  * */
 
 
-import { DisplayHubProcessing, ProcessingEnabled, PointsProcessedNotificationHandler } from './map.js';
-import { PointsRegionsManager } from '../api/cache/points_regions_manager.js';
-import { colorPalette } from '../home.js';
-import { Router, endpoints } from '../api/api_router.js';
-import { PointsLayer } from './points_layer.js';
-import { HubRouter } from '../api/hub_router.js';
-import { SelectedDataset } from '../points settings/chose_dataset.js';
-import { SelectedCriteria } from '../points settings/chose_criteria.js';
-import { PointsDimensionScale } from '../points settings/chose_points_size.js';
+import { DisplayProcessing, ProcessingEnabled, PointsProcessedNotificationHandler } from '../map.js';
+import { PointsRegionsManager } from '../../api/cache/points_regions_manager.js';
+import { colorPalette } from '../../home.js';
+import { Router, endpoints } from '../../api/api_router.js';
+import { PointsLayer } from '../points_layer.js';
+import { HubRouterInstance } from '../../api/hub_router.js';
+import { SelectedDataset } from '../../points settings/chose_dataset.js';
+import { SelectedCriteria } from '../../points settings/chose_criteria.js';
+import { PointsDimensionScale } from '../../points settings/chose_points_size.js';
 
 export const SectionsRowsCount = 1;
-export const SectionsColumnsCount = 2;
+export const SectionsColumnsCount = 1;
 
-export class PointsSectionsContainer {
+
+
+export class CassandraPointsSectionsContainer {
 
     constructor(map) {
         this.sections = [];
@@ -39,6 +42,12 @@ export class PointsSectionsContainer {
         for (var i = 0; i < this.sections.length; i++)
             this.sections[i].UpdatePointsLayer(points);
     }
+
+    //use this method to delete points layers from map
+    RemoveLayers() {
+        for (var i = 0; i < this.sections.length; i++)
+            this.sections[i].RemoveLayer();
+    }
 }
 
 
@@ -53,7 +62,7 @@ class PointsSectionHandler {
         this.columnIndex = columnIndex;
 
         /*initialise the router and the local cache*/
-        this.hubRouter = new HubRouter();
+        this.hubRouter = HubRouterInstance;
 
         /*
         var pointsRegionsManager = new PointsRegionsManager();
@@ -64,7 +73,7 @@ class PointsSectionHandler {
         }); */
 
 
-        this.hubRouter.SetCallback('ProcessPoints', async function (receivedInfo) { caller.processPoints(receivedInfo, false) });
+        this.hubRouter.SetCallback('ProcessPoints', function (receivedInfo) { caller.processPoints(receivedInfo, false) });
        
         this.hubRouter.SetCallback('PointsProcessedNotification', PointsProcessedNotificationHandler);
 
@@ -100,7 +109,7 @@ class PointsSectionHandler {
         /*switch the displayed layers*/
         this.switchLayers();
 
-        DisplayHubProcessing(true);
+        DisplayProcessing(true);
 
         var coordinates = this.getCornerCoordinates();
         var caller = this;
@@ -150,6 +159,8 @@ class PointsSectionHandler {
     }
 
     UpdatePointsLayer(points) {
+        console.log('received response');
+
         if (this.mainVector != null) {
             if (points == null) {
                 this.mainVectorSource.clear(true); 
@@ -165,6 +176,11 @@ class PointsSectionHandler {
 
            
         }
+    }
+
+    RemoveLayer() {
+        this.map.removeLayer(this.mainVector);
+        this.map.removeLayer(this.secondaryVector);
     }
 
     /*private methods*/
