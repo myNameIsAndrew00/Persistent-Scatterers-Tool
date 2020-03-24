@@ -26,7 +26,9 @@ namespace MapWebSite.Controllers
             [EnumString("HTM_TOOLTIP_Search")]
             SearchTooltip,
             [EnumString("HTM_TOOLTIP_PointsSource")]
-            PointsSource
+            PointsSource,
+            [EnumString("HPI_TOOLTIP_PlotWindow")]
+            PlotWindow
         }
 
         [HttpGet]
@@ -53,15 +55,15 @@ namespace MapWebSite.Controllers
         }
 
         /// <summary>
-        /// Return a view containing a tooltip
+        /// Return a view containing a tooltip. If the tooltip contains a gif in resources, gif will be included on response
         /// </summary>
-        /// <param name="tooltip"></param>
+        /// <param name="tooltip">Tooltip which must be returned</param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult GetTooltip(Tooltip tooltip)
+        public ActionResult GetGifTooltip(Tooltip tooltip)
         {
-            return PartialView("~/Views/Home/Miscellaneous Content/Tooltips/TutorialTooltip.cshtml",
-                new TutorialTooltipViewModel()
+            return PartialView("~/Views/Home/Miscellaneous Content/Tooltips/GifTooltip.cshtml",
+                new GifTooltipViewModel()
                 {
                     DisplayedMessage = 
                         Resources.text.TextDictionary.ResourceManager.GetString(
@@ -71,6 +73,24 @@ namespace MapWebSite.Controllers
                         $"Resources/resources/gifs/{tooltip.GetEnumString()}.gif"
                 }
                 );
+        }
+
+        /// <summary>
+        /// Return a view containing a tooltip.
+        /// </summary>
+        /// <param name="tooltip">Tooltip which must be returned</param>
+        /// <returns></returns>
+        public ActionResult GetTooltip(Tooltip tooltip)
+        {
+            return PartialView("~/Views/Home/Miscellaneous Content/Tooltips/Tooltip.cshtml",
+              new TooltipViewModel()
+              {
+                  DisplayedMessage =
+                      Resources.text.TextDictionary.ResourceManager.GetString(
+                          tooltip.GetEnumString(),
+                          Resources.text.TextDictionary.Culture)                
+              }
+              );
         }
     }
 

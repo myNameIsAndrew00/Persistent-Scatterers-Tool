@@ -308,6 +308,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open a new window to display the graph and points details. Window is persistent and can be closed anytime..
+        /// </summary>
+        public static string HPI_TOOLTIP_PlotWindow {
+            get {
+                return ResourceManager.GetString("HPI_TOOLTIP_PlotWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deformation rate.
         /// </summary>
         public static string HPIDeformationRateText {

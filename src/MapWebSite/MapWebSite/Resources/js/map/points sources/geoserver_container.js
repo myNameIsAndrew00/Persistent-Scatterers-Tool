@@ -2,6 +2,7 @@
  * Component: Points source manager
  * This script contains code which manages the source for the points layer
  * */
+import { DisplayPointInfo, SetPointInfoData } from '../../point info/point_info.js';
 
 export class GeoserverPointsSectionsContainer {
 
@@ -32,6 +33,26 @@ export class GeoserverPointsSectionsContainer {
 
     UpdatePointsLayer(points) {
        
+    }
+
+    InitialiseMapInteraction() {
+        var self = this;
+
+        this.map.on('click', function (evt) {
+            var view = self.map.getView();
+            var viewResolution = view.getResolution();
+            var source = self.pointsLayer.getSource();
+            var url = source.getFeatureInfoUrl(
+                evt.coordinate, viewResolution, view.getProjection(),
+                {
+                    INFO_FORMAT: 'text/html',
+                    FEATURE_COUNT: 1
+                });
+            if (url) {
+                //make a request to that url to receive data
+                DisplayPointInfo();
+            }
+        });
     }
 
     RemoveLayers() {

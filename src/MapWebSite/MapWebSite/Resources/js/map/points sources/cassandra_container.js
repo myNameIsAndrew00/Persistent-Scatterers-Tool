@@ -14,6 +14,7 @@ import { HubRouterInstance } from '../../api/hub_router.js';
 import { SelectedDataset } from '../../points settings/chose_dataset.js';
 import { SelectedCriteria } from '../../points settings/chose_criteria.js';
 import { PointsDimensionScale } from '../../points settings/chose_points_size.js';
+import { DisplayPointInfo, SetPointInfoData } from '../../point info/point_info.js';
 
 export const SectionsRowsCount = 1;
 export const SectionsColumnsCount = 1;
@@ -41,6 +42,11 @@ export class CassandraPointsSectionsContainer {
     UpdatePointsLayer(points) {
         for (var i = 0; i < this.sections.length; i++)
             this.sections[i].UpdatePointsLayer(points);
+    }
+
+    InitialiseMapInteraction() {
+        for (var i = 0; i < this.sections.length; i++)
+            this.sections[i].InitialiseMapInteraction();
     }
 
     //use this method to delete points layers from map
@@ -100,6 +106,66 @@ class PointsSectionHandler {
         this.localCache = localCache;
     }
 
+    InitialiseMapInteraction() {
+        var map = this.map;
+
+        this.map.on('click', function (evt) {
+            if (map.getView().getInteracting()) {
+                return;
+            }
+            var pixel = evt.pixel;
+
+            map.forEachFeatureAtPixel(pixel, function (feature) {
+                //  if (selectedPoints[feature.ID] === undefined) {
+                handleClickFunction(feature);
+                // }
+            });
+        });
+
+        /*follow section handle the click on items*/
+        /**
+         * This functions handle the click on point. Parameter represents the feature
+         */
+
+        function handleClickFunction(point) {
+
+            /*
+            function selectFeatureOnMap() {
+                var selectFeatureId = point.ID;
+        
+                var feature = new ol.Feature({
+                    'geometry': new ol.geom.Point(
+                        ol.proj.fromLonLat([point.longitude, point.latitude], 'EPSG:3857')),
+                });
+                feature.setId(point.ID + 'selected');
+                feature.ID = point.ID + 'selected';
+                feature.longitude = point.longitude;
+                feature.latitude = point.latitude;
+                feature.color = { r: 0, g: 0, b: 255 }
+                feature.size = 3;
+        
+                selectedPoints[selectFeatureId] = feature;
+        
+                vectorSource.addFeature(feature);
+            }*/
+
+            Router.Get(endpoints.Home.RequestPointDetails,
+                {
+                    zoomLevel: map.getView().getZoom(),
+                    latitude: point.latitude,
+                    longitude: point.longitude,
+                    identifier: point.ID,
+                    username: SelectedDataset.username,
+                    datasetName: SelectedDataset.datasetName
+                }, function (receivedInfo) {
+                    SetPointInfoData(receivedInfo);
+                }
+            )
+
+
+            DisplayPointInfo();
+        }
+    }
 
     LoadPoints() {
         if (SelectedDataset.username === null && SelectedDataset.datasetName === null) return;

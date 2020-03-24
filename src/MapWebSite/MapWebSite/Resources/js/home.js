@@ -85,4 +85,3 @@ export function SetColorPalette(palette){
     colorPalette = palette;
 }
 
- 

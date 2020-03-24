@@ -7,6 +7,8 @@
 import { PlotDrawer } from '../utilities/Plot/plot.js';
 import { CardsManager } from '../utilities/Card/cards_manager.js';
 import { UnselectFeatureOnMap } from '../map/map.js';
+import { TooltipManagerInstance } from '../utilities/Tooltip/tooltip_manager.js';
+import { endpoints } from '../api/api_router.js';
 
 var cardsManager = new CardsManager('map-container');
 var currentDrawer = null;
@@ -95,6 +97,10 @@ export function HidePointInfo(showTopMenu) {
 
     if(currentDisplayedPoint != null)
          UnselectFeatureOnMap(currentDisplayedPoint.Number);
+}
+
+export function AddGraphToExistentPopup() {
+
 }
 
 export function CreatePopupWindow() {
@@ -194,13 +200,31 @@ function drawPlot(values, oXLeft, oXRight, oYBottom, oYTop) {
         'Time [days]',
         'Deformation [mm]');
 
-
-    currentDrawer.DrawPoints(values);
+    currentDrawer.AddPoints(values)
+    currentDrawer.DrawPoints();
 }
 
 window.changePlotType = function changePlotType(plotType) {
     if (currentDrawer == null) return;
 
-    currentDrawer.SetPlotType(plotType,true);
+    currentDrawer.SetPlotType(plotType, true);    
     currentDrawer.RedrawPoints();
 }
+
+
+
+
+/*TOOLTIP initialisation*/
+
+TooltipManagerInstance.Register({
+    containerId: 'create_popup_window_button',
+    delay: 2000,
+    useRouter: true,
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
+        tooltipId: 5
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});

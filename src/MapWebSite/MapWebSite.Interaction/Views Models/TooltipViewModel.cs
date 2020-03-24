@@ -11,7 +11,7 @@ namespace MapWebSite.Domain.ViewModel
         public string DisplayedMessage { get; set; }
     }
 
-    public class TutorialTooltipViewModel : TooltipViewModel
+    public class GifTooltipViewModel : TooltipViewModel
     {
         public string GifPath { get; set; }
     }

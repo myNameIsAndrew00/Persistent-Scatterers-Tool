@@ -40,7 +40,7 @@ export class PlotDrawer {
         this.initialOxLabel = this.oxLabel = oxLabel;
         this.initialOyLabel = this.oyLabel = oyLabel;
         this.initialPlotType = this.plotType = 'line';
-        this.initialCurrentPoints = this.currentPoints = null;
+        this.initialCurrentPoints = this.currentPoints = [];
 
         this.initialGraphColor = this.graphColor = 'white';
         this.initialFontSize = this.fontSize = 14;
@@ -148,16 +148,20 @@ export class PlotDrawer {
      
     }
 
-    DrawPoints(points, keepExisting) {
-        this.currentPoints = points;
+    AddPoints(points) {
+        this.currentPoints.push(points);
+    }
+
+    DrawPoints(keepExisting) {
         if(keepExisting != true) this.deleteGraphPoints();
 
+        for (var i = 0; i < this.currentPoints.length; i++)
         switch (this.plotType) {
             case 'bars':
-                this.drawBarsPoints(this.currentPoints);
+                this.drawBarsPoints(this.currentPoints[ i ]);
                 break;
             case 'line':
-                this.drawLinePoints(this.currentPoints);
+                this.drawLinePoints(this.currentPoints[ i ]);
                 break;
 
         }
@@ -166,8 +170,8 @@ export class PlotDrawer {
     RedrawPoints(keepExisting) {
         if (this.currentPoints == null) return;
 
-        if (keepExisting) this.DrawPoints(this.currentPoints, true);
-        else this.DrawPoints(this.currentPoints);
+        if (keepExisting) this.DrawPoints(true);
+        else this.DrawPoints();
     }
 
     DrawAxisLabels(keepExisting) {

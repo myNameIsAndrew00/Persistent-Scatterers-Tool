@@ -319,7 +319,7 @@ TooltipManagerInstance.Register({
     useRouter: true, 
     routerData:
     {
-        endpoint: endpoints.Miscellaneous.GetTooltip,
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
         tooltipId: 0
     },
     cursorSide: 'left',
@@ -332,7 +332,7 @@ TooltipManagerInstance.Register({
     useRouter: true,
     routerData:
     {
-        endpoint: endpoints.Miscellaneous.GetTooltip,
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
         tooltipId: 1
     },
     cursorSide: 'left',
@@ -346,7 +346,7 @@ TooltipManagerInstance.Register({
     useRouter: true,
     routerData:
     {
-        endpoint: endpoints.Miscellaneous.GetTooltip,
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
         tooltipId: 2
     },
     cursorSide: 'left',
@@ -360,7 +360,7 @@ TooltipManagerInstance.Register({
     useRouter: true,
     routerData:
     {
-        endpoint: endpoints.Miscellaneous.GetTooltip,
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
         tooltipId: 3
     },
     cursorSide: 'left',
@@ -373,7 +373,7 @@ TooltipManagerInstance.Register({
     useRouter: true,
     routerData:
     {
-        endpoint: endpoints.Miscellaneous.GetTooltip,
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
         tooltipId: 4
     },
     cursorSide: 'left',

@@ -24,6 +24,13 @@ export function RefreshSelectPointsSourcePopup() {
 
 
 export function ChangePointsSource(button, sourceName) {
+    //EVERY points container must provide methods:
+    //1.A constructor which accepts target map as parameter
+    //2.RemoveLayers: method for unbind provider from map
+    //3.InitialiseMapInteraction: to provide interaction between points and user
+    //4.LoadPoints: (required, optionally used -- a callback used when map view changes)
+    //5.UpdatePointsLayer: (required, used by application features like change dataset or color palette)
+
     if (PointsSectionsContainer != null) PointsSectionsContainer.RemoveLayers();
 
     switch (sourceName) {
@@ -35,6 +42,8 @@ export function ChangePointsSource(button, sourceName) {
             break;
         default: break;
     }
+
+    if (PointsSectionsContainer != null) PointsSectionsContainer.InitialiseMapInteraction();
 
     if (button != null) {
         $('#' + selectedButtonId).removeClass('button-selected');

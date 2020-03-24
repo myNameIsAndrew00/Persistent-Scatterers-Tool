@@ -9,7 +9,7 @@
     opacity: 1;
     margin-left: 20px; 
     
-    z-index: $critical_z_index;
+    z-index: $overflow_z_index;
 
     .tooltip-body {
         pointer-events: none;

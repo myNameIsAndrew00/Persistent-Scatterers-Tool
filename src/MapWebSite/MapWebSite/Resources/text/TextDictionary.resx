@@ -457,6 +457,9 @@
   <data name="CMSGeoserver" xml:space="preserve">
     <value>Geoserver WMTS</value>
   </data>
+  <data name="HPI_TOOLTIP_PlotWindow" xml:space="preserve">
+    <value>Open a new window to display the graph and points details. Window is persistent and can be closed anytime.</value>
+  </data>
   <data name="HTM_TOOLTIP_PointsSource" xml:space="preserve">
     <value>Chose the data source for points layer. This option can enable/disable other functionalities available for data points.</value>
   </data>

@@ -18,6 +18,7 @@ export const endpoints = {
         GetNotificationsPage: '/Miscellaneous/GetNotificationsPage',
         GetChoseMapTypePage: '/Miscellaneous/GetChoseMapTypePage',
         GetChangePointsSizePage: '/Miscellaneous/GetChangePointsSizePage',
+        GetGifTooltip: '/Miscellaneous/GetGifTooltip',
         GetTooltip: '/Miscellaneous/GetTooltip',
         GetChosePointsSourcePage: '/Miscellaneous/GetChosePointsSourcePage'
     },
