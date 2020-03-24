@@ -45,6 +45,7 @@ begin
 	
 end
 
+go
   
 if object_id('UpdatePointsDatasetRepresentationLimits', 'P') is not null
 	drop procedure UpdatePointsDatasetRepresentationLimits
@@ -77,6 +78,9 @@ end
 
 go
 
+if object_id('UpdateUser', 'P') is not null
+	drop procedure UpdateUser
+go
 
 create procedure UpdateUser 
 	@username as varchar(100),
@@ -111,6 +115,7 @@ begin
 
 end
   
+go
  
 if object_id('SetUserEmail','P') is not null
 	drop procedure SetUserEmail
@@ -129,7 +134,7 @@ begin
 
 end
 
-
+go
 
 if object_id('SetUserEmailConfirmed','P') is not null
 	drop procedure SetUserEmailConfirmed
