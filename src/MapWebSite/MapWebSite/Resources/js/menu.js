@@ -25,6 +25,7 @@ var menuIconsCount = 0;
 
 const mainMenuId = '#main-menu';
 const secondaryMenuId = '#secondary-menu';
+const fixedMenuId = '#fixed-menu';
 
 window.onload = function () {
     menuIconsCount = $('#main-select-menu-icon').find('object').length;
@@ -77,6 +78,7 @@ window.changeMenuContent = function changeMenuContent(direction, display = false
 }
 
 export function ExpandMainMenu(expand) {
+    expand ? $(fixedMenuId).addClass('fixed-menu-expanded') : $(fixedMenuId).removeClass('fixed-menu-expanded');
     expand ? $(mainMenuId).addClass('main-select-menu-expanded') : $(mainMenuId).removeClass('main-select-menu-expanded');
     expand ? $(secondaryMenuId).addClass('secondary-menu-hidden') : $(secondaryMenuId).removeClass('secondary-menu-hidden')
 }
@@ -84,7 +86,7 @@ export function ExpandMainMenu(expand) {
 function hideIcon(innerImage, innerText, currentMenuList) {
     /*reset elements transition timer*/
     /*animation for side menu*/
-    if (currentMenuList != null) $(secondaryMenuId).css('margin','0 0 0 -50px');
+    if (currentMenuList != null) $(secondaryMenuId).css('margin','0 0 0 -190px');
 
     /*animation for main menu*/
     innerImage.style.transition = '0.5s';

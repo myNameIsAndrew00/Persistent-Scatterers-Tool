@@ -333,6 +333,7 @@
     <Content Include="Resources\css\small_loading_spinner.scss" />
     <Content Include="Resources\css\general\application.scss" />
     <None Include="Resources\css\application_message.scss" />
+    <Content Include="Resources\css\general\dimensions.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
     <Content Include="Resources\css\popup.scss" />
     <Content Include="Resources\css\home_points_settings_popup.scss" />
