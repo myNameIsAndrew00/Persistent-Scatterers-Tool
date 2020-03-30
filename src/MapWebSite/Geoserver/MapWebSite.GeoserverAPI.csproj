@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MapWebSite.Core\MapWebSite.Core.csproj" />
-    <ProjectReference Include="..\MapWebSite.Model\MapWebSite.Model.csproj" />
     <ProjectReference Include="..\MapWebSite.Types\MapWebSite.Types.csproj" />
   </ItemGroup>
 

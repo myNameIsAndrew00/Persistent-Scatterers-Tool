@@ -3,9 +3,10 @@ using MapWebSite.GeoserverAPI.Modules.Styles;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
-namespace GeoserverAPI.Modules
+namespace MapWebSite.GeoserverAPI.Modules
 {
     /// <summary>
     /// Represents a module which can be used to send/receive a style to Geoserver
@@ -21,12 +22,20 @@ namespace GeoserverAPI.Modules
 
         public HttpContent GetContent()
         {
-            throw new NotImplementedException();
+            StringContent content = new StringContent(stylesBuilder.ToXml(),
+                Encoding.UTF8,
+                "application/vnd.ogc.sld+xml");
+           
+            return content;
         }
+
+
 
         public string GetEndpoint()
         {
-            return Endpoints.Styles.GetEnumString();
+            return string.Format(Endpoints.Styles.GetEnumString(), this.stylesBuilder.Name);
         }
+
+      
     }
 }

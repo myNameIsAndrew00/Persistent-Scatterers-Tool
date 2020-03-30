@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
-namespace GeoserverAPI.Modules
+namespace MapWebSite.GeoserverAPI.Modules
 {
     /// <summary>
     /// Provides methods to 
@@ -13,5 +14,6 @@ namespace GeoserverAPI.Modules
         string GetEndpoint();
 
         HttpContent GetContent();
+ 
     }
 }

@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CacheTest.cs" />
+    <Compile Include="Core\GeoserverAPI.cs" />
     <Compile Include="Core\PointsGenerations.cs" />
     <Compile Include="Core\UTMConverter.cs" />
     <Compile Include="Core\Serialization.cs" />
@@ -131,6 +132,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Geoserver\MapWebSite.GeoserverAPI.csproj">
+      <Project>{7b8b948e-1bea-4a58-930f-4637f9ac5fe2}</Project>
+      <Name>MapWebSite.GeoserverAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MapWebSite.CassandraAccess\MapWebSite.CassandraAccess.csproj">
       <Project>{9f148b28-5981-40da-b669-505872475c2a}</Project>
       <Name>MapWebSite.CassandraAccess</Name>

@@ -1,4 +1,4 @@
-﻿using GeoserverAPI.Modules;
+﻿using MapWebSite.GeoserverAPI.Modules;
 using MapWebSite.GeoserverAPI.Modules.Styles;
 using System;
 using System.Collections.Generic;

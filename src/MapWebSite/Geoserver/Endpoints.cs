@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GeoserverAPI
+namespace MapWebSite.GeoserverAPI
 {
     internal enum Endpoints
     {
-            [EnumString("/about/manifests")]
+            [EnumString("/geoserver/rest/about/manifests")]
             Manifests,
             
-            [EnumString("/styles")]
+            [EnumString("/geoserver/rest/styles?name={0}")]
             Styles
 
     }
