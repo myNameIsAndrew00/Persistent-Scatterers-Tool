@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Converters;
 
-namespace MapWebSite.Core
+namespace MapWebSite.Types
 {
     public class DateFormatConverter : IsoDateTimeConverter
     {

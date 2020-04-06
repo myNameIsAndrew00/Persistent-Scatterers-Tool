@@ -11,6 +11,7 @@ import { Router, endpoints } from '../api/api_router.js';
 var __selected_palette_index = -1;
 
 const settingsLayerContainerId = '#points-settings-layer-container-content';
+const settingsLayerContainerClass = '.points-settings-layer-container-palette-content';
 
 function changeSelectedRowOnMenu(id, visible) {
     var paletteRow = $(settingsLayerContainerId).find('[id=\'' + id + '\']')[0];

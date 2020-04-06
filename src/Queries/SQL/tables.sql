@@ -112,12 +112,25 @@ create table DataSets(
 )
 
 
+create table ColorPalettesStatuses(
+	status_id int identity(1,1),
+	status_mask int not null, 
+	name nvarchar(100) not null unique,
+
+	primary key (status_id)
+  );
+
+  insert into ColorPalettesStatuses(status_mask, name)
+  values (1, 'Uploaded'),(2,'GeoserverRequested'),(4,'GeoserverSent')
+
+
 create table ColorPalettes(
 	color_palette_id int identity(1,1),
 	palette_name varchar(255) not null,
 	palette_serialization text not null,
 	user_id int not null,
 	creation_date datetime not null default(GETDATE()),
+	status_mask int not null, 
 	
 	unique nonclustered(palette_name,user_id),
 	primary key(color_palette_id),

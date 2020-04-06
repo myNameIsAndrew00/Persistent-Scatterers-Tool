@@ -20,9 +20,13 @@ var dotsCount = 1;
 var currentDot = 1;
 
 /*the limits of the slider*/
-var LeftMargin = 40 + Number(window.getComputedStyle(document.getElementById('color-picker-container'), null).marginLeft.replace(/[a-zA-Z]/g, ""));
-var SliderWidth = 800;
-var SliderLeft = 30;
+const LeftMargin = 40
+                + Number(window.getComputedStyle(document.getElementById('color-picker-container'), null).marginLeft.replace(/[a-zA-Z]/g, ""))
+                + Number(window.getComputedStyle(document.getElementById('settings-layer'), null).paddingLeft.replace(/[a-zA-Z]/g, ""))
+                + Number(window.getComputedStyle(document.getElementById('color-picker-content'), null).paddingLeft.replace(/[a-zA-Z]/g, ""))
+                - Number(window.getComputedStyle(document.getElementById('slider'), null).left.replace(/[a-zA-Z]/g, ""));
+const SliderWidth = Number(window.getComputedStyle(document.getElementById('slider'), null).width.replace(/[a-zA-Z]/g, ""));
+const DotRadius = 10;
 
 /*color mapping list*/
 var colorList = new ColorList(new ColorNode('dot-1'), SliderWidth, '#361f9c');
@@ -42,11 +46,12 @@ window.changePosition = function changePosition() {
         if(dotPosition < margins.left  || dotPosition > margins.right ) return;
 
         //change the label content
-        dotLabel.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
+        //dotLabel.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
+        $(dotLabel).val(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
         dotLabel.style.left = dotPosition + 'px';
 
         //change the point
-        dot.style.left = dotPosition + SliderLeft + 'px';
+        dot.style.left = dotPosition + DotRadius + 'px';
        
         colorList.SetPointPosition('dot-' + currentDot, dotPosition);       
         $('#slider').css({ background: colorList.BuildGradientString() }); 
@@ -80,8 +85,8 @@ window.addDot = function addDot() {
     var dotPosition = event.clientX - LeftMargin;     
  
     showColorPicker(event.clientX);
-    var spanID = createSpan(dotPosition + SliderLeft, dotColor);
-    createLabel(dotPosition);
+    var spanID = createSpan(dotPosition, dotColor);
+    createInput(dotPosition);
 
     colorList.AddNode( dotPosition, dotColor, spanID);
      
@@ -89,13 +94,13 @@ window.addDot = function addDot() {
  
 }
 
-function createLabel(dotPosition){
-    var label = document.createElement('label');
-    label.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
-    label.style.left = dotPosition + 'px';
-    label.id = 'dot-' + dotsCount + '-label';
+function createInput(dotPosition){
+    var input = document.createElement('input');
+    $(input).val(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
+    input.style.left = dotPosition + 'px';
+    input.id = 'dot-' + dotsCount + '-label';
 
-    $('#dots-container').append(label);
+    $('#dots-container').append(input);
 }
 
 function createSpan(dotPosition, dotColor){
@@ -107,7 +112,7 @@ function createSpan(dotPosition, dotColor){
    
     dot.classList.add('dot');
     dot.id = 'dot-' + dotsCount;
-    dot.style.left = dotPosition +'px';   
+    dot.style.left = dotPosition + DotRadius +'px';   
     dot.style.backgroundColor = dotColor;
     dot.draggable = false;
     dot.addEventListener('mousedown',changeSelectedDot);
@@ -128,7 +133,7 @@ window.changeSpanColor = function changeSpanColor(newColor){
 function showColorPicker(horizontalPosition) { 
    changeColorPickerVisibility(true);
 
-   $('#color-picker').css('left', horizontalPosition - 25 + 'px');
+   $('#color-picker').css('left', horizontalPosition + 'px');
 }
 
 window.removeSpan = function removeSpan() {

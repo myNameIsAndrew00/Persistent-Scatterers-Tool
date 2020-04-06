@@ -27,6 +27,7 @@
         top: 0;
         padding-left: $fixed_menu_width;
         transition: 0.7s;
+        overflow-y: auto;
     }
 
     .settings-layer-hide {
@@ -36,7 +37,7 @@
     .close_setting_layer_button {
         z-index: $critical_z_index;
         position: fixed;
-        right: 10px;
+        right: 25px;
         top: 10px;
         background: none;
         border: none;

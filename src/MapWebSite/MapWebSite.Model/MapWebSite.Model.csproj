@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Geoserver\MapWebSite.GeoserverAPI.csproj" />
     <ProjectReference Include="..\MapWebSite.Types\MapWebSite.Types.csproj" />
   </ItemGroup>
  

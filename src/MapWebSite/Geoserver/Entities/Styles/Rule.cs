@@ -22,7 +22,7 @@ namespace MapWebSite.GeoserverAPI.Entities
 
         
         [XmlElement("Filter", Namespace = "http://www.opengis.net/ogc")]
-        public List<Filter.FilterItem> FilterItems { get; set; }
+        public Filter Filter { get; set; }
 
 
         [XmlElement]
@@ -35,5 +35,15 @@ namespace MapWebSite.GeoserverAPI.Entities
         
         [XmlElement("PointSymbolizer")]
         public List<PointSymbolizer> PointSymbolizers { get; set; }
+
+        public bool ShouldSerializeMinScaleDenominator()
+        {
+            return MinScaleDenominator != 0;
+        }
+
+        public bool ShouldSerializeMaxScaleDenominator()
+        {
+            return MaxScaleDenominator != 0;
+        }
     }
 }

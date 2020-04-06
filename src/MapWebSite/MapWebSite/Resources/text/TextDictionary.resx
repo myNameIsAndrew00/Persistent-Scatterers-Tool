@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="HMenuCPArticle1" xml:space="preserve">
-    <value>Use the tool above to create a color palette.&lt;br /&gt;
+    <value>Use the tool below to create a color palette.&lt;br /&gt;
                 Click the bar if you want to create a new color
                 and drag dots left or right to set the intervals</value>
     <comment>HMenuCP --&gt; Home Menu Color Palette (page)</comment>

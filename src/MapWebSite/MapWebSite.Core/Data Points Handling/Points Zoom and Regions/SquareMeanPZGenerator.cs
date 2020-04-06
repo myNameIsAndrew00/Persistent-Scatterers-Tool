@@ -4,6 +4,7 @@ using System.Linq;
 using MapWebSite.Model;
 using MapWebSite.Core;
 using System.Threading.Tasks;
+using MapWebSite.Types;
 
 namespace MapWebSite.Core.DataPoints
 {

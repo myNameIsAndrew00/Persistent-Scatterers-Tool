@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using MapWebSite.Types;
 
 namespace MapWebSite.Controllers
 {

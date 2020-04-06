@@ -7,7 +7,8 @@
 <input type="hidden" id="_use-dataset-button-text" value="@TextDictionary.HPSCDUseButton" />
 <input type="hidden" id="_preview-dataset-button-text" value="@TextDictionary.HPSCDPreviewButton" />
 
-<div class="points-settings-layer-container-palette-content points-settings-layer-container-content">
+<div  
+     class="points-settings-layer-container-palette-content points-settings-layer-container-content">
     <div class="ps_header">
         <h4>@Html.Raw(TextDictionary.HPSCDTitleText)</h4>
         @Html.DropDownList("filter",
@@ -26,21 +27,6 @@
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
-
-            @foreach (var item in Model.Datasets)
-            {
-                <tr id="user_dataset_@(item.Username)_@(item.Name)">
-
-                    <td>@item.Username</td>
-                    <td>@item.Name</td>
-                    <td>@item.Status.GetEnumString()</td>
-                    <td>
-                        <input type="hidden" id="user_dataset_@(item.Username)_@(item.Name)_id" value="@item.ID" />
-                        <button class="use" disabled="@(!item.IsValid)" onclick="useDataset('@item.Username','@item.Name')">@TextDictionary.HPSCDUseButton</button>
-                    </td>
-                </tr>
-            }
-
         </table>
     </div>
     <aside class="ps_right ps_right-hidden" id="ps_right">
@@ -68,5 +54,9 @@
 
     </aside>
 </div>
+
+<script>
+    loadMorePointsDatasets(true);
+</script>
 
  

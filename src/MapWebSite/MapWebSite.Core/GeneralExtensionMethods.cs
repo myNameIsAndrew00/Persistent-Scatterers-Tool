@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json; 
+﻿using MapWebSite.Types;
+using Newtonsoft.Json; 
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,32 +32,7 @@ namespace MapWebSite.Core
             return result;
         }
 
-        /// <summary>
-        /// Use this extension method to map an object with a DataTable. <br></br>
-        /// DataTable columns will be the properties of the object which are decorated with UserDefinedTypeColumn attribute
-        /// </summary>
-        /// <param name="Object"></param>
-        /// <returns></returns>
-        public static DataTable GetDataTableFromProperties(this object Object)
-        {
-            if (Object.GetType().GetCustomAttributes(typeof(UserDefinedTypeAttribute), true) == null)
-                throw new ArgumentException("Argument is not a valid object. It must be decorated with UserDefinedType Attribute");
-
-            DataTable dt = new DataTable();
-            var properties = Object.GetType().GetProperties();
-
-          
-            foreach (var property in properties)
-            {
-                UserDefinedTypeColumnAttribute attribute =
-                     property.GetCustomAttribute(typeof(UserDefinedTypeColumnAttribute)) as UserDefinedTypeColumnAttribute;
-
-                if (attribute != null)  dt.Columns.Add(property.Name, property.PropertyType);
-            }
-         
-
-            return dt;
-        }
+       
 
         public static string JSONSerialize<T>(this T ObjectToBeSerialized, bool UseQuotesForColumns = true)
         {
@@ -101,22 +77,6 @@ namespace MapWebSite.Core
 
         }
 
-
-
-        /// <summary>
-        /// Get the string which decorate an enum. Decoration its mate with Types.EnumStringAttribute.
-        /// </summary>
-        /// <param name="enumValue"></param>
-        /// <returns></returns>        
-        public static string GetEnumString(this Enum enumValue)
-        {
-            var type = enumValue.GetType();
-            var info = type.GetMember(enumValue.ToString());
-
-            var enumStringAttribute = info[0].GetCustomAttribute(typeof(Types.EnumStringAttribute), false);
-
-            return (enumStringAttribute as Types.EnumStringAttribute)?.String;
-        }
 
         public static byte[] Concatenate(this byte[] firstArray, byte[] secondArray)
         {

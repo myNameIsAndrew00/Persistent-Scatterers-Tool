@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MapWebSite.Core;
 using MapWebSite.Model;
+using MapWebSite.Types;
 
 namespace MapWebSite.Authentication
 {

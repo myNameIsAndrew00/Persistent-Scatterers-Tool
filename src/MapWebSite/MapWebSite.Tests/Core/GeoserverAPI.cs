@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MapWebSite.Model;
+using MapWebSite.GeoserverAPI.Modules.Layers;
 
 namespace MapWebSite.Tests.Core
 {
@@ -16,6 +18,21 @@ namespace MapWebSite.Tests.Core
 
     public class GeoserverAPI
     {
+
+        [TestMethod]
+        public void LayersBuilderTest()
+        {
+            LayersBuilder layersBuilder = new LayersBuilder();
+            layersBuilder.LayerName = "constanta_labeled";
+            layersBuilder.Workspace = "constanta";
+            layersBuilder.Styles = new List<string>()
+            {
+                "population"
+            };
+
+            string value = layersBuilder.ToXml();
+        }
+
         [TestMethod]
         public void StylesBuilderTest()
         {
@@ -55,12 +72,12 @@ namespace MapWebSite.Tests.Core
 
             builder.AddRule(new Rule
             {
-                Abstract = "abstract",
-                MaxScaleDenominator = 10,
-                MinScaleDenominator = 10,
+                Abstract = "abstract", 
                 Name = "Rulename",
                 Title = "Ruletitle",
-                FilterItems = new List<Filter.FilterItem>()
+                Filter = new Filter
+                {
+                    FilterItems = new List<Filter.FilterItem>()
                     {
                         new Filter.FilterItem
                         {
@@ -69,6 +86,7 @@ namespace MapWebSite.Tests.Core
                             Literal = "0"
                         }
                     }
+                }
                 ,
                 PointSymbolizers = new List<PointSymbolizer>
                 {
@@ -107,6 +125,44 @@ namespace MapWebSite.Tests.Core
         }
 
         [TestMethod]
+        public void ColorMapStyle() {
+            ColorMap colorMap = new ColorMap()
+            {
+                Name = "rada",
+                Intervals = new List<Interval>()
+                {
+                    new Interval()
+                    {
+                        Color = "#FF0000",
+                        Left = -100,
+                        Right = 0
+                    },
+                    new Interval()
+                    {
+                        Color = "#00FF00",
+                        Left = 0,
+                        Right = 100
+                    }
+                }
+            };
+
+
+            StylesBuilder builder = new StylesBuilder("colormap", "colormap");
+
+            foreach (var rule in colorMap.GetRules())
+                builder.AddRule(rule);
+            
+            ModulesFactory modulesFactory = new ModulesFactory();
+
+
+            //    GeoserverClient geoserverClient = new GeoserverClient("http://localhost:8080", "admin", "geoserver");
+
+            var str = builder.ToXml();
+        //    var result = geoserverClient.CreateRequest(modulesFactory.CreateStylesModule(builder)).Result;
+
+        }
+
+        [TestMethod]
         public void GeoserverServiceTest()
         {
             StylesBuilder builder = new StylesBuilder("style", "titlestyle");
@@ -118,7 +174,9 @@ namespace MapWebSite.Tests.Core
                 MinScaleDenominator = 10,
                 Name = "Rulename",
                 Title = "Ruletitle",
-                FilterItems = new List<Filter.FilterItem>()
+                Filter = new Filter
+                {
+                    FilterItems = new List<Filter.FilterItem>()
                     {
                         new Filter.FilterItem
                         {
@@ -127,6 +185,7 @@ namespace MapWebSite.Tests.Core
                             Literal = "0"
                         }
                     }
+                }
                 ,
                 PointSymbolizers = new List<PointSymbolizer>
                 {
@@ -165,7 +224,29 @@ namespace MapWebSite.Tests.Core
             GeoserverClient geoserverClient = new GeoserverClient("http://localhost:8080", "admin", "geoserver");
 
 
-            var result = geoserverClient.CreateRequest(modulesFactory.CreateStylesModule(builder)).Result;
+            var result = geoserverClient.Post(modulesFactory.CreateStylesModule(builder)).Result;
+        }
+
+        [TestMethod]
+        public void GeoserverServiceLayerTest()
+        {
+            ModulesFactory modulesFactory = new ModulesFactory();
+
+            LayersBuilder builder = new LayersBuilder();
+            builder.LayerName = "constanta_labeled";
+            builder.Workspace = "constanta";
+            builder.SingleLayer = true;
+            builder.Styles = new List<string>()
+            {
+                "population"
+            };
+
+
+            GeoserverClient geoserverClient = new GeoserverClient("http://localhost:8080", "admin", "geoserver");
+
+
+            var result = geoserverClient.Put(modulesFactory.CreateLayerModule(builder)).Result;
+
         }
     }
 }

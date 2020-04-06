@@ -101,15 +101,21 @@ as
 begin
 	begin try
 		begin transaction
-			declare @user_id as int = -1; 
+			declare @user_id as int = -1,
+					@status_mask as int = -1; 
 			
 			--Get the user id
 			select @user_id = U.user_id
 			from Users as U where U.username = @username
 
+			--Get uploaded status id
+			select @status_mask = CPS.status_mask
+			from ColorPalettesStatuses as CPS 
+			where CPS.name = 'Uploaded'
+
 			--Insert data into the color palettes 
-			insert into ColorPalettes(palette_name, palette_serialization, user_id, creation_date)
-			values (@palette_name, @palette_serialization, @user_id, GETDATE())
+			insert into ColorPalettes(palette_name, palette_serialization, user_id, creation_date, status_mask)
+			values (@palette_name, @palette_serialization, @user_id, GETDATE(), @status_mask)
 			
 			select SCOPE_IDENTITY() as ID;
 		commit

@@ -19,48 +19,18 @@
         <input type="hidden" id="colorsTableColorsPerRow" value="@Model.ColorsPerRow" />
         <input type="hidden" id="currentColorPaletteIndex" value="1" />
     </div>
-    <div class="ps_left" id="ps_left" onscroll="loadMorePalettes(false)">
+    <div class="ps_left " id="ps_left" onscroll="loadMorePalettes(false)">
         <table>
             <tr class="table-header">
                 <th><object width="14px" height="35px" type="image/svg+xml" data="~/Resources/resources/icons/user_palette_icon.svg"></object></th>
                 <th>@TextDictionary.HPSCPHead1</th>
                 <th>@TextDictionary.HPSCPHead2</th>
                 <th>@TextDictionary.HPSCPHead3</th>
-            </tr>
-
-            @foreach (var item in Model.UsersColorMaps)
-            {
-                <tr id="user_palette_index_@(item.Item1)_@(item.Item2.Name)">
-                    <td>@item.Item1</td>
-                    <td>@item.Item2.Name</td>
-                    <td>
-                        <table class="palette">
-                            @{
-                                var intervals = item.Item2.Intervals;
-                                int rowsCount = intervals.Count / Model.ColorsPerRow,
-                                    intervalsIndex = 0;
-                            }
-                            @for (int index = 0; index <= rowsCount; index++)
-                            {
-                                <tr>
-                                    @for (int rowIndex = 0; rowIndex < Model.ColorsPerRow && intervalsIndex < item.Item2.Intervals.Count; rowIndex++, intervalsIndex++)
-                                    {
-                                        <td style="background:@intervals[intervalsIndex].Color"></td>
-                                    }
-                                </tr>
-                            }
-                        </table>
-                    </td>
-
-                    <td>
-                        <button class="use" onclick="useColorMap('@(item.Item1)_@(item.Item2.Name)','@item.Item1','@item.Item2.Name')">@TextDictionary.HPSCPUseButton</button>
-                        <button class="preview">@TextDictionary.HPSCPPreviewButton</button>
-                    </td>
-                </tr>
-            }
-
+            </tr>            
         </table>
     </div>
-    <aside class="ps_right"></aside>
+    <aside class="ps_right ps_right-hidden"></aside>
 </div>
- 
+ <script>
+     loadMorePalettes(true);
+ </script>

@@ -212,7 +212,8 @@ namespace MapWebSite.Repository
                         new ColorMap()
                         {
                             Name = (string)row["palette_name"],
-                            Intervals = new List<Interval>().JSONDeserialize((string)row["palette_serialization"])
+                            Intervals = new List<Interval>().JSONDeserialize((string)row["palette_serialization"]),
+                            StatusMask =  (int)row["status_mask"]
                         }));
             }
 

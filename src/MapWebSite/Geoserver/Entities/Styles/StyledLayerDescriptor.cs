@@ -24,6 +24,8 @@ namespace MapWebSite.GeoserverAPI.Modules.Styles
                     public List<Rule> Rules { get; set; }
                 }
 
+                public string Name { get; set; }
+
                 public string Title { get; set; }
 
                 [XmlElement("FeatureTypeStyle")]

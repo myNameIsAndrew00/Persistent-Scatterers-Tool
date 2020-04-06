@@ -5,19 +5,33 @@
     Layout = null;
 }
 
-<div id="color-picker-container"
-     class="color-picker-container"
-     onmousemove="changePosition()"
-     onmousedown="changeButtonState(true)"
-     onmouseup="changeButtonState(false)">
-    <button id="slider" class="bar" onclick="addDot()"></button>
-    <div id="dots-container">
-        <span draggable="false" id="dot-1" class="dot" onmousedown="changeSelectedDot()"></span>
-        <label style="left:30px">0%</label>
-        <label style="left:816px">100%</label>
-    </div> 
+<div id="color-picker-content" class="color-picker-content">
+    <h1>@TextDictionary.HMenuCPTitleText</h1>
+    <article id="picker-info-card">
+        <object class="current_displayed_icon"
+                width="190px"
+                height="160px"
+                type="image/svg+xml"
+                data="~/Resources/resources/icons/first_gliph.svg" )></object>
+        <h4>@TextDictionary.HMenuCPSubtitle1</h4>
+        <small>
+            @Html.Raw(TextDictionary.HMenuCPArticle1)
+        </small>
+    </article>
+    <div id="color-picker-container"
+         class="color-picker-container"
+         onmousemove="changePosition()"
+         onmousedown="changeButtonState(true)"
+         onmouseup="changeButtonState(false)">
+        <button id="slider" class="bar"
+                onclick="addDot()"></button>
+        <div id="dots-container">
+            <span draggable="false" id="dot-1" class="dot" onmousedown="changeSelectedDot()"></span>
+            <label style="left:30px">0%</label>
+            <label style="left:816px">100%</label>
+        </div>
+    </div>
 </div>
-
 
 <div id="color-picker" class="color-picker color-picker-hidden">
     <div class="color-picker-tumb"></div>
@@ -55,20 +69,9 @@
 
 <div id="color-picker-info-container"
      class="color-picker-info-container">
-    <h1>@TextDictionary.HMenuCPTitleText</h1>
 
     <section class="instructions-container" id="instructions-container">
-        <article id="picker-info-card">
-            <object class="current_displayed_icon"
-                    width="190px"
-                    height="160px"
-                    type="image/svg+xml"
-                    data="~/Resources/resources/icons/first_gliph.svg" )></object>
-            <h4>@TextDictionary.HMenuCPSubtitle1</h4>
-            <small>
-                @Html.Raw(TextDictionary.HMenuCPArticle1)
-            </small>
-        </article>
+
         <article id="name-info-card">
             <object class="current_displayed_icon"
                     width="190px"

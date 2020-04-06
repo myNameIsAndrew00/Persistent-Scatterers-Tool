@@ -1,74 +1,89 @@
 @import 'general/colors.scss';
 
+$page_margin: 50px;
 
 html, body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-
-.color-picker-container {
-    height: 65px;
-    width: 870px;
+.color-picker-content {
     position: relative;
-    user-select: none;
-    border-radius: 4px;
-    background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
-    top: 90px;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
+    padding: $page_margin;
 
-    label {
-        position: absolute;
-        top: 38px;
-        background: #fff;
-        border-radius: 9px;
-        font-size: 11px;
+    article, h1 {
         text-align: center;
-        padding: 3px;
     }
 
-    .bar {
-        position: absolute;
-        padding: 0;
-        top: 21px;
-        left: 30px;
-        width: 800px;
-        border: none;
-        height: 4px;
-        background: rgb(54, 31, 156); //TODO: make color to be accesed via variable
+    h1 {
+        margin-bottom: 35px;
+    }
+
+    .color-picker-container {
+        height: 65px;
+        width: 870px;
+        position: relative;
         user-select: none;
-    }
+        border-radius: 4px;
+        background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
+        margin-left: auto;
+        margin-right: auto;
+        top: 30px;
+        left: 0;
+        right: 0;
 
-    .dot {
-        height: 25px;
-        width: 25px;
-        background-color: rgb(54, 31, 156); //TODO: make color to be accesed via variable
-        border-radius: 50%;
-        display: inline-block;
-        user-select: none;
-        position: absolute;
-        left: 30px;
-        top: 10px;
-        z-index: 999;
-        transition: 0.3s;
-        cursor: pointer;
-    }
+        label, input {
+            position: absolute;
+            top: 38px;
+            width: 50px;
+            background: #fff;
+            border-radius: 9px;
+            text-align: center;
+            color: black;
+            padding: 5px;
+            font-size: 8px;
+        }
+
+        .bar {
+            position: absolute;
+            padding: 0;
+            top: 21px;
+            left: 30px;
+            width: 800px;
+            border: none;
+            height: 4px;
+            background: rgb(54, 31, 156); //TODO: make color to be accesed via variable
+            user-select: none;
+        }
+
+        .dot {
+            height: 25px;
+            width: 25px;
+            background-color: rgb(54, 31, 156); //TODO: make color to be accesed via variable
+            border-radius: 50%;
+            display: inline-block;
+            user-select: none;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            z-index: 999;
+            transition: 0.3s;
+            cursor: pointer;
+        }
 
 
-    .dot:hover {
-        height: 27px;
-        width: 27px;
-        top: 9px;
+        .dot:hover {
+            height: 27px;
+            width: 27px;
+            top: 9px;
+        }
     }
 }
 
 .color-picker-info-container {
-    position: absolute;     
-    top: 50%;
+    position: relative; 
     left: 50%;
-    transform: translate(-50%, -35%);
+    transform: translate(-50%, 0);
+    padding-bottom: 50px;
     width: 100%;
 
     h1 {
@@ -88,7 +103,7 @@ html, body {
             text-align: center;
             background-color: rgb(227, 227, 227); //TODO: make color to be accesed via variable
             border-radius: 10px;
-            max-width: 300px;
+            max-width: 400px;
             height: 400px;
             box-shadow: 17px 17px 0px get_color(chromaOrange);
 
@@ -114,7 +129,7 @@ html, body {
     background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
     z-index: $principal_z_index;
     border-radius: 4px;
-    top: 170px;
+    top: 490px;
 
     .color-picker-tumb {
         content: '';
@@ -142,14 +157,14 @@ html, body {
             span {
                 cursor: pointer;
                 width: 10px;
-                height: 10px; 
+                height: 10px;
                 margin: 3px;
                 border-radius: 10px;
             }
         }
     }
 
-    .palette-active{
+    .palette-active {
         display: block;
     }
 

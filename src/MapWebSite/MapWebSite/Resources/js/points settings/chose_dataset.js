@@ -8,6 +8,7 @@ import { Router, endpoints } from '../api/api_router.js';
 import { UpdatePointsLayer } from '../map/map.js';
 
 const settingsLayerContainerId = '#points-settings-layer-container-content';
+const settingsLayerContainerClass = '.points-settings-layer-container-palette-content';
 const currentDatasetTextId = '#current-dataset-text';
 
 //labels ids
@@ -39,17 +40,22 @@ class PointsDataset {
     }
 
     setDatasetLimits() {
+             
+    }
+
+    ///use this method to display dataset details inside ps_right menu 
+    displayDatasetLimits(username, datasetName) {
         Router.Get(endpoints.PointsSettingsApi.GetDatasetLimits,
             {
-                username: this.username,
-                datasetName: this.datasetName
+                username,
+                datasetName
             },
             function (response) {
                 //todo: process the response here
                 $(infoSectionId).removeClass('ps_right-hidden');
+                $(settingsLayerContainerClass).addClass('points-settings-layer-container-palette-content-expand');
             }
-        );
-        
+        );  
     }
 }
 
@@ -79,7 +85,6 @@ window.useDataset = function useDataset(username, datasetName) {
     changeSelectedRowOnMenu(previousDatasetRowId, false);
     changeSelectedRowOnMenu(datasetRowId, true);
 
-    SelectedDataset.setDatasetLimits();
     $(currentDatasetTextId).text(datasetName);
 
     UpdatePointsLayer();
@@ -111,6 +116,8 @@ function fillTable(datasets, table) {
 
     function buildButtonsColumn(username, datasetName, isValid) {
         var useButton = document.createElement('button');
+        var previewButton = document.createElement('button');
+
         useButton.classList.add('use');
         useButton.innerText = $('#_use-dataset-button-text').val();
         useButton.onclick = function () {
@@ -118,7 +125,14 @@ function fillTable(datasets, table) {
         };
         useButton.disabled = !isValid;
 
-        return { useButton };
+        previewButton.innerText = $('#_preview-dataset-button-text').val();
+        previewButton.classList.add('preview');
+        previewButton.onclick = function () {
+            SelectedDataset.displayDatasetLimits(username, datasetName);
+        };
+        previewButton.disabled = !isValid;
+
+        return { useButton, previewButton };
     }
 
 
@@ -147,6 +161,7 @@ function fillTable(datasets, table) {
 
         
         buttonsColumn.appendChild(buttons.useButton); 
+        buttonsColumn.appendChild(buttons.previewButton);
 
         row.appendChild(usernameColumn);
         row.appendChild(datasetNameColumn);

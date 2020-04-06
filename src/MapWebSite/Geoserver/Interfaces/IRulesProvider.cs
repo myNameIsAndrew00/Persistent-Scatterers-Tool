@@ -6,10 +6,10 @@ using System.Text;
 namespace MapWebSite.GeoserverAPI.Interfaces
 {
     /// <summary>
-    /// Provides methods to generate a Rule based on object
+    /// Provides methods to generate styling rules based on object properties
     /// </summary>
-    interface IRuleProvider
+    public interface IRulesProvider
     {
-        Rule GetRule();
+        IEnumerable<Rule> GetRules();
     }
 }

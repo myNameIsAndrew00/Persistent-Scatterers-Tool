@@ -48,6 +48,7 @@ namespace MapWebSite.GeoserverAPI.Modules.Styles
 
             styledLayerDescriptor.NamedLayerObject.UserStyleObject = new StyledLayerDescriptor.NamedLayer.UserStyle
             {
+                Name = this.Name,
                 Title = this.title,
                 FeatureTypeStyleObject = new StyledLayerDescriptor.NamedLayer.UserStyle.FeatureTypeStyle
                 {

@@ -1,4 +1,5 @@
 ﻿using MapWebSite.GeoserverAPI.Modules;
+using MapWebSite.GeoserverAPI.Modules.Layers;
 using MapWebSite.GeoserverAPI.Modules.Styles;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,11 @@ namespace MapWebSite.GeoserverAPI
         public IGeoserverModule CreateStylesModule(StylesBuilder stylesBuilder)
         {
             return new StylesModule(stylesBuilder);
+        }
+
+        public IGeoserverModule CreateLayerModule(LayersBuilder layersBuilder)
+        {
+            return new LayersModule(layersBuilder);
         }
     }
 }

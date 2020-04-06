@@ -124,7 +124,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the tool above to create a color palette.&lt;br /&gt;
+        ///   Looks up a localized string similar to Use the tool below to create a color palette.&lt;br /&gt;
         ///                Click the bar if you want to create a new color
         ///                and drag dots left or right to set the intervals.
         /// </summary>

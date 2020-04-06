@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MapWebSite.Core
+namespace MapWebSite.Types
 {
     public class DuplicateKeyComparer<TKey>
                  :

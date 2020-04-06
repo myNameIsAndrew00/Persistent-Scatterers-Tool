@@ -1,9 +1,9 @@
-﻿using MapWebSite.Core;
-using MapWebSite.GeoserverAPI.Entities.Graphics;
+﻿using MapWebSite.GeoserverAPI.Entities.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
+using MapWebSite.Types;
 
 namespace MapWebSite.GeoserverAPI.Entities
 {
@@ -48,9 +48,19 @@ namespace MapWebSite.GeoserverAPI.Entities
         [XmlElement(Order = 5)]
         public double Rotation { get; set; }
 
-        public bool ShouldSerializeOpacity => Opacity != 1;
-        public bool ShouldSerializeSize => Opacity != 0;
-        public bool ShouldSerializeRotation => Opacity != 0;
- 
-    }  
+        public bool ShouldSerializeOpacity()
+        {
+            return Opacity != 1;
+        }
+
+        public bool ShouldSerializeSize()
+        {
+            return Size != 0;
+        }
+
+        public bool ShouldSerializeRotation() {
+            return Rotation != 0;
+        }
+
+    }
 }

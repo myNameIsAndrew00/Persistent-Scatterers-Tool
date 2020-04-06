@@ -1,5 +1,4 @@
-﻿using MapWebSite.Core;
-using MapWebSite.Types;
+﻿using MapWebSite.Types;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,7 +30,13 @@ namespace MapWebSite.GeoserverAPI.Entities
             PropertyIsGreaterThan,
 
             [EnumString("PropertyIsGreaterThanOrEqualTo")]
-            PropertyIsGreaterThanOrEqualTo
+            PropertyIsGreaterThanOrEqualTo,
+
+            [EnumString("And")]
+            And,
+
+            [EnumString("Or")]
+            Or
         }
 
         public class FilterItem : IXmlSerializable
@@ -42,6 +47,9 @@ namespace MapWebSite.GeoserverAPI.Entities
             public string PropertyName { get; set; }
 
             public string Literal { get; set; }
+
+            [XmlAnyElement("Filter", Namespace = "http://www.opengis.net/ogc")]
+            public List<Filter.FilterItem> FilterItems { get; set; }
 
             public XmlSchema GetSchema()
             {
@@ -56,13 +64,34 @@ namespace MapWebSite.GeoserverAPI.Entities
             public void WriteXml(XmlWriter writer)
             {           
                 writer.WriteStartElement(this.Type.GetEnumString(), Namespaces.OGC);
-                writer.WriteElementString(nameof(this.PropertyName), Namespaces.OGC, PropertyName);               
-                writer.WriteElementString(nameof(this.Literal), Namespaces.OGC, Literal);
+
+                if (this.Type == FilterItemType.And || this.Type == FilterItemType.Or)
+                    writeConditional(writer);
+                else writePlain(writer);
+
                 writer.WriteEndElement();
             }
+
+            #region Private
+            
+            private void writePlain(XmlWriter writer)
+            {
+                writer.WriteElementString(nameof(this.PropertyName), Namespaces.OGC, PropertyName);
+                writer.WriteElementString(nameof(this.Literal), Namespaces.OGC, Literal);
+            }
+
+            private void writeConditional(XmlWriter writer)
+            {
+                foreach (var filterItem in FilterItems)
+                    filterItem.WriteXml(writer);
+            }
+
+            #endregion
         }
 
- 
+
+        [XmlAnyElement("Filter", Namespace = "http://www.opengis.net/ogc")]
+        public List<Filter.FilterItem> FilterItems { get; set; }
     }
 
 

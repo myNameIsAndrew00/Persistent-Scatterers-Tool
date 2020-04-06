@@ -1,10 +1,10 @@
-﻿using MapWebSite.Core;
-using MapWebSite.GeoserverAPI.Modules.Styles;
+﻿using MapWebSite.GeoserverAPI.Modules.Styles;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using MapWebSite.Types;
 
 namespace MapWebSite.GeoserverAPI.Modules
 {

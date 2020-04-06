@@ -34,10 +34,11 @@
         transition-delay: 0.5s;
     }
 
+
     .points-settings-layer-container-palette-content {
         display: grid;
         grid-template: "header header" "left right";
-        grid-template-columns: 370px 180px;
+        grid-template-columns: 100% 0;
         grid-template-rows: 50px 300px;
 
 
@@ -107,11 +108,11 @@
                     background-color: get_color(chromaGreen);
                 }
 
-                .use:disabled {
+                button:disabled {
                     background: get_color(mediumGray);
                 }
 
-                .use:disabled:hover {
+                button:disabled:hover {
                     background: get_color(mediumGray);
                 }
 
@@ -189,6 +190,7 @@
 
         .ps_right-hidden {
             visibility: hidden;
+            opacity: 0;
         }
 
         .ps_right {
@@ -196,6 +198,7 @@
             background: get_color(lightGray);
             margin: 0px 0px 0px 5px;
             padding: 11px;
+            opacity: 1;
 
             p {
                 color: black;
@@ -236,6 +239,11 @@
                 }
             }
         }
+    }
+
+    .points-settings-layer-container-palette-content-expand {
+        grid-template-columns: 70% auto;
+        transition-delay: 0s;
     }
 }
 
