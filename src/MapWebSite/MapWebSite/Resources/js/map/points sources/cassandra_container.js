@@ -257,6 +257,7 @@ class PointsSectionHandler {
 
             function binarySearch(value, left, right) {
                 if (left == right) return colorPalette[right].Color;
+                if (left >= colorPalette.length - 1) return colorPalette[colorPalette.length - 1].Color;
 
                 if (left == right - 1) {
                     if (value < colorPalette[right].Left)
@@ -282,12 +283,10 @@ class PointsSectionHandler {
                     b: parseInt(result[3], 16)
                 } : null;
             }
-
-            var rangeMin = -25;
-            var rangeMax = 23;
+             
 
             var paletteColor = binarySearch(
-                ((featureValue + Math.abs(rangeMin)) * 100) / (rangeMax + Math.abs(rangeMin)),
+                featureValue,
                 0,
                 colorPalette.length - 1
             );

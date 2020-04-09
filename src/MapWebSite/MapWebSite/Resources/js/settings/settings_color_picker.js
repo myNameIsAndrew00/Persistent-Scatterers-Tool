@@ -47,7 +47,7 @@ window.changePosition = function changePosition() {
 
         //change the label content
         //dotLabel.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
-        $(dotLabel).val(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
+        $(dotLabel).html(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
         dotLabel.style.left = dotPosition + 'px';
 
         //change the point
@@ -86,7 +86,7 @@ window.addDot = function addDot() {
  
     showColorPicker(event.clientX);
     var spanID = createSpan(dotPosition, dotColor);
-    createInput(dotPosition);
+    createLabelInput(dotPosition);
 
     colorList.AddNode( dotPosition, dotColor, spanID);
      
@@ -94,9 +94,9 @@ window.addDot = function addDot() {
  
 }
 
-function createInput(dotPosition){
-    var input = document.createElement('input');
-    $(input).val(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
+function createLabelInput(dotPosition){
+    var input = document.createElement('label');
+    $(input).html(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
     input.style.left = dotPosition + 'px';
     input.id = 'dot-' + dotsCount + '-label';
 
@@ -165,6 +165,11 @@ window.sendColorPalette = function sendColorPalette() {
     var paletteName = $('#name-info-card').children('#color-palette-name').val();
 
     if (paletteName === '') return;  
+
+    colorList.SetValues({
+        left: parseFloat($('#pickerLeftValue').val()),
+        right: parseFloat($('#pickerRightValue').val())
+    });
 
     Router.Post(endpoints.Settings.SaveColorsPalette,
         {

@@ -391,6 +391,10 @@
     <Content Include="Resources\resources\icons\logout_icon.svg" />
     <Content Include="Resources\resources\icons\map_icon.svg" />
     <Content Include="Resources\resources\icons\palette_icon.svg" />
+    <Content Include="Resources\resources\icons\palette_template_Crown.svg" />
+    <Content Include="Resources\resources\icons\palette_template_Default.svg" />
+    <Content Include="Resources\resources\icons\palette_template_Fox.svg" />
+    <Content Include="Resources\resources\icons\palette_template_Kuller.svg" />
     <Content Include="Resources\resources\icons\points_management_icon.svg" />
     <Content Include="Resources\resources\icons\points_plot_icon.svg" />
     <Content Include="Resources\resources\icons\points_server_icon.svg" />

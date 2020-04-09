@@ -162,11 +162,38 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to max. value.
+        /// </summary>
+        public static string HMenuCPMaxValueLabel {
+            get {
+                return ResourceManager.GetString("HMenuCPMaxValueLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to min. value.
+        /// </summary>
+        public static string HMenuCPMinValueLabel {
+            get {
+                return ResourceManager.GetString("HMenuCPMinValueLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to enter a name....
         /// </summary>
         public static string HMenuCPNameInput {
             get {
                 return ResourceManager.GetString("HMenuCPNameInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colors picker panel.
+        /// </summary>
+        public static string HMenuCPPanelTitle {
+            get {
+                return ResourceManager.GetString("HMenuCPPanelTitle", resourceCulture);
             }
         }
         
@@ -203,6 +230,15 @@ namespace MapWebSite.Resources.text {
         public static string HMenuCPSubtitle3 {
             get {
                 return ResourceManager.GetString("HMenuCPSubtitle3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Templates.
+        /// </summary>
+        public static string HMenuCPTemplatesTitle {
+            get {
+                return ResourceManager.GetString("HMenuCPTemplatesTitle", resourceCulture);
             }
         }
         

@@ -1,5 +1,6 @@
 ﻿@model MapWebSite.Domain.ViewModel.ColorPickerViewModel
 
+@using MapWebSite.Types
 @using MapWebSite.Resources.text
 @{
     Layout = null;
@@ -17,6 +18,34 @@
         <small>
             @Html.Raw(TextDictionary.HMenuCPArticle1)
         </small>
+    </article>
+    <article class="color-palette-panel">
+        <h4>@TextDictionary.HMenuCPPanelTitle</h4>
+        <div class="controls">
+            <div class="setting-item">
+                <label for="">@TextDictionary.HMenuCPMinValueLabel</label>
+                <input type="number" id="pickerLeftValue" />
+            </div>
+            <div class="setting-item">
+                <label for="">@TextDictionary.HMenuCPMaxValueLabel</label>
+                <input type="number" id="pickerRightValue"/>
+            </div>
+        </div>
+
+        <div class="palette-templates-container">
+            <h5>@TextDictionary.HMenuCPTemplatesTitle</h5>
+            <div class="palette-templates">
+                @foreach (ColorPickerViewModel.DefaultPalette defaultPalette in Enum.GetValues(typeof(ColorPickerViewModel.DefaultPalette)))
+                {
+                    <div class="template-card">
+                        <button>
+                            <img src="~/Resources/resources/icons/palette_template_@(defaultPalette.ToString()).svg" />
+                        </button>
+                        <label>@Html.Raw(defaultPalette.ToString())</label>
+                    </div>
+                }
+            </div>
+        </div>
     </article>
     <div id="color-picker-container"
          class="color-picker-container"

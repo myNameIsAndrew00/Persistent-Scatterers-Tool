@@ -26,6 +26,14 @@ namespace MapWebSite.Domain.ViewModel
             Black = -1
         }
 
+        public enum DefaultPalette
+        { 
+            Crown,
+            Default,
+            Fox,
+            Kuller
+        }
+
         public string GetColor(PaletteColorsHue hue)
         {
             if ((int)hue == -1) return "#000000";

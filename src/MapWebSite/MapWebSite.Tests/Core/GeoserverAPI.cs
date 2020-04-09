@@ -224,7 +224,7 @@ namespace MapWebSite.Tests.Core
             GeoserverClient geoserverClient = new GeoserverClient("http://localhost:8080", "admin", "geoserver");
 
 
-            var result = geoserverClient.Post(modulesFactory.CreateStylesModule(builder)).Result;
+            var result = geoserverClient.PostAsync(modulesFactory.CreateStylesModule(builder)).Result;
         }
 
         [TestMethod]
@@ -245,7 +245,7 @@ namespace MapWebSite.Tests.Core
             GeoserverClient geoserverClient = new GeoserverClient("http://localhost:8080", "admin", "geoserver");
 
 
-            var result = geoserverClient.Put(modulesFactory.CreateLayerModule(builder)).Result;
+            var result = geoserverClient.PutAsync(modulesFactory.CreateLayerModule(builder)).Result;
 
         }
     }

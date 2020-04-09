@@ -11,7 +11,10 @@ namespace MapWebSite.GeoserverAPI.Entities
         public enum LayerType
         {
             Vector,
-            Tile
+            Tile,
+            Raster,
+            Wms,
+            Group                 
         }
 
         [XmlElement("name")]

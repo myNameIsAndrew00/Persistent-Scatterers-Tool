@@ -21,7 +21,10 @@ export class ColorList{
     constructor(firstColorNode, barWidth, firstColor){
         this.root = firstColorNode; 
         this.barWidth = barWidth; 
-        
+
+        this.leftValue = 0;
+        this.rightValue = 100;
+
         /*initialise the dictionary*/
         this.pointsDictionary = {};
         this.pointsDictionary[ firstColorNode.pointKey ] = { 
@@ -169,9 +172,21 @@ export class ColorList{
     SetPointColor(pointID, newColor){
         this.pointsDictionary[pointID].color = newColor;  
     }
- 
+
+    /**
+     * Set values used asociated with 0% and 100%
+     * */
+    SetValues(values) {
+        this.leftValue = values.left;
+        this.rightValue = values.right;
+    }
+
     GetPercentage(position){
         return 100 * (position) / this.barWidth;
+    }
+
+    GetValue(percentage) {
+        return ((Math.abs(this.leftValue) + this.rightValue) * percentage) / 100 - Math.abs(this.leftValue);
     }
 
     GetColorMap() {
@@ -184,8 +199,8 @@ export class ColorList{
             var rightNodeKey = this.pointsDictionary[currentNodeKey].rightPointID;
             colorMap[index++] = {
                 Color: this.pointsDictionary[currentNodeKey].color,
-                Left: this.GetPercentage(this.pointsDictionary[currentNodeKey].position),
-                Right: rightNodeKey == null ? 100 : this.GetPercentage(this.pointsDictionary[rightNodeKey].position)
+                Left: this.GetValue ( this.GetPercentage(this.pointsDictionary[currentNodeKey].position) ),
+                Right: this.GetValue ( rightNodeKey == null ? 100 : this.GetPercentage(this.pointsDictionary[rightNodeKey].position))
             }
             currentNodeKey = rightNodeKey;
         }

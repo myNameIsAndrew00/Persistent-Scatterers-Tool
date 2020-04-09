@@ -1,12 +1,18 @@
 @import 'general/colors.scss';
 
 $page_margin: 50px;
+$color_picker_container_width: 870px;
 
 html, body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .color-picker-content {
+
+    label {
+        color: get_color(gray);
+    }
+
     position: relative;
     padding: $page_margin;
 
@@ -18,9 +24,94 @@ html, body {
         margin-bottom: 35px;
     }
 
+    .color-palette-panel {
+        top: 20px;
+        position: relative;
+        width: $color_picker_container_width;
+        height: 185px;
+        padding: $page_margin;
+        margin-left: auto;
+        margin-right: auto;
+        background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
+        user-select: none;
+        border-radius: 4px;
+        display: grid;
+        grid-template: "header-left ." "left right";
+        grid-template-columns: 45% 55%;
+
+
+        h4 {
+            grid-area: header-left;
+            text-align: left;
+            margin-top: -20px;
+        }
+
+
+        .controls {
+            .setting-item {
+                margin-left: 30px;
+
+                label {
+                    width: 90px;
+                }
+
+                input {
+                    font-size: 10px;
+                    margin: 4px;
+                    border-radius: 2px;
+                    background: get_color(easeGray);
+                    padding: 4px;
+                }
+            }
+
+            grid-area: left;
+            text-align: left;
+            display: block;
+        }
+
+        .palette-templates-container {
+            grid-area: right;
+
+            h5 {
+                text-align: left;
+                margin-top: -30px;
+            }
+
+            .palette-templates {
+                height: 80px;
+                display: flex;
+                flex-wrap: wrap;
+                overflow-y: auto;
+
+                .template-card {
+                    width: 87px;
+
+                    button {
+                        transition: 0.3s;
+                        padding: initial;
+                        margin: initial;
+                        background: none;
+                        border-radius: 5px;
+                        background: get_color(transparentBlack);
+
+                        img {
+                            width: 70px;
+                            height: 50px;
+                            padding: 6px;
+                        }
+                    }
+
+                    button:hover {
+                        background: get_color(easeGray);
+                    }
+                }
+            }
+        }
+    }
+
     .color-picker-container {
         height: 65px;
-        width: 870px;
+        width: $color_picker_container_width;
         position: relative;
         user-select: none;
         border-radius: 4px;
@@ -80,7 +171,7 @@ html, body {
 }
 
 .color-picker-info-container {
-    position: relative; 
+    position: relative;
     left: 50%;
     transform: translate(-50%, 0);
     padding-bottom: 50px;
@@ -129,7 +220,7 @@ html, body {
     background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
     z-index: $principal_z_index;
     border-radius: 4px;
-    top: 490px;
+    top: 680px;
 
     .color-picker-tumb {
         content: '';

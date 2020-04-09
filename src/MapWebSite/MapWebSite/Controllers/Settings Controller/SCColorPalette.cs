@@ -23,7 +23,6 @@ namespace MapWebSite.Controllers
             bool result = handler.InsertColorPalette(RouteConfig.CurrentUser.Username, colorMap);
           
 
-
             var response = new HttpResponseMessage();
             response.Content = new StringContent(MessageBoxBuilder.Create(result ? TextDictionary.OverlayCPSuccesTitle
                                                                                  : TextDictionary.OverlayCPFailedTitle, 

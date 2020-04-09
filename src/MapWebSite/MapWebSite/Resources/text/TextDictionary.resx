@@ -472,4 +472,16 @@
   <data name="RegisterConfirmationEmailFailed" xml:space="preserve">
     <value>Failed to create the account. The email which you introduced couldn't be used for account confirmation. Try again later.</value>
   </data>
+  <data name="HMenuCPPanelTitle" xml:space="preserve">
+    <value>Colors picker panel</value>
+  </data>
+  <data name="HMenuCPTemplatesTitle" xml:space="preserve">
+    <value>Templates</value>
+  </data>
+  <data name="HMenuCPMaxValueLabel" xml:space="preserve">
+    <value>max. value</value>
+  </data>
+  <data name="HMenuCPMinValueLabel" xml:space="preserve">
+    <value>min. value</value>
+  </data>
 </root>

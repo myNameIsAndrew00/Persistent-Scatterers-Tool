@@ -1,13 +1,12 @@
-﻿using MapWebSite.Core;
-using MapWebSite.Core.Database;
+﻿using MapWebSite.Core.Database;
 using MapWebSite.Core.DataPoints;
 using MapWebSite.Model;
 using MapWebSite.Repository;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+using System.Configuration;
+using MapWebSite.GeoserverAPI;
+using MapWebSite.GeoserverAPI.Modules.Styles;
 using System.Threading.Tasks;
 
 namespace MapWebSite.Domain
@@ -172,6 +171,22 @@ namespace MapWebSite.Domain
 
         public bool InsertColorPalette(string username, ColorMap colorMap)
         {
+            GeoserverClient geoserverClient =
+                new GeoserverClient(
+                    ConfigurationManager.AppSettings["GeoserverApiUrl"],
+                    ConfigurationManager.AppSettings["GeoserverUser"],
+                    ConfigurationManager.AppSettings["GeoserverPassword"]
+                    );
+
+            StylesBuilder stylesBuilder = 
+                new StylesBuilder(colorMap.Name, colorMap.Name);
+
+            foreach (var intervalRule in colorMap.GetRules())
+                stylesBuilder.AddRule(intervalRule);
+
+            if (!geoserverClient.Post(new ModulesFactory().CreateStylesModule(stylesBuilder)))
+                return false;
+
             return userRepository.CreateColorMap(username, colorMap);
         }
 
