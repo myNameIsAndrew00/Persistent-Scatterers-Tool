@@ -2,6 +2,8 @@
 using MapWebSite.Core.Database;
 using MapWebSite.Model;
 using MapWebSite.SQLAccess;
+using SqlKata;
+using SqlKata.Compilers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -37,7 +39,7 @@ namespace MapWebSite.Repository
             Array.Copy(storedHashData, storedHash, 32);
             Array.Copy(storedHashData, 32, storedSalt, 0, 32);
 
-            var userTrialPassword = Helper.HashData(Encoding.UTF8.GetBytes(password), storedSalt);
+            var userTrialPassword = Core.Helper.HashData(Encoding.UTF8.GetBytes(password), storedSalt);
 
             return storedHash.SequenceEqual(userTrialPassword);
         }
@@ -84,7 +86,7 @@ namespace MapWebSite.Repository
         }
 
 
-        public int CreateUserPointsDataset(string username, string datasetName)
+        public int CreateUserPointsDataset(string username, string datasetName, PointsSource pointsSource)
         {
             try
             {
@@ -94,7 +96,9 @@ namespace MapWebSite.Repository
                 },
                                                     new SqlParameter[]{
                                                          new SqlParameter("username", username),
-                                                         new SqlParameter("dataset_name", datasetName) },
+                                                         new SqlParameter("dataset_name", datasetName),
+                                                         new SqlParameter("source_name", pointsSource.ToString())
+                                                    },
                                                     new SqlConnection(this.connectionString)));
 
             }
@@ -193,8 +197,7 @@ namespace MapWebSite.Repository
 
         public IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(ColorMapFilters filter, string filterValue, int pageIndex, int itemsPerPage)
         {
-            List<Tuple<string, ColorMap>> result = new List<Tuple<string, ColorMap>>();
-
+            
             using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetColorPalettesFiltered")
             { CommandType = System.Data.CommandType.StoredProcedure },
                                                new SqlParameter[]
@@ -206,18 +209,55 @@ namespace MapWebSite.Repository
                                                },
                                                new SqlConnection(this.connectionString)))
             {
-                foreach (DataRow row in colorMapsResult.Tables[0].Rows)
-                    result.Add(new Tuple<string, ColorMap>(
-                        (string)row["username"],
-                        new ColorMap()
-                        {
-                            Name = (string)row["palette_name"],
-                            Intervals = new List<Interval>().JSONDeserialize((string)row["palette_serialization"]),
-                            StatusMask =  (int)row["status_mask"]
-                        }));
+                return parseColorMapDataset(colorMapsResult.Tables[0].Rows);
+            }
+             
+        }
+
+
+        public IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(IEnumerable<Tuple<ColorMapFilters, string>> filters, int pageIndex, int itemsPerPage)
+        {
+
+            Query query = new Query("dbo.ColorPalettes as CP")
+                                .Select(new string[]{
+                                       "U.username",
+                                       "CP.palette_name",
+                                       "CP.palette_serialization",
+                                       "CP.status_mask"
+                                })
+                                .Join("dbo.Users as U", "CP.user_id", "U.user_id");
+                                
+            Func<ColorMapFilters, string> getColumnName = (filter) =>
+            {
+                switch (filter)
+                {
+                    case ColorMapFilters.ColorMapName:
+                        return "CP.palette_name";
+                    case ColorMapFilters.Username:
+                        return "U.username";
+                    default:
+                        return null;
+                }
+            };
+
+            foreach(var filter in filters)
+            {
+                string columnName = getColumnName(filter.Item1);
+                if (!string.IsNullOrEmpty(columnName))
+                    query = query.WhereLike(columnName, $"%{filter.Item2}%");
             }
 
-            return result;
+            query = query.OrderByDesc("CP.creation_date")
+                .Limit(itemsPerPage).Offset(pageIndex * itemsPerPage);
+
+            SqlResult queryResult = new SqlServerCompiler().Compile(query);
+            
+            using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand(queryResult.ToString())
+            { CommandType =  CommandType.Text }, null, new SqlConnection(this.connectionString)))
+            {
+                return parseColorMapDataset(colorMapsResult.Tables[0].Rows);
+            }
+             
         }
 
         public string GetColorMapSerialization(string username, string paletteName)
@@ -309,11 +349,9 @@ namespace MapWebSite.Repository
         }
 
         public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
-        {
-            List<PointsDataSetHeader> result = new List<PointsDataSetHeader>();
-
-            using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetDataSetsFiltered")
-            { CommandType = System.Data.CommandType.StoredProcedure },
+        {            
+            using (var datasetsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetDataSetsFiltered")
+            { CommandType = CommandType.StoredProcedure },
                                                new SqlParameter[]
                                                {
                                                     new SqlParameter("@filter_id",(int)filter),
@@ -323,21 +361,58 @@ namespace MapWebSite.Repository
                                                },
                                                new SqlConnection(this.connectionString)))
             {
-                foreach (DataRow row in colorMapsResult.Tables[0].Rows)
-                {
-                    result.Add(new PointsDataSetHeader()
-                    {
-                        Username = (string)row["username"],
-                        Name = (string)row["dataset_name"],
-                        ID = (int)row["dataset_id"],
-                        Status = row["status_id"] == DBNull.Value ? DatasetStatus.None : (DatasetStatus)((int)row["status_id"])
-                    }); 
+                return parseDataPointsDataset(datasetsResult.Tables[0].Rows);
+            }
+             
+        }
 
+        public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage)
+        {
+            Query query = new Query("dbo.DataSets as DS")
+                              .Select(new string[]{
+                                        "U.username",
+                                        "DS.dataset_name",
+                                        "DS.data_set_id as dataset_id",
+                                        "DS.status_id",
+                                        "DS.source_name"
+                              })
+                              .Join("dbo.Users as U", "DS.user_id", "U.user_id");
+
+            Func<DataSetsFilters, string> getColumnName = (filter) =>
+            {
+                switch (filter)
+                {
+                    case DataSetsFilters.DataSetName:
+                        return "DS.dataset_name";
+                    case DataSetsFilters.Username:
+                        return "U.username";
+                    case DataSetsFilters.Source:
+                        return "DS.source_name";
+                    default:
+                        return null;
                 }
+            };
+
+            foreach (var filter in filters)
+            {
+                string columnName = getColumnName(filter.Item1);
+                if (!string.IsNullOrEmpty(columnName))
+                    query = query.WhereLike(columnName, $"%{filter.Item2}%");
             }
 
-            return result;
+            query = query.OrderByDesc("DS.data_set_id")
+                .Limit(itemsPerPage).Offset(pageIndex * itemsPerPage);
+
+            SqlResult queryResult = new SqlServerCompiler().Compile(query);
+
+            using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand(queryResult.ToString())
+            { CommandType = CommandType.Text }, null, new SqlConnection(this.connectionString)))
+            {
+                return parseDataPointsDataset(colorMapsResult.Tables[0].Rows);
+            }
+
         }
+
 
         public bool UpdateDatasetStatus(string datasetName, DatasetStatus status, string username)
         {
@@ -482,11 +557,92 @@ namespace MapWebSite.Repository
             return true;
         }
 
+        public int RaiseToGeoserverDataset(int datasetId, string apiUrl, int defaultColorPaletteId)
+        {
+            try
+            {
+                return Convert.ToInt32(SqlExecutionInstance.ExecuteScalar(new SqlCommand("InsertGeoserverPointsDataset")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                    new SqlParameter[]{
+                                                         new SqlParameter("geoserver_api_url", apiUrl),
+                                                         new SqlParameter("data_set_id", datasetId),
+                                                         new SqlParameter("default_color_palette_id", defaultColorPaletteId)
+                                                    },
+                                                    new SqlConnection(this.connectionString)));
+
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return -1;
+            }
+        }
+
+        public int InsertGeoserverPalette(int geoserverDatasetId, int paletteId)
+        {
+            try
+            {
+                return Convert.ToInt32(SqlExecutionInstance.ExecuteScalar(new SqlCommand("InsertGeoserverColorPalette")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                    new SqlParameter[]{
+                                                         new SqlParameter("geoserver_data_set_id", geoserverDatasetId),
+                                                         new SqlParameter("palette_id", paletteId)
+                                                    },
+                                                    new SqlConnection(this.connectionString)));
+
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return -1;
+            }
+        }
 
 
         #region Private
 
-        public User getUser(string username, string email)
+        private IEnumerable<PointsDataSetHeader> parseDataPointsDataset(DataRowCollection rows)
+        {
+            List<PointsDataSetHeader> result = new List<PointsDataSetHeader>();
+
+            foreach (DataRow row in rows)
+            {
+                result.Add(new PointsDataSetHeader()
+                {
+                    Username = (string)row["username"],
+                    Name = (string)row["dataset_name"],
+                    ID = (int)row["dataset_id"],
+                    Status = row["status_id"] == DBNull.Value ? DatasetStatus.None : (DatasetStatus)((int)row["status_id"]),
+                    PointsSource = (PointsSource)Enum.Parse(typeof(PointsSource), (string)row["source_name"])
+                });
+
+            }
+
+            return result;
+        }
+
+        private IEnumerable<Tuple<string, ColorMap>> parseColorMapDataset(DataRowCollection rows)
+        {
+            List<Tuple<string, ColorMap>> result = new List<Tuple<string, ColorMap>>();
+
+            foreach (DataRow row in rows)
+                result.Add(new Tuple<string, ColorMap>(
+                    (string)row["username"],
+                    new ColorMap()
+                    {
+                        Name = (string)row["palette_name"],
+                        Intervals = new List<Interval>().JSONDeserialize((string)row["palette_serialization"]),
+                        StatusMask = (int)row["status_mask"]
+                    }));
+
+            return result;
+        }
+
+        private User getUser(string username, string email)
         {
             using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUser") { CommandType = CommandType.StoredProcedure },
                                               new SqlParameter[]
@@ -513,6 +669,7 @@ namespace MapWebSite.Repository
             };
         }
 
+      
         #endregion
     }
 }

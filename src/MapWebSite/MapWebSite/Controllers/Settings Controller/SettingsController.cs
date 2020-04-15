@@ -22,7 +22,8 @@ namespace MapWebSite.Controllers
             About,
             Account,
             ColorPicker,
-            UploadPoints
+            UploadPoints,
+            UseGeoserverLayer
         }
     }
 }

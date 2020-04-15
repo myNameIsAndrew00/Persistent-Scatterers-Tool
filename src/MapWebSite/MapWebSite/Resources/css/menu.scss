@@ -91,10 +91,10 @@
                         width: 130px;
                         height: 130px;
                         border-radius: 2px;
-                        display: flex;
-                        align-items: flex-end;
-                        text-align: center;
+                        display: flex; 
                         justify-content: center;
+                        align-items: center;
+                        padding-top: 90px;
                         background: rgba(0,0,0,0.3);
                     }
 
@@ -331,6 +331,7 @@
                     padding: 6px;
                     transition: none;
                     background: none;
+
                 }
             }
         }

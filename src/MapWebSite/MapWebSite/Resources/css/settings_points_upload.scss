@@ -15,11 +15,13 @@
     .upload-points-container-text {
         margin-top: -100px;
         text-align: center;
+        display: flex;
+        flex-direction: column;
 
-        .bar-loading-spinner{
+        .bar-loading-spinner {
             top: -21px;
         }
-        
+
         label {
             display: block;
             font-weight: 100;
@@ -34,6 +36,15 @@
             visibility: hidden;
         }
 
+        input, button {
+            width: 200px;
+            align-self: center;
+        }
+
+        input {
+            margin-bottom: 20px;
+        }
+
         .file-button-interaction {
             display: block;
             color: get_color(light);
@@ -42,7 +53,7 @@
             padding-left: 35px;
             border-radius: 5px;
             width: 200px;
-            margin: 20px auto;
+            margin: 20px auto 0 auto;
             transition: 0.3s;
             cursor: pointer;
             text-overflow: ellipsis;

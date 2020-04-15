@@ -484,4 +484,7 @@
   <data name="HMenuCPMinValueLabel" xml:space="preserve">
     <value>min. value</value>
   </data>
+  <data name="HMenuUseGeoserverLayerText" xml:space="preserve">
+    <value>Use Geoserver layer</value>
+  </data>
 </root>

@@ -52,6 +52,24 @@ input, button {
     border-radius: 2px;
 }
 
+.default-input-gray {
+    font-size: 10px;
+    margin: 4px;
+    border-radius: 2px;
+    min-height: 30px;
+    background: get_color(easeGray);
+}
+
+.input-content {
+    display: block;
+    padding: 5px;
+
+    label, p, small, h1, h2, h3, h4, h5 {
+        min-width: 70px;
+        color: get_color(gray);
+    }
+}
+
 
 .default-input:hover, .default-input:hover{
     background-color: rgba(255,255,255,0.2);
@@ -109,9 +127,8 @@ input[type=range]::-moz-range-thumb {
     transition: .3s width ease-in-out;
     position: relative;
     top: -21px;
-} 
+}
 
- 
 
 
 .default-button{
@@ -122,6 +139,7 @@ input[type=range]::-moz-range-thumb {
     transition: 0.3s;
     color: white;
 }
+
 
 .default-button:hover {
     background-color: get_color(chromaDarkOrange);

@@ -6,6 +6,13 @@ using System.Runtime.Serialization;
 
 namespace MapWebSite.Model
 {
+
+    public enum PointsSource
+    {
+        Geoserver,
+        Cassandra
+    }
+
     /// <summary>
     /// Model used for the header of points data set
     /// </summary>
@@ -18,6 +25,8 @@ namespace MapWebSite.Model
         public string Name { get; set; }
 
         public DatasetStatus Status { get; set; }
+
+        public PointsSource PointsSource { get; set; }
 
         public bool IsValid => Status == DatasetStatus.Generated;
 

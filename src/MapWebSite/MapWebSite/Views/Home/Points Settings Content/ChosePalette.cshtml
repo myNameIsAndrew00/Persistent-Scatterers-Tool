@@ -11,7 +11,7 @@
     <div class="ps_header">
         <h4>@Html.Raw(TextDictionary.HPSCPTitle)</h4>
         @Html.DropDownList("filter",
-                         EnumHelper.GetSelectList(typeof(MapWebSite.Core.Database.ColorMapFilters)),
+                         HtmlHelperExtensions.GetListFromEnum<MapWebSite.Core.Database.ColorMapFilters>(),
                          new { id = "colorPaletteFilterValue", onchange = "loadMorePalettes(true)" })
 
         <input type="search" id="colorPaletteSearchValue" placeholder="@TextDictionary.HPSCPSearchText" onkeyup="loadMorePalettes(true)" />

@@ -4,17 +4,18 @@
 }
 
 <div class="upload-points-container">
+
     <object class="current_displayed_icon"
             width="920px"
             height="460px"
             type="image/svg+xml"
-            data="~/Resources/resources/icons/upload_points_gliph.svg" )></object>
+            data="~/Resources/resources/icons/upload_points_gliph.svg"></object>
     <div id="upload_points_container_form" class="upload-points-container-text">
         <div id="current_percent" class="current-percent-hidden">
             <h2>0%</h2>
             <div class="bar-loading-spinner"></div>
         </div>
-        
+
         <h1>@TextDictionary.HMenuUPTitle</h1>
         <small>
             @Html.Raw(TextDictionary.HMenuUPInstructionText)
@@ -23,8 +24,8 @@
         <input onchange="changeFileInputAspect()" type="file" id="uploadFile" name="file" />
         <label id="file-input-visible" class="file-button-interaction" for="uploadFile">@TextDictionary.HMenuUPSelectFileButton</label>
 
+        <input class="default-input-gray" type="text" onkeyup="enableDatasetSubmit()" id="upload_points_dataset_name" placeholder="@TextDictionary.HMenuCPNameInput" />
         <label id="warning-text"><small>@TextDictionary.HMenuUPWarningText<br /></small></label>
-        <input type="text" onkeyup="enableDatasetSubmit()" id="upload_points_dataset_name" placeholder="@TextDictionary.HMenuCPNameInput" />
 
 
         <button id="upload_points_submit" onclick="uploadDataSets()" disabled>@TextDictionary.HMenuCPSubmitButton</button>

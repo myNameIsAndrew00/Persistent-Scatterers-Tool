@@ -3,36 +3,25 @@
  * This script contains code which manages the source for the points layer
  * */
 import { DisplayPointInfo, SetPointInfoData } from '../../point info/point_info.js';
+import { SelectedDataset } from '../../points settings/chose_dataset.js';
 
 export class GeoserverPointsSectionsContainer {
 
     constructor(map) {
         this.map = map;
 
-        this.pointsLayer = new ol.layer.Tile({
-            visible: true,
-            source: new ol.source.TileWMS({
-                url: 'http://localhost:8080/geoserver/constanta/wms',
-                params: {
-                    'FORMAT': 'image/png',
-                    'VERSION': '1.1.1',
-                    tiled: true,
-                    "LAYERS": 'constanta:coasta_constanta_labeled',
-                    "exceptions": 'application/vnd.ogc.se_inimage',
-                    tilesOrigin: 26.744917 + "," + 43.1027705
-                }
-            })
-        });
+        this.initPointslayer('constanta:coasta_constanta_labeled');
 
-        this.map.addLayer(this.pointsLayer);
     }
 
     LoadPoints() {
         
     }
 
-    UpdatePointsLayer(points) {
-       
+    UpdatePointsLayer() {
+        this.RemoveLayers();
+        this.initPointslayer(SelectedDataset.datasetName);
+        this.InitialiseMapInteraction();
     }
 
     InitialiseMapInteraction() {
@@ -97,5 +86,27 @@ export class GeoserverPointsSectionsContainer {
 
     RemoveLayers() {
         this.map.removeLayer(this.pointsLayer);
+    }
+
+    /*private region below*/
+
+    initPointslayer(layer) {
+        this.pointsLayer = new ol.layer.Tile({
+            visible: true,
+            source: new ol.source.TileWMS({
+                url: 'http://localhost:8080/geoserver/constanta/wms',
+                params: {
+                    'FORMAT': 'image/png',
+                    'VERSION': '1.1.1',
+                    tiled: true,
+                    "LAYERS": 'constanta:'+ layer,
+                    "exceptions": 'application/vnd.ogc.se_inimage',
+                    tilesOrigin: 26.744917 + "," + 43.1027705,
+                    'STYLES': 'create'
+                }
+            })
+        });
+
+        this.map.addLayer(this.pointsLayer);
     }
 }

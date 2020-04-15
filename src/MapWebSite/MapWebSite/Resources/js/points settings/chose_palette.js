@@ -140,10 +140,15 @@ window.loadMorePalettes = function loadMorePalettes(resetPageIndex) {
         if (table.offsetHeight + table.scrollTop >= table.scrollHeight - 5) {
             var filterValue = $(settingsLayerContainerId).find('#colorPaletteSearchValue')[0];
             var pageIndex = $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0];
-            var filter = $(settingsLayerContainerId).find('#colorPaletteFilterValue')[0];
+            var filter = $(settingsLayerContainerId).find('#colorPaletteFilterValue')[0];       
 
             Router.Get(endpoints.PointsSettingsApi.GetColorPaletteList,
-                { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
+                { 
+                    filtersCount: 1,
+                    filter0: filter[filter.selectedIndex].value,
+                    filterValue0: filterValue.value,                   
+                    pageIndex: pageIndex.value
+                },
                 function (palette) {
                     if (palette.length)
                         $(settingsLayerContainerId).find('#currentColorPaletteIndex')[0].value = parseInt(pageIndex.value) + 1;

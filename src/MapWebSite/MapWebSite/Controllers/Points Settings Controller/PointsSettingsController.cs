@@ -13,6 +13,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using MapWebSite.Types;
+using MapWebSite.Core.Database;
 
 namespace MapWebSite.Controllers
 {
@@ -29,13 +30,15 @@ namespace MapWebSite.Controllers
             try
             {
                 DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
-      
+
                 return View("~/Views/Home/Points Settings Content/ChosePalette.cshtml",
                     new ChosePaletteViewModel(databaseInteractionHandler.GetColorPaletes(
-                       Core.Database.ColorMapFilters.None,
-                       string.Empty,
-                       0,
-                       ChosePaletteViewModel.ColorPalettesPerPage
+                        new List<Tuple<Core.Database.ColorMapFilters, string>>()
+                            {
+                                new Tuple<Core.Database.ColorMapFilters, string>(Core.Database.ColorMapFilters.None, string.Empty)
+                            },
+                           0,
+                           ChosePaletteViewModel.ColorPalettesPerPage
                         )));
             }
             catch
@@ -52,13 +55,16 @@ namespace MapWebSite.Controllers
                 DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
                 return View("~/Views/Home/Points Settings Content/ChoseDataset.cshtml",
                     new ChoseDatasetViewModel(databaseInteractionHandler.GetDataSets(
-                        Core.Database.DataSetsFilters.None,
-                        string.Empty,
-                        0,
+                        new List<Tuple<DataSetsFilters, string>>()
+                        {
+                            new Tuple<DataSetsFilters, string>(
+                                   DataSetsFilters.None,
+                                   string.Empty)
+                        },
                         ChoseDatasetViewModel.DataPointsPerPage
                         )));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View();
             }
@@ -70,7 +76,7 @@ namespace MapWebSite.Controllers
 
             foreach (PointBase.VisualisationCriteria suit in (PointBase.VisualisationCriteria[])Enum.GetValues(typeof(PointBase.VisualisationCriteria)))
                 model.Add(suit.GetEnumString());
-                
+
             return View("~/Views/Home/Points Settings Content/ChoseCriteria.cshtml",
                             model);
         }
@@ -78,7 +84,7 @@ namespace MapWebSite.Controllers
 
 
     }
-     
+
     /// <summary>
     /// Represents the api used for points settings layer
     /// </summary>
@@ -99,15 +105,17 @@ namespace MapWebSite.Controllers
         }
 
         [System.Web.Http.HttpGet]
-        public HttpResponseMessage GetColorPaletteList(string filterValue, Core.Database.ColorMapFilters filter, int pageIndex)
+        public HttpResponseMessage GetColorPaletteList(int pageIndex)
         {
             var databaseInteractionHandler = new DatabaseInteractionHandler();
             var response = new HttpResponseMessage();
 
+
+            List<Tuple<ColorMapFilters, string>> filters = buildFilters<ColorMapFilters>(Request.GetQueryNameValuePairs());
+
             response.Content = new StringContent(
                 databaseInteractionHandler.GetColorPaletes(
-                    filter,
-                    filterValue ?? string.Empty,
+                    filters,
                     pageIndex,
                     ChosePaletteViewModel.ColorPalettesPerPage
                 )?.JSONSerialize());
@@ -116,22 +124,22 @@ namespace MapWebSite.Controllers
             return response;
         }
 
-
-        public HttpResponseMessage GetDatasetsList(string filterValue, Core.Database.DataSetsFilters filter, int pageIndex)
+        public HttpResponseMessage GetDatasetsList(int pageIndex)
         {
             var databaseInteractionHandler = new DatabaseInteractionHandler();
             var response = new HttpResponseMessage();
 
+            List<Tuple<DataSetsFilters, string>> filters = buildFilters<DataSetsFilters>(Request.GetQueryNameValuePairs());
+
             var model = databaseInteractionHandler.GetDataSets(
-                    filter,
-                    filterValue ?? string.Empty,
+                    filters,
                     pageIndex,
                     ChoseDatasetViewModel.DataPointsPerPage
                 )?.Select(dataset => new
                 {
                     dataset.Name,
                     dataset.ID,
-                    dataset.Username,                   
+                    dataset.Username,
                     Status = dataset.Status.GetEnumString(),
                     dataset.IsValid
                 });
@@ -152,8 +160,43 @@ namespace MapWebSite.Controllers
             response.Content = new StringContent(databaseInteractionHandler.GetDataSet(username, datasetName).JSONSerialize());
             response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-            return response;             
+            return response;
         }
+
+
+        #region Private
+
+
+        /// <summary>
+        /// Build filters object using a query string.
+        /// </summary>
+        /// <typeparam name="T">Type of enum used for filtering</typeparam>
+        /// <param name="query">A key-value list container. Required keys are: filtersCount, filter{i}, filterValue{i}, where i is an index between 0 and filtersCount.        
+        /// </param>
+        /// <returns></returns>
+        private List<Tuple<T, string>> buildFilters<T>(IEnumerable<KeyValuePair<string, string>> query) where T : Enum
+        {
+            List<Tuple<T, string>> filters = new List<Tuple<T, string>>();
+
+            int filtersCount = Convert.ToInt32(query.First(item => item.Key == "filtersCount").Value);
+
+            for (int i = 0; i < filtersCount; i++)
+            {
+                try
+                {
+                    filters.Add(new Tuple<T, string>(
+                         (T)Enum.Parse(typeof(T), query.First(item => item.Key == $"filter{i}").Value, true),
+                         query.First(item => item.Key == $"filterValue{i}").Value
+                        ));
+                }
+                catch { }
+            }
+
+            return filters;
+        }
+
+
+        #endregion
     }
 
 

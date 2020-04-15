@@ -93,7 +93,8 @@ begin
 		   DS.minimum_def_rate,
 		   DS.maximum_def_rate,
 		   DS.minimum_std_dev,
-		   DS.maximum_std_dev
+		   DS.maximum_std_dev,
+		   DS.source_name
 	from DataSets as DS
 		inner join Users as U
 		on DS.user_id = U.user_id and U.username = @username
@@ -187,14 +188,16 @@ begin
 		   U.username,
 		   DS.dataset_name,		
 		   DS.data_set_id as dataset_id,
-		   DS.status_id
+		   DS.status_id, 
+		   DS.source_name
 		from DataSets as DS
 		inner join Users as U
 		on DS.user_id = U.user_id 
 	where CHARINDEX(@filter_value,
 				( case 
 					when @filter_id = 1 then DS.dataset_name
-					when @filter_id = 2 then U.username
+					when @filter_id = 2 then U.username					
+					when @filter_id = 3 then DS.source_name
 				end )) > 0 
 		   OR @filter_id = -1
 	order by DS.data_set_id desc

@@ -12,13 +12,13 @@
     <div class="ps_header">
         <h4>@Html.Raw(TextDictionary.HPSCDTitleText)</h4>
         @Html.DropDownList("filter",
-                         EnumHelper.GetSelectList(typeof(MapWebSite.Core.Database.DataSetsFilters)),
+                         HtmlHelperExtensions.GetListFromEnum<MapWebSite.Core.Database.DataSetsFilters>("Source"),
                          new { id = "datasetFilterValue", onchange = "loadMorePointsDatasets(true)" }
-                         )
+                             )
 
-        <input type="search" id="datasetSearchValue" placeholder="@TextDictionary.HPSCDSearchInput" onkeyup="loadMorePointsDatasets(true)" />
-        <input type="hidden" id="currentDatasetIndex" value="1" />
-    </div>
+    <input type="search" id="datasetSearchValue" placeholder="@TextDictionary.HPSCDSearchInput" onkeyup="loadMorePointsDatasets(true)" />
+    <input type="hidden" id="currentDatasetIndex" value="1" />
+</div>
     <div class="ps_left" id="ps_left" onscroll="loadMorePointsDatasets(false)">
         <table>
             <tr class="table-header">

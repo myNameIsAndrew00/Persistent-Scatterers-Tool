@@ -1,0 +1,85 @@
+﻿@import 'general/colors.scss';
+
+
+.select-geoserver-source-container {
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .select-geoserver-source-content {
+        display: grid;
+        grid-template-areas: "left right";
+        grid-template-columns: 45% 55%;
+
+        .content-left {
+            grid-area: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .inputs {
+                padding: 50px 50px 50px 10px;
+
+                .input-content {
+                    label {
+                        min-width: 100px;
+                    }
+
+                    input {
+                        width: 200px;
+                    }
+
+                    .suggestions-container {
+                        position: absolute;
+                        background: get_color(lightGray);
+                        width: 300px;
+                        height: 130px;
+                        overflow-y: auto;
+
+                        .suggestion-item {
+                            display: grid;
+                            grid-template-areas: "top" "down";
+                            padding: 15px;
+
+                            .header-row {
+                                grid-area: top;
+                                display: flex;
+
+                                button {
+                                    padding: 0px 9px 2px 9px;
+                                }
+                            }
+
+                            .palette-row {
+                                grid-area: down;
+                                margin-right: 28px;
+
+                                tbody {
+                                    tr, td {
+                                        width: 5px;
+                                        height: 5px;
+                                        margin: 0;
+                                        padding: 0;
+                                        border: solid #e3e3e3 1px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            button {
+                text-align: center;
+                align-self: center;
+                width: 200px;
+            }
+        }
+
+        .gliph {
+            grid-area: right;
+        }
+    }
+}

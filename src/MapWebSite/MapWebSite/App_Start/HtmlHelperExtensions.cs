@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 using System.Xml;
 using System.Xml.Schema;
 
@@ -20,29 +21,44 @@ namespace MapWebSite
         /// <param name="htmlAttributes">additional attributes which must be added to svg</param>
         /// <returns></returns>
         public static MvcHtmlString SVG(this HtmlHelper htmlHelper, string path, object htmlAttributes)
-        {  
+        {
             var xmlDoc = new XmlDocument();
             xmlDoc.Load(HttpContext.Current.Server.MapPath(path));
-             
-            
+
+
             PropertyInfo[] properties = htmlAttributes?.GetType().GetProperties() ?? null;
-           
-            if(properties != null)
-            foreach (PropertyInfo propertyInfo in properties)
-            {
-                if (xmlDoc.DocumentElement.Attributes[propertyInfo.Name] != null)
+
+            if (properties != null)
+                foreach (PropertyInfo propertyInfo in properties)
                 {
-                    xmlDoc.DocumentElement.Attributes[propertyInfo.Name].Value =
-                        (string)propertyInfo.GetValue(htmlAttributes, null);
+                    if (xmlDoc.DocumentElement.Attributes[propertyInfo.Name] != null)
+                    {
+                        xmlDoc.DocumentElement.Attributes[propertyInfo.Name].Value =
+                            (string)propertyInfo.GetValue(htmlAttributes, null);
+                    }
+                    else
+                    {
+                        XmlAttribute xsiNil = xmlDoc.CreateAttribute(propertyInfo.Name, "");
+                        xsiNil.Value = (string)propertyInfo.GetValue(htmlAttributes, null);
+                        xmlDoc.DocumentElement.Attributes.Append(xsiNil);
+                    }
                 }
-                else
-                {
-                    XmlAttribute xsiNil = xmlDoc.CreateAttribute(propertyInfo.Name,"");
-                    xsiNil.Value = (string)propertyInfo.GetValue(htmlAttributes, null);
-                    xmlDoc.DocumentElement.Attributes.Append(xsiNil);
-                }
-            }
             return new MvcHtmlString(xmlDoc.OuterXml);
         }
+
+        public static IEnumerable<SelectListItem> GetListFromEnum<T>(params string[] ignoreValues)
+            where T : Enum, IConvertible
+        {
+            foreach (T enumValue in ((T[])Enum.GetValues(typeof(T))).OrderBy( item => item ))
+                if (!ignoreValues.Contains(enumValue.ToString()))
+                    yield return new SelectListItem()
+                    {
+                        Disabled = false,
+                        Text = enumValue.ToString(),
+                        Value = (Convert.ToInt32(enumValue).ToString())
+                    };
+        }
+
+
     }
 }

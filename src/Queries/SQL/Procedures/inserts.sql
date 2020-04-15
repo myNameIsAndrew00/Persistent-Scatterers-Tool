@@ -54,7 +54,8 @@ if object_id('InsertPointsDataset', 'P') is not null
 go
 create procedure InsertPointsDataset 
 	@username as varchar(100),
-	@dataset_name as varchar(100)
+	@dataset_name as varchar(100),
+	@source_name as varchar(100)
 as 
 begin
 
@@ -72,8 +73,8 @@ begin
 			from DatasetsStatuses as DS where DS.name = 'Pending' 
 
 			--Insert data into the dataset 
-			insert into DataSets(user_id, dataset_name, status_id)
-			values (@user_id, @dataset_name, @status_id)
+			insert into DataSets(user_id, dataset_name, status_id, source_name)
+			values (@user_id, @dataset_name, @status_id, @source_name)
 			
 			select SCOPE_IDENTITY() as ID;
 		commit
@@ -129,3 +130,73 @@ begin
 
 end
 
+
+
+
+if object_id('InsertGeoserverColorPalette', 'P') is not null
+	drop procedure InsertGeoserverColorPalette
+go
+create procedure InsertGeoserverColorPalette 
+	@geoserver_data_set_id as int,
+	@palette_id as int
+as 
+begin
+
+	begin try
+		begin transaction
+
+			--Insert the dataset
+			insert into GeoserverDataSetsPalettes(geoserver_dataset_id, color_palette_id)
+			values (@geoserver_data_set_id, @palette_id)
+			
+			select SCOPE_IDENTITY() as ID;
+		commit
+
+		select SCOPE_IDENTITY();
+	end try
+	begin catch
+		rollback;
+		throw;
+	end catch
+
+end
+
+
+
+
+if object_id('InsertGeoserverPointsDataset', 'P') is not null
+	drop procedure InsertGeoserverPointsDataset
+go
+create procedure InsertGeoserverPointsDataset 
+	@geoserver_api_url as varchar(255),
+	@data_set_id as int,
+	@default_color_palette_id as int
+as 
+begin
+
+	begin try
+		begin transaction
+			 
+			--Insert the dataset
+			insert into GeoserverDataSets(geoserver_api_url, data_set_id, default_color_palette_id)
+			values (@geoserver_api_url, @data_set_id, @default_color_palette_id)
+			
+		    declare @inserted_id int = SCOPE_IDENTITY();
+			
+			exec InsertGeoserverColorPalette
+				@geoserver_data_set_id = @inserted_id, 
+				@palette_id = @default_color_palette_id
+
+
+
+			select @inserted_id as ID
+		commit
+
+		select SCOPE_IDENTITY();
+	end try
+	begin catch
+		rollback;
+		throw;
+	end catch
+
+end

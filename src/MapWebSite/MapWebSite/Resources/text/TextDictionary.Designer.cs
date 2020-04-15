@@ -344,6 +344,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Geoserver layer.
+        /// </summary>
+        public static string HMenuUseGeoserverLayerText {
+            get {
+                return ResourceManager.GetString("HMenuUseGeoserverLayerText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open a new window to display the graph and points details. Window is persistent and can be closed anytime..
         /// </summary>
         public static string HPI_TOOLTIP_PlotWindow {

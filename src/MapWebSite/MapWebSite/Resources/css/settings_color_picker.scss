@@ -49,19 +49,7 @@ html, body {
 
         .controls {
             .setting-item {
-                margin-left: 30px;
-
-                label {
-                    width: 90px;
-                }
-
-                input {
-                    font-size: 10px;
-                    margin: 4px;
-                    border-radius: 2px;
-                    background: get_color(easeGray);
-                    padding: 4px;
-                }
+                margin-left: 30px;                      
             }
 
             grid-area: left;
@@ -207,7 +195,7 @@ html, body {
             }
 
             button {
-                margin-top: 11px;
+                margin-top: 36px;
             }
         }
     }

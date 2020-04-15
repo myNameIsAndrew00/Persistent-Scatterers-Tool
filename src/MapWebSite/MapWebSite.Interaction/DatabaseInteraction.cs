@@ -50,12 +50,17 @@ namespace MapWebSite.Domain
         /// <param name="datasetName">Name of the dataset</param>
         /// <param name="username">The username of the user which create the dataset</param>
         /// <returns>A boolean which indicates if the insert was succesufully</returns>
-        public bool CreateDataSet(string datasetName, string username)
+        public bool CreateDataSet(string datasetName, string username, PointsSource pointsSource, string apiUrl = null, int colorPaletteId = 0 )
         {
-            int datasetId = this.userRepository.CreateUserPointsDataset(username, datasetName);
+            int datasetId = this.userRepository.CreateUserPointsDataset(username, datasetName, pointsSource);
+
+            if (pointsSource == PointsSource.Geoserver)
+                datasetId = this.userRepository.RaiseToGeoserverDataset(datasetId, apiUrl, colorPaletteId);
+
             return datasetId != -1;
         }
 
+         
         public bool UpdateDatasetStatus(string datasetName, DatasetStatus status, string username)
         {
             return this.userRepository.UpdateDatasetStatus(datasetName, status, username);
@@ -191,16 +196,16 @@ namespace MapWebSite.Domain
         }
 
 
-        public IEnumerable<Tuple<string, ColorMap>> GetColorPaletes(ColorMapFilters filter, string filterValue, int pageIndex = 0, int itemsPerPage = 10)
+        public IEnumerable<Tuple<string, ColorMap>> GetColorPaletes(IEnumerable<Tuple<ColorMapFilters,string>> filters, int pageIndex = 0, int itemsPerPage = 10)
         {
             //TODO: handle errors or do more checks if needed
-            return this.userRepository.GetColorMapsFiltered(filter, filterValue, pageIndex, itemsPerPage);
+            return this.userRepository.GetColorMapsFiltered(filters, pageIndex, itemsPerPage);
         }
 
-        public IEnumerable<PointsDataSetHeader> GetDataSets(DataSetsFilters filter, string filterValue, int pageIndex = 0, int itemsPerPage = 10)
+        public IEnumerable<PointsDataSetHeader> GetDataSets(IEnumerable<Tuple<DataSetsFilters,string>> filters, int pageIndex = 0, int itemsPerPage = 10)
         {
             //TODO: handle errors or do more checks if needed
-            return this.userRepository.GetDataSetsFiltered(filter, filterValue, pageIndex, itemsPerPage);
+            return this.userRepository.GetDataSetsFiltered(filters, pageIndex, itemsPerPage);
         }
 
 

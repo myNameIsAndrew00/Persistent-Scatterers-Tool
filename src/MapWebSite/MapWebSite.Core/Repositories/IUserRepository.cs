@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 namespace MapWebSite.Core.Database
 {
+
+
     public enum ColorMapFilters
     {
         None = -1,
@@ -16,7 +18,9 @@ namespace MapWebSite.Core.Database
         None = -1,
         DataSetName = 1,
         Username = 2,
-        //todo: add State = 3
+        Source = 3
+
+        //todo: add State = 4
     }
 
     /// <summary>
@@ -43,7 +47,24 @@ namespace MapWebSite.Core.Database
 
         byte[] GetUserHashedPassword(string username);
 
-        int CreateUserPointsDataset(string username, string datasetName);
+        int CreateUserPointsDataset(string username, string datasetName, PointsSource pointsSource);
+
+        /// <summary>
+        /// Use this method to update a dataset to be used as a geoserver source
+        /// </summary>
+        /// <param name="datasetId">Id of the dataset</param>
+        /// <param name="defaultColorPaletteId">Default color palette used to display points</param>
+        /// <param name="apiUrl">Api endpoint used to request data</param>
+        /// <returns></returns>
+        int RaiseToGeoserverDataset(int datasetId, string apiUrl, int defaultColorPaletteId);
+
+        /// <summary>
+        /// Use this method to associate a geoserver dataset with a color palette
+        /// </summary>
+        /// <param name="geoserverDatasetId">Id of the geoserver dataset</param>
+        /// <param name="paletteId">Id of color palette. Color palette must be uploaded to geoserver.</param>
+        /// <returns></returns>
+        int InsertGeoserverPalette(int geoserverDatasetId, int paletteId);
 
         bool CreateColorMap(string username, ColorMap colorMap);
 
@@ -80,9 +101,20 @@ namespace MapWebSite.Core.Database
         /// <returns>List of tuples, first item of tuple represents user username and the second item, its color map</returns>
         IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(ColorMapFilters filter, string filterValue, int pageIndex, int itemsPerPage);
 
+        /// <summary>
+        /// Provides a method to request color palettes using multiple filters 
+        /// </summary>
+        /// <param name="filters">Filters which will be applied</param> 
+        /// <param name="pageIndex">Index of the page which must be returned</param>
+        /// <param name="itemsPerPage">Items contained in a page</param>
+        /// <returns>List of tuples, first item of tuple represents user username and the second item, its color map</returns>
+        IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(IEnumerable<Tuple<ColorMapFilters, string>> filters, int pageIndex, int itemsPerPage);
+
         string GetColorMapSerialization(string username, string paletteName);
 
         IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
+       
+        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
 
         /// <summary>
         /// Use this method to update the status of an existing dataset

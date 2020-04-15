@@ -257,6 +257,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\Miscellaneous Controller\MiscellaneousController.cs" />
     <Compile Include="Controllers\Points Settings Controller\PointsSettingsController.cs" />
+    <Compile Include="Controllers\Settings Controller\SCGeoserverSelect.cs" />
     <Compile Include="Controllers\Settings Controller\SCAccountController.cs" />
     <Compile Include="Controllers\Settings Controller\SCUploadPoints.cs" />
     <Compile Include="Controllers\Settings Controller\SCColorPalette.cs" />
@@ -337,6 +338,7 @@
     <None Include="Resources\css\home_settings_layer.scss" />
     <Content Include="Resources\css\popup.scss" />
     <Content Include="Resources\css\home_points_settings_popup.scss" />
+    <Content Include="Resources\css\settings_select_geoserver.scss" />
     <None Include="Resources\css\settings_points_upload.scss" />
     <Content Include="Resources\js\api\api_router.js" />
     <Content Include="Resources\js\api\cache\points_regions_manager.js" />
@@ -347,6 +349,7 @@
     <Content Include="Resources\js\map\points_search.js" />
     <Content Include="Resources\js\map\points sources\cassandra_container.js" />
     <Content Include="Resources\js\map\received_points_worker.js" />
+    <Content Include="Resources\js\settings\settings_select_geoserver_layer.js" />
     <Content Include="Resources\js\utilities\BackgroundWaves\waves.js" />
     <Content Include="Resources\js\utilities\Card\card_drawer.js" />
     <Content Include="Resources\js\utilities\Card\cards_manager.js" />
@@ -386,6 +389,7 @@
     <Content Include="Resources\resources\icons\cluster_icon.svg" />
     <Content Include="Resources\resources\icons\eye_icon.svg" />
     <Content Include="Resources\resources\icons\first_gliph.svg" />
+    <Content Include="Resources\resources\icons\geoserver_upload_icon.svg" />
     <Content Include="Resources\resources\icons\info_icon.svg" />
     <Content Include="Resources\resources\icons\loading_icon.svg" />
     <Content Include="Resources\resources\icons\logout_icon.svg" />
@@ -401,6 +405,7 @@
     <Content Include="Resources\resources\icons\reload_icon.svg" />
     <Content Include="Resources\resources\icons\resize_point_icon.svg" />
     <Content Include="Resources\resources\icons\second_gliph.svg" />
+    <Content Include="Resources\resources\icons\select_geoserver_source_gliph.svg" />
     <Content Include="Resources\resources\icons\settings_icon.svg" />
     <Content Include="Resources\resources\icons\set_icon.svg" />
     <Content Include="Resources\resources\icons\simple_palette_icon.svg" />
@@ -569,6 +574,7 @@
     <Content Include="Views\Login\MessageForm.cshtml" />
     <Content Include="Views\Home\Miscellaneous Content\ChosePointsSource.cshtml" />
     <Content Include="Views\Home\ApplicationMessage.cshtml" />
+    <Content Include="Views\Home\Settings Content\SelectGeoserverSource.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

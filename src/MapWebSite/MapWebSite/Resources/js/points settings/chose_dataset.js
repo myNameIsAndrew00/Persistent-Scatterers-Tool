@@ -6,6 +6,7 @@
 
 import { Router, endpoints } from '../api/api_router.js';
 import { UpdatePointsLayer } from '../map/map.js';
+import { CurrentSource } from '../map/chose_points_source.js';
 
 const settingsLayerContainerId = '#points-settings-layer-container-content';
 const settingsLayerContainerClass = '.points-settings-layer-container-palette-content';
@@ -197,7 +198,14 @@ window.loadMorePointsDatasets = function loadMorePointsDatasets(resetPageIndex) 
 
                 Router.Get(
                     endpoints.PointsSettingsApi.GetDatasetsList,
-                    { filterValue: filterValue.value, filter: filter[filter.selectedIndex].value, pageIndex: pageIndex.value },
+                    {
+                        filtersCount: 2,
+                        filter0: filter[filter.selectedIndex].value,
+                        filterValue0: filterValue.value,
+                        filter1: 'Source',
+                        filterValue1: CurrentSource,
+                        pageIndex: pageIndex.value
+                    },
                     function (datasets) {
                         if (datasets.length)
                             $(settingsLayerContainerId).find('#currentDatasetIndex')[0].value = parseInt(pageIndex.value) + 1;

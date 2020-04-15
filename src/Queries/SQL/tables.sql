@@ -88,6 +88,8 @@ create table DataSets(
 	data_set_id int identity(1,1) not null,
 	user_id int not null,
 	dataset_name varchar(100) not null,
+	source_name varchar(100) not null,
+	
 	status_id int,
 	
 	/*this fields are used for optimizations*/
@@ -137,3 +139,26 @@ create table ColorPalettes(
 	foreign key (user_id) references Users(user_id)
 )
  
+--extension to datasets -- used with Geoserver
+create table GeoserverDataSets(
+	geoserver_dataset_id int identity(1,1),
+
+	geoserver_api_url nvarchar(255) not null,
+	data_set_id int not null,
+	default_color_palette_id int not null,
+
+	PRIMARY KEY(geoserver_dataset_id),
+	FOREIGN KEY (data_set_id) REFERENCES DataSets(data_set_id),
+	FOREIGN KEY (default_color_palette_id) REFERENCES ColorPalettes(color_palette_id)
+)
+
+create table GeoserverDataSetsPalettes(
+	geoserver_palette_id int identity(1,1),
+
+	geoserver_dataset_id int not null,
+	color_palette_id int not null,
+
+	PRIMARY KEY (geoserver_palette_id),
+	FOREIGN KEY (geoserver_dataset_id) REFERENCES GeoserverDataSets(geoserver_dataset_id),
+	FOREIGN KEY (color_palette_id) REFERENCES ColorPalettes(color_palette_id)
+)

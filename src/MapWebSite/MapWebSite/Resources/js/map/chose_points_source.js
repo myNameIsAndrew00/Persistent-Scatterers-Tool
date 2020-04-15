@@ -4,17 +4,22 @@
  *
  * */
 
- 
-
 import { CassandraPointsSectionsContainer } from './points sources/cassandra_container.js';
 import { GeoserverPointsSectionsContainer } from './points sources/geoserver_container.js';
 import { map } from './map.js';
+
+const sources = {
+    cassandra: 'cassandra',
+    geoserver: 'geoserver'
+}
+
 
 export var PointsSectionsContainer = null;
 
 //id of the selected button ( top menu, change ChosePointsSource.cshtml)
 var selectedButtonId = 'chose_points_source_cassandra';
 
+export var CurrentSource = sources.cassandra;
 
 export function RefreshSelectPointsSourcePopup() {
 
@@ -34,10 +39,10 @@ export function ChangePointsSource(button, sourceName) {
     if (PointsSectionsContainer != null) PointsSectionsContainer.RemoveLayers();
 
     switch (sourceName) {
-        case 'geoserver':
+        case sources.geoserver:
             PointsSectionsContainer = new GeoserverPointsSectionsContainer(map);
             break;
-        case 'cassandra':
+        case sources.cassandra:
             PointsSectionsContainer = new CassandraPointsSectionsContainer(map);
             break;
         default: break;
@@ -52,6 +57,7 @@ export function ChangePointsSource(button, sourceName) {
         selectedButtonId = button.id;
     }
 
+    CurrentSource = sourceName;
 }
 
 window.ChangePointsSource = ChangePointsSource;

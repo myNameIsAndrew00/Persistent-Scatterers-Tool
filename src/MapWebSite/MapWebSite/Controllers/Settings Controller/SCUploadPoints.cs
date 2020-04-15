@@ -53,7 +53,8 @@ namespace MapWebSite.Controllers
                     Directory.CreateDirectory(fileFolderName);
                     databaseInteractionHandler.CreateDataSet(
                        checkoutData[0],
-                       RouteConfig.CurrentUser.Username
+                       RouteConfig.CurrentUser.Username,
+                       PointsSource.Cassandra
                     );    
                 }
 

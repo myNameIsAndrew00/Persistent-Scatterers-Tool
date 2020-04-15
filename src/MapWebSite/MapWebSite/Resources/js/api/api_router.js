@@ -38,7 +38,8 @@ export const endpoints = {
         UploadFileChunk: applicationApiUrl + '/settings/UploadFileChunk',
         ClearFileChunks: applicationApiUrl + '/settings/ClearFileChunks',
         MergeFileChunks: applicationApiUrl + '/settings/MergeFileChunks',
-        CheckDatasetExistance: applicationApiUrl + '/settings/CheckDatasetExistance'
+        CheckDatasetExistance: applicationApiUrl + '/settings/CheckDatasetExistance',
+        UploadGeoserverLayer: applicationApiUrl + '/settings/UploadGeoserverLayer'
     },
     LoginApi: {
         ValidateUsername: applicationApiUrl + '/LoginApi/ValidateUsername',
