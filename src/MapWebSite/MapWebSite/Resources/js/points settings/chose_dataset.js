@@ -27,16 +27,16 @@ const defrateLimitRightLabelId = '#defrate_limit_right';
 class PointsDataset {
 
     constructor(username, datasetName) {
-        this.username = username;
-        this.datasetName = datasetName;
+        this.user = username;
+        this.name = datasetName;
 
         this.identifier = this.setIdentifier();
     }
 
     setIdentifier() {
-        if (this.username === null || this.datasetName === null) return 0;
+        if (this.user === null || this.name === null) return 0;
 
-        let id = 'user_dataset_' + this.username + '_' + this.datasetName + '_id';
+        let id = 'user_dataset_' + this.user + '_' + this.name + '_id';
         return $(settingsLayerContainerId).find('[id=\'' + id + '\']')[0].value;
     }
 
@@ -78,7 +78,7 @@ function changeSelectedRowOnMenu(id, visible) {
  */
 window.useDataset = function useDataset(username, datasetName) {
 
-    var previousDatasetRowId = 'user_dataset_' + SelectedDataset.username + '_' + SelectedDataset.datasetName;
+    var previousDatasetRowId = 'user_dataset_' + SelectedDataset.user + '_' + SelectedDataset.name;
     var datasetRowId = 'user_dataset_' + username + '_' + datasetName;
 
     SelectedDataset = new PointsDataset(username, datasetName);
@@ -170,7 +170,7 @@ function fillTable(datasets, table) {
         row.appendChild(buttonsColumn);
 
         /*hover the row if the color palette is in use*/
-        if (SelectedDataset.username === datasets[i].Username && SelectedDataset.datasetName == datasets[i].Name)
+        if (SelectedDataset.user === datasets[i].Username && SelectedDataset.name == datasets[i].Name)
             row.classList.add('selected-row');
 
 
@@ -220,6 +220,6 @@ window.loadMorePointsDatasets = function loadMorePointsDatasets(resetPageIndex) 
 }
 
 export function UpdateSelectedDatasetLayout() {
-    changeSelectedRowOnMenu('user_dataset_' + SelectedDataset.username + '_' + SelectedDataset.datasetName, true);
+    changeSelectedRowOnMenu('user_dataset_' + SelectedDataset.user + '_' + SelectedDataset.name, true);
 }
  

@@ -47,34 +47,21 @@ namespace MapWebSite.Core.Database
 
         byte[] GetUserHashedPassword(string username);
 
+        //todo: move this methods in other repository, for datapoints headers
+        #region Data points related
+
         int CreateUserPointsDataset(string username, string datasetName, PointsSource pointsSource);
+
 
         /// <summary>
         /// Use this method to update a dataset to be used as a geoserver source
         /// </summary>
-        /// <param name="datasetId">Id of the dataset</param>
-        /// <param name="defaultColorPaletteId">Default color palette used to display points</param>
+        /// <param name="datasetId">Id of the dataset</param> 
         /// <param name="apiUrl">Api endpoint used to request data</param>
         /// <returns></returns>
-        int RaiseToGeoserverDataset(int datasetId, string apiUrl, int defaultColorPaletteId);
+        int RaiseToGeoserverDataset(int datasetId, string apiUrl);
 
-        /// <summary>
-        /// Use this method to associate a geoserver dataset with a color palette
-        /// </summary>
-        /// <param name="geoserverDatasetId">Id of the geoserver dataset</param>
-        /// <param name="paletteId">Id of color palette. Color palette must be uploaded to geoserver.</param>
-        /// <returns></returns>
-        int InsertGeoserverPalette(int geoserverDatasetId, int paletteId);
-
-        bool CreateColorMap(string username, ColorMap colorMap);
-
-        /// <summary>
-        /// Get all the color maps for a user
-        /// </summary>
-        /// <param name="username"></param>
-        /// <returns></returns>
-        IEnumerable<string> GetColorMapsNames(string username);
-
+    
         /// <summary>
         /// Get the id of a dataset
         /// </summary>
@@ -83,6 +70,15 @@ namespace MapWebSite.Core.Database
         /// <returns></returns>
         int GetDatasetID(string username, string datasetName);
 
+
+
+        /// <summary>
+        /// Get the geoserver id of a dataset 
+        /// </summary> 
+        /// <param name="datasetId">The id of the dataset</param>
+        /// <returns></returns>
+        int GetGeoserverDatasetID(int datasetId);
+
         /// <summary>
         /// Get the header of a dataset
         /// </summary>
@@ -90,6 +86,18 @@ namespace MapWebSite.Core.Database
         /// <param name="datasetName">The name of dataset</param>
         /// <returns></returns>
         PointsDataSetHeader GetDatasetHeader(string username, string datasetName);
+
+        /// <summary>
+        /// Get the header of a dataset
+        /// </summary>
+        /// <param name="datasetId">Id of the dataset</param> 
+        /// <returns></returns>
+        PointsDataSetHeader GetDatasetHeader(int datasetId);
+
+        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
+
+        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
+
 
         /// <summary>
         /// Provides a method to request color palettes (and their 'creators') using a filter 
@@ -110,11 +118,43 @@ namespace MapWebSite.Core.Database
         /// <returns>List of tuples, first item of tuple represents user username and the second item, its color map</returns>
         IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(IEnumerable<Tuple<ColorMapFilters, string>> filters, int pageIndex, int itemsPerPage);
 
+
+        /// <summary>
+        /// Retrieve color maps which were been loaded in geoserver using the application. 
+        /// </summary>
+        /// <param name="geoserverDatasetId">The id of the geoserver dataset</param>
+        /// <returns>List of tuples, first item of tuple represents user username and the second item, its color map</returns>
+        IEnumerable<Tuple<string,ColorMap>> GetGeoserverColorMaps(int geoserverDatasetId);
+
+
         string GetColorMapSerialization(string username, string paletteName);
 
-        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
-       
-        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
+        /// <summary>
+        /// Use this method to associate a geoserver dataset with a color palette
+        /// </summary>
+        /// <param name="geoserverDatasetId">Id of the geoserver dataset</param>
+        /// <param name="paletteId">Id of color palette. Color palette must be uploaded to geoserver first.</param>
+        /// <returns></returns>
+        int InsertGeoserverColorMap(int geoserverDatasetId, int paletteId);
+
+
+        /// <summary>
+        /// Use this method to associate a geoserver dataset with a color palette
+        /// </summary>
+        /// <param name="geoserverDatasetId">Id of the geoserver dataset</param>
+        /// <param name="paletteName">Name of the palette. Color palette must be uploaded to geoserver first.</param>
+        /// <param name="paletteUsername">Username of user which uploaded the color palette. Color palette must be uploaded to geoserver first.</param>
+        /// <returns></returns>
+        int InsertGeoserverColorMap(int geoserverDatasetId, string paletteName, string paletteUsername);
+
+        bool CreateColorMap(string username, ColorMap colorMap);
+
+        /// <summary>
+        /// Get all the color maps for a user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        IEnumerable<string> GetColorMapsNames(string username);
 
         /// <summary>
         /// Use this method to update the status of an existing dataset
@@ -163,5 +203,6 @@ namespace MapWebSite.Core.Database
                                  decimal? minimumStdDev,
                                  decimal? maximumStdDev);
 
+        #endregion
     }
 }

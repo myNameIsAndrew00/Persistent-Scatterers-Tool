@@ -134,39 +134,16 @@ namespace MapWebSite.Repository
 
         public PointsDataSetHeader GetDatasetHeader(string username, string datasetName)
         {
-            using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUserPointsDataset")
-            { CommandType = CommandType.StoredProcedure },
-                                                   new SqlParameter[]
-                                                   {
-                                                           new SqlParameter("username", username),
-                                                           new SqlParameter("dataset_name", datasetName),
-                                                   },
-                                                   new SqlConnection(this.connectionString)))
-            {
-                if (userCredentialsInfo.Tables[0].Rows.Count == 0) return null;
-                var resultRow = userCredentialsInfo.Tables[0].Rows[0];
-
-                return new PointsDataSetHeader()
-                {
-                    Username = username,
-                    Name = datasetName,
-                    ID = (int)resultRow["data_set_id"],
-                    MaximumLatitude = resultRow["maximum_latitude"] is DBNull ? null : (decimal?)resultRow["maximum_latitude"],
-                    MaximumLongitude = resultRow["maximum_longitude"] is DBNull ? null : (decimal?)resultRow["maximum_longitude"],
-                    MinimumLatitude = resultRow["minimum_latitude"] is DBNull ? null : (decimal?)resultRow["minimum_latitude"],
-                    MinimumLongitude = resultRow["minimum_longitude"] is DBNull ? null : (decimal?)resultRow["minimum_longitude"],
-                    MinimumHeight = resultRow["minimum_height"] is DBNull ? null : (decimal?)resultRow["minimum_height"],
-                    MaximumHeight = resultRow["maximum_height"] is DBNull ? null : (decimal?)resultRow["maximum_height"],
-                    MinimumDeformationRate = resultRow["minimum_def_rate"] is DBNull ? null : (decimal?)resultRow["minimum_def_rate"],
-                    MaximumDeformationRate = resultRow["maximum_def_rate"] is DBNull ? null : (decimal?)resultRow["maximum_def_rate"],
-                    MinimumStdDev = resultRow["minimum_std_dev"] is DBNull ? null : (decimal?)resultRow["minimum_std_dev"],
-                    MaximumStdDev = resultRow["maximum_std_dev"] is DBNull ? null : (decimal?)resultRow["maximum_std_dev"],
-                     
-                    Status = (DatasetStatus)((int)resultRow["data_set_id"])
-                };
-
-            };
+            return getDatasetHeader(username, datasetName, 0);
         }
+
+
+        public PointsDataSetHeader GetDatasetHeader(int datasetId)
+        {
+            return getDatasetHeader(string.Empty, string.Empty, datasetId);
+        }
+
+
 
 
         public bool InsertUser(User user)
@@ -557,7 +534,7 @@ namespace MapWebSite.Repository
             return true;
         }
 
-        public int RaiseToGeoserverDataset(int datasetId, string apiUrl, int defaultColorPaletteId)
+        public int RaiseToGeoserverDataset(int datasetId, string apiUrl)
         {
             try
             {
@@ -567,8 +544,7 @@ namespace MapWebSite.Repository
                 },
                                                     new SqlParameter[]{
                                                          new SqlParameter("geoserver_api_url", apiUrl),
-                                                         new SqlParameter("data_set_id", datasetId),
-                                                         new SqlParameter("default_color_palette_id", defaultColorPaletteId)
+                                                         new SqlParameter("data_set_id", datasetId)
                                                     },
                                                     new SqlConnection(this.connectionString)));
 
@@ -580,7 +556,7 @@ namespace MapWebSite.Repository
             }
         }
 
-        public int InsertGeoserverPalette(int geoserverDatasetId, int paletteId)
+        public int InsertGeoserverColorMap(int geoserverDatasetId, int paletteId)
         {
             try
             {
@@ -602,9 +578,110 @@ namespace MapWebSite.Repository
             }
         }
 
+        public int InsertGeoserverColorMap(int geoserverDatasetId, string paletteName, string paletteUsername)
+        {
+            try
+            {
+                return Convert.ToInt32(SqlExecutionInstance.ExecuteScalar(new SqlCommand("InsertGeoserverColorPaletteByName")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                    new SqlParameter[]{
+                                                         new SqlParameter("geoserver_data_set_id", geoserverDatasetId),
+                                                         new SqlParameter("palette_name", paletteName),
+                                                         new SqlParameter("username", paletteUsername)
+                                                    },
+                                                    new SqlConnection(this.connectionString)));
+
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return -1;
+            }
+        }
+
+
+
+        public IEnumerable<Tuple<string, ColorMap>> GetGeoserverColorMaps(int geoserverDatasetId)
+        {
+            using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetGeoserverColorPalettes")
+            { CommandType = System.Data.CommandType.StoredProcedure },
+                                             new SqlParameter[]
+                                             {
+                                                    new SqlParameter("@geoserver_dataset_id",geoserverDatasetId)
+                                             },
+                                             new SqlConnection(this.connectionString)))
+            {
+                return parseColorMapDataset(colorMapsResult.Tables[0].Rows);
+            }
+        }
+
+        public int GetGeoserverDatasetID(int datasetId)
+        {
+            try
+            {
+                return Convert.ToInt32(SqlExecutionInstance.ExecuteScalar(new SqlCommand("GetUserGeoserverPointsDataasetID")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                    new SqlParameter[]{
+                                                         new SqlParameter("dataset_id", datasetId)
+                                                    },
+                                                    new SqlConnection(this.connectionString)));
+
+            }
+            catch (Exception exception)
+            {
+                //TODO: log exception
+                return -1;
+            }
+        }
 
         #region Private
 
+        private PointsDataSetHeader getDatasetHeader(string username, string datasetName, int datasetId)
+        {
+            using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUserPointsDataset")
+            { CommandType = CommandType.StoredProcedure },
+                                                   new SqlParameter[]
+                                                   {
+                                                           new SqlParameter("username", username),
+                                                           new SqlParameter("dataset_name", datasetName),
+                                                           new SqlParameter("dataset_id", datasetId),
+                                                   },
+                                                   new SqlConnection(this.connectionString)))
+            {
+                return parseDataSetHeaderDataset(userCredentialsInfo.Tables[0].Rows);
+            };
+        }
+
+        private PointsDataSetHeader parseDataSetHeaderDataset(DataRowCollection rows)
+        {
+            if (rows.Count == 0) return null;
+            var resultRow = rows[0];
+
+            return new PointsDataSetHeader()
+            {
+                Username = (string)resultRow["username"],
+                Name = (string)resultRow["dataset_name"],
+                ID = (int)resultRow["data_set_id"],
+                MaximumLatitude = resultRow["maximum_latitude"] is DBNull ? null : (decimal?)resultRow["maximum_latitude"],
+                MaximumLongitude = resultRow["maximum_longitude"] is DBNull ? null : (decimal?)resultRow["maximum_longitude"],
+                MinimumLatitude = resultRow["minimum_latitude"] is DBNull ? null : (decimal?)resultRow["minimum_latitude"],
+                MinimumLongitude = resultRow["minimum_longitude"] is DBNull ? null : (decimal?)resultRow["minimum_longitude"],
+                MinimumHeight = resultRow["minimum_height"] is DBNull ? null : (decimal?)resultRow["minimum_height"],
+                MaximumHeight = resultRow["maximum_height"] is DBNull ? null : (decimal?)resultRow["maximum_height"],
+                MinimumDeformationRate = resultRow["minimum_def_rate"] is DBNull ? null : (decimal?)resultRow["minimum_def_rate"],
+                MaximumDeformationRate = resultRow["maximum_def_rate"] is DBNull ? null : (decimal?)resultRow["maximum_def_rate"],
+                MinimumStdDev = resultRow["minimum_std_dev"] is DBNull ? null : (decimal?)resultRow["minimum_std_dev"],
+                MaximumStdDev = resultRow["maximum_std_dev"] is DBNull ? null : (decimal?)resultRow["maximum_std_dev"],
+
+                Status = (DatasetStatus)((int)resultRow["data_set_id"]),
+                PointsSource = (PointsSource)Enum.Parse(typeof(PointsSource), (string)resultRow["source_name"])                
+            };
+
+        }
         private IEnumerable<PointsDataSetHeader> parseDataPointsDataset(DataRowCollection rows)
         {
             List<PointsDataSetHeader> result = new List<PointsDataSetHeader>();
@@ -669,7 +746,10 @@ namespace MapWebSite.Repository
             };
         }
 
-      
+    
+
+
+
         #endregion
     }
 }

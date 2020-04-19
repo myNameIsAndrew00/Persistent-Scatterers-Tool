@@ -31,7 +31,8 @@ export const endpoints = {
         GetColorPalette: applicationApiUrl + '/PointsSettingsApi/GetColorPalette',
         GetColorPaletteList: applicationApiUrl + '/PointsSettingsApi/GetColorPaletteList',
         GetDatasetsList: applicationApiUrl + '/PointsSettingsApi/GetDatasetsList',
-        GetDatasetLimits: applicationApiUrl + '/PointsSettingsApi/GetDatasetLimits'
+        GetDatasetLimits: applicationApiUrl + '/PointsSettingsApi/GetDatasetLimits',
+        ValidateGeoserverStyle: applicationApiUrl + '/PointsSettingsApi/ValidateGeoserverStyle'
     },
     Settings: {
         SaveColorsPalette: applicationApiUrl + '/settings/SaveColorsPalette',
@@ -52,10 +53,15 @@ export const endpoints = {
 export class Router {
     /*internal methods*/
 
-    static Get(endpoint, parameters, callback) {
-        $.get(endpoint,
-            parameters,
-            callback);
+    static Get(endpoint, parameters, callback, errorCallback = function () { }) {
+        $.ajax({
+            type: "GET",
+            data: parameters,
+            url: endpoint,
+            success: function (data) { callback(data) },
+            error: function (data) { errorCallback(data) }
+        });
+       
     }
 
  

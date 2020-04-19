@@ -18,7 +18,7 @@ namespace MapWebSite.GeoserverAPI
 
         [EnumString("/geoserver/rest/layers")]
         Layers,
-        [EnumString("/geoserver/rest/layer/{0}")]
+        [EnumString("/geoserver/rest/layers/{0}")]
         Layer,
 
         [EnumString("/geoserver/rest/workspaces/{0}/layers")]

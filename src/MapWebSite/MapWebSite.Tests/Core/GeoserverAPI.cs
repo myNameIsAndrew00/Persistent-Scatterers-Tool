@@ -233,19 +233,14 @@ namespace MapWebSite.Tests.Core
             ModulesFactory modulesFactory = new ModulesFactory();
 
             LayersBuilder builder = new LayersBuilder();
-            builder.LayerName = "constanta_labeled";
-            builder.Workspace = "constanta";
+            builder.LayerName = "constanta:coasta_constanta_labeled";
             builder.SingleLayer = true;
-            builder.Styles = new List<string>()
-            {
-                "population"
-            };
-
+         
 
             GeoserverClient geoserverClient = new GeoserverClient("http://localhost:8080", "admin", "geoserver");
 
 
-            var result = geoserverClient.PutAsync(modulesFactory.CreateLayerModule(builder)).Result;
+            var result = geoserverClient.Get<Layer>(modulesFactory.CreateLayerModule(builder));
 
         }
     }

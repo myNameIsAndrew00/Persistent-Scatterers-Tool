@@ -1,62 +1,22 @@
-﻿@{
+﻿@using MapWebSite.Resources.text
+
+@{
     Layout = null;
 }
 
 <div class="select-geoserver-source-container">
     <div class="select-geoserver-source-content">
         <div class="content-left">
-            <h1>Select from Geoserver</h1>
-            <small>Use a layer from Geoserver WMTS as a points source. Enter the layer name, service url and the color palette which must be used for styling the layer.</small>
+            <h1>@TextDictionary.HMenuSGSTitleText</h1>
+            <small>@TextDictionary.HMenuSGSDescriptionText</small>
 
             <div class="inputs">
                 <div class="input-content">
-                    <label>Name</label>
-                    @Html.TextBox("name", null, new { placeholder = "enter name here", @class = "default-input-gray" })
-
-                </div>
-
-                <div class="input-content">
-                    <label>Url</label>
-                    @Html.TextBox("url", null, new { placeholder = "enter url here", @class = "default-input-gray" })
-
-                </div>
-
-                <div class="input-content">
-                    <label>Color palette</label>
-                    @Html.TextBox("paletteName", null, new { placeholder = "filter color palettes", @class = "default-input-gray" })
-          
-                   @*<div class="suggestions-container">
-                    <div class="suggestion-item">
-                        <div class="header-row"> 
-                            <label>palettename</label>
-                        </div>
-                        <table class="palette-row">
-                            <tbody><tr><td style="background: rgb(28, 100, 20) none repeat scroll 0% 0%;"></td><td style="background: rgb(24, 172, 30) none repeat scroll 0% 0%;"></td><td style="background: rgb(83, 185, 71) none repeat scroll 0% 0%;"></td><td style="background: rgb(255, 255, 99) none repeat scroll 0% 0%;"></td><td style="background: rgb(255, 254, 0) none repeat scroll 0% 0%;"></td><td style="background: rgb(227, 161, 52) none repeat scroll 0% 0%;"></td><td style="background: rgb(185, 136, 71) none repeat scroll 0% 0%;"></td></tr><tr><td style="background: rgb(236, 23, 23) none repeat scroll 0% 0%;"></td><td style="background: rgb(185, 71, 91) none repeat scroll 0% 0%;"></td></tr></tbody>
-                        </table>
-
-                    </div>
-                    <div class="suggestion-item">
-                        <div class="header-row"> 
-                            <label>palettename</label>
-                        </div>
-                        <table class="palette-row">
-                            <tbody><tr><td style="background: rgb(28, 100, 20) none repeat scroll 0% 0%;"></td><td style="background: rgb(24, 172, 30) none repeat scroll 0% 0%;"></td><td style="background: rgb(83, 185, 71) none repeat scroll 0% 0%;"></td><td style="background: rgb(255, 255, 99) none repeat scroll 0% 0%;"></td><td style="background: rgb(255, 254, 0) none repeat scroll 0% 0%;"></td><td style="background: rgb(227, 161, 52) none repeat scroll 0% 0%;"></td><td style="background: rgb(185, 136, 71) none repeat scroll 0% 0%;"></td></tr><tr><td style="background: rgb(236, 23, 23) none repeat scroll 0% 0%;"></td><td style="background: rgb(185, 71, 91) none repeat scroll 0% 0%;"></td></tr></tbody>
-                        </table>
-
-                    </div>
-                    <div class="suggestion-item">
-                        <div class="header-row"> 
-                            <label>palettename</label>
-                        </div>
-                        <table class="palette-row">
-                            <tbody><tr><td style="background: rgb(28, 100, 20) none repeat scroll 0% 0%;"></td><td style="background: rgb(24, 172, 30) none repeat scroll 0% 0%;"></td><td style="background: rgb(83, 185, 71) none repeat scroll 0% 0%;"></td><td style="background: rgb(255, 255, 99) none repeat scroll 0% 0%;"></td><td style="background: rgb(255, 254, 0) none repeat scroll 0% 0%;"></td><td style="background: rgb(227, 161, 52) none repeat scroll 0% 0%;"></td><td style="background: rgb(185, 136, 71) none repeat scroll 0% 0%;"></td></tr><tr><td style="background: rgb(236, 23, 23) none repeat scroll 0% 0%;"></td><td style="background: rgb(185, 71, 91) none repeat scroll 0% 0%;"></td></tr></tbody>
-                        </table>
-
-                    </div>
-                </div>*@
+                    <label>@TextDictionary.HMenuSGSNameInputLabel</label>
+                    @Html.TextBox("name", null, new { placeholder = @TextDictionary.HMenuSGSNameInputPlaceholder, @class = "default-input-gray", onkeyup = "enableGeoserverUploadSubmit()" })
                 </div>
             </div>
-            <button onclick="uploadSelectedGeoserverLayer()" disabled>Finish</button>
+            <button id="geoserverSelectFinishButton" onclick="uploadSelectedGeoserverLayer()" disabled>@TextDictionary.HMenuSGSUploadButton</button>
         </div>
         <div class="gliph">
             @Html.SVG("~/Resources/resources/icons/select_geoserver_source_gliph.svg", new { @class = "current_displayed_icon", height = "460px", width = "650px" })

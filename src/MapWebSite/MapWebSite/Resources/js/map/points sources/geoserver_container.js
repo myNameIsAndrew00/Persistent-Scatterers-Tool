@@ -4,14 +4,14 @@
  * */
 import { DisplayPointInfo, SetPointInfoData } from '../../point info/point_info.js';
 import { SelectedDataset } from '../../points settings/chose_dataset.js';
+import { ColorPalette } from '../../home.js';
+import { Router, endpoints } from '../../api/api_router.js';
 
 export class GeoserverPointsSectionsContainer {
 
     constructor(map) {
-        this.map = map;
-
-        this.initPointslayer('constanta:coasta_constanta_labeled');
-
+        this.map = map; 
+        this.pointsLayer = null;
     }
 
     LoadPoints() {
@@ -20,14 +20,28 @@ export class GeoserverPointsSectionsContainer {
 
     UpdatePointsLayer() {
         this.RemoveLayers();
-        this.initPointslayer(SelectedDataset.datasetName);
-        this.InitialiseMapInteraction();
+
+        var self = this;
+
+        Router.Get(endpoints.PointsSettingsApi.ValidateGeoserverStyle,
+            {
+                datasetName: SelectedDataset.name,
+                datasetUsername: SelectedDataset.user,
+                paletteName: ColorPalette.name,
+                paletteUsername: ColorPalette.user
+            },
+            function (response) {
+                self.initPointslayer();
+                self.InitialiseMapInteraction();
+            });
+         
     }
 
     InitialiseMapInteraction() {
         var self = this;
 
         this.map.on('click', function (evt) {
+            if (self.pointsLayer == null) return;
 
             //adapt properties received from Geoserver to a format accepted by ' point_info '
             function adaptProperties(geoserverFeature) {
@@ -44,7 +58,7 @@ export class GeoserverPointsSectionsContainer {
                 result.EstimatedDeformationRate = geoserverFeature.EstimatedD;
                 result.Displacements = [];
 
-                const displacementsCount = Object.keys(geoserverFeature).length;
+                const displacementsCount = Object.keys(geoserverFeature).length - 10;
 
                 for (var index = 0; index < displacementsCount; index++)
                     result.Displacements[index] = {
@@ -85,24 +99,27 @@ export class GeoserverPointsSectionsContainer {
     }
 
     RemoveLayers() {
-        this.map.removeLayer(this.pointsLayer);
+        if(this.pointsLayer != null)
+            this.map.removeLayer(this.pointsLayer);
+
+        this.pointsLayer = null;
     }
 
     /*private region below*/
 
-    initPointslayer(layer) {
+    initPointslayer() {
         this.pointsLayer = new ol.layer.Tile({
             visible: true,
             source: new ol.source.TileWMS({
-                url: 'http://localhost:8080/geoserver/constanta/wms',
+                url: 'http://localhost:8080/geoserver/wms',
                 params: {
                     'FORMAT': 'image/png',
                     'VERSION': '1.1.1',
                     tiled: true,
-                    "LAYERS": 'constanta:'+ layer,
+                    "LAYERS": SelectedDataset.name,
                     "exceptions": 'application/vnd.ogc.se_inimage',
                     tilesOrigin: 26.744917 + "," + 43.1027705,
-                    'STYLES': 'create'
+                    'STYLES': ColorPalette.user + '_' + ColorPalette.name
                 }
             })
         });

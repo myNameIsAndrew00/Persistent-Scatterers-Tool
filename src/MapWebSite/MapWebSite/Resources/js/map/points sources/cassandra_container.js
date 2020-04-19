@@ -7,7 +7,7 @@
 
 import { DisplayProcessing, ProcessingEnabled, PointsProcessedNotificationHandler } from '../map.js';
 import { PointsRegionsManager } from '../../api/cache/points_regions_manager.js';
-import { colorPalette } from '../../home.js';
+import { ColorPalette } from '../../home.js';
 import { Router, endpoints } from '../../api/api_router.js';
 import { PointsLayer } from '../points_layer.js';
 import { HubRouterInstance } from '../../api/hub_router.js';
@@ -155,8 +155,8 @@ class PointsSectionHandler {
                     latitude: point.latitude,
                     longitude: point.longitude,
                     identifier: point.ID,
-                    username: SelectedDataset.username,
-                    datasetName: SelectedDataset.datasetName
+                    username: SelectedDataset.user,
+                    datasetName: SelectedDataset.name
                 }, function (receivedInfo) {
                     SetPointInfoData(receivedInfo);
                 }
@@ -168,7 +168,7 @@ class PointsSectionHandler {
     }
 
     LoadPoints() {
-        if (SelectedDataset.username === null && SelectedDataset.datasetName === null) return;
+        if (SelectedDataset.user === null && SelectedDataset.name === null) return;
 
 
         this.secondaryVectorSource.clear(true);
@@ -188,8 +188,8 @@ class PointsSectionHandler {
                 latitudeTo: coordinates.bottomCorner.latitude,
                 longitudeTo: coordinates.bottomCorner.longitude,
                 zoomLevel: Math.floor(this.map.getView().getZoom()),
-                username: SelectedDataset.username,
-                datasetName: SelectedDataset.datasetName
+                username: SelectedDataset.user,
+                datasetName: SelectedDataset.name
             }, function (regionsKeys) {
                  
                 var cachedRegionsKeys = caller.localCache.GetRegionsKeys(regionsKeys);
@@ -214,8 +214,8 @@ class PointsSectionHandler {
                     coordinates.bottomCorner.longitude,
                     Math.floor(caller.map.getView().getZoom()),
                     cachedRegionsKeys,
-                    SelectedDataset.username,
-                    SelectedDataset.datasetName
+                    SelectedDataset.user,
+                    SelectedDataset.name
                 );
             }
         );
@@ -256,23 +256,23 @@ class PointsSectionHandler {
         function buildStyleFromPalette(featureValue) {
 
             function binarySearch(value, left, right) {
-                if (left == right) return colorPalette[right].Color;
-                if (left >= colorPalette.length - 1) return colorPalette[colorPalette.length - 1].Color;
+                if (left == right) return ColorPalette.intervals[right].Color;
+                if (left >= ColorPalette.intervals.length - 1) return ColorPalette.intervals[ColorPalette.intervals.length - 1].Color;
 
                 if (left == right - 1) {
-                    if (value < colorPalette[right].Left)
-                        return colorPalette[left].Color;
-                    return colorPalette[right].Color;
+                    if (value < ColorPalette.intervals[right].Left)
+                        return ColorPalette.intervals[left].Color;
+                    return ColorPalette.intervals[right].Color;
                 }
 
                 var middle = Math.floor((right + left) / 2);
 
-                if (value < colorPalette[middle].Left)
+                if (value < ColorPalette.intervals[middle].Left)
                     return binarySearch(value, left, middle);
-                if (value > colorPalette[middle].Right)
+                if (value > ColorPalette.intervals[middle].Right)
                     return binarySearch(value, middle, right);
 
-                return colorPalette[middle].Color;
+                return ColorPalette.intervals[middle].Color;
             }
 
             function hexToRgb(hex) {
@@ -288,7 +288,7 @@ class PointsSectionHandler {
             var paletteColor = binarySearch(
                 featureValue,
                 0,
-                colorPalette.length - 1
+                ColorPalette.intervals.length - 1
             );
 
             return hexToRgb(paletteColor);

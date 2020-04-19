@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CacheTest.cs" />
+    <Compile Include="Controllers\DatabaseInteractionHandler.cs" />
     <Compile Include="Core\GeoserverAPI.cs" />
     <Compile Include="Core\PointsGenerations.cs" />
     <Compile Include="Core\UTMConverter.cs" />

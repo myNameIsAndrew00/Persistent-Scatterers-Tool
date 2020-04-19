@@ -26,14 +26,15 @@ namespace MapWebSite.Controllers
         {
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
 
-            bool insertResult = handler.CreateDataSet(
-                                     datasetName: data["name"].ToObject<string>(), 
-                                     username: RouteConfig.CurrentUser.Username, 
-                                     pointsSource: PointsSource.Geoserver,
-                                     apiUrl: data["url"].ToObject<string>(),
-                                     colorPaletteId: data["colorPaletteId"].ToObject<int>());
 
-            if(insertResult)
+            var insertResult = handler.CreateDataSet(
+                                     datasetName: data["name"].ToObject<string>(),
+                                     username: RouteConfig.CurrentUser.Username,
+                                     pointsSource: PointsSource.Geoserver,
+                                     apiUrl: string.Empty);
+                
+
+            if(insertResult == DatabaseInteractionHandler.CreateDatasetResultCode.Ok)
             {
                 handler.UpdateDatasetStatus(data["name"].ToObject<string>(),
                                             DatasetStatus.Generated,
@@ -50,9 +51,13 @@ namespace MapWebSite.Controllers
             return new HttpResponseMessage()
             {
                 StatusCode = System.Net.HttpStatusCode.OK,
-                Content = new StringContent(MessageBoxBuilder.Create(TextDictionary.OverlayCDFailTitle,
-                                                                   TextDictionary.OverlayCDFailText,
-                                                                   true))
+                Content = new StringContent(MessageBoxBuilder.Create(
+                    insertResult == DatabaseInteractionHandler.CreateDatasetResultCode.GeoserverError ? 
+                        TextDictionary.OverlayCDGeoserverFailTitle :
+                        TextDictionary.OverlayCDFailTitle,
+                    insertResult == DatabaseInteractionHandler.CreateDatasetResultCode.GeoserverError ? 
+                        string.Format(TextDictionary.OverlayCDGeoserverFailText, data["name"].ToObject<string>()) :
+                        TextDictionary.OverlayCDFailText))
             };
         }
 

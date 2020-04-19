@@ -39,31 +39,21 @@
                         overflow-y: auto;
 
                         .suggestion-item {
-                            display: grid;
-                            grid-template-areas: "top" "down";
-                            padding: 15px;
+                            display: flex;
+                            align-items: center;
+                            padding: 10px;
 
-                            .header-row {
-                                grid-area: top;
-                                display: flex;
-
-                                button {
-                                    padding: 0px 9px 2px 9px;
-                                }
+                            button {
+                                padding: 0px 9px 2px 9px;
                             }
 
-                            .palette-row {
-                                grid-area: down;
-                                margin-right: 28px;
-
-                                tbody {
-                                    tr, td {
-                                        width: 5px;
-                                        height: 5px;
-                                        margin: 0;
-                                        padding: 0;
-                                        border: solid #e3e3e3 1px;
-                                    }
+                            tbody {
+                                tr, td {
+                                    width: 22px;
+                                    height: 4px;
+                                    margin: 0;
+                                    padding: 0;
+                                    border: solid #e3e3e3 1px;
                                 }
                             }
                         }

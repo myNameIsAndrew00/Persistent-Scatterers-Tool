@@ -78,7 +78,8 @@ if object_id('GetUserPointsDataset','P') is not null
 go
 create procedure GetUserPointsDataset
 	@username as varchar(100),
-	@dataset_name as varchar(100)
+	@dataset_name as varchar(100),
+	@dataset_id as int
 as
 begin
 	select DS.data_set_id,
@@ -94,15 +95,66 @@ begin
 		   DS.maximum_def_rate,
 		   DS.minimum_std_dev,
 		   DS.maximum_std_dev,
-		   DS.source_name
+		   DS.source_name,
+		   U.username
 	from DataSets as DS
 		inner join Users as U
-		on DS.user_id = U.user_id and U.username = @username
-	where DS.dataset_name = @dataset_name
+		on DS.user_id = U.user_id 
+	where (DS.dataset_name = @dataset_name and U.username = @username) or DS.data_set_id = @dataset_id
 
 end
 
+
 go
+
+
+if object_id('GetDataSetsFiltered', 'P') is not null
+	drop procedure GetDataSetsFiltered
+go
+create procedure GetDataSetsFiltered 
+	@filter_id as int,
+	@filter_value as varchar(255),
+	@page_index as int,
+	@items_per_page as int
+as 
+begin
+	select 
+		   U.username,
+		   DS.dataset_name,		
+		   DS.data_set_id as dataset_id,
+		   DS.status_id, 
+		   DS.source_name
+		from DataSets as DS
+		inner join Users as U
+		on DS.user_id = U.user_id 
+	where CHARINDEX(@filter_value,
+				( case 
+					when @filter_id = 1 then DS.dataset_name
+					when @filter_id = 2 then U.username					
+					when @filter_id = 3 then DS.source_name
+				end )) > 0 
+		   OR @filter_id = -1
+	order by DS.data_set_id desc
+	OFFSET @page_index * @items_per_page ROWS FETCH NEXT @items_per_page ROWS ONLY;
+end
+ 
+go
+
+if object_id('GetUserGeoserverPointsDataasetID', 'P') is not null
+	drop procedure GetUserGeoserverPointsDataasetID
+go
+create procedure GetUserGeoserverPointsDataasetID 
+	@dataset_id int
+as 
+begin
+	select GDS.geoserver_dataset_id
+		from GeoserverDataSets as GDS
+			where GDS.data_set_id = @dataset_id
+				
+end
+
+
+
 
 
 
@@ -173,39 +225,6 @@ end
  
 go
 
-
-if object_id('GetDataSetsFiltered', 'P') is not null
-	drop procedure GetDataSetsFiltered
-go
-create procedure GetDataSetsFiltered 
-	@filter_id as int,
-	@filter_value as varchar(255),
-	@page_index as int,
-	@items_per_page as int
-as 
-begin
-	select 
-		   U.username,
-		   DS.dataset_name,		
-		   DS.data_set_id as dataset_id,
-		   DS.status_id, 
-		   DS.source_name
-		from DataSets as DS
-		inner join Users as U
-		on DS.user_id = U.user_id 
-	where CHARINDEX(@filter_value,
-				( case 
-					when @filter_id = 1 then DS.dataset_name
-					when @filter_id = 2 then U.username					
-					when @filter_id = 3 then DS.source_name
-				end )) > 0 
-		   OR @filter_id = -1
-	order by DS.data_set_id desc
-	OFFSET @page_index * @items_per_page ROWS FETCH NEXT @items_per_page ROWS ONLY;
-end
- 
-go
-
 if object_id('GetUserColorPalette', 'P') is not null
 	drop procedure GetUserColorPalette
 go
@@ -221,6 +240,30 @@ begin
 	where CP.palette_name = @palette_name			
 end
  
+go
+
+if object_id('GetGeoserverColorPalettes', 'P') is not null
+	drop procedure GetGeoserverColorPalettes
+go
+create procedure GetGeoserverColorPalettes 
+	@geoserver_dataset_id int
+as 
+begin
+	select 
+		   U.username,
+		   CP.palette_name,
+		   CP.palette_serialization,
+		   CP.status_mask
+		from ColorPalettes as CP
+		inner join Users as U
+		on CP.user_id = U.user_id  
+			inner join GeoserverDataSetsPalettes as GDSP
+				on CP.color_palette_id = GDSP.color_palette_id
+					inner join GeoserverDataSets as GDS
+						on GDSP.geoserver_dataset_id = GDS.geoserver_dataset_id
+						and GDS.geoserver_dataset_id = @geoserver_dataset_id
+				
+end
 
 
 

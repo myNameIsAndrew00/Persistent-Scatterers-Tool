@@ -4,7 +4,7 @@
  *
  * */
 
-import { SetColorPalette } from '../home.js';
+import { ColorPalette } from '../home.js';
 import { UpdatePointsLayer } from '../map/map.js';
 import { Router, endpoints } from '../api/api_router.js';
 
@@ -24,7 +24,7 @@ window.useColorMap = async function useColorMap(paletteIndex, username, paletteN
     Router.Get(endpoints.PointsSettingsApi.GetColorPalette,
         { username: username, paletteName: paletteName },
         await function (palette) {
-            SetColorPalette(palette);
+            ColorPalette.Set(palette, username, paletteName);
             UpdatePointsLayer();
 
             var previousPaletteId = 'user_palette_index_' + __selected_palette_index;

@@ -8,6 +8,9 @@ using System.Configuration;
 using MapWebSite.GeoserverAPI;
 using MapWebSite.GeoserverAPI.Modules.Styles;
 using System.Threading.Tasks;
+using System.Linq;
+using MapWebSite.GeoserverAPI.Modules.Layers;
+using MapWebSite.GeoserverAPI.Entities;
 
 namespace MapWebSite.Domain
 {
@@ -22,12 +25,29 @@ namespace MapWebSite.Domain
     /// </summary>
     public class DatabaseInteractionHandler
     { 
+        /// <summary>
+        /// An enum which handles codes for CreateDataset function
+        /// </summary>
+        public enum CreateDatasetResultCode
+        {
+            Ok,
+            GeoserverError,
+            DatasetError
+        }
 
         private readonly IUserRepository userRepository;
 
         private readonly IDataPointsRepository dataPointsRepository;
 
         private readonly IDataPointsRegionsSource dataPointsRegionSource;
+
+        private readonly Func<GeoserverClient> geoserverClient = () => 
+              new GeoserverClient(
+                  ConfigurationManager.AppSettings["GeoserverApiUrl"],
+                  ConfigurationManager.AppSettings["GeoserverUser"],
+                  ConfigurationManager.AppSettings["GeoserverPassword"]
+                  );
+        
 
         /// <summary>
         /// Use this method to initialise the any database connections
@@ -49,15 +69,36 @@ namespace MapWebSite.Domain
         /// </summary>
         /// <param name="datasetName">Name of the dataset</param>
         /// <param name="username">The username of the user which create the dataset</param>
-        /// <returns>A boolean which indicates if the insert was succesufully</returns>
-        public bool CreateDataSet(string datasetName, string username, PointsSource pointsSource, string apiUrl = null, int colorPaletteId = 0 )
+        /// <returns>A boolean which indicates if the insert was succesufully and a return message</returns>
+        public CreateDatasetResultCode CreateDataSet(string datasetName, string username, PointsSource pointsSource, string apiUrl = null)
         {
+            /** error strings: 
+             * Dataset - caused by dataset insertions
+             * Geoserver - caused by geoserver 
+             **/
+
             int datasetId = this.userRepository.CreateUserPointsDataset(username, datasetName, pointsSource);
 
             if (pointsSource == PointsSource.Geoserver)
-                datasetId = this.userRepository.RaiseToGeoserverDataset(datasetId, apiUrl, colorPaletteId);
+            { 
+                LayersBuilder builder = new LayersBuilder
+                {
+                    LayerName = datasetName,
+                    SingleLayer = true
+                };
 
-            return datasetId != -1;
+                GeoserverClient client = geoserverClient();
+
+                if (client.Get<Layer>(new ModulesFactory().CreateLayerModule(builder)) == null)
+                    return CreateDatasetResultCode.GeoserverError;
+
+                //if dataset already exists in database
+                if (datasetId == -1) datasetId = this.userRepository.GetDatasetID(username, datasetName);
+                 
+                datasetId = this.userRepository.RaiseToGeoserverDataset(datasetId, apiUrl);
+            }
+
+            return datasetId != -1 ? CreateDatasetResultCode.Ok : CreateDatasetResultCode.DatasetError;
         }
 
          
@@ -174,22 +215,75 @@ namespace MapWebSite.Domain
             return this.dataPointsRepository.GetPointDetails(dataSetID, basicPoint);
         }
 
+        /// <summary>
+        /// Use this method to associate a style with a layer in geoserver or to validat
+        /// </summary>
+        /// <param name="datasetId"></param>
+        /// <param name="paletteName"></param>
+        /// <param name="paletteUsername"></param>
+        /// <returns></returns>
+        public bool ValidateOrSetPaletteToGeoserverLayer(string datasetName, string datasetUsername, string paletteName, string paletteUsername)
+        {
+            /**
+             * Steps: 1. check if palette is already asociated. If yes, return true 
+             *        2. if the palette is not associated, retrieve it from db and associate it with layer.
+             *        3. if insert succeed, count the palette in the database and return true
+             *        4. if insert fail, return false
+             */
+
+            try
+            {
+
+                if (string.IsNullOrEmpty(paletteName) || string.IsNullOrEmpty(paletteUsername)) return false;
+
+                int datasetId = userRepository.GetDatasetID( datasetUsername, datasetName);
+                int geoserverId = userRepository.GetGeoserverDatasetID(datasetId);
+               
+                if (geoserverId == -1) return false;
+
+                var userPalettes = userRepository.GetGeoserverColorMaps(geoserverId);
+
+                var selectedPalette = userPalettes.Where(p => p.Item1 == paletteUsername && p.Item2.Name == paletteName).FirstOrDefault();
+                if (selectedPalette != null) return true;
+
+                GeoserverClient client = geoserverClient();
+                ModulesFactory modulesFactory = new ModulesFactory();
+
+                LayersBuilder builder = new LayersBuilder();
+                builder.LayerName = userRepository.GetDatasetHeader(datasetId).Name;      
+                builder.SingleLayer = true;
+
+                builder.Styles = userPalettes.Select(p => p.Item1 + '_' + p.Item2.Name).ToList();
+                builder.Styles.Add(paletteUsername + '_' + paletteName);
+
+                return client.Put(modulesFactory.CreateLayerModule(builder)) ?
+                    userRepository.InsertGeoserverColorMap(
+                        geoserverId,
+                        paletteName,
+                        paletteUsername
+                    ) != -1
+                    : false;
+
+            }
+            catch(Exception exception)
+            {
+                return false;
+            }
+
+        }
+
+
         public bool InsertColorPalette(string username, ColorMap colorMap)
         {
-            GeoserverClient geoserverClient =
-                new GeoserverClient(
-                    ConfigurationManager.AppSettings["GeoserverApiUrl"],
-                    ConfigurationManager.AppSettings["GeoserverUser"],
-                    ConfigurationManager.AppSettings["GeoserverPassword"]
-                    );
+            GeoserverClient client = geoserverClient();
 
             StylesBuilder stylesBuilder = 
-                new StylesBuilder(colorMap.Name, colorMap.Name);
+                new StylesBuilder(username + '_' + colorMap.Name, colorMap.Name);
 
             foreach (var intervalRule in colorMap.GetRules())
                 stylesBuilder.AddRule(intervalRule);
 
-            if (!geoserverClient.Post(new ModulesFactory().CreateStylesModule(stylesBuilder)))
+            if (!client.Post(new ModulesFactory().CreateStylesModule(stylesBuilder)))
                 return false;
 
             return userRepository.CreateColorMap(username, colorMap);

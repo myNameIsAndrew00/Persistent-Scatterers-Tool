@@ -487,4 +487,25 @@
   <data name="HMenuUseGeoserverLayerText" xml:space="preserve">
     <value>Use Geoserver layer</value>
   </data>
+  <data name="HMenuSGSDescriptionText" xml:space="preserve">
+    <value>Use a layer from Geoserver WMTS as a points source. Enter the layer name, service url and the color palette which must be used for styling the layer.</value>
+  </data>
+  <data name="HMenuSGSNameInputLabel" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="HMenuSGSNameInputPlaceholder" xml:space="preserve">
+    <value>enter layer name...</value>
+  </data>
+  <data name="HMenuSGSTitleText" xml:space="preserve">
+    <value>Select from Geoserver</value>
+  </data>
+  <data name="HMenuSGSUploadButton" xml:space="preserve">
+    <value>Finish</value>
+  </data>
+  <data name="OverlayCDGeoserverFailText" xml:space="preserve">
+    <value>Layer with name {0} was not found in geoserver. Please chose a valid name.</value>
+  </data>
+  <data name="OverlayCDGeoserverFailTitle" xml:space="preserve">
+    <value>Layer not found</value>
+  </data>
 </root>

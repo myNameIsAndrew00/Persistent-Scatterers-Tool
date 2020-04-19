@@ -78,14 +78,15 @@ namespace MapWebSite.Model
                     PointSymbolizers = new List<PointSymbolizer>
                     {
                         new PointSymbolizer
-                        {
+                        {                            
                             Graphic = new Graphic
                             {
+                                Size = 6,
                                 MarkObject = new Graphic.Mark()
                                 {
                                     WellKnownNameProperty = Shape.Circle,
                                     Fill = new Fill
-                                    {
+                                    {                                       
                                         CssParameterArray = new List<CssParameter>()
                                         {
                                             new CssParameter

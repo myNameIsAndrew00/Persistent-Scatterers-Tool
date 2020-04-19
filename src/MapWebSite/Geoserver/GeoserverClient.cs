@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace MapWebSite.GeoserverAPI
 {
@@ -49,7 +50,7 @@ namespace MapWebSite.GeoserverAPI
         /// <returns>A boolean which indicates if the request succeed</returns>
         public bool Post(IGeoserverModule module)
         {
-            return this.createRequest(module, HttpMethod.Post);
+            return this.createRequest(module, HttpMethod.Post)?.IsSuccessStatusCode ?? false;
         }
 
         /// <summary>
@@ -69,18 +70,49 @@ namespace MapWebSite.GeoserverAPI
         /// <returns></returns>
         public bool Put(IGeoserverModule module)
         {
-            return this.createRequest(module, HttpMethod.Put);
+            return this.createRequest(module, HttpMethod.Put)?.IsSuccessStatusCode ?? false;
         }
 
+        /// <summary>
+        /// Creates a GET request using a specific module
+        /// </summary>
+        /// <param name="module">Module used to provide request body content</param>
+        /// <returns></returns>
+        public T Get<T>(IGeoserverModule module)
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+
+                return (T)serializer.Deserialize(this.createRequest(module, HttpMethod.Get)
+                                                      .Content
+                                                      .ReadAsStreamAsync()
+                                                      .Result);
+            }
+            catch(Exception exception)
+            {
+                return default;
+            }
+        }
+
+        /// <summary>
+        /// Creates a GET request using a specific module
+        /// </summary>
+        /// <param name="module">Module used to provide request body content</param>
+        /// <returns></returns>
+        public async Task<bool> GetAsync(IGeoserverModule module)
+        {
+            return false;
+        }
+ 
         #region Private
 
-        private bool createRequest(IGeoserverModule module, HttpMethod method)
+        private HttpResponseMessage createRequest(IGeoserverModule module, HttpMethod method)
         {
             string[] encodings = new[]
-           {
+            {
                 "application/vnd.ogc.sld+xml",
-                "application/xml",
-                "application/json"
+                "application/xml"
             };
 
             using (HttpClient client = new HttpClient())
@@ -96,17 +128,16 @@ namespace MapWebSite.GeoserverAPI
                 {
                     using (HttpRequestMessage request = new HttpRequestMessage(method, module.GetEndpoint()))
                     {
-                        request.Content = module.GetContent();
+                        if(method != HttpMethod.Get) request.Content = module.GetContent();
                         request.Headers.Authorization = new AuthenticationHeaderValue("Basic", this.serviceCredentials);
 
-                        HttpResponseMessage response = client.SendAsync(request).Result;
-
-                        return response.IsSuccessStatusCode;
+                        return client.SendAsync(request).Result;
+                         
                     }
                 }
                 catch(Exception exception)
                 {
-                    return false;
+                    return null;
                 }
             }             
         }

@@ -279,6 +279,51 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a layer from Geoserver WMTS as a points source. Enter the layer name, service url and the color palette which must be used for styling the layer..
+        /// </summary>
+        public static string HMenuSGSDescriptionText {
+            get {
+                return ResourceManager.GetString("HMenuSGSDescriptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string HMenuSGSNameInputLabel {
+            get {
+                return ResourceManager.GetString("HMenuSGSNameInputLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to enter layer name....
+        /// </summary>
+        public static string HMenuSGSNameInputPlaceholder {
+            get {
+                return ResourceManager.GetString("HMenuSGSNameInputPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select from Geoserver.
+        /// </summary>
+        public static string HMenuSGSTitleText {
+            get {
+                return ResourceManager.GetString("HMenuSGSTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finish.
+        /// </summary>
+        public static string HMenuSGSUploadButton {
+            get {
+                return ResourceManager.GetString("HMenuSGSUploadButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a text file which contains points and upload them on server. &lt;br /&gt;
         ///            The name which you chose must be unique.
         ///            Dataset will be available for display after a service will process the text file..
@@ -1015,6 +1060,24 @@ namespace MapWebSite.Resources.text {
         public static string OverlayCDFailTitle {
             get {
                 return ResourceManager.GetString("OverlayCDFailTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layer with name {0} was not found in geoserver. Please chose a valid name..
+        /// </summary>
+        public static string OverlayCDGeoserverFailText {
+            get {
+                return ResourceManager.GetString("OverlayCDGeoserverFailText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layer not found.
+        /// </summary>
+        public static string OverlayCDGeoserverFailTitle {
+            get {
+                return ResourceManager.GetString("OverlayCDGeoserverFailTitle", resourceCulture);
             }
         }
         

@@ -143,9 +143,9 @@ create table ColorPalettes(
 create table GeoserverDataSets(
 	geoserver_dataset_id int identity(1,1),
 
-	geoserver_api_url nvarchar(255) not null,
+	geoserver_api_url nvarchar(255),
 	data_set_id int not null,
-	default_color_palette_id int not null,
+	default_color_palette_id int,
 
 	PRIMARY KEY(geoserver_dataset_id),
 	FOREIGN KEY (data_set_id) REFERENCES DataSets(data_set_id),

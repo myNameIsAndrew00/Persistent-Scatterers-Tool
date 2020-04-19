@@ -192,6 +192,7 @@ window.displayPointsLayerPage = async function displayPointsLayerPage(display, r
         displayPage(display, '');
     else
         Router.Get(endpoints.PointsSettings[requestMethodName],
+            null,
             await function (data) {
                 displayPage(false, '');
                 setTimeout(function () { displayPage(true, data) }, 150);
@@ -213,7 +214,7 @@ function displayPopup(buttonId, url, callbackHandler, additionalContent) {
 
     //display content requested from server to fill the popup
     if (url != null)
-        Router.Get(url,
+        Router.Get(url,null,
             function (data) {
 
                 fillPopup(HtmlToElement(data))

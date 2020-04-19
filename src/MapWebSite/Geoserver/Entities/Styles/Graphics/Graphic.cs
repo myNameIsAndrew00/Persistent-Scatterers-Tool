@@ -18,7 +18,20 @@ namespace MapWebSite.GeoserverAPI.Entities
             [XmlIgnore]
             public Shape WellKnownNameProperty { get; set; }
 
-            public string WellKnownName => WellKnownNameProperty.GetEnumString();
+            [XmlElement]
+            public string WellKnownName
+            {
+                get
+                {
+                    return WellKnownNameProperty.GetEnumString();
+                }
+                set
+                {
+                    Enum.TryParse<Shape>(value, true, out Shape property);
+                    WellKnownNameProperty = property;
+
+                }
+            }
 
             [XmlElement]
             public Fill Fill { get; set; }
@@ -58,7 +71,8 @@ namespace MapWebSite.GeoserverAPI.Entities
             return Size != 0;
         }
 
-        public bool ShouldSerializeRotation() {
+        public bool ShouldSerializeRotation()
+        {
             return Rotation != 0;
         }
 

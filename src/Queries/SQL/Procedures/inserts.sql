@@ -130,7 +130,7 @@ begin
 
 end
 
-
+go
 
 
 if object_id('InsertGeoserverColorPalette', 'P') is not null
@@ -161,16 +161,53 @@ begin
 
 end
 
+go
 
 
+
+if object_id('InsertGeoserverColorPaletteByName', 'P') is not null
+	drop procedure InsertGeoserverColorPaletteByName
+go
+create procedure InsertGeoserverColorPaletteByName 
+	@geoserver_data_set_id as int,
+	@palette_name as varchar(255),
+	@username as varchar(100)
+as 
+begin
+
+	begin try
+		begin transaction
+			declare @palette_id as int = -1;
+
+			select @palette_id = color_palette_id
+				from ColorPalettes as CP
+					inner join Users as U
+					on U.user_id = CP.user_id and U.username = @username
+				where CP.palette_name = @palette_name
+					
+
+			exec  InsertGeoserverColorPalette
+				@geoserver_data_set_id = @geoserver_data_set_id,
+				@palette_id = @palette_id
+		commit
+
+		select SCOPE_IDENTITY();
+	end try
+	begin catch
+		rollback;
+		throw;
+	end catch
+
+end
+
+go
 
 if object_id('InsertGeoserverPointsDataset', 'P') is not null
 	drop procedure InsertGeoserverPointsDataset
 go
 create procedure InsertGeoserverPointsDataset 
 	@geoserver_api_url as varchar(255),
-	@data_set_id as int,
-	@default_color_palette_id as int
+	@data_set_id as int
 as 
 begin
 
@@ -178,16 +215,11 @@ begin
 		begin transaction
 			 
 			--Insert the dataset
-			insert into GeoserverDataSets(geoserver_api_url, data_set_id, default_color_palette_id)
-			values (@geoserver_api_url, @data_set_id, @default_color_palette_id)
+			insert into GeoserverDataSets(geoserver_api_url, data_set_id)
+			values (@geoserver_api_url, @data_set_id)
 			
 		    declare @inserted_id int = SCOPE_IDENTITY();
-			
-			exec InsertGeoserverColorPalette
-				@geoserver_data_set_id = @inserted_id, 
-				@palette_id = @default_color_palette_id
-
-
+			 
 
 			select @inserted_id as ID
 		commit

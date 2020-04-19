@@ -91,6 +91,20 @@ namespace MapWebSite.Controllers
     [System.Web.Http.Authorize]
     public class PointsSettingsApiController : ApiController
     {
+
+        [System.Web.Http.HttpGet]
+        public HttpResponseMessage ValidateGeoserverStyle(string datasetName, string datasetUsername, string paletteName, string paletteUsername)
+        {
+            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+
+            bool validationResult = databaseInteractionHandler.ValidateOrSetPaletteToGeoserverLayer(datasetName, datasetUsername, paletteName, paletteUsername);
+
+            var response = new HttpResponseMessage();
+            response.StatusCode = validationResult ? System.Net.HttpStatusCode.OK : System.Net.HttpStatusCode.Conflict;
+
+            return response;
+        }
+
         [System.Web.Http.HttpGet]
         public HttpResponseMessage GetColorPalette(string username, string paletteName)
         {

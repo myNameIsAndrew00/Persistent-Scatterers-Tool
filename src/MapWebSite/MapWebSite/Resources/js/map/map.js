@@ -111,9 +111,9 @@ export function UnselectFeatureOnMap(featureId) {
 /**
  * Section below contain the points request handling
  */
+
 export function UpdatePointsLayer(points) {
     PointsSectionsContainer.UpdatePointsLayer(points);
-
 }
 
 function initialisePointsRequest(evt) {
