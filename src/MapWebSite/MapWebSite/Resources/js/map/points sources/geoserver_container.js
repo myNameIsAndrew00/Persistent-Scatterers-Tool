@@ -2,6 +2,7 @@
  * Component: Points source manager
  * This script contains code which manages the source for the points layer
  * */
+
 import { DisplayPointInfo, SetPointInfoData } from '../../point info/point_info.js';
 import { SelectedDataset } from '../../points settings/chose_dataset.js';
 import { ColorPalette } from '../../home.js';

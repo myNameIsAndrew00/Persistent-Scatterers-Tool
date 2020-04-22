@@ -270,6 +270,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage users.
+        /// </summary>
+        public static string HMenuManageUsersDatapointsText {
+            get {
+                return ResourceManager.GetString("HMenuManageUsersDatapointsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string HMenuSettingsText {

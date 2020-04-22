@@ -38,6 +38,8 @@ namespace MapWebSite.Controllers
                     return View((string)"Settings Content/About");
                 case SettingsController.Page.UseGeoserverLayer:
                     return View((string)"Settings Content/SelectGeoserverSource");
+                case SettingsController.Page.ManageUsersDatapoints:
+                    return View((string)"Settings Content/ManageUsersDatapoints");
                 default:
                     return View((string)"Settings Content/ColorPicker");
             }

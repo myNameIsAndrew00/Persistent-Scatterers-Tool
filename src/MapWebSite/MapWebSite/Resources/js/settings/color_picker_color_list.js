@@ -84,6 +84,19 @@ export class ColorList{
     * public region
     */
 
+    GetKeys() {
+        var result = [];
+        var itemIndex = 0;
+
+        var currentNode = this.root;
+        while (currentNode != null) {
+            result[itemIndex++] = currentNode.pointKey;
+            currentNode = currentNode.nextColor;
+        }
+
+        return result;
+    }
+
     AddNode(pointPositionOnSlider, color, pointID){
         /*calculate the percent*/
         var percent = this.GetPercentage(pointPositionOnSlider);
@@ -112,6 +125,7 @@ export class ColorList{
         previousColor.nextColor = colorNode; 
         if(nextColor != null) nextColor.prevColor = colorNode;
     }
+
 
     RemoveNode(pointID) { 
         var node = this.findNodeById(pointID);

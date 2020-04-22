@@ -296,10 +296,10 @@ namespace MapWebSite.Domain
             return this.userRepository.GetColorMapsFiltered(filters, pageIndex, itemsPerPage);
         }
 
-        public IEnumerable<PointsDataSetHeader> GetDataSets(IEnumerable<Tuple<DataSetsFilters,string>> filters, int pageIndex = 0, int itemsPerPage = 10)
+        public IEnumerable<PointsDataSetHeader> GetDataSets(string username, IEnumerable<Tuple<DataSetsFilters,string>> filters, int pageIndex = 0, int itemsPerPage = 10)
         {
             //TODO: handle errors or do more checks if needed
-            return this.userRepository.GetDataSetsFiltered(filters, pageIndex, itemsPerPage);
+            return this.userRepository.GetDataSetsFiltered(username ,filters, pageIndex, itemsPerPage);
         }
 
 

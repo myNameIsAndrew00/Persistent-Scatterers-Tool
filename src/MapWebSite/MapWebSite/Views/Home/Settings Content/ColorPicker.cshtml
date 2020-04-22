@@ -24,11 +24,11 @@
         <div class="controls">
             <div class="setting-item input-content">
                 <label for="pickerLeftValue">@TextDictionary.HMenuCPMinValueLabel</label>
-                <input class="default-input-gray" type="number" id="pickerLeftValue" />
+                <input class="default-input-gray" type="number" id="pickerLeftValue" value="0" />
             </div>
             <div class="setting-item input-content">
                 <label for="pickerRightValue">@TextDictionary.HMenuCPMaxValueLabel</label>
-                <input class="default-input-gray" type="number" id="pickerRightValue"/>
+                <input class="default-input-gray" type="number" id="pickerRightValue" value="100"/>
             </div>
         </div>
 
@@ -38,7 +38,7 @@
                 @foreach (ColorPickerViewModel.DefaultPalette defaultPalette in Enum.GetValues(typeof(ColorPickerViewModel.DefaultPalette)))
                 {
                     <div class="template-card">
-                        <button>
+                        <button onclick="usePaletteTemplate('@defaultPalette.GetEnumString()')">
                             <img src="~/Resources/resources/icons/palette_template_@(defaultPalette.ToString()).svg" />
                         </button>
                         <label>@Html.Raw(defaultPalette.ToString())</label>
@@ -90,7 +90,7 @@
             }
         </div>
         <button onclick="changeColorPickerVisibility(false)">@TextDictionary.HMenuCPClosePicker</button>
-        <button class="close-button" onclick="removeSpan()">X</button>
+        <button class="close-button" onclick="removeDot()">X</button>
     </div>
 
 </div>

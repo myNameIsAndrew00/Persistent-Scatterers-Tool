@@ -28,9 +28,32 @@ namespace MapWebSite.Domain.ViewModel
 
         public enum DefaultPalette
         { 
+            [EnumString( "[{ \"color\":\"#000000\",\"percent\": 0 }," 
+                       +  "{ \"color\":\"#FFFFFF\",\"percent\": 25 }," 
+                       +  "{ \"color\":\"#AD91CE\",\"percent\": 40 }," 
+                       +  "{ \"color\":\"#9152CE\",\"percent\": 55 }," 
+                       +  "{ \"color\":\"#CCCE86\",\"percent\": 75 }]")]
             Crown,
+
+            [EnumString("[ { \"color\":\"#f2438b\" , \"percent\": 0 },"
+                       +  "{ \"color\":\"#ff7f00\" , \"percent\": 13 },"
+                       +  "{ \"color\":\"#ffbc00\" , \"percent\": 26 },"
+                       +  "{ \"color\":\"#FFFF00\" , \"percent\": 39 },"      
+                       +  "{ \"color\":\"#d8d852\" , \"percent\": 52 },"
+                       +  "{ \"color\":\"#aaaf38\" , \"percent\": 65 },"
+                       +  "{ \"color\":\"#38b274\" , \"percent\": 78 },"
+                       +  "{ \"color\":\"#76e586\" , \"percent\": 91 }]")]
             Default,
-            Fox,
+
+            [EnumString("[ { \"color\":\"#f49a38\" , \"percent\": 0 },"                            
+                        + "{ \"color\":\"#59af4a\" , \"percent\": 50 }]")]
+            Fox,             
+
+            [EnumString( "[{ \"color\": \"#2032d3\" , \"percent\": 0  },"
+                        + "{ \"color\": \"#31bac4\" , \"percent\": 25 }," 
+                        + "{ \"color\": \"#d35050\" , \"percent\": 40 }," 
+                        + "{ \"color\": \"#66a563\" , \"percent\": 55 },"
+                        + "{ \"color\": \"#ba7c52\" , \"percent\": 75 }]")] 
             Kuller
         }
 

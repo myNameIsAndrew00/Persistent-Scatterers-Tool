@@ -39,7 +39,7 @@ namespace MapWebSite.GeoserverAPI
         /// <returns>A boolean which indicates if the request succeed</returns>
         public async Task<bool> PostAsync(IGeoserverModule module)
         {
-            //implement async
+            //todo: implement async
             return false;
         }
 
@@ -60,6 +60,7 @@ namespace MapWebSite.GeoserverAPI
         /// <returns></returns>
         public async Task<bool> PutAsync(IGeoserverModule module)
         {
+            //todo: implement
             return false;
         }
 

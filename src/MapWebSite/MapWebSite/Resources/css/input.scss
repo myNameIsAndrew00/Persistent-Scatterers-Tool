@@ -119,6 +119,33 @@ input[type=range]::-moz-range-thumb {
     cursor: pointer;
 }
 
+/* Remove thumbs for input type nummber */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+ 
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+input[type=number] {
+    .input-up-button, .input-down-button {
+        height: 20px;
+        width: 20px;
+        padding: 20px; 
+    }
+
+    .input-up-button::after {
+        content: '+';
+    }
+
+    .input-down-button::after {
+        content: '-';
+    }
+}
+
 .input-border {
     height: 2px;
     width: 0px;

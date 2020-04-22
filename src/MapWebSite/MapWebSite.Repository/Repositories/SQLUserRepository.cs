@@ -325,12 +325,13 @@ namespace MapWebSite.Repository
 
         }
 
-        public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
+        public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
         {            
             using (var datasetsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetDataSetsFiltered")
             { CommandType = CommandType.StoredProcedure },
                                                new SqlParameter[]
                                                {
+                                                    new SqlParameter("@username", username),
                                                     new SqlParameter("@filter_id",(int)filter),
                                                     new SqlParameter("@filter_value",filterValue),
                                                     new SqlParameter("@page_index",pageIndex),
@@ -343,8 +344,10 @@ namespace MapWebSite.Repository
              
         }
 
-        public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage)
+        public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage)
         {
+            IList<UserRoles> roles = this.GetUserRoles(username);
+           
             Query query = new Query("dbo.DataSets as DS")
                               .Select(new string[]{
                                         "U.username",
@@ -353,7 +356,8 @@ namespace MapWebSite.Repository
                                         "DS.status_id",
                                         "DS.source_name"
                               })
-                              .Join("dbo.Users as U", "DS.user_id", "U.user_id");
+                              .Join("dbo.Users as U", "DS.user_id", "U.user_id")
+                              .LeftJoin("dbo.UsersAllowedDatasets as UAD", "UAD.dataset_id", "DS.data_set_id");
 
             Func<DataSetsFilters, string> getColumnName = (filter) =>
             {
@@ -376,6 +380,8 @@ namespace MapWebSite.Repository
                 if (!string.IsNullOrEmpty(columnName))
                     query = query.WhereLike(columnName, $"%{filter.Item2}%");
             }
+
+            query.WhereRaw($"(UAD.user_id = (select top 1 user_id from Users as _U where _U.username  = ?) { (roles.Contains(UserRoles.Administrator) ? "OR 1 = 1" : string.Empty) })", username);
 
             query = query.OrderByDesc("DS.data_set_id")
                 .Limit(itemsPerPage).Offset(pageIndex * itemsPerPage);
@@ -638,6 +644,104 @@ namespace MapWebSite.Repository
             }
         }
 
+ 
+        public bool AddPointsDatasetToUser(string datasetName, string datasetUser, string username)
+        {
+            try
+            {
+                SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("InsertDatapointsToUser")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                 new SqlParameter[]{
+                                                        new SqlParameter("dataset_name", datasetName),
+                                                        new SqlParameter("dataset_user", datasetUser),
+                                                        new SqlParameter("username", username),
+                                                 },
+                                                 new SqlConnection(this.connectionString));
+            }
+            catch (Exception exception)
+            {
+                //todo: log exception
+                return false;
+            }
+            return true;
+        }
+    
+        public bool RemovePointsDatasetFromUser(string datasetName, string datasetUser, string username)
+        {
+            try
+            {
+                SqlExecutionInstance.ExecuteNonQuery(new SqlCommand("RemoveDatapointsFromUser")
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                },
+                                                 new SqlParameter[]{
+                                                        new SqlParameter("dataset_name", datasetName),
+                                                        new SqlParameter("dataset_user", datasetUser),
+                                                        new SqlParameter("username", username),
+                                                 },
+                                                 new SqlConnection(this.connectionString));
+            }
+            catch (Exception exception)
+            {
+                //todo: log exception
+                return false;
+            }
+            return true;
+        }
+
+
+        public IEnumerable<User> GetUsersFiltered(IEnumerable<Tuple<UserFilters, string>> filters, int pageIndex, int itemsPerPage)
+        {
+            Query query = new Query("dbo.Users as U")
+                              .Select(new string[]{
+                                       "U.username",
+                                        "UD.first_name",
+                                        "UD.last_name",
+                                        "UD.timestamp",
+                                        "UD.email",
+                                        "UD.email_confirmed"
+                              })
+                              .Join("dbo.UsersDetails as UD", "UD.user_id", "U.user_id");
+
+            Func<UserFilters, string> getColumnName = (filter) =>
+            {
+                switch (filter)
+                {
+                    case UserFilters.Email:
+                        return "UD.email";
+                    case UserFilters.FirstName:
+                        return "UD.first_name";
+                    case UserFilters.LastName:
+                        return "UD.last_name";
+                    case UserFilters.Username:
+                        return "U.username";                   
+                    default:
+                        return null;
+                }
+            };
+
+            foreach (var filter in filters)
+            {
+                string columnName = getColumnName(filter.Item1);
+                if (!string.IsNullOrEmpty(columnName))
+                    query = query.WhereLike(columnName, $"%{filter.Item2}%");
+            }
+
+            query = query.OrderByDesc("UD.user_id")
+                .Limit(itemsPerPage).Offset(pageIndex * itemsPerPage);
+
+            SqlResult queryResult = new SqlServerCompiler().Compile(query);
+
+            using (var usersResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand(queryResult.ToString())
+            { CommandType = CommandType.Text }, null, new SqlConnection(this.connectionString)))
+            {
+                return parseUserDataset(usersResult.Tables[0].Rows);
+            }
+
+        }
+
         #region Private
 
         private PointsDataSetHeader getDatasetHeader(string username, string datasetName, int datasetId)
@@ -654,6 +758,43 @@ namespace MapWebSite.Repository
             {
                 return parseDataSetHeaderDataset(userCredentialsInfo.Tables[0].Rows);
             };
+        }
+
+        private User getUser(string username, string email)
+        {
+            using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUser") { CommandType = CommandType.StoredProcedure },
+                                              new SqlParameter[]
+                                              {
+                                                    new SqlParameter("username",username),
+                                                    new SqlParameter("email",  email)
+                                              },
+                                              new SqlConnection(this.connectionString)))
+            {
+                if (userCredentialsInfo.Tables[0].Rows.Count == 0) return null;
+
+                return this.parseUserDataset(userCredentialsInfo.Tables[0].Rows).FirstOrDefault();
+            };
+        }
+
+        private IEnumerable<User> parseUserDataset(DataRowCollection rows)
+        {
+            List<User> result = new List<User>();
+
+            foreach (DataRow row in rows)
+            {
+                result.Add(new User()
+                {
+                    Username = (string)row["username"],
+                    FirstName = (string)row["first_name"],
+                    LastName = (string)row["last_name"],
+                    SecurityStamp = row["timestamp"] is DBNull ? null : (string)row["timestamp"],
+                    Email = row["email"] is DBNull ? null : (string)row["email"],
+                    ConfirmedEmail = row["email_confirmed"] is DBNull ? false : (bool)row["email_confirmed"],
+                    PasswordHash = null
+                });
+            }
+
+            return result;
         }
 
         private PointsDataSetHeader parseDataSetHeaderDataset(DataRowCollection rows)
@@ -719,34 +860,7 @@ namespace MapWebSite.Repository
             return result;
         }
 
-        private User getUser(string username, string email)
-        {
-            using (var userCredentialsInfo = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetUser") { CommandType = CommandType.StoredProcedure },
-                                              new SqlParameter[]
-                                              {
-                                                    new SqlParameter("username",username),
-                                                    new SqlParameter("email",  email)
-                                              },
-                                              new SqlConnection(this.connectionString)))
-            {
-                if (userCredentialsInfo.Tables[0].Rows.Count == 0) return null;
-                var resultRow = userCredentialsInfo.Tables[0].Rows[0];
-
-                return new User()
-                {
-                    Username = (string)resultRow["username"],
-                    FirstName = (string)resultRow["first_name"],
-                    LastName = (string)resultRow["last_name"],
-                    SecurityStamp = resultRow["timestamp"] is DBNull ? null : (string)resultRow["timestamp"],
-                    Email = resultRow["email"] is DBNull ? null : (string)resultRow["email"],
-                    ConfirmedEmail = resultRow["email_confirmed"] is DBNull ? false : (bool)resultRow["email_confirmed"],
-                    PasswordHash = null
-                };
-
-            };
-        }
-
-    
+      
 
 
 

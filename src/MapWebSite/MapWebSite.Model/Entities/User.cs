@@ -32,6 +32,8 @@ namespace MapWebSite.Model
         [EnumString("Anonymous")]
         Anonymous,
         [EnumString("Normal")]
-        Normal
+        Normal,
+        [EnumString("Administrator")]
+        Administrator
     }
 }

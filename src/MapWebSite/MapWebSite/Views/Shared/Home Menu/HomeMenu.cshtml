@@ -34,7 +34,7 @@
             <object class="current_displayed_icon" id="main-menu-icon-@(sectionsCount++)" type="image/svg+xml" data="~/Resources/resources/icons/user_details_icon.svg"></object>
 
             @*Principal Menu Item: Manage data points*@
-            @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+            @if (User.IsInRole(UserRoles.Administrator.GetEnumString()))
             {
                 <object class="" id="main-menu-icon-@(sectionsCount++)" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
             }
@@ -49,7 +49,7 @@
         @{ Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/UserDetailsNavigationItems.cshtml", (sectionsCount++));}
 
         @*Secondary menu: used for Manage data points*@
-        @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+        @if (User.IsInRole(UserRoles.Administrator.GetEnumString()))
         {
             Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/ManageDatapointsNavigationItems.cshtml", (sectionsCount++));
         }

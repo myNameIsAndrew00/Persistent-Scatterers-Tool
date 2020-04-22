@@ -55,6 +55,7 @@ namespace MapWebSite.Controllers
                 DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
                 return View("~/Views/Home/Points Settings Content/ChoseDataset.cshtml",
                     new ChoseDatasetViewModel(databaseInteractionHandler.GetDataSets(
+                        RouteConfig.CurrentUser.Username,
                         new List<Tuple<DataSetsFilters, string>>()
                         {
                             new Tuple<DataSetsFilters, string>(
@@ -146,6 +147,7 @@ namespace MapWebSite.Controllers
             List<Tuple<DataSetsFilters, string>> filters = buildFilters<DataSetsFilters>(Request.GetQueryNameValuePairs());
 
             var model = databaseInteractionHandler.GetDataSets(
+                    RouteConfig.CurrentUser.Username,
                     filters,
                     pageIndex,
                     ChoseDatasetViewModel.DataPointsPerPage

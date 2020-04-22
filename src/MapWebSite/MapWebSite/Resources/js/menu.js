@@ -23,6 +23,14 @@ import { HtmlToElement } from './utilities/utils.js';
 var currentMenuIconIndex = 0;
 var menuIconsCount = 0;
 
+export const Ids = {
+    buttons : {
+        customizable: '.customizable-buttons',
+        general: '.general-buttons',
+        search: '.search-button'
+    }   
+}
+
 const mainMenuId = '#main-menu';
 const secondaryMenuId = '#secondary-menu';
 const fixedMenuId = '#fixed-menu';
@@ -81,6 +89,10 @@ export function ExpandMainMenu(expand) {
     expand ? $(fixedMenuId).addClass('fixed-menu-expanded') : $(fixedMenuId).removeClass('fixed-menu-expanded');
     expand ? $(mainMenuId).addClass('main-select-menu-expanded') : $(mainMenuId).removeClass('main-select-menu-expanded');
     expand ? $(secondaryMenuId).addClass('secondary-menu-hidden') : $(secondaryMenuId).removeClass('secondary-menu-hidden')
+}
+
+export function ChangeContextualMenuVisibility(menuId, visible) {
+    visible == false ? $(menuId).addClass('buttons-group-hidden') : $(menuId).removeClass('buttons-group-hidden')  ;
 }
 
 function hideIcon(innerImage, innerText, currentMenuList) {

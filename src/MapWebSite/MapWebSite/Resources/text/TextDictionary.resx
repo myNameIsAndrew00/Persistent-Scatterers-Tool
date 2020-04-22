@@ -508,4 +508,7 @@
   <data name="OverlayCDGeoserverFailTitle" xml:space="preserve">
     <value>Layer not found</value>
   </data>
+  <data name="HMenuManageUsersDatapointsText" xml:space="preserve">
+    <value>Manage users</value>
+  </data>
 </root>

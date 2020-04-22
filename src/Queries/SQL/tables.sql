@@ -53,7 +53,7 @@ create table UserNotifications(
 /************/
 
 insert into Roles(role_name)
-values ('Normal')
+values ('Normal'), ('Administrator')
 
 /************/
 
@@ -113,6 +113,16 @@ create table DataSets(
 	foreign key (status_id) references DatasetsStatuses(status_id)
 )
 
+create table UsersAllowedDatasets
+  (
+	 user_allowed_dataset_id int identity(1,1),
+	 user_id int not null,
+	 dataset_id int not null,
+
+	 primary key(user_allowed_dataset_id),
+	 foreign key(user_id) references Users(user_id),
+	 foreign key(dataset_id) references DataSets(data_set_id)
+  )
 
 create table ColorPalettesStatuses(
 	status_id int identity(1,1),

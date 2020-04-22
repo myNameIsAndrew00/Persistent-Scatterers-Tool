@@ -369,6 +369,7 @@
     <Content Include="Resources\js\utilities\Plot\plot.js" />
     <Content Include="Resources\js\settings\settings_points_upload.js" />
     <Content Include="Resources\js\point info\point_info.js" />
+    <Content Include="Resources\js\utilities\Table\table_drawer.js" />
     <Content Include="Resources\js\utilities\Tooltip\tooltip_manager.js" />
     <Content Include="Resources\js\utilities\utils.js" />
     <Content Include="Resources\resources\background-original.jpg" />
@@ -412,6 +413,7 @@
     <Content Include="Resources\resources\icons\third_gliph.svg" />
     <Content Include="Resources\resources\icons\upload_points_gliph.svg" />
     <Content Include="Resources\resources\icons\upload_points_icon.svg" />
+    <Content Include="Resources\resources\icons\user_add_datapoints_icon.svg" />
     <Content Include="Resources\resources\icons\user_default_icon.svg" />
     <Content Include="Resources\resources\icons\user_details_icon.svg" />
     <Content Include="Resources\resources\icons\user_palette_icon.svg" />
@@ -575,6 +577,7 @@
     <Content Include="Views\Home\Miscellaneous Content\ChosePointsSource.cshtml" />
     <Content Include="Views\Home\ApplicationMessage.cshtml" />
     <Content Include="Views\Home\Settings Content\SelectGeoserverSource.cshtml" />
+    <Content Include="Views\Home\Settings Content\ManageUsersDatapoints.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

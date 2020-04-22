@@ -65,6 +65,20 @@ window.changeButtonState = function changeButtonState(state){
 
 }
 
+window.usePaletteTemplate = function usePaletteTemplate(colorsString) {
+    //remove current dots
+    var keys = colorList.GetKeys();
+    for (var i = 0; i < keys.length; i++)
+        removeDot(keys[i]);
+
+    const colors = JSON.parse(colorsString);
+
+    changeSpanColor(colors[0].color, 'dot-1');
+
+    for (var i = 1; i < colors.length; i++)
+        addDot(colors[i].color, (colors[i].percent / 100) * SliderWidth, false);
+
+}
 
 window.changeSelectedDot = function changeSelectedDot(){
     var id = event.srcElement.id; 
@@ -78,32 +92,25 @@ window.changeActivePalette = function changeActivePalette(itemId) {
     $(`#picker-${itemId}`).addClass('palette-active');
 }
 
-/*function which handles the points addition to the slider*/  
-window.addDot = function addDot() { 
-    
-    var dotColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-    var dotPosition = event.clientX - LeftMargin;     
- 
-    showColorPicker(event.clientX);
-    var spanID = createSpan(dotPosition, dotColor);
-    createLabelInput(dotPosition);
 
-    colorList.AddNode( dotPosition, dotColor, spanID);
-     
-    $('#slider').css({ background: colorList.BuildGradientString() });
- 
-}
 
-function createLabelInput(dotPosition){
-    var input = document.createElement('label');
-    $(input).html(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
-    input.style.left = dotPosition + 'px';
-    input.id = 'dot-' + dotsCount + '-label';
+/**
+ * Create a span and a label on slider
+ * @param {any} dotPosition dot position on slider
+ * @param {any} dotColor dot color
+ * Returns span id
+ */
+function createSpan(dotPosition, dotColor) {
 
-    $('#dots-container').append(input);
-}
+    function createLabelInput() {
+        var input = document.createElement('label');
+        $(input).html(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
+        input.style.left = dotPosition + 'px';
+        input.id = 'dot-' + dotsCount + '-label';
 
-function createSpan(dotPosition, dotColor){
+        $('#dots-container').append(input);
+    }
+
     dotsCount++;
     //set the current dot to be the newest one
     currentDot = dotsCount;
@@ -115,41 +122,74 @@ function createSpan(dotPosition, dotColor){
     dot.style.left = dotPosition + DotRadius +'px';   
     dot.style.backgroundColor = dotColor;
     dot.draggable = false;
-    dot.addEventListener('mousedown',changeSelectedDot);
- 
+    dot.addEventListener('mousedown', changeSelectedDot); 
+
     $('#dots-container').append(dot);
+    createLabelInput();
 
     return dot.id;
 }
 
-window.changeSpanColor = function changeSpanColor(newColor){
-    colorList.SetPointColor('dot-' + currentDot, newColor);
-    document.getElementById('dot-' + currentDot).style.backgroundColor = newColor;
+/**
+ * Delete a span and a label based on span id
+ * @param {any} dotId id of span
+ */
+function deleteSpan(dotId) {
+    //remove the point visualy
+    dotId = '#' + dotId;
+    var dotLabelId = dotId + '-label';
+
+    $('#dots-container').children(dotId).remove();
+    $('#dots-container').children(dotLabelId).remove();
+
+    //redraw the slider and close the color picker
+    $('#slider').css({ background: colorList.BuildGradientString() });
+    changeColorPickerVisibility(false);
+}
+
+/*function which handles the points addition to the slider*/
+window.addDot = function addDot(color, position, displayPicker = true) {
+
+    if (color === undefined) color = '#' + (Math.random() * 0xFFFFFF << 0).toString(16);
+    if (position === undefined) position = event.clientX - LeftMargin;
+
+    if(displayPicker === true) showColorPicker(event.clientX);
+
+    var spanID = createSpan(position, color);
+
+    colorList.AddNode(position, color, spanID);
+
+    $('#slider').css({ background: colorList.BuildGradientString() });
+
+}
+
+window.removeDot = function removeDot(dotId) {
+    if (dotId === undefined) dotId = 'dot-' + currentDot;
+
+    if (colorList.RemoveNode(dotId) === false) return;
+
+    deleteSpan(dotId);    
+}
+
+
+window.changeSpanColor = function changeSpanColor(newColor, spanId) {
+    if (spanId === undefined) spanId = 'dot-' + currentDot;
+
+    colorList.SetPointColor(spanId, newColor);
+    document.getElementById(spanId).style.backgroundColor = newColor;
     
     $('#slider').css({ background: colorList.BuildGradientString() });
      
 }
 
+
+
+
+
 function showColorPicker(horizontalPosition) { 
    changeColorPickerVisibility(true);
 
    $('#color-picker').css('left', horizontalPosition + 'px');
-}
-
-window.removeSpan = function removeSpan() {
-    if(colorList.RemoveNode('dot-' + currentDot) === false) return;
-
-    //remove the point from internal structures
-    var dotId = '#dot-' + currentDot;
-    var dotLabelId = dotId + '-label';
-
-    //remove the point visualy
-    $('#dots-container').children(dotId).remove();
-    $('#dots-container').children(dotLabelId).remove();
-
-    //redraw the slider and close the color picker
-    $('#slider').css({ background: colorList.BuildGradientString() }); 
-    changeColorPickerVisibility(false);
 }
 
 window.changeColorPickerVisibility = function changeColorPickerVisibility(isVisible){

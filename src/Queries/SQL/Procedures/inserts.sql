@@ -232,3 +232,87 @@ begin
 	end catch
 
 end
+
+
+
+if object_id('InsertDatapointsToUser', 'P') is not null
+	drop procedure InsertDatapointsToUser
+go
+create procedure InsertDatapointsToUser 
+	@dataset_name as varchar(255),
+	@dataset_user as varchar(100),
+	@username as varchar(100)
+as 
+begin
+
+	begin try
+		begin transaction
+			declare @user_id as int = -1;
+			declare @dataset_id as int = -1;
+
+			select @user_id = U.user_id
+				from Users as U 
+				where U.username = @username
+
+			select @dataset_id = DS.data_set_id
+				from DataSets as DS
+					inner join Users as U
+					on U.user_id = DS.user_id and U.username = @dataset_user
+				where DS.dataset_name = @dataset_name
+
+			--Insert the dataset
+			insert into UsersAllowedDatasets(user_id, dataset_id)
+			values (@user_id, @dataset_id)
+			
+			select SCOPE_IDENTITY() as ID;
+		commit
+
+		select SCOPE_IDENTITY();
+	end try
+	begin catch
+		rollback;
+		throw;
+	end catch
+
+end
+
+
+
+if object_id('RemoveDatapointsFromUser', 'P') is not null
+	drop procedure RemoveDatapointsFromUser
+go
+create procedure RemoveDatapointsFromUser 
+	@dataset_name as varchar(255),
+	@dataset_user as varchar(100),
+	@username as varchar(100)
+as 
+begin
+
+	begin try
+		begin transaction
+			declare @user_id as int = -1;
+			declare @dataset_id as int = -1;
+
+			select @user_id = U.user_id
+				from Users as U 
+				where U.username = @username
+
+			select @dataset_id = DS.data_set_id
+				from DataSets as DS
+					inner join Users as U
+					on U.user_id = DS.user_id and U.username = @dataset_user
+				where DS.dataset_name = @dataset_name
+
+			--Insert the dataset
+			delete from UsersAllowedDatasets
+			where user_id = @user_id and dataset_id = @dataset_id
+			 
+		commit
+		 
+	end try
+	begin catch
+		rollback;
+		throw;
+	end catch
+
+end

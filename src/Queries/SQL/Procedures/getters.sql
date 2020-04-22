@@ -112,31 +112,52 @@ if object_id('GetDataSetsFiltered', 'P') is not null
 	drop procedure GetDataSetsFiltered
 go
 create procedure GetDataSetsFiltered 
+	@username as varchar(100),
 	@filter_id as int,
 	@filter_value as varchar(255),
 	@page_index as int,
 	@items_per_page as int
 as 
 begin
+	declare @isAdministrator as int = -1
+	declare @user_id as int = -1;
+	
+	select @user_id = U.user_id 
+ 	from Users as U where U.username = @username
+
+	select @isAdministrator = U.user_id
+		from Users as U
+		inner join UsersRoles as UR
+			on UR.user_id = U.user_id
+			inner join Roles as R
+			on R.role_id = UR.role_id and R.role_name = 'Administrator'
+	where U.user_id = @user_id
+
 	select 
 		   U.username,
 		   DS.dataset_name,		
 		   DS.data_set_id as dataset_id,
-		   DS.status_id, 
+		   DS.status_id,
 		   DS.source_name
 		from DataSets as DS
 		inner join Users as U
 		on DS.user_id = U.user_id 
-	where CHARINDEX(@filter_value,
+			left join UsersAllowedDatasets as UAD 
+			on UAD.dataset_id = DS.data_set_id
+	where ( CHARINDEX(@filter_value,
 				( case 
 					when @filter_id = 1 then DS.dataset_name
-					when @filter_id = 2 then U.username					
+					when @filter_id = 2 then U.username
 					when @filter_id = 3 then DS.source_name
 				end )) > 0 
-		   OR @filter_id = -1
+		   OR @filter_id = -1 )
+		   and
+		   (UAD.user_id = @user_id OR @isAdministrator != -1)
 	order by DS.data_set_id desc
 	OFFSET @page_index * @items_per_page ROWS FETCH NEXT @items_per_page ROWS ONLY;
 end
+ 
+
  
 go
 

@@ -5,6 +5,9 @@ using System.Data.SqlClient;
 
 namespace MapWebSite.SQLAccess
 {
+    /// <summary>
+    /// Use this class to handle sql server query executions
+    /// </summary>
     public static class SqlExecutionInstance
     {
 

@@ -5,6 +5,14 @@ using System.Collections.Generic;
 namespace MapWebSite.Core.Database
 {
 
+    public enum UserFilters
+    {
+        None = -1,
+        Username = 1,
+        FirstName = 2,
+        LastName = 3,
+        Email = 4
+    }
 
     public enum ColorMapFilters
     {
@@ -28,11 +36,21 @@ namespace MapWebSite.Core.Database
     /// </summary>
     public interface IUserRepository
     {
+        #region User related
         bool InsertUser(User user);
 
         bool UpdateUser(User user);
 
         User GetUser(string username);
+
+        /// <summary>
+        /// Retrieve a list of users based a set of filters
+        /// </summary>
+        /// <param name="filters">Filters which will be used to filter the result</param>
+        /// <param name="pageIndex">Index of the page which must be returned</param>
+        /// <param name="itemsPerPage">Represents how many items area available per page</param>
+        /// <returns>A list of users</returns>
+        IEnumerable<User> GetUsersFiltered(IEnumerable<Tuple<UserFilters, string>> filters, int pageIndex, int itemsPerPage);
 
         User GetUserByEmail(string email);
 
@@ -40,16 +58,43 @@ namespace MapWebSite.Core.Database
 
         bool SetEmailConfirmed(string username, bool confirmed);
 
-
         IList<UserRoles> GetUserRoles(string username);
 
         bool CheckUser(string username, string password);
 
         byte[] GetUserHashedPassword(string username);
 
+
+        #endregion
+
         //todo: move this methods in other repository, for datapoints headers
         #region Data points related
 
+        /// <summary>
+        /// Use this method to associate a points dataset with a user
+        /// </summary>
+        /// <param name="datasetName">Name of the dataset</param>
+        /// <param name="datasetUser">User which created the dataset</param>
+        /// <param name="username">The user which will be associated with the dataset</param>
+        /// <returns>Returns true if operation succeed</returns>
+        bool AddPointsDatasetToUser(string datasetName, string datasetUser, string username);
+
+        /// <summary>
+        /// Use this method to remove a associated points dataset from a user
+        /// </summary>
+        /// <param name="datasetName">Name of the dataset</param>
+        /// <param name="datasetUser">User which created the dataset</param>
+        /// <param name="username">The user which will be associated with the dataset</param>
+        /// <returns>Returns true if operation succeed</returns>
+        bool RemovePointsDatasetFromUser(string datasetName, string datasetUser, string username);
+
+        /// <summary>
+        /// Use this method to create a points dataset
+        /// </summary>
+        /// <param name="username">Username of user which creates the dataset</param>
+        /// <param name="datasetName">The name of the dataset</param>
+        /// <param name="pointsSource">Source type for dataset</param>
+        /// <returns>Returns the id of the dataset which was inserted or -1 if operation fails </returns>
         int CreateUserPointsDataset(string username, string datasetName, PointsSource pointsSource);
 
 
@@ -58,7 +103,7 @@ namespace MapWebSite.Core.Database
         /// </summary>
         /// <param name="datasetId">Id of the dataset</param> 
         /// <param name="apiUrl">Api endpoint used to request data</param>
-        /// <returns></returns>
+        /// <returns>Returns the id of the dataset which was inserted or -1 if operation fails</returns>
         int RaiseToGeoserverDataset(int datasetId, string apiUrl);
 
     
@@ -94,9 +139,9 @@ namespace MapWebSite.Core.Database
         /// <returns></returns>
         PointsDataSetHeader GetDatasetHeader(int datasetId);
 
-        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
+        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
 
-        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
+        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
 
 
         /// <summary>

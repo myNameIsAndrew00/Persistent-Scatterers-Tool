@@ -1,5 +1,6 @@
 ﻿@import 'general/colors.scss';
 
+$main_menu_width: 600px;
 
 .fixed-menu:hover {
     width: 200px;
@@ -16,7 +17,7 @@
 
     .main-select-menu-expanded {
         height: 400px;
-        width: 600px;
+        width: $main_menu_width;
         border-radius: 5px;
         margin: 10px;
         display: grid;
@@ -61,8 +62,11 @@
             visibility: visible;
 
             ul {
-                transition: 0.3s;
                 display: flex;
+                flex-wrap: wrap;
+                width: $main_menu_width - 100px!important;
+
+                transition: 0.3s;
                 opacity: 0;
                 width: 0;
                 height: 0;
@@ -84,14 +88,15 @@
 
                     a {
                         color: white;
-                        text-decoration: none;
+                        text-decoration: none;                 
+                        text-align: center;
                     }
 
                     button, a {
                         width: 130px;
                         height: 130px;
                         border-radius: 2px;
-                        display: flex; 
+                        display: flex;
                         justify-content: center;
                         align-items: center;
                         padding-top: 90px;
@@ -361,22 +366,30 @@
             pointer-events: none;
         }
 
-        .customizable-buttons {
-            margin-right: 12px;
-        }
-
         .customizable-buttons, .general-buttons, .search-button {
             padding: 5px;
+            transition: 0.3s;
         }
 
-        .general-buttons {
-            border-left: solid get_color(white);
+        .customizable-buttons {
+            margin-right: 12px;
+            padding-right: 20px;
+            border-right: solid get_color(white);
         }
 
         .search-button {
             border-right: solid;
             border-radius: 0;
             margin-right: 3px;
+        }
+
+        .buttons-group-hidden {
+            visibility: hidden; 
+            display: block ruby;
+            width: 0;
+            margin: 0;
+            padding: 0;
+            opacity: 0;
         }
 
         .autocomplete-hidden {
