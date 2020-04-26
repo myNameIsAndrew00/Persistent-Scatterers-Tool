@@ -1,0 +1,117 @@
+﻿@import '../general/colors.scss';
+@import '../general/dimensions.scss';
+
+.default-table {
+    width: 95%;
+    margin: 15px;
+    margin-top: 0;
+    background: get_color(lightGray);
+    table-layout: fixed;
+    border-bottom-left-radius: $general_border_radius;
+    border-bottom-right-radius: $general_border_radius;
+    font-size: small;
+    border: solid 1px get_color(transparentBlack);
+    border-collapse: inherit;
+    border-spacing: 0 5px;
+
+    tr {
+
+        .checkbox {
+            width: 20px;
+        }
+
+        th {
+            padding: 12px 25px 12px 25px;
+            background: get_color(opaqueTransparentBlue);
+            color: get_color(white);
+        }
+
+        td {
+            padding: 7px 12px 7px 12px;
+            font-size: smaller;
+            border-top: solid 1px get_color(transparentBlack);
+            border-bottom: solid 1px get_color(transparentBlack);
+            background: get_color(white);
+        }
+
+
+        td:nth-child(even) {
+            color: get_color(gray);
+            font-weight: bold;
+        }
+    }
+
+
+    tr:last-child {
+        td {
+            border-bottom: none;
+        }
+    }
+}
+
+.default-table-container {
+    margin: 50px;
+    padding: 10px;
+
+    .command-header {
+        border-top-left-radius: $general_border_radius;
+        border-top-right-radius: $general_border_radius;
+        border: solid 1px get_color(transparentBlack);
+        display: flex;
+        margin: 15px;
+        background: get_color(lightGray);
+        margin-bottom: 0;
+        margin-right: 4%;
+        align-items: center;
+
+        h5 {
+            margin-right: auto;
+            margin-bottom: 0;
+            margin-left: 15px;
+            padding: 10px; 
+            font-variant: petite-caps;
+        }
+
+        button {
+            padding: 8px;
+            padding-left: 13px;
+            padding-right: 27px;
+            transition: 0.3s;
+            height: 32px;
+            width: 32px;
+            border-radius: 0;
+            background: none;
+            border-left: solid 1px get_color(transparentBlack);
+            border-right: solid 1px get_color(transparentBlack);
+
+            object {
+                pointer-events: none;
+                width: 16px;
+            }
+        }
+
+        button:hover {
+            background: get_color(easeGray);
+        }
+    }
+
+    .pagination-buttons {
+        margin: auto;
+        width: 25%;
+        text-align: center;
+
+        button {
+            margin: 7px;
+            padding: 0;
+            font-size: small;
+            width: 20px;
+            height: 20px;
+            border-radius: 25px;
+            background: get_color(easeGray);
+        }
+
+        .button-selected {
+            background: get_color(mediumGray);
+        }
+    }
+}

@@ -257,6 +257,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\Miscellaneous Controller\MiscellaneousController.cs" />
     <Compile Include="Controllers\Points Settings Controller\PointsSettingsController.cs" />
+    <Compile Include="Controllers\Settings Controller\SCManageUsers.cs" />
     <Compile Include="Controllers\Settings Controller\SCGeoserverSelect.cs" />
     <Compile Include="Controllers\Settings Controller\SCAccountController.cs" />
     <Compile Include="Controllers\Settings Controller\SCUploadPoints.cs" />
@@ -335,6 +336,7 @@
     <Content Include="Resources\css\general\application.scss" />
     <None Include="Resources\css\application_message.scss" />
     <Content Include="Resources\css\general\dimensions.scss" />
+    <Content Include="Resources\css\controls\table.scss" />
     <None Include="Resources\css\home_settings_layer.scss" />
     <Content Include="Resources\css\popup.scss" />
     <Content Include="Resources\css\home_points_settings_popup.scss" />
@@ -349,6 +351,7 @@
     <Content Include="Resources\js\map\points_search.js" />
     <Content Include="Resources\js\map\points sources\cassandra_container.js" />
     <Content Include="Resources\js\map\received_points_worker.js" />
+    <Content Include="Resources\js\settings\settings_manage_users.js" />
     <Content Include="Resources\js\settings\settings_select_geoserver_layer.js" />
     <Content Include="Resources\js\utilities\BackgroundWaves\waves.js" />
     <Content Include="Resources\js\utilities\Card\card_drawer.js" />
@@ -379,6 +382,7 @@
     <Content Include="Resources\resources\gifs\HTM_TOOLTIP_PointsSize.gif" />
     <Content Include="Resources\resources\gifs\HTM_TOOLTIP_PointsSource.gif" />
     <Content Include="Resources\resources\gifs\HTM_TOOLTIP_Search.gif" />
+    <Content Include="Resources\resources\icons\add_black_icon.svg" />
     <Content Include="Resources\resources\icons\add_icon.svg" />
     <Content Include="Resources\resources\icons\arrow_down_icon.svg" />
     <Content Include="Resources\resources\icons\arrow_left_icon.svg" />
@@ -388,6 +392,8 @@
     <Content Include="Resources\resources\icons\bell_icon.svg" />
     <Content Include="Resources\resources\icons\close_icon.svg" />
     <Content Include="Resources\resources\icons\cluster_icon.svg" />
+    <Content Include="Resources\resources\icons\delete_black_icon.svg" />
+    <Content Include="Resources\resources\icons\edit_black_icon.svg" />
     <Content Include="Resources\resources\icons\eye_icon.svg" />
     <Content Include="Resources\resources\icons\first_gliph.svg" />
     <Content Include="Resources\resources\icons\geoserver_upload_icon.svg" />
@@ -520,7 +526,7 @@
     <Content Include="Views\Shared\_HomeLayout.cshtml" />
     <Content Include="Resources\css\general\colors.scss" />
     <Content Include="Resources\css\home.scss" />
-    <Content Include="Resources\css\input.scss" />
+    <Content Include="Resources\css\controls\input.scss" />
     <Content Include="Resources\css\login.scss" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
@@ -535,10 +541,10 @@
     <Content Include="Views\Home\PointInfo.cshtml" />
     <Content Include="Resources\css\plot.scss" />
     <Content Include="Views\Home\PointsSettingsLayer.cshtml" />
-    <Content Include="Resources\css\scrollbar.scss" />
+    <Content Include="Resources\css\controls\scrollbar.scss" />
     <Content Include="Views\Home\Points Settings Content\ChosePalette.cshtml" />
     <Content Include="Views\Home\Points Settings Content\ChoseDataset.cshtml" />
-    <Content Include="Resources\css\select.scss" />
+    <Content Include="Resources\css\controls\select.scss" />
     <Content Include="Views\Login\LoginForm.cshtml" />
     <Content Include="Views\Login\RegisterForm.cshtml" />
     <Content Include="Views\Home\Settings Content\AccountSettings.cshtml" />
@@ -569,6 +575,7 @@
     <Content Include="Views\Home\Settings Content\About.cshtml" />
     <Content Include="Resources\css\tooltips\tooltip.scss" />
     <Content Include="Views\Home\Miscellaneous Content\Tooltips\Tooltip.cshtml" />
+    <Content Include="Resources\css\settings_users_management.scss" />
     <None Include="Views\Home\Miscellaneous Content\Tooltips\GifTooltip.cshtml" />
     <Content Include="Resources\css\tooltips\customizations.scss" />
     <Content Include="Views\Shared\Home Menu\Navigation Menus\UserDetailsNavigationItems.cshtml" />
@@ -577,7 +584,7 @@
     <Content Include="Views\Home\Miscellaneous Content\ChosePointsSource.cshtml" />
     <Content Include="Views\Home\ApplicationMessage.cshtml" />
     <Content Include="Views\Home\Settings Content\SelectGeoserverSource.cshtml" />
-    <Content Include="Views\Home\Settings Content\ManageUsersDatapoints.cshtml" />
+    <Content Include="Views\Home\Settings Content\ManageUsers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

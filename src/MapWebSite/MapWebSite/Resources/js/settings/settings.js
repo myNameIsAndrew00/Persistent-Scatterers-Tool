@@ -6,6 +6,14 @@
 
 import { ExpandMainMenu } from '../menu.js';
 
+export const constants = {
+    id: {
+        settingsLayerContainer: '#settings-layer-container',
+        settingsOverlay: '#settings-layer-overlay',
+        settingsLayer: '#settings-layer'
+    }
+}
+
 /*functions used for spinner */
 var rotateSpinner = false;
 
@@ -59,35 +67,38 @@ export function ChangeSpinnerVisibility(visible) {
 }
 
 /*Use this function to display the overlay. The message must be in the right format, processed by server (check MessageBoxBuilder.cs)*/
-export function DisplayOverlay(message) {
-    $('#settings-layer-container').children('#settings-layer-overlay').removeClass('message-overlay-hidden');
-    $('#settings-layer-container').children('#settings-layer-overlay').html(message);
+export function DisplayOverlay(content) {
+    $(constants.id.settingsLayerContainer).children(constants.id.settingsOverlay).removeClass('message-overlay-hidden');
+    $(constants.id.settingsLayerContainer).children(constants.id.settingsOverlay).html(content);
 }
 
+
+/**
+ * Use this function to hide the settings overlay modal (todo: createa generic modal)
+ * @param {any} closeSettingsPage set this parameter to true if closing settings page is required
+ */
+export function HideOverlay(closeSettingsPage) {
+    $(constants.id.settingsLayerContainer).children(constants.id.settingsOverlay).addClass('message-overlay-hidden');
+    $(constants.id.settingsLayerContainer).children(constants.id.settingsOverlay).empty();
+
+    if (closeSettingsPage === true) DisplayPage(false);
+}
+
+window.hideOverlay = HideOverlay;
+
 export function DisplayPage(display) {
-    $('#settings-layer').html('');
+    $(constants.id.settingsLayer).html('');
 
     ExpandMainMenu(!display);
 
     function doAction(remove, id, className) {
         remove ? $(id).removeClass(className) : $(id).addClass(className);
     }
-    doAction(display, '#settings-layer-container', 'settings-layer-container-hide');
-    doAction(display, '#settings-layer', 'settings-layer-hide');
+    doAction(display, constants.id.settingsLayerContainer, 'settings-layer-container-hide');
+    doAction(display, constants.id.settingsLayer, 'settings-layer-hide');
     doAction(!display, '#main-menu', 'main-select-menu-nontransparent');
     doAction(!display, '#secondary-menu', 'secondary-menu-nontransparent');
     doAction(!display, '#top-menu', 'top-menu-hiden');
 }
 
 window.DisplayPage = DisplayPage;
-
-/**
- * Use this function to hide the settings overlay modal (todo: createa generic modal)
- * @param {any} closeSettingsPage set this parameter to true if closing settings page is required
- */
-window.hideOverlay = function HideOverlay(closeSettingsPage) {
-    $('#settings-layer-container').children('#settings-layer-overlay').addClass('message-overlay-hidden');
-    $('#settings-layer-container').children('#settings-layer-overlay').empty();
-
-    if (closeSettingsPage === true) DisplayPage(false);
-}

@@ -68,7 +68,7 @@ namespace MapWebSite.SQLAccess
         public static object ExecuteScalar(SqlCommand Command, SqlParameter[] Parameters, SqlConnection Connection)
         {
             Command.Connection = Connection;
-            Command.Parameters.AddRange(Parameters);
+            if (Parameters != null) Command.Parameters.AddRange(Parameters);
 
             try
             {

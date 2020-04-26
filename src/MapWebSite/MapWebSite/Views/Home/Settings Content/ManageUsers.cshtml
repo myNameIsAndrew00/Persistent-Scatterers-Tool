@@ -1,0 +1,13 @@
+﻿@model Tuple<int,int>
+@{ 
+    Layout = null;
+}
+ 
+<div id="manage-users-container">
+    @Html.Hidden("itemsPerPage", Model.Item2)
+    @Html.Hidden("pagesCount", Model.Item1 / Model.Item2 + (Model.Item1 % Model.Item2 > 0 ? 1 : 0))
+</div>
+<script>
+    getScript('#settings-layer', '/Resources/js/settings/settings_manage_users.js');
+    if (!( drawTables === undefined )) drawTables();
+</script>

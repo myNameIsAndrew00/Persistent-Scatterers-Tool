@@ -13,7 +13,7 @@ namespace MapWebSite
 
             //config.Filters.Add(new ApiAuthenticationFilter());
 
-            config.Routes.Add("DefaultApi", config.Routes.CreateRoute("api/{controller}/{action}/{id}",
+            config.Routes.Add("DefaultApi", config.Routes.CreateRoute("rpc/{controller}/{action}/{id}",
                                                                     new { id = RouteParameter.Optional },
                                                                     null));
 

@@ -11,10 +11,14 @@
 @import 'home_settings_layer.scss';
 @import 'home_points_settings_layer.scss';
 @import 'home_points_settings_popup.scss';
-@import 'scrollbar.scss';
-@import 'select.scss';
 
-@import 'input.scss';
+
+
+@import './controls/scrollbar.scss';
+@import './controls/select.scss';
+@import './controls/input.scss';
+@import './controls/table.scss';
+
 @import './tooltips/tooltip.scss';
 @import './tooltips/customizations.scss';
 

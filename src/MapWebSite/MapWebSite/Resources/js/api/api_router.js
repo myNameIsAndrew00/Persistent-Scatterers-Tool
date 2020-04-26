@@ -5,7 +5,7 @@
  * 
  * */
 
-const applicationApiUrl = '/api';
+const applicationApiUrl = '/rpc';
 const geolocationApiUrl = 'https://nominatim.openstreetmap.org/search/';
 
 export const endpoints = {
@@ -40,7 +40,9 @@ export const endpoints = {
         ClearFileChunks: applicationApiUrl + '/settings/ClearFileChunks',
         MergeFileChunks: applicationApiUrl + '/settings/MergeFileChunks',
         CheckDatasetExistance: applicationApiUrl + '/settings/CheckDatasetExistance',
-        UploadGeoserverLayer: applicationApiUrl + '/settings/UploadGeoserverLayer'
+        UploadGeoserverLayer: applicationApiUrl + '/settings/UploadGeoserverLayer',
+        GetUsers: applicationApiUrl + '/settings/GetUsers',
+        GetUserDatasets: applicationApiUrl + '/settings/GetUserDatasets'
     },
     LoginApi: {
         ValidateUsername: applicationApiUrl + '/LoginApi/ValidateUsername',

@@ -52,6 +52,8 @@ namespace MapWebSite.Core.Database
         /// <returns>A list of users</returns>
         IEnumerable<User> GetUsersFiltered(IEnumerable<Tuple<UserFilters, string>> filters, int pageIndex, int itemsPerPage);
 
+        int GetUsersCount();
+
         User GetUserByEmail(string email);
 
         bool SetEmail(string username, string email);
@@ -141,9 +143,9 @@ namespace MapWebSite.Core.Database
 
         IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
 
-        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
+        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);      
 
-
+        int GetDatasetsCount();
         /// <summary>
         /// Provides a method to request color palettes (and their 'creators') using a filter 
         /// </summary>

@@ -139,8 +139,10 @@ namespace MapWebSite.Controllers
             return response;
         }
 
-        public HttpResponseMessage GetDatasetsList(int pageIndex)
+        public HttpResponseMessage GetDatasetsList(int pageIndex, int itemsPerPage = -1)
         {
+            if (itemsPerPage == -1) itemsPerPage = ChoseDatasetViewModel.DataPointsPerPage;
+
             var databaseInteractionHandler = new DatabaseInteractionHandler();
             var response = new HttpResponseMessage();
 
@@ -150,7 +152,7 @@ namespace MapWebSite.Controllers
                     RouteConfig.CurrentUser.Username,
                     filters,
                     pageIndex,
-                    ChoseDatasetViewModel.DataPointsPerPage
+                    itemsPerPage
                 )?.Select(dataset => new
                 {
                     dataset.Name,

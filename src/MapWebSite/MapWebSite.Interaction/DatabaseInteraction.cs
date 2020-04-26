@@ -302,6 +302,16 @@ namespace MapWebSite.Domain
             return this.userRepository.GetDataSetsFiltered(username ,filters, pageIndex, itemsPerPage);
         }
 
+        public IEnumerable<User> GetUsers(IEnumerable<Tuple<UserFilters, string>> filters, int pageIndex = 0, int itemsPerPage = 10)
+        {
+            return this.userRepository.GetUsersFiltered(filters, pageIndex, itemsPerPage);
+        }
+
+        public int GetUsersCount()
+        {
+            return this.userRepository.GetUsersCount();           
+        }
+
 
         public PointsDataSetHeader GetDataSet(string username, string datasetName)
         {

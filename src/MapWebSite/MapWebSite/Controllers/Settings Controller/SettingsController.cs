@@ -24,7 +24,7 @@ namespace MapWebSite.Controllers
             ColorPicker,
             UploadPoints,
             UseGeoserverLayer,
-            ManageUsersDatapoints
+            ManageUsers
         }
     }
 }

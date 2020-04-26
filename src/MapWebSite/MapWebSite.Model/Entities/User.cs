@@ -1,4 +1,5 @@
 ﻿using MapWebSite.Types;
+using Newtonsoft.Json;
 
 namespace MapWebSite.Model
 {
@@ -9,16 +10,19 @@ namespace MapWebSite.Model
     {
         public string Username { get; set; }
 
+        [JsonIgnore]
         public byte[] PasswordHash { get; set; }         
 
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
+        [JsonIgnore]
         public string SecurityStamp { get; set; }
 
         public string Email { get; set; }
 
+        [JsonIgnore]
         public bool ConfirmedEmail { get; set; }
          
     }

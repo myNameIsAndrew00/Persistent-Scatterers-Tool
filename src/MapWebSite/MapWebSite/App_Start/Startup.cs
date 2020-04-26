@@ -31,6 +31,7 @@ namespace MapWebSite
                 Provider = new CookieAuthenticationProvider { }
             });
 
+
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             

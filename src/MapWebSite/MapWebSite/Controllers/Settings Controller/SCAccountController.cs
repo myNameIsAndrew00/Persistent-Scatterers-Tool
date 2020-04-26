@@ -21,7 +21,6 @@ namespace MapWebSite.Controllers
     [Authorize]
     public partial class SettingsController : ApiController
     {
-
          
     }
 }

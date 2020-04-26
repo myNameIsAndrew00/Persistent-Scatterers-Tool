@@ -174,7 +174,7 @@ namespace MapWebSite.Repository
 
         public IEnumerable<Tuple<string, ColorMap>> GetColorMapsFiltered(ColorMapFilters filter, string filterValue, int pageIndex, int itemsPerPage)
         {
-            
+
             using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetColorPalettesFiltered")
             { CommandType = System.Data.CommandType.StoredProcedure },
                                                new SqlParameter[]
@@ -188,7 +188,7 @@ namespace MapWebSite.Repository
             {
                 return parseColorMapDataset(colorMapsResult.Tables[0].Rows);
             }
-             
+
         }
 
 
@@ -203,7 +203,7 @@ namespace MapWebSite.Repository
                                        "CP.status_mask"
                                 })
                                 .Join("dbo.Users as U", "CP.user_id", "U.user_id");
-                                
+
             Func<ColorMapFilters, string> getColumnName = (filter) =>
             {
                 switch (filter)
@@ -217,24 +217,25 @@ namespace MapWebSite.Repository
                 }
             };
 
-            foreach(var filter in filters)
-            {
-                string columnName = getColumnName(filter.Item1);
-                if (!string.IsNullOrEmpty(columnName))
-                    query = query.WhereLike(columnName, $"%{filter.Item2}%");
-            }
+            if (filters != null)
+                foreach (var filter in filters)
+                {
+                    string columnName = getColumnName(filter.Item1);
+                    if (!string.IsNullOrEmpty(columnName))
+                        query = query.WhereLike(columnName, $"%{filter.Item2}%");
+                }
 
             query = query.OrderByDesc("CP.creation_date")
                 .Limit(itemsPerPage).Offset(pageIndex * itemsPerPage);
 
             SqlResult queryResult = new SqlServerCompiler().Compile(query);
-            
+
             using (var colorMapsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand(queryResult.ToString())
-            { CommandType =  CommandType.Text }, null, new SqlConnection(this.connectionString)))
+            { CommandType = CommandType.Text }, null, new SqlConnection(this.connectionString)))
             {
                 return parseColorMapDataset(colorMapsResult.Tables[0].Rows);
             }
-             
+
         }
 
         public string GetColorMapSerialization(string username, string paletteName)
@@ -326,7 +327,7 @@ namespace MapWebSite.Repository
         }
 
         public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage)
-        {            
+        {
             using (var datasetsResult = SqlExecutionInstance.ExecuteQuery(new SqlCommand("GetDataSetsFiltered")
             { CommandType = CommandType.StoredProcedure },
                                                new SqlParameter[]
@@ -341,13 +342,13 @@ namespace MapWebSite.Repository
             {
                 return parseDataPointsDataset(datasetsResult.Tables[0].Rows);
             }
-             
+
         }
 
         public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage)
         {
             IList<UserRoles> roles = this.GetUserRoles(username);
-           
+
             Query query = new Query("dbo.DataSets as DS")
                               .Select(new string[]{
                                         "U.username",
@@ -374,12 +375,13 @@ namespace MapWebSite.Repository
                 }
             };
 
-            foreach (var filter in filters)
-            {
-                string columnName = getColumnName(filter.Item1);
-                if (!string.IsNullOrEmpty(columnName))
-                    query = query.WhereLike(columnName, $"%{filter.Item2}%");
-            }
+            if (filters != null)
+                foreach (var filter in filters)
+                {
+                    string columnName = getColumnName(filter.Item1);
+                    if (!string.IsNullOrEmpty(columnName))
+                        query = query.WhereLike(columnName, $"%{filter.Item2}%");
+                }
 
             query.WhereRaw($"(UAD.user_id = (select top 1 user_id from Users as _U where _U.username  = ?) { (roles.Contains(UserRoles.Administrator) ? "OR 1 = 1" : string.Empty) })", username);
 
@@ -501,7 +503,7 @@ namespace MapWebSite.Repository
                                                  },
                                                  new SqlConnection(this.connectionString));
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 //todo: log exception
                 return false;
@@ -644,7 +646,7 @@ namespace MapWebSite.Repository
             }
         }
 
- 
+
         public bool AddPointsDatasetToUser(string datasetName, string datasetUser, string username)
         {
             try
@@ -667,7 +669,7 @@ namespace MapWebSite.Repository
             }
             return true;
         }
-    
+
         public bool RemovePointsDatasetFromUser(string datasetName, string datasetUser, string username)
         {
             try
@@ -716,18 +718,19 @@ namespace MapWebSite.Repository
                     case UserFilters.LastName:
                         return "UD.last_name";
                     case UserFilters.Username:
-                        return "U.username";                   
+                        return "U.username";
                     default:
                         return null;
                 }
             };
 
-            foreach (var filter in filters)
-            {
-                string columnName = getColumnName(filter.Item1);
-                if (!string.IsNullOrEmpty(columnName))
-                    query = query.WhereLike(columnName, $"%{filter.Item2}%");
-            }
+            if (filters != null)
+                foreach (var filter in filters)
+                {
+                    string columnName = getColumnName(filter.Item1);
+                    if (!string.IsNullOrEmpty(columnName))
+                        query = query.WhereLike(columnName, $"%{filter.Item2}%");
+                }
 
             query = query.OrderByDesc("UD.user_id")
                 .Limit(itemsPerPage).Offset(pageIndex * itemsPerPage);
@@ -740,6 +743,36 @@ namespace MapWebSite.Repository
                 return parseUserDataset(usersResult.Tables[0].Rows);
             }
 
+        }
+
+        public int GetUsersCount()
+        {
+            Query query = new Query("Users").AsCount("user_id");
+
+            SqlResult queryResult = new SqlServerCompiler().Compile(query);
+
+            return Convert.ToInt32(
+                SqlExecutionInstance.ExecuteScalar(new SqlCommand(queryResult.ToString())
+                {
+                    CommandType = CommandType.Text
+                }, 
+                null, 
+                new SqlConnection(this.connectionString)));
+        }
+
+        public int GetDatasetsCount()
+        {
+            Query query = new Query("DataSets").AsCount("data_set_id");
+
+            SqlResult queryResult = new SqlServerCompiler().Compile(query);
+
+            return Convert.ToInt32(
+                SqlExecutionInstance.ExecuteScalar(new SqlCommand(queryResult.ToString())
+                {
+                    CommandType = CommandType.Text
+                },
+                null,
+                new SqlConnection(this.connectionString)));
         }
 
         #region Private
@@ -819,7 +852,7 @@ namespace MapWebSite.Repository
                 MaximumStdDev = resultRow["maximum_std_dev"] is DBNull ? null : (decimal?)resultRow["maximum_std_dev"],
 
                 Status = (DatasetStatus)((int)resultRow["data_set_id"]),
-                PointsSource = (PointsSource)Enum.Parse(typeof(PointsSource), (string)resultRow["source_name"])                
+                PointsSource = (PointsSource)Enum.Parse(typeof(PointsSource), (string)resultRow["source_name"])
             };
 
         }
@@ -860,7 +893,7 @@ namespace MapWebSite.Repository
             return result;
         }
 
-      
+
 
 
 
