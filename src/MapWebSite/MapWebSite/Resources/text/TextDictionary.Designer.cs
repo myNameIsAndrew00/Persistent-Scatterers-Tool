@@ -270,11 +270,29 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage users.
+        ///   Looks up a localized string similar to Users management.
         /// </summary>
         public static string HMenuManageUsersDatapointsText {
             get {
                 return ResourceManager.GetString("HMenuManageUsersDatapointsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this settings page to see all users available in application and manage their accounts. Users can not be removed..
+        /// </summary>
+        public static string HMenuMUDescriptionText {
+            get {
+                return ResourceManager.GetString("HMenuMUDescriptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Users management.
+        /// </summary>
+        public static string HMenuMUDescriptionTitle {
+            get {
+                return ResourceManager.GetString("HMenuMUDescriptionTitle", resourceCulture);
             }
         }
         

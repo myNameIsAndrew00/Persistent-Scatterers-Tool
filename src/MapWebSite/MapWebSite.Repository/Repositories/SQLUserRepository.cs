@@ -16,6 +16,13 @@ namespace MapWebSite.Repository
 {
     public class SQLUserRepository : SQLBaseRepository, IUserRepository
     {
+        private static class Tables {
+            public static readonly string Users = "Users";
+            public static readonly string Datasets = "DataSets";
+            public static readonly string UsersAllowedDatasets = "UsersAllowedDatasets";
+        }
+
+
         public bool CheckUser(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return false;
@@ -762,8 +769,28 @@ namespace MapWebSite.Repository
 
         public int GetDatasetsCount()
         {
-            Query query = new Query("DataSets").AsCount("data_set_id");
+            Query query = new Query(Tables.Datasets).AsCount("data_set_id");
 
+            SqlResult queryResult = new SqlServerCompiler().Compile(query);
+
+            return Convert.ToInt32(
+                SqlExecutionInstance.ExecuteScalar(new SqlCommand(queryResult.ToString())
+                {
+                    CommandType = CommandType.Text
+                },
+                null,
+                new SqlConnection(this.connectionString)));
+        }
+
+        public int GetUserAssociatedDatasetsCount(string username)
+        {
+            IList<UserRoles> roles = this.GetUserRoles(username);
+
+            Query query = new Query($"{Tables.Datasets} as D")
+                                    .AsCount()
+                                    .LeftJoin($"{Tables.UsersAllowedDatasets} as UAD", "D.data_set_id", "UAD.dataset_id")
+                                    .WhereRaw($"(UAD.user_id = (select top 1 user_id from Users as _U where _U.username  = ?) { (roles.Contains(UserRoles.Administrator) ? "OR 1 = 1" : string.Empty) })", username);
+            
             SqlResult queryResult = new SqlServerCompiler().Compile(query);
 
             return Convert.ToInt32(

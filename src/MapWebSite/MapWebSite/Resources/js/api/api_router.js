@@ -42,7 +42,10 @@ export const endpoints = {
         CheckDatasetExistance: applicationApiUrl + '/settings/CheckDatasetExistance',
         UploadGeoserverLayer: applicationApiUrl + '/settings/UploadGeoserverLayer',
         GetUsers: applicationApiUrl + '/settings/GetUsers',
-        GetUserDatasets: applicationApiUrl + '/settings/GetUserDatasets'
+        GetUserDatasets: applicationApiUrl + '/settings/GetUserDatasets',
+        GetUserAssociatedDatasetsCount: applicationApiUrl + '/settings/GetUserAssociatedDatasetsCount',
+        AddDatasetToUser: applicationApiUrl + '/settings/AddDatasetToUser',
+        RemoveDatasetFromUser: applicationApiUrl + '/settings/RemoveDatasetFromUser'
     },
     LoginApi: {
         ValidateUsername: applicationApiUrl + '/LoginApi/ValidateUsername',

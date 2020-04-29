@@ -119,9 +119,13 @@ create table UsersAllowedDatasets
 	 user_id int not null,
 	 dataset_id int not null,
 
+ 	 unique nonclustered(user_id,dataset_id),
+
 	 primary key(user_allowed_dataset_id),
 	 foreign key(user_id) references Users(user_id),
-	 foreign key(dataset_id) references DataSets(data_set_id)
+	 foreign key(dataset_id) references DataSets(data_set_id),
+	 
+	 
   )
 
 create table ColorPalettesStatuses(

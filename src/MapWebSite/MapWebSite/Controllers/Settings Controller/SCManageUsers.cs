@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using MapWebSite.Types;
 using System.Net.Mime;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace MapWebSite.Controllers
 {
@@ -43,7 +44,8 @@ namespace MapWebSite.Controllers
                 dataset.ID,
                 dataset.Username,
                 Status = dataset.Status.GetEnumString(),
-                dataset.IsValid
+                dataset.IsValid,
+                Source = dataset.PointsSource.ToString()
             }); ;
 
             var response = new HttpResponseMessage();
@@ -53,6 +55,55 @@ namespace MapWebSite.Controllers
             return response;
         }
 
+        [HttpGet]
+        public HttpResponseMessage GetUserAssociatedDatasetsCount(string username)
+        {
+            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+
+            var datasetsCount = new { count = handler.GetUsersAssociatedDatasetsCount(username) };
+
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent(datasetsCount.JSONSerialize());
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            return response;
+        }
+
+        /// <summary>
+        /// Associate a dataset with a user
+        /// </summary>
+        /// <param name="data">Json object which contains 'username', 'datasetUser', 'datasetName'</param>
+        /// <returns></returns>
+        [HttpPost]        
+        public HttpResponseMessage AddDatasetToUser([FromBody] JObject data)
+        {
+            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+
+            return handler.ChangeUserAssociatedDataset(
+                        data["username"].ToString(),
+                        data["datasetName"].ToString(),
+                        data["datasetUser"].ToString(),
+                        true) ?
+                new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.OK }
+                :
+                new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.InternalServerError };
+            //todo: add a better message here
+        }
+
+        [HttpPost]
+        public HttpResponseMessage RemoveDatasetFromUser([FromBody] JObject data)
+        {
+            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+           
+            return handler.ChangeUserAssociatedDataset(
+                        data["username"].ToString(),
+                        data["datasetName"].ToString(),
+                        data["datasetUser"].ToString(),
+                        false) ?
+                new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.OK }
+                :
+                new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.InternalServerError };
+        }
 
     }
 }

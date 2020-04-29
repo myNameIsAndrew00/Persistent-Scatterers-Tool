@@ -302,6 +302,14 @@ namespace MapWebSite.Domain
             return this.userRepository.GetDataSetsFiltered(username ,filters, pageIndex, itemsPerPage);
         }
 
+        public bool ChangeUserAssociatedDataset(string username ,string datasetName, string datasetUsername, bool add)
+        {
+            //TODO: handle errors or do more checks if needed
+            return add ? this.userRepository.AddPointsDatasetToUser(datasetName, datasetUsername, username)
+                       : this.userRepository.RemovePointsDatasetFromUser(datasetName, datasetUsername, username);
+        }
+
+
         public IEnumerable<User> GetUsers(IEnumerable<Tuple<UserFilters, string>> filters, int pageIndex = 0, int itemsPerPage = 10)
         {
             return this.userRepository.GetUsersFiltered(filters, pageIndex, itemsPerPage);
@@ -310,6 +318,11 @@ namespace MapWebSite.Domain
         public int GetUsersCount()
         {
             return this.userRepository.GetUsersCount();           
+        }
+
+        public int GetUsersAssociatedDatasetsCount(string username)
+        {
+            return this.userRepository.GetUserAssociatedDatasetsCount(username);
         }
 
 

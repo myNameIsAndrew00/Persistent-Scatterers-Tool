@@ -40,7 +40,7 @@ namespace MapWebSite.Controllers
                     return View((string)"Settings Content/SelectGeoserverSource");
                 case SettingsController.Page.ManageUsers:
                     return View((string)"Settings Content/ManageUsers", 
-                        new Tuple<int,int>(new DatabaseInteractionHandler().GetUsersCount(), 15));
+                        new Tuple<int,int>(new DatabaseInteractionHandler().GetUsersCount(), 10));
                 default:
                     return View((string)"Settings Content/ColorPicker");
             }

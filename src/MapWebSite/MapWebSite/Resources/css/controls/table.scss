@@ -1,10 +1,16 @@
 ﻿@import '../general/colors.scss';
 @import '../general/dimensions.scss';
 
+$defaultTableWidth: 450px;
+
 .default-table {
     width: 95%;
     margin: 15px;
     margin-top: 0;
+    display: block;
+    overflow: auto;
+    height: $defaultTableWidth;
+
     background: get_color(lightGray);
     table-layout: fixed;
     border-bottom-left-radius: $general_border_radius;
@@ -53,6 +59,12 @@
     margin: 50px;
     padding: 10px;
 
+    .text-button {
+        color: get_color(black);
+        width: 60px;
+        padding: 0;
+    }
+
     .command-header {
         border-top-left-radius: $general_border_radius;
         border-top-right-radius: $general_border_radius;
@@ -68,9 +80,10 @@
             margin-right: auto;
             margin-bottom: 0;
             margin-left: 15px;
-            padding: 10px; 
+            padding: 10px;
             font-variant: petite-caps;
         }
+
 
         button {
             padding: 8px;

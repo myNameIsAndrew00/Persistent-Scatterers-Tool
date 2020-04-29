@@ -509,6 +509,12 @@
     <value>Layer not found</value>
   </data>
   <data name="HMenuManageUsersDatapointsText" xml:space="preserve">
-    <value>Manage users</value>
+    <value>Users management</value>
+  </data>
+  <data name="HMenuMUDescriptionText" xml:space="preserve">
+    <value>Use this settings page to see all users available in application and manage their accounts. Users can not be removed.</value>
+  </data>
+  <data name="HMenuMUDescriptionTitle" xml:space="preserve">
+    <value>Users management</value>
   </data>
 </root>

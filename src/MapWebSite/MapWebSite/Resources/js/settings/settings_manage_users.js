@@ -16,7 +16,8 @@ var selectedUser = '';
 
 const constants = {
 	id: {
-		manageUsersContainer: '#manage-users-container',
+		manageUsersContainerId: '#manage-users-container',
+		manageDatasetsContainerId: '#manage-datasets-container',
 		usersTableId: '#manage-users-table',
 		datasetsTableId: '#manage-datasets-table',
 		usersTablePagesCount: '#pagesCount',
@@ -25,12 +26,14 @@ const constants = {
 	class: {
 		tableClass: 'default-table',
 		tableContainerClass: 'default-table-container box',
-		formClass: 'message-overlay-container edit-datasets-form'
+		formClass: 'message-overlay-container edit-datasets-form',
+		defaultInputClass: 'default-input-gray'
 	},
 	resources: {
 		addIcon: '/Resources/resources/icons/add_black_icon.svg',
 		editIcon: '/Resources/resources/icons/edit_black_icon.svg',
-		deleteIcon: '/Resources/resources/icons/delete_black_icon.svg'
+		deleteIcon: '/Resources/resources/icons/delete_black_icon.svg',
+		exitIcon: '/Resources/resources/icons/close_icon.svg'
 	},
 	strings: {
 		usersTableTitle: 'Application users',
@@ -42,28 +45,28 @@ window.drawTables = function drawTables() {
 
 	usersTableDrawer = new TableDrawer({
 		title: constants.strings.usersTableTitle,
-		container: constants.id.manageUsersContainer,
+		container: constants.id.manageUsersContainerId,
 		class: constants.class.tableClass,
 		tableContainerClass: constants.class.tableContainerClass,
 		id: constants.id.usersTableId,
 		itemsPerPage: parseInt($(constants.id.itemsPerPage).val()),
-		rowDrawingType: RowDrawingTypes.raw,		
+		rowDrawingType: RowDrawingTypes.raw,
 		rowDrawingRules: [{
-			drawingType: ColumnDrawingTypes.raw,			 
+			drawingType: ColumnDrawingTypes.raw,
 			columnName: 'Username'
 		},
 		{
-			drawingType: ColumnDrawingTypes.raw,			 
+			drawingType: ColumnDrawingTypes.raw,
 			columnName: 'FirstName',
 			displayName: 'First name'
 		},
 		{
-			drawingType: ColumnDrawingTypes.raw,			 
+			drawingType: ColumnDrawingTypes.raw,
 			columnName: 'LastName',
 			displayName: 'Last name'
 		},
 		{
-			drawingType: ColumnDrawingTypes.raw,			 
+			drawingType: ColumnDrawingTypes.raw,
 			columnName: 'Email'
 		},
 		{
@@ -76,91 +79,26 @@ window.drawTables = function drawTables() {
 					selectedUser = columnValue.Username;
 					drawDatasetsTable();
 				});
-			
+
 				return ($('<td></td>').append(displayDatasetsButton));
 			},
 			width: 10,
 			columnName: 'Datasets'
 		}
-		],	
-		dataSourceCallback: function (pageIndex, itemsPerPage, tableCallback) {
-			Router.Get(endpoints.Settings.GetUsers,
-				{
-					pageIndex,
-					itemsPerPage
-				},
-				tableCallback
-			);
-		}
-	});
-
-	datapointsTableDrawer = new TableDrawer({
-		container: constants.id.manageUsersContainer,
-		title: constants.strings.datasetTableTitle,
-		editFormContainer: settingsConstants.id.settingsOverlay,
-		class: constants.class.tableClass,
-		tableContainerClass: constants.class.tableContainerClass,
-		id: constants.id.datasetsTableId,
-		itemsPerPage: parseInt($(constants.id.itemsPerPage).val()),
-		rowDrawingType: RowDrawingTypes.raw,
-		commandHeader: {
-			addButtonIcon: constants.resources.addIcon ,
-			editButtonIcon: constants.resources.editIcon,
-			deleteButtonIcon: constants.resources.deleteIcon
-		},	
-		rowDrawingRules: [{
-			drawingType: ColumnDrawingTypes.raw,
-			columnName: 'Name'
-		},
-		{
-			drawingType: ColumnDrawingTypes.raw,
-			columnName: 'Username'
-		},
-		{
-			drawingType: ColumnDrawingTypes.raw,
-			columnName: 'Status',
-			ignoreEdit: true
-		},
-		{
-			drawingType: ColumnDrawingTypes.raw,
-			columnName: 'IsValid',
-			displayName: 'Valid',
-			width: 8,
-			ignoreEdit: true
-		}
 		],
-		dataSourceCallback: function (pageIndex, itemsPerPage, tableCallback) {
-			Router.Get(endpoints.Settings.GetUserDatasets,
-				{
-					username: selectedUser,
-					pageIndex,
-					itemsPerPage
-				},
-				tableCallback
-			);
-		},
-		deleteRowCallback: function (dataItem, responseCallback) {
-			responseCallback({ isValid: true });
-		},
-		addRowCallback: function (dataItem, responseCallback) {
-			console.log(dataItem);
-			responseCallback({ isValid: true });
-		},
-		updateRowCallback: function (dataItem, responseCallback) {
-			console.log(dataItem);
-			responseCallback({ isValid: true });
-		},
-		form: {
-			class: constants.class.formClass
-		},
-		preOpenEditFormCallback: function (continueCallback) {
-			DisplayOverlay($(''));
-			continueCallback();
-		},
-		postCloseEditFormCallback: function (continueCallback) {
-			HideOverlay(false);
-			continueCallback();
-		},
+		dataSourceCallback: function (pageIndex, itemsPerPage) {
+			return new Promise(function (fullfill, reject) {
+				Router.Get(endpoints.Settings.GetUsers,
+					{
+						pageIndex,
+						itemsPerPage
+					},
+					function (data) {
+						fullfill(data);
+					}
+				);
+			});
+		}
 	});
 
 	Router.Get(endpoints.Settings.GetUsers,
@@ -175,15 +113,125 @@ window.drawTables = function drawTables() {
 }
 
 function drawDatasetsTable() {
-	Router.Get(endpoints.Settings.GetUserDatasets,
+	if (datapointsTableDrawer == null)
+		datapointsTableDrawer = new TableDrawer({
+			title: constants.strings.datasetTableTitle,
+			container: constants.id.manageDatasetsContainerId,
+			editFormContainer: settingsConstants.id.settingsOverlay,
+			class: constants.class.tableClass,
+			tableContainerClass: constants.class.tableContainerClass,
+			id: constants.id.datasetsTableId,
+			itemsPerPage: parseInt($(constants.id.itemsPerPage).val()),
+			rowDrawingType: RowDrawingTypes.raw,
+			commandHeader: {
+				addButtonIcon: constants.resources.addIcon,
+				editButtonIcon: constants.resources.editIcon,
+				deleteButtonIcon: constants.resources.deleteIcon
+			},
+			rowDrawingRules: [{
+				drawingType: ColumnDrawingTypes.raw,
+				columnName: 'Name'
+			},
+			{
+				drawingType: ColumnDrawingTypes.raw,
+				columnName: 'Username'
+			},
+			{
+				drawingType: ColumnDrawingTypes.raw,
+				columnName: 'Status',
+				ignoreEdit: true
+			},
+			{
+				drawingType: ColumnDrawingTypes.raw,
+				columnName: 'Source',
+				ignoreEdit: true
+			},
+			{
+				drawingType: ColumnDrawingTypes.raw,
+				columnName: 'IsValid',
+				displayName: 'Valid',
+				width: 1,
+				ignoreEdit: true
+			}
+			],
+			dataSourceCallback: function (pageIndex, itemsPerPage) {
+				return new Promise(function (fullfil, _) {
+					Router.Get(endpoints.Settings.GetUserDatasets,
+						{
+							username: selectedUser,
+							pageIndex,
+							itemsPerPage
+						},
+						function (data) {
+							fullfil(data)
+						}
+					);
+				});
+			},
+			deleteRowCallback: function (dataItem) {
+				return new Promise(function (fullfil, _) {
+					Router.Post(endpoints.Settings.RemoveDatasetFromUser,
+						{
+							username: selectedUser,
+							datasetName: dataItem.Name,
+							datasetUser: dataItem.Username
+						},
+						function (data) {
+							fullfil({ isValid: true });
+						}
+					);
+				});
+			},
+			addRowCallback: function (dataItem) {
+				return new Promise(function (fullfil, _) {
+					Router.Post(endpoints.Settings.AddDatasetToUser,
+						{
+							username: selectedUser,
+							datasetName: dataItem.Name,
+							datasetUser: dataItem.Username
+						},
+						function (data) {
+							fullfil({ isValid: true });
+						}
+					);
+				});
+			},
+			form: {
+				class: constants.class.formClass,
+				closeButtonIcon: constants.resources.exitIcon,
+				textInputClass: constants.class.defaultInputClass
+			},
+			preOpenEditFormCallback: function () {
+				DisplayOverlay($(''));
+			},
+			postCloseEditFormCallback: function () {
+				HideOverlay(false);
+			},
+		});
+
+	Router.Get(endpoints.Settings.GetUserAssociatedDatasetsCount,
 		{
-			username: selectedUser,
-			pageIndex: 0,
-			itemsPerPage: 100
+			username: selectedUser
 		},
-		function (datasets) {
-			datapointsTableDrawer.Clear();
-			datapointsTableDrawer.Draw(datasets, 1);
+		function (datasetsCountResult) {
+			const itemsPerPage = parseInt($(constants.id.itemsPerPage).val());
+			Router.Get(endpoints.Settings.GetUserDatasets,
+				{
+					username: selectedUser,
+					pageIndex: 0,
+					itemsPerPage
+				},
+				function (datasets) {
+					datapointsTableDrawer.ReplaceProperties({ title: (constants.strings.datasetTableTitle + ` (${selectedUser})`) });
+					//datapointsTableDrawer.Clear();
+					datapointsTableDrawer.Draw(datasets,
+						(datasetsCountResult.count / itemsPerPage) + (datasetsCountResult.count % itemsPerPage == 0 ? 0 : 1));
+
+					$(constants.id.manageDatasetsContainerId)[0].scrollIntoView({
+						behavior: "smooth", // or "auto" or "instant"
+						block: "end"
+					});
+				});
 		}
 	);
 }

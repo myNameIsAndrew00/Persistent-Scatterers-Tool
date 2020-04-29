@@ -73,6 +73,13 @@ namespace MapWebSite.Core.Database
         #region Data points related
 
         /// <summary>
+        /// Returns the number of datasets available for a user
+        /// </summary>
+        /// <param name="username">Username of the user</param>
+        /// <returns>An integer representing available datasets count</returns>
+        int GetUserAssociatedDatasetsCount(string username);
+
+        /// <summary>
         /// Use this method to associate a points dataset with a user
         /// </summary>
         /// <param name="datasetName">Name of the dataset</param>
@@ -108,7 +115,7 @@ namespace MapWebSite.Core.Database
         /// <returns>Returns the id of the dataset which was inserted or -1 if operation fails</returns>
         int RaiseToGeoserverDataset(int datasetId, string apiUrl);
 
-    
+
         /// <summary>
         /// Get the id of a dataset
         /// </summary>
@@ -143,7 +150,7 @@ namespace MapWebSite.Core.Database
 
         IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
 
-        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);      
+        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
 
         int GetDatasetsCount();
         /// <summary>
@@ -171,7 +178,7 @@ namespace MapWebSite.Core.Database
         /// </summary>
         /// <param name="geoserverDatasetId">The id of the geoserver dataset</param>
         /// <returns>List of tuples, first item of tuple represents user username and the second item, its color map</returns>
-        IEnumerable<Tuple<string,ColorMap>> GetGeoserverColorMaps(int geoserverDatasetId);
+        IEnumerable<Tuple<string, ColorMap>> GetGeoserverColorMaps(int geoserverDatasetId);
 
 
         string GetColorMapSerialization(string username, string paletteName);

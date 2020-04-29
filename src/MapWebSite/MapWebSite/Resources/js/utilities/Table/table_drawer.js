@@ -19,12 +19,19 @@ const constants = {
 		checkboxColumn: 'checkbox',
 		paginationButtons: 'pagination-buttons',
 		commandHeader: 'command-header',
+		textButton: 'text-button',
 		buttonSelected: 'button-selected',
-		title: 'title'
+		title: 'title',
+		editForm: 'edit-form',
+		editFormCloseButton: 'close-button',
+		editFormFinishButon: 'finish-button'
 	}
 }
 
+
+
 export class TableDrawer {
+
 	constructor(properties) {
 		this.properties = properties;
 
@@ -38,10 +45,49 @@ export class TableDrawer {
 		this.selectedIndexes = [];
 		//handles the table data model
 		this.data = [];
+
+
+		this.drawTable();
+	}
+
+	Clear() {
+		this.removeRows();
+	}
+
+	Remove() {
+		$(this.properties.container).empty();
+	}
+
+	ReplaceProperties(properties) {
+		var self = this;
+		$.each(properties, function (key, value) {
+			self.properties[key] = properties[key];
+		});
+
+		this.Remove();
+		this.drawTable();
+	}
+
+	Draw(data, pagesCount) {
+		this.data = data;
+		this.currentPage = 0;
+
+		this.appendRows();
+
+		if (pagesCount != undefined && pagesCount != null)
+			this.properties.pagesCount = pagesCount;
+
+		//append buttons to buttons container
+		this.appendPaginationButtons(true);
+	}
+
+	/** private region **/
+
+	drawTable() {
 		//handles the container of table 
 		this.tableContainer = $("<div></div>")
 			.addClass(this.properties.tableContainerClass);
-		this.tableContainer.id = properties.id;
+		this.tableContainer.id = this.properties.id;
 
 		//handle the table 
 		this.table = $("<table></table>")
@@ -68,81 +114,82 @@ export class TableDrawer {
 		$(this.properties.container).append(this.tableContainer);
 	}
 
-	Clear() {
-		this.removeRows();
+	/**
+	 * Use this method to draw a icon into a button
+	 * @param {any} button The button which must be filled
+	 * @param {any} path Path to the svg file which will provide the icon
+	 * @param {any} text Textplaceholder if path is undefined
+	 */
+	drawButtonIcon(button, path, text) {
+		if (path === undefined) {
+			button.append(text);
+			button.addClass(constants.class.textButton);
+			return;
+		}
+		var svg = $('<object>');
+		svg.attr('data', path);
+		svg.attr('type', 'image/svg+xml');
+
+		button.append(svg);
 	}
-
-	Remove() {
-		$(this.properties.container).remove(this.tableContainer);
-	}
-
-	ReplaceProperties(properties) {
-		var self = this;
-		$.each(this.properties, function (key, value) {
-			self.properties[key] = properties[key];
-		});
-	}
-
-	Draw(data, pagesCount) {
-		this.data = data;
-
-		this.appendRows();
-
-		if (pagesCount != undefined && pagesCount != null)
-			this.properties.pagesCount = pagesCount;
-
-		//append buttons to buttons container
-		this.appendPaginationButtons(true);
-	}
-
-	/** private region **/
-
-
 
 	appendCommandHeader() {
 		var self = this;
 
-		function drawButtonIcon(button, path) {
-			var svg = $('<object>');
-			svg.attr('data', path);
-			svg.attr('type', 'image/svg+xml');
-
-			button.append(svg);
-		}
 
 		function drawAddButton() {
 			var button = $('<button>');
-	
+
 			button.click(function () {
 				self.drawEditForm(null,
 					function (response) {
 						if (response.isValid) {
-							self.properties.addRowCallback(response.dataItem, function (validationResult) {
-								if (validationResult.isValid === true) {
-									self.closeEditForm();
-									self.redraw();
-								}
-								//else validationResult.message
-							})
+							$.when(self.properties.addRowCallback(response.dataItem)).then(
+								function (validationResult) {
+									if (validationResult.isValid === true) {
+										self.closeEditForm();
+										self.redraw();
+									}
+									//else validationResult.message
+								});
 						}
 						else alert('nope');
 					}
 				);
 			});
 
-			drawButtonIcon(button, self.properties.commandHeader.addButtonIcon);
+			self.drawButtonIcon(button, self.properties.commandHeader.addButtonIcon, 'Add');
 			self.commandHeaderContainer.append(button);
 		}
 
 		function drawDeleteButton() {
-			var button = $('<button>'); 
+			var button = $('<button>');
 
-			drawButtonIcon(button, self.properties.commandHeader.deleteButtonIcon);		
+			button.click(function () {
+				{
+					var deletedCount = 0;
+
+					for (var i = 0; i < self.selectedIndexes.length; i++)
+						$.when(self.properties.deleteRowCallback(self.data[self.selectedIndexes[i]])).then(
+							function (validationResult) {
+								deletedCount++;
+								if (deletedCount === self.selectedIndexes.length) {
+									self.closeEditForm();
+									self.redraw();
+								}
+								//else validationResult.message
+							});
+
+				}
+
+			});
+
+			self.drawButtonIcon(button, self.properties.commandHeader.deleteButtonIcon, 'Delete');
 			self.commandHeaderContainer.append(button);
 		}
 
 		function drawUpdateButton() {
-			var button = $('<button>'); 
+			var button = $('<button>');
 
 			button.click(function () {
 				if (self.selectedIndexes.length == 0)
@@ -150,15 +197,15 @@ export class TableDrawer {
 
 				self.drawEditForm(self.data[self.selectedIndexes[0]],
 					function (response) {
-
 						if (response.isValid) {
-							self.properties.updateRowCallback(response.dataItem, function (validationResult) {
-								if (validationResult.isValid === true) {
-									self.closeEditForm();
-									self.redraw();
-								}
-								//else validationResult.message
-							})
+							$.when(self.properties.updateRowCallback(response.dataItem)).then(
+								function (validationResult) {
+									if (validationResult.isValid === true) {
+										self.closeEditForm();
+										self.redraw();
+									}
+									//else validationResult.message
+								});
 						}
 						else alert('nope');
 
@@ -167,14 +214,14 @@ export class TableDrawer {
 				);
 			});
 
-			drawButtonIcon(button, self.properties.commandHeader.editButtonIcon);		
+			self.drawButtonIcon(button, self.properties.commandHeader.editButtonIcon, 'Edit');
 			self.commandHeaderContainer.append(button);
 		}
 
 		function drawTitle() {
 			var title = $('<h5></h5>')
-							.addClass(constants.class.title)
-							.html(self.properties.title);
+				.addClass(constants.class.title)
+				.html(self.properties.title);
 
 			self.commandHeaderContainer.append(title);
 		}
@@ -256,7 +303,7 @@ export class TableDrawer {
 		var index = 0;
 
 		function drawRow(dataItem) {
-		
+
 			function drawColumn(drawingRule) {
 				var column = null;
 				switch (drawingRule.drawingType) {
@@ -276,10 +323,10 @@ export class TableDrawer {
 			function drawRowCheckbox() {
 				var input = $('<input>');
 				var innerIndex = index;
-				input.attr('type', 'checkbox');			
+				input.attr('type', 'checkbox');
 
 				input.click(function () {
-					self.selectItem(innerIndex, ! ($(this).is(':checked')));
+					self.selectItem(innerIndex, !($(this).is(':checked')));
 				});
 
 				var column = $('<td></td>');
@@ -315,7 +362,20 @@ export class TableDrawer {
 	redraw() {
 		var self = this;
 
-		this.properties.dataSourceCallback(
+		$.when(this.properties.dataSourceCallback(
+			this.currentPage,
+			this.properties.itemsPerPage)).then(
+				function (data) {
+					self.data = data;
+					self.selectedIndexes = [];
+
+
+					self.removeRows();
+					self.appendRows();
+					self.appendPaginationButtons(true);
+				}
+			)
+		/*this.properties.dataSourceCallback(
 			this.currentPage,
 			this.properties.itemsPerPage,
 			function (data) {
@@ -326,7 +386,7 @@ export class TableDrawer {
 				self.appendRows();
 				self.appendPaginationButtons(true);
 			}
-		);
+		);*/
 
 	}
 
@@ -340,7 +400,7 @@ export class TableDrawer {
 	selectItem(itemIndex, unselect) {
 		if (unselect === true)
 			this.selectedIndexes = this.selectedIndexes.filter(index => index != itemIndex);
-		else this.selectedIndexes.push(itemIndex);		 
+		else this.selectedIndexes.push(itemIndex);
 	}
 
 	drawEditForm(dataItem, editAction) {
@@ -348,8 +408,20 @@ export class TableDrawer {
 
 		function drawForm() {
 			var form = $('<form></form>')
-				.addClass(self.properties.form.class);
-			var closeButton = $('<button>');
+				.addClass(self.properties.form.class)
+				.addClass(constants.class.editForm);
+			var title = $('<h5></h5>');
+			var finishButton = $('<button>')
+				.addClass(constants.class.editFormFinishButon);
+			var closeButton = $('<button>')
+				.addClass(constants.class.editFormCloseButton);
+
+			self.drawButtonIcon(finishButton, self.properties.form.finishButtonIcon, 'Finish');
+			self.drawButtonIcon(closeButton, self.properties.form.closeButtonIcon, 'Close');
+			title.html(dataItem == null ?
+				(self.properties.form.addTitle === undefined ? 'Add item' : self.properties.form.addTitle) :
+				(self.properties.form.editTitle === undefined ? 'Edit item' : self.properties.form.editTitle)
+			);
 
 			function createInput(drawingRule) {
 				if (drawingRule.ignoreEdit === true) return;
@@ -358,8 +430,12 @@ export class TableDrawer {
 				container.addClass(constants.class.inputGroup);
 
 				var label = $('<label></label>');
+				//todo: here can be other things that input. Make a builder for this
 				var input = $('<input>');
 				input.attr('name', drawingRule.columnName);
+				if (!(self.properties.form.textInputClass === undefined))
+					input.addClass(self.properties.form.textInputClass);
+
 
 				if (dataItem != null)
 					input.val(dataItem[drawingRule.columnName]);
@@ -371,7 +447,7 @@ export class TableDrawer {
 				form.append(container);
 			}
 
-			closeButton.click(function () {
+			finishButton.click(function () {
 				event.preventDefault();
 				function parseFormObject(formObject) {
 					var item = {};
@@ -381,21 +457,29 @@ export class TableDrawer {
 					return item;
 				}
 				var formObject = $(form).serializeArray();
-				
+
 				editAction({
 					isValid: true,
 					dataItem: parseFormObject(formObject)
 				});
 			});
 
+			closeButton.click(function () {
+				self.closeEditForm();
+			});
+
+
+
+			form.append(title);
 			self.properties.rowDrawingRules.forEach(createInput);
 
+			form.append(finishButton);
 			form.append(closeButton);
 			$(self.properties.editFormContainer).append(form);
 		}
 
 		if (!(self.properties.preOpenEditFormCallback === undefined))
-			self.properties.preOpenEditFormCallback(drawForm);
+			$.when(self.properties.preOpenEditFormCallback()).then(drawForm);
 		else drawForm();
 		//edit action parameter is an object with isValid representing if action is valid
 		//and dataItem the updated item
@@ -406,7 +490,7 @@ export class TableDrawer {
 	closeEditForm() {
 		var self = this;
 		if (!(self.properties.postCloseEditFormCallback === undefined))
-			self.properties.postCloseEditFormCallback(function () {
+			$.when(self.properties.postCloseEditFormCallback()).then(function () {
 				$(self.properties.editFormContainer).html('');
 			});
 		else $(self.properties.editFormContainer).html('');
@@ -415,7 +499,7 @@ export class TableDrawer {
 
 /** Sample of use:
  * TableDrawer drawer = new TableDrawer({
-			container: containerId,							--container which contains the table		
+			container: containerId,							--container which contains the table
 			title: 'table title',
 			editFormContainer: editFormContainerId,			--container which contains the form which will be opened when a row is update/add
 			id: 'id'										--id of the table
@@ -428,7 +512,7 @@ export class TableDrawer {
 				addButtonIcon : 'path',
 				editButtonIcon: 'path',
 				deleteButtonIcon: 'path'
-			},			
+			},
 			rowDrawingRules: [{								-- used only if drawingType is 'raw' for drawing rows
 			   drawingType: 'raw'/'function'
 			   draw: 'label'/'button',
@@ -441,20 +525,23 @@ export class TableDrawer {
 				}
 			],
 
-			deleteRowCallback: function(dataItem, responseCallback(			 --callback which is called when 'delete' is pressed
-						param = { isValid:, message: }
-			) ),
-			addRowCallback: function(dataItem, responseCallback(param) ),    --callback which is called when add is pressed
-			updateRowCallback: function(dataItem, responseCallback(param) ), --callback which is called when update is pressed
+			deleteRowCallback: function(dataItem)	,				--callback which is called when 'delete' is pressed; return = { isValid:, message: }
+			addRowCallback: function(dataItem ),    --callback which is called when add is pressed can return promise; return = { isValid:, message: }
+			updateRowCallback: function(dataItem ), --callback which is called when update is pressed can return promise; return = { isValid:, message: }
 
-			dataSourceCallback: function(pageIndex, itemsPerPage, tableCallback(data))  --a function which provides data for redrawing
+			dataSourceCallback: function(pageIndex, itemsPerPage)	--a function which provides data for redrawing returns data or a promise to return data
 			},
 
-			editForm : {												--edit form properties
-				class: 'class'
+			form : {												--edit form properties
+				class: 'class',
+				closeButtonIcon: 'path',					--icon for close button
+				finishButtonIcon: 'path',					--icon for finish button
+				addTitle: 'string',							--title for add
+				editTitle: 'string'							--title for edit
+				textInputClass: 'string'
 			},
-			preOpenEditFormCallback: function(continueCallback());		--trigers befor edit form is opened
-			postCloseEditFormCallback: function(continuecallback());	--trigers after the edit form callback is closed
+			preOpenEditFormCallback: function();		--trigers befor edit form is opened
+			postCloseEditFormCallback: function();		--trigers after the edit form callback is closed
 			);
 drawer.Draw(data, pagesCount);
 

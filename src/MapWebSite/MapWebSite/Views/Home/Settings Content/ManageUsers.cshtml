@@ -1,13 +1,24 @@
-﻿@model Tuple<int,int>
-@{ 
+﻿@model Tuple<int, int>
+@{
     Layout = null;
 }
- 
-<div id="manage-users-container">
-    @Html.Hidden("itemsPerPage", Model.Item2)
-    @Html.Hidden("pagesCount", Model.Item1 / Model.Item2 + (Model.Item1 % Model.Item2 > 0 ? 1 : 0))
+
+<div class="users-management-container">
+
+    <div class="description-container">
+        <h1>@TextDictionary.HMenuMUDescriptionTitle</h1>
+        <small>@TextDictionary.HMenuMUDescriptionText</small>
+    </div>
+
+    <div id="manage-users-container">
+        @Html.Hidden("itemsPerPage", Model.Item2)
+        @Html.Hidden("pagesCount", Model.Item1 / Model.Item2 + (Model.Item1 % Model.Item2 > 0 ? 1 : 0))
+    </div>
+    <div id="manage-datasets-container">
+    </div>
 </div>
+
 <script>
     getScript('#settings-layer', '/Resources/js/settings/settings_manage_users.js');
-    if (!( drawTables === undefined )) drawTables();
+    if (!(drawTables === undefined)) drawTables();
 </script>
