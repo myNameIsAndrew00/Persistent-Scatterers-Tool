@@ -63,6 +63,8 @@ namespace MapWebSite.Authentication
             this.FirstName = "Anonymous";
             this.LastName = "Anonymous";
             this.Username = "Anonymous";
+            this.Email = "Anonymous";
+            this.ConfirmedEmail = true;            
         }
     }
 }

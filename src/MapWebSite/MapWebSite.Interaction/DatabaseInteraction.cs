@@ -296,10 +296,19 @@ namespace MapWebSite.Domain
             return this.userRepository.GetColorMapsFiltered(filters, pageIndex, itemsPerPage);
         }
 
-        public IEnumerable<PointsDataSetHeader> GetDataSets(string username, IEnumerable<Tuple<DataSetsFilters,string>> filters, int pageIndex = 0, int itemsPerPage = 10)
+        /// <summary>
+        /// Returns datasets available for a user
+        /// </summary>
+        /// <param name="username">Username of the user which require data</param>
+        /// <param name="ignoreUsername">A parameter which can be set to ignore the user association with required datasets</param>
+        /// <param name="filters">Filter applied for searching</param>
+        /// <param name="pageIndex">Index of the page requested</param>
+        /// <param name="itemsPerPage">Items count per page</param>
+        /// <returns>An array of data sets headers</returns>
+        public IEnumerable<PointsDataSetHeader> GetDataSets(string username, bool ignoreUsername, IEnumerable<Tuple<DataSetsFilters,string>> filters, int pageIndex = 0, int itemsPerPage = 10)
         {
             //TODO: handle errors or do more checks if needed
-            return this.userRepository.GetDataSetsFiltered(username ,filters, pageIndex, itemsPerPage);
+            return this.userRepository.GetDataSetsFiltered(username, ignoreUsername, filters, pageIndex, itemsPerPage);
         }
 
         public bool ChangeUserAssociatedDataset(string username ,string datasetName, string datasetUsername, bool add)

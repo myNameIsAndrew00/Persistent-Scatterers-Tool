@@ -385,7 +385,7 @@ $main_menu_width: 600px;
 
         .buttons-group-hidden {
             visibility: hidden; 
-            display: block ruby;
+            display: flex;
             width: 0;
             margin: 0;
             padding: 0;

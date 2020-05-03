@@ -32,6 +32,8 @@ export class CassandraPointsSectionsContainer {
         for (var i = 0; i < SectionsRowsCount; i++)
             for (var j = 0; j < SectionsColumnsCount; j++)
                 this.sections[sectionsCount++] = new PointsSectionHandler(i, j, map, this.cache);
+
+        HubRouterInstance.EnableConnection();
     }
 
     LoadPoints() {
@@ -79,7 +81,10 @@ class PointsSectionHandler {
         }); */
 
 
-        this.hubRouter.SetCallback('ProcessPoints', function (receivedInfo) { caller.processPoints(receivedInfo, false) });
+        this.hubRouter.SetCallback('ProcessPoints', function (receivedInfo) {
+            console.log('received');
+            caller.processPoints(receivedInfo, false)
+        });
        
         this.hubRouter.SetCallback('PointsProcessedNotification', PointsProcessedNotificationHandler);
 

@@ -1,4 +1,5 @@
 ﻿@using MapWebSite.Resources.text
+@using MapWebSite.Core.Database
 @model  MapWebSite.Domain.ViewModel.ChoseDatasetViewModel
 @{
     Layout = null;
@@ -6,19 +7,30 @@
 
 <input type="hidden" id="_use-dataset-button-text" value="@TextDictionary.HPSCDUseButton" />
 <input type="hidden" id="_preview-dataset-button-text" value="@TextDictionary.HPSCDPreviewButton" />
+<input type="hidden" id="currentDatasetIndex" value="1" />
 
-<div  
-     class="points-settings-layer-container-palette-content points-settings-layer-container-content">
+<div class="points-settings-layer-container-palette-content points-settings-layer-container-content">
+
     <div class="ps_header">
         <h4>@Html.Raw(TextDictionary.HPSCDTitleText)</h4>
-        @Html.DropDownList("filter",
-                         HtmlHelperExtensions.GetListFromEnum<MapWebSite.Core.Database.DataSetsFilters>("Source"),
-                         new { id = "datasetFilterValue", onchange = "loadMorePointsDatasets(true)" }
-                             )
+      
+        @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+        {
 
-    <input type="search" id="datasetSearchValue" placeholder="@TextDictionary.HPSCDSearchInput" onkeyup="loadMorePointsDatasets(true)" />
-    <input type="hidden" id="currentDatasetIndex" value="1" />
-</div>
+            @Html.DropDownList("filter",
+                          HtmlHelperExtensions.GetListFromEnum<DataSetsFilters>(
+                             DataSetsFilters.Source.ToString(),
+                             DataSetsFilters.IsDemo.ToString()),
+                          new { id = "datasetFilterValue", onchange = "loadMorePointsDatasets(true)" }
+                              )
+
+
+            <input type="search" id="datasetSearchValue" placeholder="@TextDictionary.HPSCDSearchInput" onkeyup="loadMorePointsDatasets(true)" />
+            
+        }
+
+    </div>
+
     <div class="ps_left" id="ps_left" onscroll="loadMorePointsDatasets(false)">
         <table>
             <tr class="table-header">
@@ -33,7 +45,7 @@
         <p>@TextDictionary.HPSCDInfoTitleText</p>
         <ul>
             <li>
-                <label class="label-header">@TextDictionary.HPSCDHeightLabel</label>       
+                <label class="label-header">@TextDictionary.HPSCDHeightLabel</label>
                 <label id="height_limit_left" class="limit left-limit">-inf</label>
                 <label>-</label>
                 <label id="height_limit_right" class="limit right-limit">inf</label>
@@ -59,4 +71,3 @@
     loadMorePointsDatasets(true);
 </script>
 
- 

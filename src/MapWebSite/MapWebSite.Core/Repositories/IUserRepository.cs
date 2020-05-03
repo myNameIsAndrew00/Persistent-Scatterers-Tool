@@ -26,8 +26,8 @@ namespace MapWebSite.Core.Database
         None = -1,
         DataSetName = 1,
         Username = 2,
-        Source = 3
-
+        Source = 3,
+        IsDemo = 4
         //todo: add State = 4
     }
 
@@ -150,7 +150,7 @@ namespace MapWebSite.Core.Database
 
         IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, DataSetsFilters filter, string filterValue, int pageIndex, int itemsPerPage);
 
-        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
+        IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, bool ignoreUsername, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
 
         int GetDatasetsCount();
         /// <summary>

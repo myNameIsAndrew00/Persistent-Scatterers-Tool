@@ -189,7 +189,7 @@ window.changeSpanColor = function changeSpanColor(newColor, spanId) {
 function showColorPicker(horizontalPosition) { 
    changeColorPickerVisibility(true);
 
-   $('#color-picker').css('left', horizontalPosition + 'px');
+   $('#color-picker').css('left', horizontalPosition - LeftMargin + 'px');
 }
 
 window.changeColorPickerVisibility = function changeColorPickerVisibility(isVisible){

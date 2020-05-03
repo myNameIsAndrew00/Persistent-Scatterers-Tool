@@ -304,13 +304,13 @@
     <comment>OverlayMF --&gt; overlay merge files</comment>
   </data>
   <data name="HPSCPPreviewButton" xml:space="preserve">
-    <value>Preview</value>
+    <value>Info</value>
   </data>
   <data name="HPSCPUseButton" xml:space="preserve">
     <value>Use</value>
   </data>
   <data name="HPSCDPreviewButton" xml:space="preserve">
-    <value>Preview</value>
+    <value>Info</value>
   </data>
   <data name="HPSCDUseButton" xml:space="preserve">
     <value>Use</value>
@@ -479,10 +479,10 @@
     <value>Templates</value>
   </data>
   <data name="HMenuCPMaxValueLabel" xml:space="preserve">
-    <value>max. value</value>
+    <value>Max. value</value>
   </data>
   <data name="HMenuCPMinValueLabel" xml:space="preserve">
-    <value>min. value</value>
+    <value>Min. value</value>
   </data>
   <data name="HMenuUseGeoserverLayerText" xml:space="preserve">
     <value>Use Geoserver layer</value>
@@ -510,6 +510,9 @@
   </data>
   <data name="HMenuManageUsersDatapointsText" xml:space="preserve">
     <value>Users management</value>
+  </data>
+  <data name="HMenuCPDisplayPercentLabel" xml:space="preserve">
+    <value>Display percent</value>
   </data>
   <data name="HMenuMUDescriptionText" xml:space="preserve">
     <value>Use this settings page to see all users available in application and manage their accounts. Users can not be removed.</value>

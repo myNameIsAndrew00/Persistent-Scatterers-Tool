@@ -67,7 +67,7 @@ namespace MapWebSite.Authentication
         public Task<User> FindByNameAsync(string username)
         {
             /*If the user is not set, it means that it was an anonymous authentication*/
-            if (string.IsNullOrEmpty(username))
+            if (string.IsNullOrEmpty(username) || username == AnonymousUser.Get.Username)
             {
                 this.user = (User)AnonymousUser.Get;
                 return Task.FromResult(this.user);

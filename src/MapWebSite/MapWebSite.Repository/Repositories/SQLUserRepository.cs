@@ -352,7 +352,7 @@ namespace MapWebSite.Repository
 
         }
 
-        public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage)
+        public IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, bool ignoreUsername, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage)
         {
             IList<UserRoles> roles = this.GetUserRoles(username);
 
@@ -377,6 +377,8 @@ namespace MapWebSite.Repository
                         return "U.username";
                     case DataSetsFilters.Source:
                         return "DS.source_name";
+                    case DataSetsFilters.IsDemo:
+                        return "DS.is_demo";
                     default:
                         return null;
                 }
@@ -390,7 +392,7 @@ namespace MapWebSite.Repository
                         query = query.WhereLike(columnName, $"%{filter.Item2}%");
                 }
 
-            query.WhereRaw($"(UAD.user_id = (select top 1 user_id from Users as _U where _U.username  = ?) { (roles.Contains(UserRoles.Administrator) ? "OR 1 = 1" : string.Empty) })", username);
+            query.WhereRaw($"(UAD.user_id = (select top 1 user_id from Users as _U where _U.username  = ?) { (roles.Contains(UserRoles.Administrator) || ignoreUsername ? "OR 1 = 1" : string.Empty) })", username);
 
             query = query.OrderByDesc("DS.data_set_id")
                 .Limit(itemsPerPage).Offset(pageIndex * itemsPerPage);

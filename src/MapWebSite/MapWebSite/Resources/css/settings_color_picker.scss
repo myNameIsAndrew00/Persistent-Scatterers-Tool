@@ -27,8 +27,7 @@ html, body {
     .color-palette-panel {
         top: 20px;
         position: relative;
-        width: $color_picker_container_width;
-        height: 185px;
+        width: $color_picker_container_width; 
         padding: $page_margin;
         margin-left: auto;
         margin-right: auto;
@@ -48,8 +47,14 @@ html, body {
 
 
         .controls {
+
+            border-right: solid 4px get_color(transparentBlack);
+
             .setting-item {
-                margin-left: 30px;                      
+                margin-left: 30px;                  
+                input{
+                    margin: 0;
+                }
             }
 
             grid-area: left;
@@ -208,7 +213,7 @@ html, body {
     background: rgb(227, 227, 227); //TODO: make color to be accesed via variable
     z-index: $principal_z_index;
     border-radius: 4px;
-    top: 680px;
+    top: 80px;
 
     .color-picker-tumb {
         content: '';

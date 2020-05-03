@@ -16,11 +16,10 @@ const sources = {
 
 
 export var PointsSectionsContainer = null;
-
+export var CurrentSource = sources.geoserver;
 //id of the selected button ( top menu, change ChosePointsSource.cshtml)
-var selectedButtonId = 'chose_points_source_cassandra';
+var selectedButtonId = 'chose_points_source_' + CurrentSource;
 
-export var CurrentSource = sources.cassandra;
 
 export function RefreshSelectPointsSourcePopup() {
 
@@ -65,5 +64,6 @@ export function ChangePointsSource(button, sourceName) {
 }
 
 window.ChangePointsSource = ChangePointsSource;
+ 
 
  

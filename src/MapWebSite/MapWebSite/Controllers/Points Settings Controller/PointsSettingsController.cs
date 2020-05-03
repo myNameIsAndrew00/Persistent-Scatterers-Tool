@@ -55,7 +55,8 @@ namespace MapWebSite.Controllers
                 DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
                 return View("~/Views/Home/Points Settings Content/ChoseDataset.cshtml",
                     new ChoseDatasetViewModel(databaseInteractionHandler.GetDataSets(
-                        RouteConfig.CurrentUser.Username,
+                        RouteConfig.CurrentUser?.Username,
+                        false,
                         new List<Tuple<DataSetsFilters, string>>()
                         {
                             new Tuple<DataSetsFilters, string>(
@@ -146,10 +147,20 @@ namespace MapWebSite.Controllers
             var databaseInteractionHandler = new DatabaseInteractionHandler();
             var response = new HttpResponseMessage();
 
+            bool isAnonymous = User.IsInRole(UserRoles.Anonymous.GetEnumString());
+
             List<Tuple<DataSetsFilters, string>> filters = buildFilters<DataSetsFilters>(Request.GetQueryNameValuePairs());
+
+            //if is anonymous, only source filter should be considered
+            if (isAnonymous)
+            {
+                filters = filters.Where(item => item.Item1 == DataSetsFilters.Source).ToList();
+                filters.Add(new Tuple<DataSetsFilters, string>(DataSetsFilters.IsDemo, "1")); 
+            }
 
             var model = databaseInteractionHandler.GetDataSets(
                     RouteConfig.CurrentUser.Username,
+                    isAnonymous,
                     filters,
                     pageIndex,
                     itemsPerPage

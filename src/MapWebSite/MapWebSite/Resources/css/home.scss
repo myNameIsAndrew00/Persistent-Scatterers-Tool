@@ -33,16 +33,3 @@ body, html {
     color: get_color(primary);
 }
 
-
-
-button:disabled {
-    background-color: gray;
-}
-
-button:disabled:hover {
-    background-color: gray;
-}
-
-input:hover, button:hover {
-    background: orange;
-}

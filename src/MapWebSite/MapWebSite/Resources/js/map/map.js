@@ -8,7 +8,7 @@ import { DisplayPointInfo, SetPointInfoData } from '../point info/point_info.js'
 import { Router, endpoints } from '../api/api_router.js';
 import { SelectedDataset } from '../points settings/chose_dataset.js';
 import { MapType } from './chose_map_type.js';
-import { PointsSectionsContainer, ChangePointsSource } from './chose_points_source.js';
+import { PointsSectionsContainer, ChangePointsSource, CurrentSource } from './chose_points_source.js';
 
 var selectedPoints = [];
 export var ProcessingEnabled = 0;
@@ -79,7 +79,8 @@ export function SetMapType(chosenType) {
 export function GoTo(latitude, longitude) {
     map.getView().animate({
         center: new ol.proj.fromLonLat([longitude, latitude], 'EPSG:3857'),
-        duration: 1000
+        duration: 1000,
+        zoom: 18
     });
 
 }
@@ -131,7 +132,7 @@ function initialisePointsRequest(evt) {
 //initialise map interactions
 
 
-ChangePointsSource(null,'cassandra');
+ChangePointsSource(null, CurrentSource);
 
 /**********************************************/
 /*this section contains context menu functions*/

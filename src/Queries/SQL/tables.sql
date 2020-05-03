@@ -91,6 +91,7 @@ create table DataSets(
 	source_name varchar(100) not null,
 	
 	status_id int,
+	is_demo bit,
 	
 	/*this fields are used for optimizations*/
 	minimum_latitude decimal(18,14), 

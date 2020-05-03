@@ -196,12 +196,15 @@ window.loadMorePointsDatasets = function loadMorePointsDatasets(resetPageIndex) 
                 var pageIndex = $(settingsLayerContainerId).find('#currentDatasetIndex')[0];
                 var filter = $(settingsLayerContainerId).find('#datasetFilterValue')[0];
 
+                const filter0 = filter === undefined ? 'None' : filter[filter.selectedIndex].value;
+                const filterValue0 = filterValue === undefined ? '' : filterValue.value;
+
                 Router.Get(
                     endpoints.PointsSettingsApi.GetDatasetsList,
                     {
                         filtersCount: 2,
-                        filter0: filter[filter.selectedIndex].value,
-                        filterValue0: filterValue.value,
+                        filter0,
+                        filterValue0,
                         filter1: 'Source',
                         filterValue1: CurrentSource,
                         pageIndex: pageIndex.value

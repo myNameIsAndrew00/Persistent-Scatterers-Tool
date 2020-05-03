@@ -16,13 +16,24 @@ class HubRouter {
     }
 
     constructor() {
+        this.enabled = false;
         this.connection = $.hubConnection();
-        this.hubProxy = this.connection.createHubProxy('DataPointsHub');
 
-        this.connection.start().done(() => {    
-            this.enabled = true;
+      
+        this.hubProxy = this.connection.createHubProxy('DataPointsHub');   
+
+        this.SetCallback('Ping', function () { console.log('Connected with success.') });
+
+      
+    }
+
+    EnableConnection() {
+        var self = this;
+
+        this.connection.start().done(() => {
+            self.hubProxy.invoke('Ping');
+            self.enabled = true;
         });
-
     }
 
     SetCallback(callbackName, callback) {

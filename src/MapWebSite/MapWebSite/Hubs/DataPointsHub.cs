@@ -60,5 +60,9 @@ namespace MapWebSite.Hubs
         }
 
       
+        public void Ping()
+        {           
+            Clients.Caller.Ping();
+        }
     }
 }

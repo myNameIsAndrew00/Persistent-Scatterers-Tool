@@ -162,7 +162,16 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to max. value.
+        ///   Looks up a localized string similar to Display percent.
+        /// </summary>
+        public static string HMenuCPDisplayPercentLabel {
+            get {
+                return ResourceManager.GetString("HMenuCPDisplayPercentLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max. value.
         /// </summary>
         public static string HMenuCPMaxValueLabel {
             get {
@@ -171,7 +180,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to min. value.
+        ///   Looks up a localized string similar to Min. value.
         /// </summary>
         public static string HMenuCPMinValueLabel {
             get {
@@ -551,7 +560,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview.
+        ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string HPSCDPreviewButton {
             get {
@@ -623,7 +632,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview.
+        ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string HPSCPPreviewButton {
             get {

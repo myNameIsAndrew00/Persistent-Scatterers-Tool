@@ -28,8 +28,13 @@
             </div>
             <div class="setting-item input-content">
                 <label for="pickerRightValue">@TextDictionary.HMenuCPMaxValueLabel</label>
-                <input class="default-input-gray" type="number" id="pickerRightValue" value="100"/>
+                <input class="default-input-gray" type="number" id="pickerRightValue" value="100" />
             </div>
+            <div class="setting-item input-content"> 
+                <label for="displayPercent">@TextDictionary.HMenuCPDisplayPercentLabel</label>
+                <input class="default-input-gray" type="checkbox" id="displayPercent" checked />
+            </div>
+
         </div>
 
         <div class="palette-templates-container">
@@ -59,40 +64,40 @@
             <label style="left:30px">0%</label>
             <label style="left:816px">100%</label>
         </div>
-    </div>
-</div>
 
-<div id="color-picker" class="color-picker color-picker-hidden">
-    <div class="color-picker-tumb"></div>
-    <div class="color-container">
-        @foreach (ColorPickerViewModel.PaletteColorsHue color in Enum.GetValues(typeof(ColorPickerViewModel.PaletteColorsHue)))
-        {
-            <table id="picker-@Html.Raw((int)color)" class="@Html.Raw(color == ColorPickerViewModel.PaletteColorsHue.Red ? "palette-active" : "")">
-                @{
-                    string[] colors = Model.GetColors(color).ToArray();
+        <div id="color-picker" class="color-picker color-picker-hidden">
+            <div class="color-picker-tumb"></div>
+            <div class="color-container">
+                @foreach (ColorPickerViewModel.PaletteColorsHue color in Enum.GetValues(typeof(ColorPickerViewModel.PaletteColorsHue)))
+                {
+                    <table id="picker-@Html.Raw((int)color)" class="@Html.Raw(color == ColorPickerViewModel.PaletteColorsHue.Red ? "palette-active" : "")">
+                        @{
+                            string[] colors = Model.GetColors(color).ToArray();
 
-                    for (int i = 0; i < 2; i++)
-                    {
-                        <tr>
-                            @for (int j = 0; j < colors.Length / 2; j++)
+                            for (int i = 0; i < 2; i++)
                             {
-                                <th onclick="changeSpanColor('@colors[8 * i + j]')" style="background: @colors[8 * i + j]" />
+                                <tr>
+                                    @for (int j = 0; j < colors.Length / 2; j++)
+                                    {
+                                        <th onclick="changeSpanColor('@colors[8 * i + j]')" style="background: @colors[8 * i + j]" />
+                                    }
+                                </tr>
                             }
-                        </tr>
-                    }
+                        }
+                    </table>
                 }
-            </table>
-        }
-        <div class="main-color-list">
-            @foreach (ColorPickerViewModel.PaletteColorsHue color in Enum.GetValues(typeof(ColorPickerViewModel.PaletteColorsHue)))
-            {
-                <span onclick="changeActivePalette(@Html.Raw((int)color))" style="background-color: @Model.GetColor(color)"></span>
-            }
-        </div>
-        <button onclick="changeColorPickerVisibility(false)">@TextDictionary.HMenuCPClosePicker</button>
-        <button class="close-button" onclick="removeDot()">X</button>
-    </div>
+                <div class="main-color-list">
+                    @foreach (ColorPickerViewModel.PaletteColorsHue color in Enum.GetValues(typeof(ColorPickerViewModel.PaletteColorsHue)))
+                    {
+                        <span onclick="changeActivePalette(@Html.Raw((int)color))" style="background-color: @Model.GetColor(color)"></span>
+                    }
+                </div>
+                <button onclick="changeColorPickerVisibility(false)">@TextDictionary.HMenuCPClosePicker</button>
+                <button class="close-button" onclick="removeDot()">X</button>
+            </div>
 
+        </div>
+    </div>
 </div>
 
 
