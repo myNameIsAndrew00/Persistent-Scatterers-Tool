@@ -14,7 +14,7 @@
         -main-menu (corner left) which manage the displayed secondary menu
         -secondary-menu (left) which contains general interactions
         -top-menu (top) which contains map-points interactions
-    Displayed features are provided based on user roles
+    Displayed features ARE PROVIDED based on user roles
 *@
 
 
@@ -28,6 +28,17 @@
             <button onclick="changeMenuContent('down')" class="arrow-icon">
                 <object type="image/svg+xml" data="~/Resources/resources/icons/arrow_down_icon.svg"></object>
             </button>
+            <div class="bottom">
+                @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+                {
+                    <button onclick="requestSettingsPage(@Html.Raw( (int)SettingsController.Page.Account) ,'/Resources/css/settings_points_upload.scss')" class="arrow-icon">
+                        <object type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
+                    </button>
+                }
+                <a href="@Url.Action("Logout", "Home", null)" class="arrow-icon">
+                    <object type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
+                </a>
+            </div>
         </div>
         <div id="main-select-menu-icon" class="main-select-menu-icon">
             @*Principal Menu Item: User Details*@
@@ -38,12 +49,17 @@
             {
                 <object class="" id="main-menu-icon-@(sectionsCount++)" type="image/svg+xml" data="~/Resources/resources/icons/points_management_icon.svg"></object>
             }
+
+            @*Principal Menu Item: Manage palettes*@
+            @if (User.IsInRole(UserRoles.Administrator.GetEnumString()))
+            {
+                <object class="" id="main-menu-icon-@(sectionsCount++)" type="image/svg+xml" data="~/Resources/resources/icons/palettes_management_icon.svg"></object>
+            }
         </div>
 
         @{ sectionsCount = 0; }
          
     <div id="main-select-menu-content" class="main-select-menu-content">
-
 
         @*Secondary menu: used for User details*@
         @{ Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/UserDetailsNavigationItems.cshtml", (sectionsCount++));}
@@ -53,24 +69,36 @@
         {
             Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/ManageDatapointsNavigationItems.cshtml", (sectionsCount++));
         }
+
+        @*Secondary menu: used for Manage palettes*@
+        @if (User.IsInRole(UserRoles.Administrator.GetEnumString()))
+        {
+            Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/ManagePalettesNavigationItems.cshtml", (sectionsCount++));
+        }
     </div>
     </div>
 
 
     @{ sectionsCount = 0; }
 
-    <nav id="secondary-menu" class="secondary-menu secondary-menu-hidden ">
+<nav id="secondary-menu" class="secondary-menu secondary-menu-hidden ">
 
-        @*Secondary menu: used for User details*@
-        @{ Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/UserDetailsNavigationItems.cshtml", (sectionsCount++));}
+    @*Secondary menu: used for User details*@
+    @{ Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/UserDetailsNavigationItems.cshtml", (sectionsCount++));}
 
-        @*Secondary menu: used for Manage data points*@
-        @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
-        {
-            Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/ManageDatapointsNavigationItems.cshtml", (sectionsCount++));
-        }
+    @*Secondary menu: used for Manage data points*@
+    @if (User.IsInRole(UserRoles.Administrator.GetEnumString()))
+    {
+        Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/ManageDatapointsNavigationItems.cshtml", (sectionsCount++));
+    }
 
-    </nav>
+    @*Secondary menu: used for Manage palettes*@
+    @if (User.IsInRole(UserRoles.Administrator.GetEnumString()))
+    {
+        Html.RenderPartial("~/Views/Shared/Home Menu/Navigation Menus/ManagePalettesNavigationItems.cshtml", (sectionsCount++));
+    }
+
+</nav>
 
 
 

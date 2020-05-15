@@ -20,8 +20,8 @@ const constants = {
 		manageDatasetsContainerId: '#manage-datasets-container',
 		usersTableId: '#manage-users-table',
 		datasetsTableId: '#manage-datasets-table',
-		usersTablePagesCount: '#pagesCount',
-		itemsPerPage: '#itemsPerPage'
+		usersTablePagesCount: '#manage-users-container #pagesCount',
+		itemsPerPage: '#manage-users-container #itemsPerPage'
 	},
 	class: {
 		tableClass: 'default-table',
@@ -82,7 +82,7 @@ window.drawTables = function drawTables() {
 
 				return ($('<td></td>').append(displayDatasetsButton));
 			},
-			width: 10,
+			width: 8,
 			columnName: 'Datasets'
 		}
 		],

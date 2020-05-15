@@ -151,7 +151,7 @@
     <value>Create palette</value>
   </data>
   <data name="HMenuLogoutText" xml:space="preserve">
-    <value>Go to login</value>
+    <value>Logout</value>
   </data>
   <data name="HMenuSettingsText" xml:space="preserve">
     <value>Settings</value>
@@ -519,5 +519,26 @@
   </data>
   <data name="HMenuMUDescriptionTitle" xml:space="preserve">
     <value>Users management</value>
+  </data>
+  <data name="HMenuManageDatasetsText" xml:space="preserve">
+    <value>Datasets management</value>
+  </data>
+  <data name="HMenuMDDescriptionText" xml:space="preserve">
+    <value>Use this settings page to visualise and manage all datasetsa available in application.</value>
+  </data>
+  <data name="HMenuMDDescriptionTitle" xml:space="preserve">
+    <value>Datasets management</value>
+  </data>
+  <data name="HMenuCPCriteriaLabel" xml:space="preserve">
+    <value>Criteria</value>
+  </data>
+  <data name="HMenuUseGeoserverPaletteText" xml:space="preserve">
+    <value>Use Geoserver style</value>
+  </data>
+  <data name="HMenuSGSUrlInputLabel" xml:space="preserve">
+    <value>Service URL</value>
+  </data>
+  <data name="HMenuSGSUrlInputPlaceholder" xml:space="preserve">
+    <value>https://demowmts:8080</value>
   </data>
 </root>

@@ -257,6 +257,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\Miscellaneous Controller\MiscellaneousController.cs" />
     <Compile Include="Controllers\Points Settings Controller\PointsSettingsController.cs" />
+    <Compile Include="Controllers\Settings Controller\SCManageDatasets.cs" />
     <Compile Include="Controllers\Settings Controller\SCManageUsers.cs" />
     <Compile Include="Controllers\Settings Controller\SCGeoserverSelect.cs" />
     <Compile Include="Controllers\Settings Controller\SCAccountController.cs" />
@@ -351,6 +352,7 @@
     <Content Include="Resources\js\map\points_search.js" />
     <Content Include="Resources\js\map\points sources\cassandra_container.js" />
     <Content Include="Resources\js\map\received_points_worker.js" />
+    <Content Include="Resources\js\settings\settings_manage_datasets.js" />
     <Content Include="Resources\js\settings\settings_manage_users.js" />
     <Content Include="Resources\js\settings\settings_select_geoserver_layer.js" />
     <Content Include="Resources\js\utilities\BackgroundWaves\waves.js" />
@@ -396,11 +398,13 @@
     <Content Include="Resources\resources\icons\edit_black_icon.svg" />
     <Content Include="Resources\resources\icons\eye_icon.svg" />
     <Content Include="Resources\resources\icons\first_gliph.svg" />
+    <Content Include="Resources\resources\icons\geoserver_palette_icon.svg" />
     <Content Include="Resources\resources\icons\geoserver_upload_icon.svg" />
     <Content Include="Resources\resources\icons\info_icon.svg" />
     <Content Include="Resources\resources\icons\loading_icon.svg" />
     <Content Include="Resources\resources\icons\logout_icon.svg" />
     <Content Include="Resources\resources\icons\map_icon.svg" />
+    <Content Include="Resources\resources\icons\palettes_management_icon.svg" />
     <Content Include="Resources\resources\icons\palette_icon.svg" />
     <Content Include="Resources\resources\icons\palette_template_Crown.svg" />
     <Content Include="Resources\resources\icons\palette_template_Default.svg" />
@@ -423,6 +427,7 @@
     <Content Include="Resources\resources\icons\user_default_icon.svg" />
     <Content Include="Resources\resources\icons\user_details_icon.svg" />
     <Content Include="Resources\resources\icons\user_palette_icon.svg" />
+    <Content Include="Resources\resources\icons\user_users_icon.svg" />
     <Content Include="Resources\resources\icons\window_icon.svg" />
     <Content Include="Resources\resources\icons\zoom_dataset_icon.svg" />
     <Content Include="Resources\resources\icons_images\cassandra.png" />
@@ -576,6 +581,7 @@
     <Content Include="Resources\css\tooltips\tooltip.scss" />
     <Content Include="Views\Home\Miscellaneous Content\Tooltips\Tooltip.cshtml" />
     <Content Include="Resources\css\settings_users_management.scss" />
+    <Content Include="Resources\css\settings_datasets_management.scss" />
     <None Include="Views\Home\Miscellaneous Content\Tooltips\GifTooltip.cshtml" />
     <Content Include="Resources\css\tooltips\customizations.scss" />
     <Content Include="Views\Shared\Home Menu\Navigation Menus\UserDetailsNavigationItems.cshtml" />
@@ -585,6 +591,9 @@
     <Content Include="Views\Home\ApplicationMessage.cshtml" />
     <Content Include="Views\Home\Settings Content\SelectGeoserverSource.cshtml" />
     <Content Include="Views\Home\Settings Content\ManageUsers.cshtml" />
+    <Content Include="Views\Home\Settings Content\ManageDatasets.cshtml" />
+    <Content Include="Views\Shared\Home Menu\Navigation Menus\ManagePalettesNavigationItems.cshtml" />
+    <Content Include="Views\Home\Settings Content\SelectGeoserverPalette.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\text\TextDictionary.resx">

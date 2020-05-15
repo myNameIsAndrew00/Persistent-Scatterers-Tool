@@ -45,7 +45,8 @@ export const endpoints = {
         GetUserDatasets: applicationApiUrl + '/settings/GetUserDatasets',
         GetUserAssociatedDatasetsCount: applicationApiUrl + '/settings/GetUserAssociatedDatasetsCount',
         AddDatasetToUser: applicationApiUrl + '/settings/AddDatasetToUser',
-        RemoveDatasetFromUser: applicationApiUrl + '/settings/RemoveDatasetFromUser'
+        RemoveDatasetFromUser: applicationApiUrl + '/settings/RemoveDatasetFromUser',
+        GetDatasets: applicationApiUrl + '/settings/GetDatasets'
     },
     LoginApi: {
         ValidateUsername: applicationApiUrl + '/LoginApi/ValidateUsername',

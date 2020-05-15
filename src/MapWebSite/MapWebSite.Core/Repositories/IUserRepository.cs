@@ -106,6 +106,13 @@ namespace MapWebSite.Core.Database
         /// <returns>Returns the id of the dataset which was inserted or -1 if operation fails </returns>
         int CreateUserPointsDataset(string username, string datasetName, PointsSource pointsSource);
 
+        /// <summary>
+        /// Use this method to delete an existing dataset from database
+        /// </summary>
+        /// <param name="username">Username of user which created the dataset</param>
+        /// <param name="datasetName">The name of the dataset</param>
+        /// <returns></returns>
+        bool RemovePointsDataset(string username, string datasetName);
 
         /// <summary>
         /// Use this method to update a dataset to be used as a geoserver source
@@ -113,7 +120,7 @@ namespace MapWebSite.Core.Database
         /// <param name="datasetId">Id of the dataset</param> 
         /// <param name="apiUrl">Api endpoint used to request data</param>
         /// <returns>Returns the id of the dataset which was inserted or -1 if operation fails</returns>
-        int RaiseToGeoserverDataset(int datasetId, string apiUrl);
+        int RaiseToGeoserverDataset(int datasetId, int? defaultColorPaletteId, string apiUrl);
 
 
         /// <summary>

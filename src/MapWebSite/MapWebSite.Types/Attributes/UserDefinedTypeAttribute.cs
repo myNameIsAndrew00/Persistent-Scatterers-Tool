@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection;
 
 namespace MapWebSite.Types
@@ -35,6 +37,42 @@ namespace MapWebSite.Types
 
     public static class UserDefinedTypeAttributeExtensions
     {
+
+        public static string GetUserDefinedNameInDatabase<T>(this T @enum) where T : Enum
+        {
+            var info = typeof(T).GetMember(@enum.ToString());
+
+            var attributeValue = (UserDefinedTypeColumnAttribute)info[0].GetCustomAttribute(typeof(UserDefinedTypeColumnAttribute), false);
+ 
+            if (attributeValue == null)
+                throw new ArgumentException("Argument is not a valid object. It must be decorated with UserDefinedTypeColumn Attribute");
+
+            return attributeValue.NameInDatabase;
+        }
+
+        /// <summary>
+        /// If user defind column names are used as attributes inside an enum, use this method to retrieve all the names 
+        /// </summary>
+        /// <param name="enum"></param>
+        /// <returns></returns>
+        public static string[] GetUserDefinedColumnsNames(Type @enum) 
+        {
+            List<string> result = new List<string>();
+            foreach(var userDefinedType in Enum.GetValues(@enum))
+            {              
+                var info = @enum.GetMember(userDefinedType.ToString());
+
+                var attributeValue = (UserDefinedTypeColumnAttribute) info[0].GetCustomAttribute(typeof(UserDefinedTypeColumnAttribute), false);
+
+                if (attributeValue == null)
+                    throw new ArgumentException("Argument is not a valid object. It must be decorated with UserDefinedTypeColumn Attribute");
+
+                result.Add(attributeValue.NameInDatabase);
+            }
+
+            return result.ToArray();
+        }
+
         /// <summary>
         /// Use this extension method to map an object with a DataTable. <br></br>
         /// DataTable columns will be the properties of the object which are decorated with UserDefinedTypeColumn attribute

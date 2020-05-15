@@ -10,7 +10,8 @@ import { Router, endpoints } from '../api/api_router.js';
 
 /*finaliser*/
 export function PageFinaliser() {
-    colorList = new ColorList(new ColorNode('dot-1'), SliderWidth, '#361f9c');
+    colorList = new ColorList(new ColorNode('dot-1'), SliderWidth, '#361f9c');  
+    labelsObserver.dropAll();
 }
 
 /*use this variables for dots controll*/
@@ -31,24 +32,64 @@ const DotRadius = 10;
 /*color mapping list*/
 var colorList = new ColorList(new ColorNode('dot-1'), SliderWidth, '#361f9c');
 
+/*use this object to manage displayed labels*/
+var labelsObserver = {
+    labels: [],
+    addLabel:
+        /**
+         * Use this function to change an existing label
+         * @param {any} position absolut position of the label
+         * @param {any} dotIdentifier the identifier of the label
+         * @param {any} create a boolean which indicate if the label must be created or not
+         * */
+        function (position, dotIdentifier, create) {
+            var label = null;
+            if (!create) {
+                label = document.getElementById('dot-' + dotIdentifier + '-label');
+            } else {
+                label = document.createElement('label');
+                label.id = 'dot-' + dotIdentifier + '-label';
+                $('#dots-container').append(label);
+            }
+
+            label.style.left = position + 'px';
+            this.display(label);
+            this.labels.push(label);
+        },
+    rewriteLabels: function () {
+        for (var i = 0; i < this.labels.length; i++) {
+            this.display(this.labels[i]);
+        }
+    },
+    display: function (label) {
+        var percentage = colorList.GetPercentage(label.offsetLeft).toFixed(2);
+        $(label).html(this.displayPercent() ?
+            percentage + '%' :
+            colorList.GetValue(percentage).toFixed(2));
+    },
+    displayPercent: function () {
+        return $('#displayPercent').is(':checked');
+    },
+    dropAll: function () {
+        this.labels = [];
+    }
+}
+
 window.resetColorList = function resetColorList() {
-    colorList = new ColorList(new ColorNode('dot-1'), SliderWidth, '#361f9c');
+    PageFinaliser();
 }
 
 window.changePosition = function changePosition() { 
     if(currentDot == 1) return;
     if(isMouseDown){
         var dotPosition = event.clientX - LeftMargin;
-        var dot = document.getElementById('dot-' + currentDot);
-        var dotLabel = document.getElementById('dot-' + currentDot + '-label');
+        var dot = document.getElementById('dot-' + currentDot); 
         var margins = colorList.GetPointMargins('dot-' + currentDot);
      
         if(dotPosition < margins.left  || dotPosition > margins.right ) return;
 
-        //change the label content
-        //dotLabel.innerText = colorList.GetPercentage(dotPosition).toFixed(2) + '%';
-        $(dotLabel).html(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
-        dotLabel.style.left = dotPosition + 'px';
+        //change the label content      
+        labelsObserver.addLabel(dotPosition, currentDot, false);
 
         //change the point
         dot.style.left = dotPosition + DotRadius + 'px';
@@ -59,10 +100,16 @@ window.changePosition = function changePosition() {
     }  
 }
 
+window.minMaxValueChanged = function minMaxValueChanged() {
+    changeColorListValues();
+}
+
+window.displayPercentChanged = function displayPercentChanged() {
+    labelsObserver.rewriteLabels();
+}
 
 window.changeButtonState = function changeButtonState(state){ 
     isMouseDown = state;
-
 }
 
 window.usePaletteTemplate = function usePaletteTemplate(colorsString) {
@@ -93,6 +140,16 @@ window.changeActivePalette = function changeActivePalette(itemId) {
 }
 
 
+/**
+ * Use this function to change color list left and right values */
+function changeColorListValues() {
+    colorList.SetValues({
+        left: parseFloat($('#pickerLeftValue').val()),
+        right: parseFloat($('#pickerRightValue').val())
+    });
+    labelsObserver.rewriteLabels();
+}
+
 
 /**
  * Create a span and a label on slider
@@ -101,15 +158,6 @@ window.changeActivePalette = function changeActivePalette(itemId) {
  * Returns span id
  */
 function createSpan(dotPosition, dotColor) {
-
-    function createLabelInput() {
-        var input = document.createElement('label');
-        $(input).html(colorList.GetPercentage(dotPosition).toFixed(2) + '%');
-        input.style.left = dotPosition + 'px';
-        input.id = 'dot-' + dotsCount + '-label';
-
-        $('#dots-container').append(input);
-    }
 
     dotsCount++;
     //set the current dot to be the newest one
@@ -125,10 +173,11 @@ function createSpan(dotPosition, dotColor) {
     dot.addEventListener('mousedown', changeSelectedDot); 
 
     $('#dots-container').append(dot);
-    createLabelInput();
+    labelsObserver.addLabel(dotPosition, dotsCount, true);
 
     return dot.id;
 }
+ 
 
 /**
  * Delete a span and a label based on span id
@@ -206,10 +255,7 @@ window.sendColorPalette = function sendColorPalette() {
 
     if (paletteName === '') return;  
 
-    colorList.SetValues({
-        left: parseFloat($('#pickerLeftValue').val()),
-        right: parseFloat($('#pickerRightValue').val())
-    });
+    changeColorListValues();
 
     Router.Post(endpoints.Settings.SaveColorsPalette,
         {

@@ -162,6 +162,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Criteria.
+        /// </summary>
+        public static string HMenuCPCriteriaLabel {
+            get {
+                return ResourceManager.GetString("HMenuCPCriteriaLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Display percent.
         /// </summary>
         public static string HMenuCPDisplayPercentLabel {
@@ -270,11 +279,20 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Go to login.
+        ///   Looks up a localized string similar to Logout.
         /// </summary>
         public static string HMenuLogoutText {
             get {
                 return ResourceManager.GetString("HMenuLogoutText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datasets management.
+        /// </summary>
+        public static string HMenuManageDatasetsText {
+            get {
+                return ResourceManager.GetString("HMenuManageDatasetsText", resourceCulture);
             }
         }
         
@@ -284,6 +302,24 @@ namespace MapWebSite.Resources.text {
         public static string HMenuManageUsersDatapointsText {
             get {
                 return ResourceManager.GetString("HMenuManageUsersDatapointsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this settings page to visualise and manage all datasetsa available in application..
+        /// </summary>
+        public static string HMenuMDDescriptionText {
+            get {
+                return ResourceManager.GetString("HMenuMDDescriptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Datasets management.
+        /// </summary>
+        public static string HMenuMDDescriptionTitle {
+            get {
+                return ResourceManager.GetString("HMenuMDDescriptionTitle", resourceCulture);
             }
         }
         
@@ -360,6 +396,24 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service URL.
+        /// </summary>
+        public static string HMenuSGSUrlInputLabel {
+            get {
+                return ResourceManager.GetString("HMenuSGSUrlInputLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://demowmts:8080.
+        /// </summary>
+        public static string HMenuSGSUrlInputPlaceholder {
+            get {
+                return ResourceManager.GetString("HMenuSGSUrlInputPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a text file which contains points and upload them on server. &lt;br /&gt;
         ///            The name which you chose must be unique.
         ///            Dataset will be available for display after a service will process the text file..
@@ -430,6 +484,15 @@ namespace MapWebSite.Resources.text {
         public static string HMenuUseGeoserverLayerText {
             get {
                 return ResourceManager.GetString("HMenuUseGeoserverLayerText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Geoserver style.
+        /// </summary>
+        public static string HMenuUseGeoserverPaletteText {
+            get {
+                return ResourceManager.GetString("HMenuUseGeoserverPaletteText", resourceCulture);
             }
         }
         

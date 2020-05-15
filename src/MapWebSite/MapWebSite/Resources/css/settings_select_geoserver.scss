@@ -1,4 +1,5 @@
 ﻿@import 'general/colors.scss';
+@import 'general/dimensions.scss';
 
 
 .select-geoserver-source-container {
@@ -20,7 +21,7 @@
             justify-content: center;
 
             .inputs {
-                padding: 50px 50px 50px 10px;
+                padding: 10px;
 
                 .input-content {
                     label {
@@ -64,7 +65,12 @@
             button {
                 text-align: center;
                 align-self: center;
+                margin-top: $general_big_margin;
                 width: 200px;
+            }
+
+            small {
+                margin-bottom: $general_big_margin;
             }
         }
 

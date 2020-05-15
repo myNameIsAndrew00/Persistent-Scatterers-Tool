@@ -4,13 +4,12 @@
  *
  * */
 
-import { DisplayPointInfo, SetPointInfoData } from '../point info/point_info.js';
-import { Router, endpoints } from '../api/api_router.js';
-import { SelectedDataset } from '../points settings/chose_dataset.js';
-import { MapType } from './chose_map_type.js';
 import { PointsSectionsContainer, ChangePointsSource, CurrentSource } from './chose_points_source.js';
 
 var selectedPoints = [];
+var maxExtent = [17.5, 42.0, 32.8, 49.0];
+ol.IMAGE_RELOAD_ATTEMPTS = 5;
+
 export var ProcessingEnabled = 0;
 
 /*workers*/
@@ -35,6 +34,7 @@ export function DisplayProcessing(display) {
  */
 var mapView = new ol.View({
     center: ol.proj.fromLonLat([28.652880, 44.177269], 'EPSG:3857'),
+    extent: ol.proj.transformExtent(maxExtent, 'EPSG:4326', 'EPSG:3857'),
     zoom: 10,
     minZoom: 3,
     maxZoom: 20

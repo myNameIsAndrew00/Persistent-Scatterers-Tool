@@ -10,17 +10,17 @@
  
     <ul id="secondary-menu-items-@Model-@Guid.NewGuid()">
         <li class="secondary-menu-item">
+            <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/user_add_datapoints_icon.svg"></object>
+            <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.ManageDatasets), '/Resources/css/settings_datasets_management.scss')">@TextDictionary.HMenuManageDatasetsText</button>
+        </li>
+        <li class="secondary-menu-item">
             <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/upload_points_icon.svg"></object>
             <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.UploadPoints),'/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuUploadPointsText</button>
         </li>
         <li class="secondary-menu-item">
             <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/geoserver_upload_icon.svg"></object>
             <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.UseGeoserverLayer), '/Resources/css/settings_select_geoserver.scss')">@TextDictionary.HMenuUseGeoserverLayerText</button>
-        </li>
-        <li class="secondary-menu-item">
-            <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/palette_icon.svg"></object>
-            <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.ColorPicker),'/Resources/css/settings_color_picker.scss')">@TextDictionary.HMenuCreatePaletteText</button>
-        </li>
+        </li>       
 
     </ul>
  

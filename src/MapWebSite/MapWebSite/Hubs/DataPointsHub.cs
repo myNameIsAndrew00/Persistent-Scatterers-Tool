@@ -41,7 +41,7 @@ namespace MapWebSite.Hubs
             try
             {
 
-                databaseInteractionHandler.RequestPointsRegions(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
+                databaseInteractionHandler.RequestCassandraPointsRegions(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
                                           new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
                                           zoomLevel,
                                           username,

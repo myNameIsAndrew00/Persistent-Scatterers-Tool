@@ -551,7 +551,7 @@ namespace MapWebSite.Repository
             return true;
         }
 
-        public int RaiseToGeoserverDataset(int datasetId, string apiUrl)
+        public int RaiseToGeoserverDataset(int datasetId, int? defaultColorPaletteId, string apiUrl)
         {
             try
             {
@@ -561,6 +561,7 @@ namespace MapWebSite.Repository
                 },
                                                     new SqlParameter[]{
                                                          new SqlParameter("geoserver_api_url", apiUrl),
+                                                         new SqlParameter("default_color_palette_id ", defaultColorPaletteId),
                                                          new SqlParameter("data_set_id", datasetId)
                                                     },
                                                     new SqlConnection(this.connectionString)));
@@ -920,6 +921,25 @@ namespace MapWebSite.Repository
                     }));
 
             return result;
+        }
+
+        public bool RemovePointsDataset(string username, string datasetName)
+        {
+            Query query = new Query(Tables.Datasets)
+                                .AsDelete()
+                                .Where("dataset_name", datasetName)
+                                .Where("user_id", new Query(Tables.Users).Select("id").Where("username",username));
+
+            SqlResult queryResult = new SqlServerCompiler().Compile(query);
+
+            return 
+              SqlExecutionInstance.ExecuteScalar(new SqlCommand(queryResult.ToString())
+                                                  {
+                                                      CommandType = CommandType.Text
+                                                  },
+                                                  null,
+                                                  new SqlConnection(this.connectionString)) 
+                                    != null;
         }
 
 

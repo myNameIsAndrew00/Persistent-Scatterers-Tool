@@ -16,6 +16,13 @@
                     @Html.TextBox("name", null, new { placeholder = @TextDictionary.HMenuSGSNameInputPlaceholder, @class = "default-input-gray", onkeyup = "enableGeoserverUploadSubmit()" })
                 </div>
             </div>
+            <div class="inputs">
+                <div class="input-content">
+                    <label>@TextDictionary.HMenuSGSUrlInputLabel</label>
+                    @Html.TextBox("url", null, new { placeholder = @TextDictionary.HMenuSGSUrlInputPlaceholder, @class = "default-input-gray" })
+                </div>
+            </div>
+
             <button id="geoserverSelectFinishButton" onclick="uploadSelectedGeoserverLayer()" disabled>@TextDictionary.HMenuSGSUploadButton</button>
         </div>
         <div class="gliph">

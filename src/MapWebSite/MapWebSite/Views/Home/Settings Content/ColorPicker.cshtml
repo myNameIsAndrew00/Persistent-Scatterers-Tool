@@ -24,15 +24,19 @@
         <div class="controls">
             <div class="setting-item input-content">
                 <label for="pickerLeftValue">@TextDictionary.HMenuCPMinValueLabel</label>
-                <input class="default-input-gray" type="number" id="pickerLeftValue" value="0" />
+                <input class="default-input-gray" type="number" onkeyup="minMaxValueChanged()" id="pickerLeftValue" value="0" />
             </div>
             <div class="setting-item input-content">
                 <label for="pickerRightValue">@TextDictionary.HMenuCPMaxValueLabel</label>
-                <input class="default-input-gray" type="number" id="pickerRightValue" value="100" />
+                <input class="default-input-gray" type="number" onkeyup="minMaxValueChanged()" id="pickerRightValue" value="100" />
             </div>
-            <div class="setting-item input-content"> 
+            <div class="setting-item input-content">
+                <label for="criteriaValue">@TextDictionary.HMenuCPCriteriaLabel</label>
+                <input class="default-input-gray" id="criteriaValue" value="Height" />
+            </div>
+            <div class="setting-item input-content">
                 <label for="displayPercent">@TextDictionary.HMenuCPDisplayPercentLabel</label>
-                <input class="default-input-gray" type="checkbox" id="displayPercent" checked />
+                <input class="default-input-gray" type="checkbox" onchange="displayPercentChanged()"  id="displayPercent" checked />
             </div>
 
         </div>
@@ -61,8 +65,8 @@
                 onclick="addDot()"></button>
         <div id="dots-container">
             <span draggable="false" id="dot-1" class="dot" onmousedown="changeSelectedDot()"></span>
-            <label style="left:30px">0%</label>
-            <label style="left:816px">100%</label>
+            <label style="left:30px">Min.</label>
+            <label style="left:816px">Max.</label>
         </div>
 
         <div id="color-picker" class="color-picker color-picker-hidden">

@@ -161,7 +161,8 @@ class PointsSectionHandler {
                     longitude: point.longitude,
                     identifier: point.ID,
                     username: SelectedDataset.user,
-                    datasetName: SelectedDataset.name
+                    datasetName: SelectedDataset.name,
+                    pointsSource: 'Cassandra'
                 }, function (receivedInfo) {
                     SetPointInfoData(receivedInfo);
                 }

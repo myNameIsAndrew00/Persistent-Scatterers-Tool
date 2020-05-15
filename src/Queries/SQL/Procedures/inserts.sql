@@ -207,6 +207,7 @@ if object_id('InsertGeoserverPointsDataset', 'P') is not null
 go
 create procedure InsertGeoserverPointsDataset 
 	@geoserver_api_url as varchar(255),
+	@default_color_palette_id as int,
 	@data_set_id as int
 as 
 begin
@@ -215,8 +216,8 @@ begin
 		begin transaction
 			 
 			--Insert the dataset
-			insert into GeoserverDataSets(geoserver_api_url, data_set_id)
-			values (@geoserver_api_url, @data_set_id)
+			insert into GeoserverDataSets(geoserver_api_url, data_set_id, default_color_palette_id)
+			values (@geoserver_api_url, @data_set_id, @default_color_palette_id)
 			
 		    declare @inserted_id int = SCOPE_IDENTITY();
 			 

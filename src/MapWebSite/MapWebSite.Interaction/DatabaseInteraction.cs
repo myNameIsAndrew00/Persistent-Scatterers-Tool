@@ -95,7 +95,7 @@ namespace MapWebSite.Domain
                 //if dataset already exists in database
                 if (datasetId == -1) datasetId = this.userRepository.GetDatasetID(username, datasetName);
                  
-                datasetId = this.userRepository.RaiseToGeoserverDataset(datasetId, apiUrl);
+                datasetId = this.userRepository.RaiseToGeoserverDataset(datasetId, null, apiUrl);
             }
 
             return datasetId != -1 ? CreateDatasetResultCode.Ok : CreateDatasetResultCode.DatasetError;
@@ -110,7 +110,9 @@ namespace MapWebSite.Domain
        
 
         /// <summary>
-        /// Returns data points regions which are inside a specific area of screen for a zoom level. Limits unit of measure with latitude/longitude.
+        /// Returns data points regions which are inside a specific area of screen for a zoom level. 
+        /// Limits unit of measure with latitude/longitude.
+        /// Points zones source is Cassandra
         /// </summary>
         /// <param name="topLeftCorner"></param>
         /// <param name="bottomRightCorner"></param>
@@ -119,7 +121,7 @@ namespace MapWebSite.Domain
         /// <param name="cachedRegions">A list of regions keys which are cached on browser</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public void RequestPointsRegions(Pair topLeftCorner,
+        public void RequestCassandraPointsRegions(Pair topLeftCorner,
                                                      Pair bottomRightCorner,
                                                      int zoomLevel,
                                                      string username,
@@ -205,14 +207,34 @@ namespace MapWebSite.Domain
             return PointsCacheManager.GetKeys(topLeftIndexes, bottomRightIndexes, zoomLevel, dataSetHeader.ID);
         }
 
-        public Point RequestPointDetails(string dataSet, string username, int zoomLevel, PointBase basicPoint)
+        /// <summary>
+        /// Use this method to request details about a selected point
+        /// </summary>
+        /// <param name="dataSet"></param>
+        /// <param name="username"></param>
+        /// <param name="basicPoint"></param>
+        /// <param name="pointsSource"></param>
+        /// <returns></returns>
+        public Point RequestPointDetails(string dataSet, string username, PointBase basicPoint, PointsSource pointsSource = PointsSource.Cassandra)
         {
             int dataSetID = this.userRepository.GetDatasetID(username, dataSet);
             if (dataSetID == -1) throw new ApplicationException($"User do not have a dataset with name {dataSet}");
 
-            //TODO: ignore zoom level, delete it in further updates (*)
 
-            return this.dataPointsRepository.GetPointDetails(dataSetID, basicPoint);
+            //datasource can be switched between current dataPointsRepository and other repos
+            IDataPointsRepository detailsSource = this.dataPointsRepository;
+
+            switch (pointsSource)
+            {
+                case PointsSource.Geoserver:
+                    detailsSource = new PostgreSQLDataPointsRepository();
+                    break;
+                case PointsSource.Cassandra:
+                default:
+                    break;
+            }
+
+            return detailsSource.GetPointDetails(dataSetID, basicPoint);
         }
 
         /// <summary>
@@ -331,7 +353,10 @@ namespace MapWebSite.Domain
 
         public int GetUsersAssociatedDatasetsCount(string username)
         {
-            return this.userRepository.GetUserAssociatedDatasetsCount(username);
+            if(username == null)
+                return this.userRepository.GetDatasetsCount();
+
+            return this.userRepository.GetUserAssociatedDatasetsCount(username);         
         }
 
 

@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapWebSite.Data Services", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.DataPointsParserService", "MapWebSite.DataPointsParserService\MapWebSite.DataPointsParserService.csproj", "{131C0E23-29BA-48DA-8F5F-0F9A0D40EF87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapWebSite.GeoserverAPI", "Geoserver\MapWebSite.GeoserverAPI.csproj", "{7B8B948E-1BEA-4A58-930F-4637F9AC5FE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapWebSite.GeoserverAPI", "Geoserver\MapWebSite.GeoserverAPI.csproj", "{7B8B948E-1BEA-4A58-930F-4637F9AC5FE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

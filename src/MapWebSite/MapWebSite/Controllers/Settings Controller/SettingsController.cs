@@ -21,10 +21,12 @@ namespace MapWebSite.Controllers
         {
             About,
             Account,
-            ColorPicker,
+            CreateColorPalette,
+            UseGeoserverPalette,
             UploadPoints,
             UseGeoserverLayer,
-            ManageUsers
+            ManageUsers,
+            ManageDatasets
         }
     }
 }

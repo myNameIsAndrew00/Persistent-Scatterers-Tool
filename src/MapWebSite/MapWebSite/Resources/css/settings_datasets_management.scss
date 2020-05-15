@@ -1,0 +1,42 @@
+﻿@import 'general/colors.scss';
+
+.edit-datasets-form {
+    width: 30%;
+    height: 30%;
+    padding: 30px;
+
+    .finish-button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin: 20px;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: none;
+
+        object {
+            width: 15px;
+            height: 30px;
+            pointer-events: none;
+        }
+    }
+}
+
+.datasets-management-container {
+    .description-container {
+        padding-left: 50px;
+        padding-top: 30px;
+        padding-bottom: 20px;
+        margin: 0;
+        margin-bottom: 0px;
+        margin-bottom: -50px;
+
+        h1, p{
+            margin: 0;
+        }
+    }
+}

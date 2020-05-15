@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace MapWebSite.Tests.Database
 {
     using Builder = CassandraAccess.CassandraQueryBuilder;
+
     [TestClass]
     public class CassandraTest
     {

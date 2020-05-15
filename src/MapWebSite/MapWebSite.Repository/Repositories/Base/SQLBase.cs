@@ -16,5 +16,10 @@ namespace MapWebSite.Repository
             this.connectionString = ConfigurationManager.ConnectionStrings["PersistantScatterersDatabase"].ToString();
         }
 
+        public SQLBaseRepository(string configurationStringKey)
+        {
+            this.connectionString = ConfigurationManager.ConnectionStrings[configurationStringKey].ToString();
+        }
+
     }
 }

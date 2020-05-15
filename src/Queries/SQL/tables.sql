@@ -124,7 +124,7 @@ create table UsersAllowedDatasets
 
 	 primary key(user_allowed_dataset_id),
 	 foreign key(user_id) references Users(user_id),
-	 foreign key(dataset_id) references DataSets(data_set_id),
+	 foreign key(dataset_id) references DataSets(data_set_id) on delete cascade,
 	 
 	 
   )
@@ -163,7 +163,7 @@ create table GeoserverDataSets(
 	default_color_palette_id int,
 
 	PRIMARY KEY(geoserver_dataset_id),
-	FOREIGN KEY (data_set_id) REFERENCES DataSets(data_set_id),
+	FOREIGN KEY (data_set_id) REFERENCES DataSets(data_set_id) on delete cascade,
 	FOREIGN KEY (default_color_palette_id) REFERENCES ColorPalettes(color_palette_id)
 )
 
@@ -174,6 +174,6 @@ create table GeoserverDataSetsPalettes(
 	color_palette_id int not null,
 
 	PRIMARY KEY (geoserver_palette_id),
-	FOREIGN KEY (geoserver_dataset_id) REFERENCES GeoserverDataSets(geoserver_dataset_id),
+	FOREIGN KEY (geoserver_dataset_id) REFERENCES GeoserverDataSets(geoserver_dataset_id) on delete cascade,
 	FOREIGN KEY (color_palette_id) REFERENCES ColorPalettes(color_palette_id)
 )

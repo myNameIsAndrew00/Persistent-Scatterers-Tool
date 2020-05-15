@@ -28,8 +28,10 @@ namespace MapWebSite.Controllers
         {
             switch (settingsPage)
             {
-                case SettingsController.Page.ColorPicker:
+                case SettingsController.Page.CreateColorPalette:
                     return View((string)"Settings Content/ColorPicker", new ColorPickerViewModel());
+                case SettingsController.Page.UseGeoserverPalette:
+                    return View((string)"Settings Content/SelectGeoserverPalette");
                 case SettingsController.Page.UploadPoints:
                     return View((string)"Settings Content/UploadPoints");
                 case SettingsController.Page.Account:
@@ -41,6 +43,9 @@ namespace MapWebSite.Controllers
                 case SettingsController.Page.ManageUsers:
                     return View((string)"Settings Content/ManageUsers", 
                         new Tuple<int,int>(new DatabaseInteractionHandler().GetUsersCount(), 10));
+                case SettingsController.Page.ManageDatasets:
+                    return View((string)"Settings Content/ManageDatasets",
+                        new Tuple<int,int>(new DatabaseInteractionHandler().GetUsersAssociatedDatasetsCount(null),10));
                 default:
                     return View((string)"Settings Content/ColorPicker");
             }
@@ -68,20 +73,22 @@ namespace MapWebSite.Controllers
                                              int identifier,
                                              decimal zoomLevel,
                                              string username,
-                                             string datasetName)
+                                             string datasetName,
+                                             PointsSource pointsSource)
         {
             DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
 
             //*zoomLevel is not required anymore
             var point = databaseInteractionHandler.RequestPointDetails(datasetName,
                                                                        username,
-                                                                       0,
                                                                        new PointBase()
                                                                        {
                                                                            Latitude = latitude,
                                                                            Longitude = longitude,
                                                                            Number = identifier
-                                                                       });
+                                                                       },
+                                                                       pointsSource
+                                                                       );
             var response = new HttpResponseMessage();
             response.Content = new StringContent( point.JSONSerialize() );
             response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");

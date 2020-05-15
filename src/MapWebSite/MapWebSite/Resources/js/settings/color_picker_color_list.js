@@ -200,7 +200,7 @@ export class ColorList{
     }
 
     GetValue(percentage) {
-        return ((Math.abs(this.leftValue) + this.rightValue) * percentage) / 100 - Math.abs(this.leftValue);
+        return ((this.rightValue - this.leftValue) * percentage) / 100 + this.leftValue;
     }
 
     GetColorMap() {

@@ -11,11 +11,14 @@ namespace MapWebSite.SQLAccess
     public static class SqlExecutionInstance
     {
 
-        public static void ExecuteNonQuery(SqlCommand Command, SqlParameter[] Parameters, SqlConnection Connection)
+        public static void ExecuteNonQuery(IDbCommand Command, IDbDataParameter[] Parameters, IDbConnection Connection)
         {
 
             Command.Connection = Connection;
-            Command.Parameters.AddRange(Parameters);
+
+            if (Parameters != null)
+                foreach (var parameter in Parameters)
+                    Command.Parameters.Add(parameter);
 
             try
             {
@@ -26,7 +29,7 @@ namespace MapWebSite.SQLAccess
                     Command.ExecuteNonQuery();
                 }
             }
-            catch (SqlException Exception)
+            catch (Exception Exception)
             {
                 throw Exception;
             }
@@ -36,12 +39,18 @@ namespace MapWebSite.SQLAccess
             }
         }
 
-        public static DataSet ExecuteQuery(SqlCommand Command, SqlParameter[] Parameters, SqlConnection Connection)
+        public static DataSet ExecuteQuery(IDbCommand Command, IDbDataParameter[] Parameters, IDbConnection Connection,
+            Func<IDbCommand, IDbDataAdapter> adapterCreator = null)
         {
+            if (adapterCreator == null)
+                adapterCreator = command => new SqlDataAdapter(command as SqlCommand);
+
             DataSet dataSet = new DataSet();
 
             Command.Connection = Connection;
-            if (Parameters != null) Command.Parameters.AddRange(Parameters);
+            if (Parameters != null)
+                foreach (var parameter in Parameters)
+                    Command.Parameters.Add(parameter);
 
             try
             {
@@ -49,8 +58,10 @@ namespace MapWebSite.SQLAccess
                 using (Command)
                 {
                     Connection.Open();
-                    using (SqlDataAdapter dataAdapter = new SqlDataAdapter(Command))
-                        dataAdapter.Fill(dataSet);
+                    IDbDataAdapter dataAdapter = adapterCreator(Command);
+                    dataAdapter.Fill(dataSet);
+
+                    (dataAdapter as IDisposable)?.Dispose();
                 }
             }
             catch (Exception Exception)
@@ -65,10 +76,12 @@ namespace MapWebSite.SQLAccess
             return dataSet;
         }
 
-        public static object ExecuteScalar(SqlCommand Command, SqlParameter[] Parameters, SqlConnection Connection)
+        public static object ExecuteScalar(IDbCommand Command, IDbDataParameter[] Parameters, IDbConnection Connection)
         {
             Command.Connection = Connection;
-            if (Parameters != null) Command.Parameters.AddRange(Parameters);
+            if (Parameters != null)
+                foreach (var parameter in Parameters)
+                    Command.Parameters.Add(parameter);
 
             try
             {
@@ -79,7 +92,7 @@ namespace MapWebSite.SQLAccess
                     return Command.ExecuteScalar();
                 }
             }
-            catch (SqlException Exception)
+            catch (Exception Exception)
             {
                 throw Exception;
             }
@@ -91,5 +104,5 @@ namespace MapWebSite.SQLAccess
 
 
     }
-     
+
 }

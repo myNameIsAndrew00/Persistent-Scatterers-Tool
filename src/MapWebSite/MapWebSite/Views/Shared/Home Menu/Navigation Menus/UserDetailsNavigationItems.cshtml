@@ -13,21 +13,13 @@
         @if (User.IsInRole(UserRoles.Administrator.GetEnumString()))
         {
             <li class="secondary-menu-item">
-                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
-                <button onclick="requestSettingsPage(@Html.Raw( (int)SettingsController.Page.Account) ,'/Resources/css/settings_points_upload.scss')">@TextDictionary.HMenuSettingsText</button>
-            </li>
-            <li class="secondary-menu-item">
-                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/user_add_datapoints_icon.svg"></object>
+                <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/user_users_icon.svg"></object>
                 <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.ManageUsers), '/Resources/css/settings_users_management.scss')">@TextDictionary.HMenuManageUsersDatapointsText</button>
-            </li>
+            </li>           
         }
         <li class="secondary-menu-item">
             <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/info_icon.svg"></object>
             <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.About), null)">@TextDictionary.HMenuAboutText</button>
-        </li>
-        <li class="secondary-menu-item">
-            <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/logout_icon.svg"></object>
-            @Html.ActionLink(TextDictionary.HMenuLogoutText, "Logout", "Home", null)
-        </li>
+        </li>        
 
     </ul>

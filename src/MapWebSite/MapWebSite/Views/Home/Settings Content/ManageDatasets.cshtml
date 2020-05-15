@@ -1,0 +1,23 @@
+﻿@model Tuple<int,int>
+@{
+    Layout = null;
+}
+
+<div class="datasets-management-container">
+
+        <div class="description-container">
+            <h1>@TextDictionary.HMenuMDDescriptionTitle</h1>
+            <small>@TextDictionary.HMenuMDDescriptionText</small>
+        </div>
+
+        <div id="manage-datasets-container">
+            @Html.Hidden("itemsPerPage", Model.Item2)
+            @Html.Hidden("pagesCount", Model.Item1 / Model.Item2 + (Model.Item1 % Model.Item2 > 0 ? 1 : 0))
+        </div>
+       
+</div>
+
+<script>
+    getScript('#settings-layer', '/Resources/js/settings/settings_manage_datasets.js');
+    if (!(window.drawDatasetsTable === undefined)) drawDatasetsTable();
+</script>

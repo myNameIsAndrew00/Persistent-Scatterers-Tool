@@ -1,0 +1,21 @@
+﻿@using MapWebSite.Resources.text
+@using MapWebSite.Model
+@using MapWebSite.Core
+@using MapWebSite.Controllers
+
+@*model is represented by section index, used to bind to javascript*@
+@model int
+
+@*Generate the id using a random guid to reuse this section*@
+ 
+    <ul id="secondary-menu-items-@Model-@Guid.NewGuid()">
+        <li class="secondary-menu-item">
+            <object width="48px" height="36px" type="image/svg+xml" data="~/Resources/resources/icons/palette_icon.svg"></object>
+            <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.CreateColorPalette),'/Resources/css/settings_color_picker.scss')">@TextDictionary.HMenuCreatePaletteText</button>
+        </li>
+        <li class="secondary-menu-item">
+            <object width="48px" height="37px" type="image/svg+xml" data="~/Resources/resources/icons/geoserver_palette_icon.svg"></object>
+            <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.UseGeoserverPalette),null)">@TextDictionary.HMenuUseGeoserverPaletteText</button>
+        </li>
+    </ul>
+ 
