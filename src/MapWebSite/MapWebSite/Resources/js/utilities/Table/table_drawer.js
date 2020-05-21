@@ -75,7 +75,7 @@ export class TableDrawer {
 		this.appendRows();
 
 		if (pagesCount != undefined && pagesCount != null)
-			this.properties.pagesCount = pagesCount;
+			this.propert ies.pagesCount = pagesCount;
 
 		//append buttons to buttons container
 		this.appendPaginationButtons(true);

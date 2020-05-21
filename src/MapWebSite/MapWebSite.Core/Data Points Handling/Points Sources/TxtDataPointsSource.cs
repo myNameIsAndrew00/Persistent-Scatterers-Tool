@@ -71,8 +71,10 @@ namespace MapWebSite.Core.DataPoints
                         }
                         catch (Exception exception)
                         {
-                                //TODO: log exception
-                                exceptions.Enqueue(exception);
+
+                            CoreContainers.LogsRepository.LogError(exception, Database.Logs.LogTrigger.CoreModule);
+                                
+                            exceptions.Enqueue(exception);
                         }
                         if (exceptions.Count > 0) throw new Exception("Failed to parse with success the file");
                     });
@@ -93,7 +95,8 @@ namespace MapWebSite.Core.DataPoints
                 }
                 catch (Exception exception)
                 {
-                    //TODO: parse exception here
+                    CoreContainers.LogsRepository.LogError(exception, Database.Logs.LogTrigger.CoreModule);
+
                     pointsDataSet = null;
                 }
                 yield return pointsDataSet;

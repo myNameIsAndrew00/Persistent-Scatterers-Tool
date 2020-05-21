@@ -38,6 +38,11 @@ namespace MapWebSite.Model
 
         public List<Interval> Intervals { get; set; }
 
+        /// <summary>
+        /// This property represents the main criteria used for drawing points colors
+        /// </summary>
+        public string MainColorCriteria { get; set; } = "Height";
+
 
         #region Geoserver API Interface
 
@@ -59,13 +64,13 @@ namespace MapWebSite.Model
                                 {
                                     new Filter.FilterItem
                                     {
-                                        PropertyName = "Height",
+                                        PropertyName = this.MainColorCriteria,
                                         Type = Filter.FilterItemType.PropertyIsGreaterThanOrEqualTo,
                                         Literal = interval.Left.ToString()
                                     },
                                     new Filter.FilterItem
                                     {
-                                        PropertyName = "Height",
+                                        PropertyName = this.MainColorCriteria,
                                         Type = Filter.FilterItemType.PropertyIsLessThan,
                                         Literal = interval.Right.ToString()
                                     }

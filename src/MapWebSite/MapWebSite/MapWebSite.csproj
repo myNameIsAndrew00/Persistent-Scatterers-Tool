@@ -363,6 +363,7 @@
     <Content Include="Resources\js\points settings\chose_palette.js" />
     <Content Include="Resources\js\map\points sources\geoserver_container.js" />
     <Content Include="Resources\js\points settings\chose_points_size.js" />
+    <Content Include="Resources\js\utilities\List\list_drawer.js" />
     <Content Include="Resources\js\utilities\Popup\popup.js" />
     <Content Include="Resources\js\settings\settings.js" />
     <Content Include="Resources\js\settings\settings_color_picker.js" />

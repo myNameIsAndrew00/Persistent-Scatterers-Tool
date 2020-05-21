@@ -191,7 +191,8 @@ as
 begin
 	select CP.palette_name,
 		   CP.palette_serialization,
-		   CP.status_mask
+		   CP.status_mask,
+		   CP.main_color_criteria
 		from ColorPalettes as CP
 		inner join Users as U
 		on U.username = @username
@@ -230,7 +231,8 @@ begin
 		   U.username,
 		   CP.palette_name,
 		   CP.palette_serialization,
-		   CP.status_mask
+		   CP.status_mask,
+		   CP.main_color_criteria
 		from ColorPalettes as CP
 		inner join Users as U
 		on CP.user_id = U.user_id 
@@ -274,7 +276,8 @@ begin
 		   U.username,
 		   CP.palette_name,
 		   CP.palette_serialization,
-		   CP.status_mask
+		   CP.status_mask,
+		   CP.main_color_criteria
 		from ColorPalettes as CP
 		inner join Users as U
 		on CP.user_id = U.user_id  

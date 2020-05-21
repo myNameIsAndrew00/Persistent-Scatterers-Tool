@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using MapWebSite.GeoserverAPI.Modules.Layers;
 using MapWebSite.GeoserverAPI.Entities;
+using MapWebSite.Core;
 
 namespace MapWebSite.Domain
 {
@@ -167,9 +168,11 @@ namespace MapWebSite.Domain
                     
                     }
                     catch (Exception exception)
-                    { //TODO: log exception
+                    {
+                        CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.Domain);
+
                         //if a error ocurs, the created entry must be deleted from the cache
-                       
+
                         PointsCacheManager.Remove(coordinate.Item1, coordinate.Item2, coordinate.Item3, datasetHeader.ID);
                     }
                 });

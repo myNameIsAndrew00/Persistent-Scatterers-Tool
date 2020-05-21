@@ -16,6 +16,13 @@ export function PageFinaliser() {
 
 /*use this variables for dots controll*/
 
+const constants ={
+    ids: {
+        colorCriteriaInput: '#criteriaValue',
+        dotsContainer: '#dots-container'
+    }
+}
+
 var isMouseDown = false;
 var dotsCount = 1;
 var currentDot = 1;
@@ -49,7 +56,7 @@ var labelsObserver = {
             } else {
                 label = document.createElement('label');
                 label.id = 'dot-' + dotIdentifier + '-label';
-                $('#dots-container').append(label);
+                $(constants.ids.dotsContainer).append(label);
             }
 
             label.style.left = position + 'px';
@@ -172,7 +179,7 @@ function createSpan(dotPosition, dotColor) {
     dot.draggable = false;
     dot.addEventListener('mousedown', changeSelectedDot); 
 
-    $('#dots-container').append(dot);
+    $(constants.ids.dotsContainer).append(dot);
     labelsObserver.addLabel(dotPosition, dotsCount, true);
 
     return dot.id;
@@ -188,8 +195,8 @@ function deleteSpan(dotId) {
     dotId = '#' + dotId;
     var dotLabelId = dotId + '-label';
 
-    $('#dots-container').children(dotId).remove();
-    $('#dots-container').children(dotLabelId).remove();
+    $(constants.ids.dotsContainer).children(dotId).remove();
+    $(constants.ids.dotsContainer).children(dotLabelId).remove();
 
     //redraw the slider and close the color picker
     $('#slider').css({ background: colorList.BuildGradientString() });
@@ -252,8 +259,10 @@ window.enableSubmit = function enableSubmit() {
 
 window.sendColorPalette = function sendColorPalette() {
     var paletteName = $('#name-info-card').children('#color-palette-name').val();
+    var criteria = $(constants.ids.colorCriteriaInput).val();
 
     if (paletteName === '') return;  
+    if (criteria === '') return;
 
     changeColorListValues();
 
@@ -261,6 +270,7 @@ window.sendColorPalette = function sendColorPalette() {
         {
             Intervals: colorList.GetColorMap(),
             Name: paletteName,
+            MainColorCriteria: criteria
         },
         function (receivedInfo) {
             DisplayOverlay(receivedInfo);

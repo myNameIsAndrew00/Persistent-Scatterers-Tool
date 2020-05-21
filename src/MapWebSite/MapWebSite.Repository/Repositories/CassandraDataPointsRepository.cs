@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using MapWebSite.Core;
 
 namespace MapWebSite.Repository
 {
@@ -36,7 +37,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
             }
         }
 
@@ -129,8 +130,9 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                return false;
-                //todo: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
+              
+                return false;                
             }
 
             return true;
@@ -173,7 +175,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
             }
 
 

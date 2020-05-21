@@ -94,10 +94,10 @@ go
 if object_id('InsertColorPalette', 'P') is not null
 	drop procedure InsertColorPalette
 go
-create procedure InsertColorPalette
 	@username as varchar(100),
 	@palette_name as varchar(255),
-	@palette_serialization as text
+	@palette_serialization as text,
+	@main_color_critera as nvarchar(255)
 as 
 begin
 	begin try
@@ -115,8 +115,8 @@ begin
 			where CPS.name = 'Uploaded'
 
 			--Insert data into the color palettes 
-			insert into ColorPalettes(palette_name, palette_serialization, user_id, creation_date, status_mask)
-			values (@palette_name, @palette_serialization, @user_id, GETDATE(), @status_mask)
+			insert into ColorPalettes(palette_name, palette_serialization, user_id, creation_date, status_mask, main_color_criteria)
+			values (@palette_name, @palette_serialization, @user_id, GETDATE(), @status_mask, @main_color_critera)
 			
 			select SCOPE_IDENTITY() as ID;
 		commit

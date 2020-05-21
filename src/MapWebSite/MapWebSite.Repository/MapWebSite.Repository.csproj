@@ -95,6 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CassandraDataPointsRepository.cs" />
     <Compile Include="Repositories\PostgreSQLDataPointsRepository.cs" />
+    <Compile Include="Repositories\SQLLogsRepository.cs" />
     <Compile Include="Repositories\SQLUserRepository.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -378,6 +378,24 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default palette.
+        /// </summary>
+        public static string HMenuSGSPaletteLabel {
+            get {
+                return ResourceManager.GetString("HMenuSGSPaletteLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select palette.
+        /// </summary>
+        public static string HMenuSGSSearchPaletteButtonText {
+            get {
+                return ResourceManager.GetString("HMenuSGSSearchPaletteButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select from Geoserver.
         /// </summary>
         public static string HMenuSGSTitleText {

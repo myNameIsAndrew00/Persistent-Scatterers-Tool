@@ -33,9 +33,12 @@ namespace MapWebSite
 
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
-
             
             app.MapSignalR();
+
+            Domain.DomainLoader.Load();
+
+
         } 
     }
 }

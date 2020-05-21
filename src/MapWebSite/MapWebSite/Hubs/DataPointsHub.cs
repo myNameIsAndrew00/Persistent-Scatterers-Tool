@@ -51,7 +51,7 @@ namespace MapWebSite.Hubs
             }
             catch (Exception exception)
             {
-                //todo: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.Controllers);
             }
             finally
             {              

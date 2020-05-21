@@ -148,6 +148,7 @@ create table ColorPalettes(
 	user_id int not null,
 	creation_date datetime not null default(GETDATE()),
 	status_mask int not null, 
+	main_color_criteria nvarchar(255),
 	
 	unique nonclustered(palette_name,user_id),
 	primary key(color_palette_id),
@@ -176,4 +177,17 @@ create table GeoserverDataSetsPalettes(
 	PRIMARY KEY (geoserver_palette_id),
 	FOREIGN KEY (geoserver_dataset_id) REFERENCES GeoserverDataSets(geoserver_dataset_id) on delete cascade,
 	FOREIGN KEY (color_palette_id) REFERENCES ColorPalettes(color_palette_id)
+)
+
+  
+create table ApplicationLogs(
+	id int identity(1,1),
+
+	stacktrace text,
+	log_type nvarchar(100) not null,
+	message nvarchar(500) not null,
+	log_trigger nvarchar(100) not null,
+	creation_date datetime not null,
+
+	primary key(id)
 )

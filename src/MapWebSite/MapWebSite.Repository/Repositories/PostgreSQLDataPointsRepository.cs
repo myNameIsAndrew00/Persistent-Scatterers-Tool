@@ -9,6 +9,7 @@ using Npgsql;
 using System.Threading.Tasks;
 using System.Data;
 using MapWebSite.Types;
+using MapWebSite.Core;
 
 namespace MapWebSite.Repository
 {
@@ -64,56 +65,65 @@ namespace MapWebSite.Repository
 
         public Point GetPointDetails(int dataSetID, PointBase basicPoint)
         {
-            Query query = new Query(Tables.metadataTableName)
-                            .Select("table_names")
-                            .Where("data_set_id",dataSetID);
-            SqlResult queryResult = new SqlServerCompiler().Compile(query);
-            string tableName = SqlExecutionInstance.ExecuteScalar
-                (new NpgsqlCommand(queryResult.ToString().Replace("[","").Replace("]","")),
-                                                null,
-                                                 new NpgsqlConnection(this.connectionString))?.ToString();
-
-            if (tableName == null) return null;
-
-            query = new Query(Tables.metadataTableName)
-                            .Select("time_references")
-                            .Where("data_set_id", dataSetID);
-            queryResult = new SqlServerCompiler().Compile(query);
-            long[] timeReferences = (long[])SqlExecutionInstance.ExecuteScalar
-               (new NpgsqlCommand(queryResult.ToString().Replace("[", "").Replace("]", "")),
-                                               null,
-                                                new NpgsqlConnection(this.connectionString));
-
-            if (timeReferences == null) return null;
-
-
-            List<string> queryColumns = new List<string>();
-            for (int i = 0; i < timeReferences.Length; i++)
-                queryColumns.Add($"d_{i}");
-            queryColumns.AddRange(
-                    UserDefinedTypeAttributeExtensions.GetUserDefinedColumnsNames(typeof(Tables.MetadataTableColumns)));
-
-            query = new Query(tableName)
-                .Select(queryColumns.ToArray())
-                .WhereRaw("geom && ST_Expand(ST_SetSRID(ST_MakePoint(?,?),4326),100)", basicPoint.Longitude, basicPoint.Latitude)
-                .OrderByRaw("ST_SetSRID(ST_MakePoint(?,?),4326) <-> geom", basicPoint.Longitude, basicPoint.Latitude);
-                
-
-            queryResult = new SqlServerCompiler().Compile(query);
-
-            using (var datasetResult = SqlExecutionInstance.ExecuteQuery(
-                                                    new NpgsqlCommand(queryResult.ToString()
-                                                                      .Replace("[", "")
-                                                                      .Replace("]", "")
-                                                                      + " limit 1"),
-                                                    null,
-                                                    new NpgsqlConnection(this.connectionString),
-                                                    (command) =>
-                                                    {
-                                                        return new NpgsqlDataAdapter((NpgsqlCommand)command);
-                                                    }))
+            try
             {
-                return parsePointDetails(datasetResult.Tables[0].Rows, timeReferences);
+                Query query = new Query(Tables.metadataTableName)
+                                .Select("table_names")
+                                .Where("data_set_id", dataSetID);
+                SqlResult queryResult = new SqlServerCompiler().Compile(query);
+                string tableName = SqlExecutionInstance.ExecuteScalar
+                    (new NpgsqlCommand(queryResult.ToString().Replace("[", "").Replace("]", "")),
+                                                    null,
+                                                     new NpgsqlConnection(this.connectionString))?.ToString();
+
+                if (tableName == null) return null;
+
+                query = new Query(Tables.metadataTableName)
+                                .Select("time_references")
+                                .Where("data_set_id", dataSetID);
+                queryResult = new SqlServerCompiler().Compile(query);
+                long[] timeReferences = (long[])SqlExecutionInstance.ExecuteScalar
+                   (new NpgsqlCommand(queryResult.ToString().Replace("[", "").Replace("]", "")),
+                                                   null,
+                                                    new NpgsqlConnection(this.connectionString));
+
+                if (timeReferences == null) return null;
+
+
+                List<string> queryColumns = new List<string>();
+                for (int i = 0; i < timeReferences.Length; i++)
+                    queryColumns.Add($"d_{i}");
+                queryColumns.AddRange(
+                        UserDefinedTypeAttributeExtensions.GetUserDefinedColumnsNames(typeof(Tables.MetadataTableColumns)));
+
+                query = new Query(tableName)
+                    .Select(queryColumns.ToArray())
+                    .WhereRaw("geom && ST_Expand(ST_SetSRID(ST_MakePoint(?,?),4326),100)", basicPoint.Longitude, basicPoint.Latitude)
+                    .OrderByRaw("ST_SetSRID(ST_MakePoint(?,?),4326) <-> geom", basicPoint.Longitude, basicPoint.Latitude);
+
+
+                queryResult = new SqlServerCompiler().Compile(query);
+
+                using (var datasetResult = SqlExecutionInstance.ExecuteQuery(
+                                                        new NpgsqlCommand(queryResult.ToString()
+                                                                          .Replace("[", "")
+                                                                          .Replace("]", "")
+                                                                          + " limit 1"),
+                                                        null,
+                                                        new NpgsqlConnection(this.connectionString),
+                                                        (command) =>
+                                                        {
+                                                            return new NpgsqlDataAdapter((NpgsqlCommand)command);
+                                                        }))
+                {
+                    return parsePointDetails(datasetResult.Tables[0].Rows, timeReferences);
+                }
+            }
+            catch(Exception exception)
+            {
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
+                
+                return new Point();
             }
         }
 

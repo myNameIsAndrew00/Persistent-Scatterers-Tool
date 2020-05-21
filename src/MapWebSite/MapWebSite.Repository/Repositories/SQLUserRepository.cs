@@ -62,13 +62,15 @@ namespace MapWebSite.Repository
                                                     new SqlParameter[]{
                                                     new SqlParameter("username", username),
                                                     new SqlParameter("palette_name", colorMap.Name),
-                                                    new SqlParameter("palette_serialization", colorMap.Intervals.JSONSerialize())
+                                                    new SqlParameter("palette_serialization", colorMap.Intervals.JSONSerialize()),
+                                                    new SqlParameter("main_color_critera", colorMap.MainColorCriteria)
                                                     },
                                                     new SqlConnection(this.connectionString));
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
+               
                 return false;
             }
             return true;
@@ -111,7 +113,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return -1;
             }
         }
@@ -134,7 +136,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return -1;
             }
         }
@@ -173,7 +175,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return false;
             }
 
@@ -207,7 +209,8 @@ namespace MapWebSite.Repository
                                        "U.username",
                                        "CP.palette_name",
                                        "CP.palette_serialization",
-                                       "CP.status_mask"
+                                       "CP.status_mask",
+                                       "CP.main_color_criteria"
                                 })
                                 .Join("dbo.Users as U", "CP.user_id", "U.user_id");
 
@@ -261,7 +264,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return string.Empty;
             }
         }
@@ -305,7 +308,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return false;
             }
             return true;
@@ -425,7 +428,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return false;
             }
             return true;
@@ -514,7 +517,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //todo: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return false;
             }
             return true;
@@ -538,17 +541,16 @@ namespace MapWebSite.Repository
                 }
                 catch (Exception exception)
                 {
-                    //todo: log exception
+                    CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                     return false;
                 }
                 return true;
             }
             catch (Exception exception)
             {
-                //todo: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return false;
-            }
-            return true;
+            } 
         }
 
         public int RaiseToGeoserverDataset(int datasetId, int? defaultColorPaletteId, string apiUrl)
@@ -569,7 +571,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return -1;
             }
         }
@@ -591,7 +593,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return -1;
             }
         }
@@ -614,7 +616,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return -1;
             }
         }
@@ -651,7 +653,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //TODO: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return -1;
             }
         }
@@ -674,7 +676,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //todo: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return false;
             }
             return true;
@@ -697,7 +699,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                //todo: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return false;
             }
             return true;
@@ -917,7 +919,8 @@ namespace MapWebSite.Repository
                     {
                         Name = (string)row["palette_name"],
                         Intervals = new List<Interval>().JSONDeserialize((string)row["palette_serialization"]),
-                        StatusMask = (int)row["status_mask"]
+                        StatusMask = (int)row["status_mask"],
+                        MainColorCriteria =  row["main_color_criteria"]?.ToString()
                     }));
 
             return result;

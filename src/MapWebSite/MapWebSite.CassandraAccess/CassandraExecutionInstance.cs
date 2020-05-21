@@ -1,4 +1,5 @@
 ﻿using Cassandra;
+using MapWebSite.Core;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -77,7 +78,7 @@ namespace MapWebSite.CassandraAccess
             }
             catch(Exception exception)
             {
-                //todo: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
             }
         }
 
@@ -98,7 +99,7 @@ namespace MapWebSite.CassandraAccess
             }
             catch (Exception exception)
             {
-                //todo: log exception
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return new List<Row>();
             }
         }

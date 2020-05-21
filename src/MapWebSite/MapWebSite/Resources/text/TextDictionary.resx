@@ -541,4 +541,10 @@
   <data name="HMenuSGSUrlInputPlaceholder" xml:space="preserve">
     <value>https://demowmts:8080</value>
   </data>
+  <data name="HMenuSGSPaletteLabel" xml:space="preserve">
+    <value>Default palette</value>
+  </data>
+  <data name="HMenuSGSSearchPaletteButtonText" xml:space="preserve">
+    <value>Select palette</value>
+  </data>
 </root>
