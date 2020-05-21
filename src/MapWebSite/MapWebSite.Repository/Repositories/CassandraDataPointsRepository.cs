@@ -37,7 +37,7 @@ namespace MapWebSite.Repository
             }
             catch (Exception exception)
             {
-                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
+                CoreContainers.LogsRepository?.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
             }
         }
 
