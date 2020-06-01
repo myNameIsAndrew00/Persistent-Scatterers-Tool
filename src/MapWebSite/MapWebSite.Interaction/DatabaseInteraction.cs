@@ -33,7 +33,8 @@ namespace MapWebSite.Domain
         {
             Ok,
             GeoserverError,
-            DatasetError
+            DatasetError,
+            BadPaletteError
         }
 
         private readonly IUserRepository userRepository;
@@ -42,11 +43,11 @@ namespace MapWebSite.Domain
 
         private readonly IDataPointsRegionsSource dataPointsRegionSource;
 
-        private readonly Func<GeoserverClient> geoserverClient = () => 
+        private readonly Func<string,string,string,GeoserverClient> geoserverClient = (url, username, password) => 
               new GeoserverClient(
-                  ConfigurationManager.AppSettings["GeoserverApiUrl"],
-                  ConfigurationManager.AppSettings["GeoserverUser"],
-                  ConfigurationManager.AppSettings["GeoserverPassword"]
+                  url ?? ConfigurationManager.AppSettings["GeoserverApiUrl"],
+                  username ?? ConfigurationManager.AppSettings["GeoserverUser"],
+                  password ?? ConfigurationManager.AppSettings["GeoserverPassword"]
                   );
         
 
@@ -71,7 +72,12 @@ namespace MapWebSite.Domain
         /// <param name="datasetName">Name of the dataset</param>
         /// <param name="username">The username of the user which create the dataset</param>
         /// <returns>A boolean which indicates if the insert was succesufully and a return message</returns>
-        public CreateDatasetResultCode CreateDataSet(string datasetName, string username, PointsSource pointsSource, string apiUrl = null)
+        public CreateDatasetResultCode CreateDataSet(string datasetName, 
+                                                     string username, 
+                                                     PointsSource pointsSource, 
+                                                     string apiUrl = null, 
+                                                     string colorPaletteUser = null, 
+                                                     string colorPaletteName = null)
         {
             /** error strings: 
              * Dataset - caused by dataset insertions
@@ -88,15 +94,20 @@ namespace MapWebSite.Domain
                     SingleLayer = true
                 };
 
-                GeoserverClient client = geoserverClient();
+                GeoserverClient client = geoserverClient(null, null, null);
 
                 if (client.Get<Layer>(new ModulesFactory().CreateLayerModule(builder)) == null)
                     return CreateDatasetResultCode.GeoserverError;
 
                 //if dataset already exists in database
                 if (datasetId == -1) datasetId = this.userRepository.GetDatasetID(username, datasetName);
-                 
-                datasetId = this.userRepository.RaiseToGeoserverDataset(datasetId, null, apiUrl);
+                
+                int defaultColorPaletteId = this.userRepository.GetColorMapID(colorPaletteUser, colorPaletteName);
+                if (defaultColorPaletteId == -1) return CreateDatasetResultCode.BadPaletteError;
+
+                datasetId = this.userRepository.RaiseToGeoserverDataset(datasetId,
+                    defaultColorPaletteId, 
+                    apiUrl);
             }
 
             return datasetId != -1 ? CreateDatasetResultCode.Ok : CreateDatasetResultCode.DatasetError;
@@ -271,7 +282,7 @@ namespace MapWebSite.Domain
                 var selectedPalette = userPalettes.Where(p => p.Item1 == paletteUsername && p.Item2.Name == paletteName).FirstOrDefault();
                 if (selectedPalette != null) return true;
 
-                GeoserverClient client = geoserverClient();
+                GeoserverClient client = geoserverClient(null, null, null);
                 ModulesFactory modulesFactory = new ModulesFactory();
 
                 LayersBuilder builder = new LayersBuilder();
@@ -300,7 +311,7 @@ namespace MapWebSite.Domain
 
         public bool InsertColorPalette(string username, ColorMap colorMap)
         {
-            GeoserverClient client = geoserverClient();
+            GeoserverClient client = geoserverClient(null, null, null);
 
             StylesBuilder stylesBuilder = 
                 new StylesBuilder(username + '_' + colorMap.Name, colorMap.Name);

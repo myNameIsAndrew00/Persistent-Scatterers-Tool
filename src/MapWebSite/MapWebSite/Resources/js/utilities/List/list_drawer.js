@@ -4,7 +4,7 @@
  *
  * */
 
-class ListDrawer {
+export class ListDrawer {
 
     /**
      * An instance which manage generic list drawing
@@ -34,9 +34,10 @@ class ListDrawer {
         var self = this;
 
         this.listContainer = $('<div></div>');
+        this.listContainer.addClass(this.properties.class);
         this.listContainer.css('display', 'flex');
         this.listContainer.css('flex-direction',
-                                this.properties.orientation === 'vertical' ? 'row' : 'column');
+                                this.properties.orientation === 'vertical' ? 'column' : 'row');
 
         this.listContainer.on('scroll', function () {
             if (self.listContainer.scrollTop() + self.listContainer.innerHeight() >= self.listContainer[0].scrollHeight) {
@@ -67,7 +68,7 @@ class ListDrawer {
         if (this.isVerbose) console.log(this.data);
 
         for (var i = 0; i < this.data.length; i++) {
-            var listItem = this.properties.onItemCreate(this.data[i], this.currentPage * this.itemsPerPage + i);
+            var listItem = this.properties.onItemCreate(this.data[i], this.currentPage * this.properties.itemsPerPage + i);
 
             this.listContainer.append(listItem);
         }
@@ -79,6 +80,7 @@ class ListDrawer {
 /*
     var drawer = new ListDrawer({
        container: containerId,                                  --id of the container which contain the list
+       class: class                                             --class of list (styling)
        itemsPerPage: 10,                                        --items loaded at once
        onItemCreate: function(itemValue, itemIndex),            --function which is called to render a card(returns an html element);
        dataSourceCallback: function(pageIndex, itemsPerPage),   --function which is called to provide data

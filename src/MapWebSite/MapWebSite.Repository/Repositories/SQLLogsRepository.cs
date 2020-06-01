@@ -39,22 +39,22 @@ namespace MapWebSite.Repository
 
         public void LogInfo(string message)
         {
-            log(message, null, LogTrigger.Other, LogType.Info);
+            log(message, string.Empty, LogTrigger.Other, LogType.Info);
         }
 
         public void LogInfo(string message, LogTrigger trigger)
         {
-            log(message, null, trigger, LogType.Info);
+            log(message, string.Empty, trigger, LogType.Info);
         }
 
         public void LogWarning(string message)
         {
-            log(message, null, LogTrigger.Other, LogType.Warning);
+            log(message, string.Empty, LogTrigger.Other, LogType.Warning);
         }
 
         public void LogWarning(string message, LogTrigger trigger)
         {
-            log(message, null, trigger, LogType.Warning);
+            log(message, string.Empty, trigger, LogType.Warning);
         }
 
 

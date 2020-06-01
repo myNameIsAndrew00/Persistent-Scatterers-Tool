@@ -132,12 +132,16 @@
                 }
 
                 .palette {
+                    border-spacing: 4px;
+                    border-collapse: separate;
+
                     tr, td {
                         width: 12px;
                         height: 12px;
                         margin: 0;
-                        padding: 0;
-                        border: solid #e3e3e3 1px;
+                        padding: 3px;
+                        border: solid get_color(white) 2px;
+                        border-radius: 25px;
                     }
                 }
             }
@@ -160,11 +164,11 @@
             }
 
             .selected-row {
-                background: #c0e6cc;
+                background: get_color(chromaLightGreen);
 
                 table {
                     tr, td {
-                        border-color: #4b4b4b;
+                        border-color: get_color(chromaLightGreen);
                     }
                 }
             }

@@ -68,8 +68,14 @@ export function ChangeSpinnerVisibility(visible) {
 
 /*Use this function to display the overlay. The message must be in the right format, processed by server (check MessageBoxBuilder.cs)*/
 export function DisplayOverlay(content) {
+    $(document).keyup(function (event) {
+        if (event.key == 'Escape') HideOverlay(false);
+    });
+
     $(constants.id.settingsLayerContainer).children(constants.id.settingsOverlay).removeClass('message-overlay-hidden');
-    $(constants.id.settingsLayerContainer).children(constants.id.settingsOverlay).html(content);
+
+    if (!(content === undefined || content == null))
+       $(constants.id.settingsLayerContainer).children(constants.id.settingsOverlay).html(content);
 }
 
 

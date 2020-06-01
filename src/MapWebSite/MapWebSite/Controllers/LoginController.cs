@@ -146,6 +146,8 @@ namespace MapWebSite.Controllers
                 return View((object)TextDictionary.LCESuccessMessage);
             }
 
+            CoreContainers.LogsRepository.LogWarning($"Failed to validate email for user with id {userId} and code {code}", Core.Database.Logs.LogTrigger.Controllers);
+
             return View((object)TextDictionary.LCEFailMessage);
         }
 
@@ -274,8 +276,8 @@ namespace MapWebSite.Controllers
                     Message = TextDictionary.LRegisterInvalidPasswordInputMessage_Uppercase
                 }.JSONSerialize());
 
-            if (response.Content == null) response.Content = new StringContent(new RegisterValidationResult() { IsValid = true }.JSONSerialize());
-            
+            if (response.Content == null) response.Content = new StringContent(new RegisterValidationResult() { IsValid = true }.JSONSerialize());            
+
             response.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             return response;
         }

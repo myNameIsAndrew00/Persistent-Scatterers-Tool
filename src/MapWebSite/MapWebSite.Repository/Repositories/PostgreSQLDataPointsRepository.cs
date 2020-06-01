@@ -102,6 +102,7 @@ namespace MapWebSite.Repository
                     .OrderByRaw("ST_SetSRID(ST_MakePoint(?,?),4326) <-> geom", basicPoint.Longitude, basicPoint.Latitude);
 
 
+
                 queryResult = new SqlServerCompiler().Compile(query);
 
                 using (var datasetResult = SqlExecutionInstance.ExecuteQuery(
@@ -116,7 +117,14 @@ namespace MapWebSite.Repository
                                                             return new NpgsqlDataAdapter((NpgsqlCommand)command);
                                                         }))
                 {
-                    return parsePointDetails(datasetResult.Tables[0].Rows, timeReferences);
+                    var pointDetails = parsePointDetails(datasetResult.Tables[0].Rows, timeReferences);
+
+                    if (pointDetails == null)
+                    {
+                        CoreContainers.LogsRepository.LogWarning($"Nothing found for dataset id {dataSetID} - lat: {basicPoint.Latitude}, long: {basicPoint.Longitude}", Core.Database.Logs.LogTrigger.DataAccess);
+                        CoreContainers.LogsRepository.LogWarning($"Query failed for table {tableName}", Core.Database.Logs.LogTrigger.DataAccess);
+                    }
+                    return pointDetails;
                 }
             }
             catch(Exception exception)
@@ -147,6 +155,12 @@ namespace MapWebSite.Repository
 
         private Point parsePointDetails(DataRowCollection rows, long[] timeReferences)
         {
+            if (rows.Count == 0)
+            {
+                CoreContainers.LogsRepository.LogInfo($"No point details found for selected point", Core.Database.Logs.LogTrigger.DataAccess);
+                return null;
+            }
+
             DataRow firstRow = rows[0];
 
             var result = new Point

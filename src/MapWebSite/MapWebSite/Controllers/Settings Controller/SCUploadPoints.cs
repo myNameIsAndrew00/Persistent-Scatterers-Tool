@@ -87,9 +87,16 @@ namespace MapWebSite.Controllers
         [HttpPost]
         public HttpResponseMessage MergeFileChunks([FromBody] JObject data)
         {
+          
+
             string fileName = data["fileName"].ToObject<string>();
-            if(string.IsNullOrEmpty(fileName))
-                return new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.InternalServerError };
+            if (string.IsNullOrEmpty(fileName))
+            {
+                //Log a warning message
+                Core.CoreContainers.LogsRepository.LogInfo($"Failed to upload a file uploaded by {RouteConfig.CurrentUser.UserName} because 'fileName' is not found", Core.Database.Logs.LogTrigger.Controllers);
+
+                return new HttpResponseMessage() { StatusCode = System.Net.HttpStatusCode.InternalServerError };            
+            }
 
             string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{RouteConfig.CurrentUser.UserName}\\{fileName}";
 
@@ -107,6 +114,9 @@ namespace MapWebSite.Controllers
                         fileChunk.CopyTo(finalFile);
                     }
                 }
+          
+            //Log a warning message
+            Core.CoreContainers.LogsRepository.LogInfo($"Merged chunks for file {directoryName}\\{fileName} uploaded by {RouteConfig.CurrentUser.UserName}", Core.Database.Logs.LogTrigger.Controllers);
 
             //TODO: handle an error if any problems are encountered
             new DatabaseInteractionHandler().UpdateDatasetStatus(fileName,

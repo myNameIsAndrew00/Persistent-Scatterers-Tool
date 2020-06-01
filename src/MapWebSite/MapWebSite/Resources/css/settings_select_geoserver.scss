@@ -1,6 +1,8 @@
 ﻿@import 'general/colors.scss';
 @import 'general/dimensions.scss';
 
+$paletteListWidth: 500px;
+$paletteListHeight: 300px;
 
 .select-geoserver-source-container {
     position: absolute;
@@ -79,6 +81,49 @@
 
         .gliph {
             grid-area: right;
+        }
+    }
+}
+
+.message-overlay {
+    .palette-list-container {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        height: $paletteListHeight;
+        width: $paletteListWidth;
+        overflow-y: auto;
+        background: get_color(white);
+        border-radius: $general_border_radius;
+
+
+        .palette-list-container-item {
+            padding: $general_large_padding;
+            border-left: solid $general_large_padding get_color(chromaOrange);
+            transition: 0.3s;
+ 
+            label {
+                pointer-events: none;
+            }
+
+            .palette-list-table {
+                display: flex;
+                flex-wrap: wrap;
+
+                span {
+                    height: 12px;
+                    width: 12px;
+                    border-radius: 12px;
+                    margin: 5px;
+                }
+            }
+        }
+
+        .palette-list-container-item:hover {
+            cursor: pointer;
+            background: get_color(transparentBlack);
+            border-left: solid $general_large_padding get_color(chromaDarkOrange);
         }
     }
 }

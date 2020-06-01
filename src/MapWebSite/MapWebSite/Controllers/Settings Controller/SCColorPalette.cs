@@ -20,15 +20,20 @@ namespace MapWebSite.Controllers
         public HttpResponseMessage SaveColorsPalette(ColorMap colorMap)
         { 
             DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
-            bool result = handler.InsertColorPalette(RouteConfig.CurrentUser.Username, colorMap);
+            bool success = handler.InsertColorPalette(RouteConfig.CurrentUser.Username, colorMap);
           
 
             var response = new HttpResponseMessage();
-            response.Content = new StringContent(MessageBoxBuilder.Create(result ? TextDictionary.OverlayCPSuccesTitle
+            response.Content = new StringContent(MessageBoxBuilder.Create(success ? TextDictionary.OverlayCPSuccesTitle
                                                                                  : TextDictionary.OverlayCPFailedTitle, 
-                                                                          result ? TextDictionary.OverlayCPSuccesText
+                                                                          success ? TextDictionary.OverlayCPSuccesText
                                                                                  : TextDictionary.OverlayCPFailedText,
-                                                                          result));
+                                                                          success));
+
+            //Log a warning message if insert fails
+            if(!success)
+              Core.CoreContainers.LogsRepository.LogWarning($"Failed to insert color palette { colorMap.Name } (main color criteria: { colorMap.MainColorCriteria }) for user {RouteConfig.CurrentUser.UserName}", Core.Database.Logs.LogTrigger.Controllers);
+
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
 
             return response;
