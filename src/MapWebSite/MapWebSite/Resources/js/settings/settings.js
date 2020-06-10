@@ -4,7 +4,7 @@
  * 
  * */
 
-import { ExpandMainMenu } from '../menu.js';
+import { ExpandMainMenu, ChangeMenuMode } from '../menu.js';
 
 export const constants = {
     id: {
@@ -95,16 +95,15 @@ window.hideOverlay = HideOverlay;
 export function DisplayPage(display) {
     $(constants.id.settingsLayer).html('');
 
-    ExpandMainMenu(!display);
-
     function doAction(remove, id, className) {
         remove ? $(id).removeClass(className) : $(id).addClass(className);
     }
+
     doAction(display, constants.id.settingsLayerContainer, 'settings-layer-container-hide');
     doAction(display, constants.id.settingsLayer, 'settings-layer-hide');
-    doAction(!display, '#main-menu', 'main-select-menu-nontransparent');
-    doAction(!display, '#secondary-menu', 'secondary-menu-nontransparent');
-    doAction(!display, '#top-menu', 'top-menu-hiden');
+
+    ExpandMainMenu(!display);
+    ChangeMenuMode(!display);
 }
 
 window.DisplayPage = DisplayPage;

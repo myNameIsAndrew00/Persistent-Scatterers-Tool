@@ -79,6 +79,15 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Google map.
+        /// </summary>
+        public static string CMTGoogle {
+            get {
+                return ResourceManager.GetString("CMTGoogle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hybrid map.
         /// </summary>
         public static string CMTHybrid {
@@ -524,7 +533,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Deformation rate.
+        ///   Looks up a localized string similar to Deformation rate [mm/year].
         /// </summary>
         public static string HPIDeformationRateText {
             get {
@@ -533,7 +542,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Estimated def. rate.
+        ///   Looks up a localized string similar to Estimated def. rate uncertainty [mm/year].
         /// </summary>
         public static string HPIEstimatedDefRateText {
             get {
@@ -542,7 +551,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Estimated height.
+        ///   Looks up a localized string similar to Estimated height uncertainty [mm].
         /// </summary>
         public static string HPIEstimatedHeightText {
             get {
@@ -551,7 +560,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Height.
+        ///   Looks up a localized string similar to Height [m].
         /// </summary>
         public static string HPIHeightText {
             get {
@@ -596,7 +605,7 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Standard deviation.
+        ///   Looks up a localized string similar to Standard deviation [rad].
         /// </summary>
         public static string HPIStandardDeviationText {
             get {

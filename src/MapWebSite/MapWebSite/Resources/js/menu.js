@@ -16,6 +16,7 @@ import { Router, endpoints } from './api/api_router.js';
 import { PopupBuilderInstance } from './utilities/Popup/popup.js';
 import { TooltipManagerInstance } from './utilities/Tooltip/tooltip_manager.js';
 import { HtmlToElement } from './utilities/utils.js';
+import { map } from './map/map.js';
 
 /**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE DOWN-LEFT MENU******************/
 /*************************************************************************************************/
@@ -27,16 +28,83 @@ export const Ids = {
     buttons : {
         customizable: '.customizable-buttons',
         general: '.general-buttons',
-        search: '.search-button'
-    }   
+        search: '.search-button'       
+    },
+    labels : {
+        mousePosition: 'cursor-position-labels'
+    },
+    controls: {
+        mainSelectMenuIcon: '#main-select-menu-icon',
+        mainMenu: '#main-menu',
+        secondaryMenu: '#secondary-menu',
+        fixedMenu: '#fixed-menu',
+        topMenu: '#top-menu'
+    }
 }
 
-const mainMenuId = '#main-menu';
-const secondaryMenuId = '#secondary-menu';
-const fixedMenuId = '#fixed-menu';
+const classes = {
+    labels: {
+        mousePosition: 'mouse-position'
+    },
+    controls: {
+        topMenuHidden: 'top-menu-hiden'
+    }
+} 
+
+/*control for pointer position display*/
+var mousePositionControl = new ol.control.MousePosition({
+    coordinateFormat: ol.coordinate.createStringXY(4),
+    projection: 'EPSG:4326',
+    target: document.getElementById(Ids.labels.mousePosition),
+    className: classes.labels.mousePosition,
+    undefinedHTML: '[lat], [long]'
+});
+
+var MenuHandler = {
+    topMenuVisible: true,
+    ExpandMainMenu: function (expand) {
+        expand ? $(Ids.controls.fixedMenu).addClass('fixed-menu-expanded') : $(Ids.controls.fixedMenu).removeClass('fixed-menu-expanded');
+        expand ? $(Ids.controls.mainMenu).addClass('main-select-menu-expanded') : $(Ids.controls.mainMenu).removeClass('main-select-menu-expanded');
+        expand ? $(Ids.controls.secondaryMenu).addClass('secondary-menu-hidden') : $(Ids.controls.secondaryMenu).removeClass('secondary-menu-hidden')
+    }, 
+    /**
+     * Change the visibility of the menus, taking in consideration internal state. If secondary parameter is not supplied, all menus are affected
+     * @param {any} visibleMode the state which should be visible (if internal state is in concordance)
+     * @param {any} menus the menus which must be affected, all if not provided
+     */
+    ChangeMenuMode: function (visibleMode, menus) {
+        if (menus === undefined)
+            menus = {
+                top: true,
+                main: true,
+                secondary: true
+            };
+
+        function doAction(remove, id, className) {
+            remove ? $(id).removeClass(className) : $(id).addClass(className);
+        }
+
+        if (menus.main === true) doAction(visibleMode, Ids.controls.mainMenu, 'main-select-menu-nontransparent');
+        if (menus.secondary === true) doAction(visibleMode, Ids.controls.secondaryMenu, 'secondary-menu-nontransparent');
+        if (menus.top === true) doAction(visibleMode && this.topMenuVisible, Ids.controls.topMenu, classes.controls.topMenuHidden);
+    },
+    /**
+     * Change the top menu visibility. If display parameter is not provided, only internal state will be considered
+     * @param {any} display
+     */
+    ChangeTopMenuVisibility: function () {
+        const id = Ids.controls.topMenu;
+        this.topMenuVisible = !this.topMenuVisible;
+
+        !this.topMenuVisible ? $(id).addClass(classes.controls.topMenuHidden) : $(id).removeClass(classes.controls.topMenuHidden);
+    }
+}
+
 
 window.onload = function () {
-    menuIconsCount = $('#main-select-menu-icon').find('object').length;
+    map.addControl(mousePositionControl);
+
+    menuIconsCount = $(Ids.controls.mainSelectMenuIcon).find('object').length;
 
     //hide every content which is not displayed
     for (var menuIndex = 1; menuIndex < menuIconsCount; menuIndex++) {
@@ -85,11 +153,11 @@ window.changeMenuContent = function changeMenuContent(direction, display = false
 
 }
 
-export function ExpandMainMenu(expand) {
-    expand ? $(fixedMenuId).addClass('fixed-menu-expanded') : $(fixedMenuId).removeClass('fixed-menu-expanded');
-    expand ? $(mainMenuId).addClass('main-select-menu-expanded') : $(mainMenuId).removeClass('main-select-menu-expanded');
-    expand ? $(secondaryMenuId).addClass('secondary-menu-hidden') : $(secondaryMenuId).removeClass('secondary-menu-hidden')
-}
+window.changeTopMenuVisibility = function () { MenuHandler.ChangeTopMenuVisibility() };
+
+export function ExpandMainMenu(expand) { MenuHandler.ExpandMainMenu(expand) };
+
+export function ChangeMenuMode(mode, menus) { MenuHandler.ChangeMenuMode(mode, menus) };
 
 export function ChangeContextualMenuVisibility(menuId, visible) {
     visible == false ? $(menuId).addClass('buttons-group-hidden') : $(menuId).removeClass('buttons-group-hidden')  ;
@@ -98,7 +166,7 @@ export function ChangeContextualMenuVisibility(menuId, visible) {
 function hideIcon(innerImage, innerText, currentMenuList) {
     /*reset elements transition timer*/
     /*animation for side menu*/
-    if (currentMenuList != null) $(secondaryMenuId).css('margin','0 0 0 -190px');
+    if (currentMenuList != null) $(Ids.controls.secondaryMenu).css('margin','0 0 0 -190px');
 
     /*animation for main menu*/
     innerImage.style.transition = '0.5s';
@@ -121,7 +189,7 @@ function showIcon(innerImage, innerText, currentMenuIcon, currentMenuList) {
 
     setTimeout(function () {
         /*animation for side menu. Remove all the custom styles*/
-        $(secondaryMenuId).removeAttr("style");
+        $(Ids.controls.secondaryMenu).removeAttr("style");
 
         /*animation for main menu*/
         innerImage.style.transform = 'translate(0, 0) rotate(0)';

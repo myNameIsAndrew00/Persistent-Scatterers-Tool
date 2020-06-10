@@ -178,16 +178,16 @@
     <value>Upload file</value>
   </data>
   <data name="HPIDeformationRateText" xml:space="preserve">
-    <value>Deformation rate</value>
+    <value>Deformation rate [mm/year]</value>
   </data>
   <data name="HPIEstimatedDefRateText" xml:space="preserve">
-    <value>Estimated def. rate</value>
+    <value>Estimated def. rate uncertainty [mm/year]</value>
   </data>
   <data name="HPIEstimatedHeightText" xml:space="preserve">
-    <value>Estimated height</value>
+    <value>Estimated height uncertainty [mm]</value>
   </data>
   <data name="HPIHeightText" xml:space="preserve">
-    <value>Height</value>
+    <value>Height [m]</value>
   </data>
   <data name="HPIIDText" xml:space="preserve">
     <value>ID</value>
@@ -200,7 +200,7 @@
     <comment>HPI --&gt; Home points Info</comment>
   </data>
   <data name="HPIStandardDeviationText" xml:space="preserve">
-    <value>Standard deviation</value>
+    <value>Standard deviation [rad]</value>
   </data>
   <data name="HPSCPHead1" xml:space="preserve">
     <value>Palette name</value>
@@ -546,5 +546,8 @@
   </data>
   <data name="HMenuSGSSearchPaletteButtonText" xml:space="preserve">
     <value>Select palette</value>
+  </data>
+  <data name="CMTGoogle" xml:space="preserve">
+    <value>Google map</value>
   </data>
 </root>

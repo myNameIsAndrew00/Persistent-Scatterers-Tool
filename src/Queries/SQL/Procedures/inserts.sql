@@ -62,7 +62,8 @@ begin
 	begin try
 		begin transaction
 			declare @user_id as int = -1,
-					@dataset_id as int = -1;
+					@dataset_id as int = -1,
+					@status_id as int = -1;
 			
 			--Get the user id
 			select @user_id = U.user_id
@@ -94,6 +95,7 @@ go
 if object_id('InsertColorPalette', 'P') is not null
 	drop procedure InsertColorPalette
 go
+create procedure InsertColorPalette
 	@username as varchar(100),
 	@palette_name as varchar(255),
 	@palette_serialization as text,
@@ -234,7 +236,7 @@ begin
 
 end
 
-
+go
 
 if object_id('InsertDatapointsToUser', 'P') is not null
 	drop procedure InsertDatapointsToUser
@@ -277,7 +279,7 @@ begin
 
 end
 
-
+go
 
 if object_id('RemoveDatapointsFromUser', 'P') is not null
 	drop procedure RemoveDatapointsFromUser

@@ -311,6 +311,7 @@
     <Content Include="FrameworkContent\Bootstrap\bootstrap.min.css" />
     <Content Include="FrameworkContent\OpenLayers\ol.css" />
     <Content Include="FrameworkContent\OpenLayers\ol.js" />
+    <Content Include="FrameworkContent\Scripts\d3regression.min.js" />
     <Content Include="Global.asax" />
     <Content Include="FrameworkContent\Scripts\bootstrap.js" />
     <Content Include="FrameworkContent\Scripts\bootstrap.min.js" />
@@ -417,9 +418,12 @@
     <Content Include="Resources\resources\icons\geoserver_palette_icon.svg" />
     <Content Include="Resources\resources\icons\geoserver_upload_icon.svg" />
     <Content Include="Resources\resources\icons\info_icon.svg" />
+    <Content Include="Resources\resources\icons\linear_regression_icon.svg" />
     <Content Include="Resources\resources\icons\loading_icon.svg" />
     <Content Include="Resources\resources\icons\logout_icon.svg" />
+    <Content Include="Resources\resources\icons\map_cursor_icon.svg" />
     <Content Include="Resources\resources\icons\map_icon.svg" />
+    <Content Include="Resources\resources\icons\map_menu_icon.svg" />
     <Content Include="Resources\resources\icons\palettes_management_icon.svg" />
     <Content Include="Resources\resources\icons\palette_icon.svg" />
     <Content Include="Resources\resources\icons\palette_template_Crown.svg" />
@@ -428,7 +432,10 @@
     <Content Include="Resources\resources\icons\palette_template_Kuller.svg" />
     <Content Include="Resources\resources\icons\points_management_icon.svg" />
     <Content Include="Resources\resources\icons\points_plot_icon.svg" />
+    <Content Include="Resources\resources\icons\points_reference_icon.svg" />
     <Content Include="Resources\resources\icons\points_server_icon.svg" />
+    <Content Include="Resources\resources\icons\point_plot_icon.svg" />
+    <Content Include="Resources\resources\icons\poly_regression_icon.svg" />
     <Content Include="Resources\resources\icons\reload_icon.svg" />
     <Content Include="Resources\resources\icons\resize_point_icon.svg" />
     <Content Include="Resources\resources\icons\second_gliph.svg" />
@@ -449,6 +456,7 @@
     <Content Include="Resources\resources\icons\zoom_dataset_icon.svg" />
     <Content Include="Resources\resources\icons_images\cassandra.png" />
     <Content Include="Resources\resources\icons_images\geoserver.png" />
+    <Content Include="Resources\resources\icons_images\google.png" />
     <Content Include="Resources\resources\icons_images\hybrid.png" />
     <Content Include="Resources\resources\icons_images\terrain.png" />
     <Content Include="Resources\resources\WebDisasterLogo.png" />
@@ -457,6 +465,8 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\d3\d3.js" />
+    <Content Include="Scripts\d3\d3.min.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -599,6 +609,10 @@
     <Content Include="Views\Home\Miscellaneous Content\Tooltips\Tooltip.cshtml" />
     <Content Include="Resources\css\settings_users_management.scss" />
     <Content Include="Resources\css\settings_datasets_management.scss" />
+    <Content Include="Scripts\d3\README.md" />
+    <Content Include="Scripts\d3\LICENSE" />
+    <Content Include="Scripts\d3\CHANGES.md" />
+    <Content Include="Scripts\d3\API.md" />
     <None Include="Views\Home\Miscellaneous Content\Tooltips\GifTooltip.cshtml" />
     <Content Include="Resources\css\tooltips\customizations.scss" />
     <Content Include="Views\Shared\Home Menu\Navigation Menus\UserDetailsNavigationItems.cshtml" />

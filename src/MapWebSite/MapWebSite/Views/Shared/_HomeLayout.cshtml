@@ -11,6 +11,7 @@
     @Styles.Render("~/css/openlayers")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/hub")
+    @Scripts.Render("~/bundles/d3")
     @Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/hubProxy")
     @Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/api")
 
@@ -25,7 +26,7 @@
     @Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/settings")
 
 
-    @{ Html.RenderPartial("~/Views/Shared/Home Menu/HomeMenu.cshtml"); }
+    @{ Html.RenderPartial("~/Views/Shared/Home Menu/HomeMenu.cshtml"); } 
 
     @Scripts.Render("~/scripts/select")
 

@@ -61,8 +61,8 @@ namespace MapWebSite.Domain
 
         public DatabaseInteractionHandler()
         {
-            userRepository = new SQLUserRepository();
-            dataPointsRepository = CassandraDataPointsRepository.Instance;
+            userRepository = CoreContainers.UsersRepository;
+            dataPointsRepository = CoreContainers.DataPointsRepository;
             dataPointsRegionSource = new PowerOfTwoRegionsSource();
         }
 

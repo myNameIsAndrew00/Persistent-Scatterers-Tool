@@ -42,23 +42,50 @@
     </div>
     <div class="plot-area">
         <div class="plot_container">
-            <svg class="plot" id="plot" version="1.1" width="1000" height="1000">
+            <div class="plot" id="plot">
 
 
-            </svg>
+            </div>
 
-            <ul id="plot-menu" class="plot-menu">
-                <li>
-                    <button onclick="changePlotType('bars')">
+            <div id="plot-menu" class="plot-menu">
+                <div class="plot-menu-item">
+                    <button onclick="changePlotType('bar')">
                         <object type="image/svg+xml" data="/Resources/resources/icons/bar_plot_icon.svg" width="16px" height="20px"></object>
                     </button>
-                </li>
-                <li>
+                </div>
+                <div class="plot-menu-item">
                     <button onclick="changePlotType('line')">
                         <object type="image/svg+xml" data="/Resources/resources/icons/points_plot_icon.svg" width="16px" height="20px"></object>
                     </button>
-                </li>
-            </ul>
+                </div>
+                <div class="plot-menu-item">
+                    <button onclick="changePlotType('points')">
+                        <object type="image/svg+xml" data="/Resources/resources/icons/point_plot_icon.svg" width="16px" height="20px"></object>
+                    </button>
+                </div>
+
+                <hr />
+
+                <div class="plot-menu-item ">
+                    <button onclick="drawRegressionFunction('linear')">
+                        <object type="image/svg+xml" data="/Resources/resources/icons/linear_regression_icon.svg" width="16px" height="20px"></object>
+                    </button>
+                </div>
+                <div class="plot-menu-item">
+                    <button onclick="drawRegressionFunction('polynomial')">
+                        <object type="image/svg+xml" data="/Resources/resources/icons/poly_regression_icon.svg" width="16px" height="20px"></object>
+                    </button>
+                </div>
+
+                <hr />
+
+                <div class="plot-menu-item">
+                    <button onclick="drawReferenceAxis()">
+                        <object type="image/svg+xml" data="/Resources/resources/icons/points_reference_icon.svg" width="16px" height="20px"></object>
+                    </button>
+                </div>
+
+            </div>
 
             <div class="plot-popup plot-popup-hidden" id="plot-popup">
                 <button class="plot-popup-close">X</button>

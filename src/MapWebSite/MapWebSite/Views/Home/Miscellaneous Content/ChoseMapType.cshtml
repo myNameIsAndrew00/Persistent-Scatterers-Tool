@@ -3,19 +3,26 @@
     Layout = null;
 }
 
-<ul class="chose-list chose-map-list">
-    <li>
-        <button id="chose_map_hybrid"
-                onclick="changeMapType(this,'hybrid')">
-            <img src="@Url.Content("~/Resources/resources/icons_images/hybrid.png")">
-            @Html.Raw(TextDictionary.CMTHybrid)
-        </button>
-    </li>
-    <li>
-        <button id="chose_map_satelitte"
-                onclick="changeMapType(this,'satelitte')">
-            <img src="@Url.Content("~/Resources/resources/icons_images/terrain.png")">
-            @Html.Raw(TextDictionary.CMTSatelitte)
-        </button>
-    </li>
-</ul>
+    <ul class="chose-list chose-map-list">
+        <li>
+            <button id="chose_map_hybrid"
+                    onclick="changeMapType(this,'hybrid')">
+                <img src="@Url.Content("~/Resources/resources/icons_images/hybrid.png")">
+                @Html.Raw(TextDictionary.CMTHybrid)
+            </button>
+        </li>
+        <li>
+            <button id="chose_map_satelitte"
+                    onclick="changeMapType(this,'satelitte')">
+                <img src="@Url.Content("~/Resources/resources/icons_images/terrain.png")">
+                @Html.Raw(TextDictionary.CMTSatelitte)
+            </button>
+        </li>
+        <li>
+            <button id="chose_map_google"
+                    onclick="changeMapType(this,'google')">
+                <img src="@Url.Content("~/Resources/resources/icons_images/google.png")">
+                @Html.Raw(TextDictionary.CMTGoogle)
+            </button>
+        </li>
+    </ul>

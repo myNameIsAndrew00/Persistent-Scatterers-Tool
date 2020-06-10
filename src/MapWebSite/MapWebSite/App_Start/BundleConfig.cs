@@ -78,6 +78,9 @@ namespace MapWebSite
             bundles.Add(new ScriptBundle("~/bundles/hub").Include(
                 "~/Scripts/jquery.signalR-2.4.1.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/d3").Include(
+                "~/Scripts/d3/d3.min.js",
+                "~/FrameworkContent/Scripts/d3regression.min.js"));
 
             /**Custom scripts bellow**/
             bundles.Add(new ScriptBundle("~/scripts/login").Include(
