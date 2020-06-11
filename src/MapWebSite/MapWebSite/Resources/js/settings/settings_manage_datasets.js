@@ -55,6 +55,10 @@ window.drawDatasetsTable = function drawDatasetsTable() {
 			},
 			{
 				drawingType: ColumnDrawingTypes.raw,
+				columnName: 'Name'
+			},
+			{
+				drawingType: ColumnDrawingTypes.raw,
 				columnName: 'Username'
 			},
 			{

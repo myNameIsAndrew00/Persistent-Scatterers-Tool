@@ -38,6 +38,8 @@ namespace MapWebSite.Model
         [EnumString("Normal")]
         Normal,
         [EnumString("Administrator")]
-        Administrator
+        Administrator,
+        [EnumString("SuperAdministrator")]
+        SuperAdministrator
     }
 }

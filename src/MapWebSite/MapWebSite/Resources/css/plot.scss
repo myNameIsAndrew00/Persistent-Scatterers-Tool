@@ -1,3 +1,5 @@
+@import 'general/colors.scss';
+
 .plot_container {
     width: 530px;
     margin: 0 auto;
@@ -5,10 +7,29 @@
     grid-template-columns: auto auto;
     grid-template-areas: "plot menu";
     /*remainder: add point-event if another items are added inside*/
+    .svg-container {
+        display: inline-block;
+        position: relative;
+        width: 100%;
+        padding-bottom: 100%; /* aspect ratio */
+        vertical-align: top;
+        overflow: hidden;
+    }
+
+    .svg-content-responsive {
+        display: inline-block;
+        position: absolute;
+        top: 10px;
+        left: 0;
+    }
+
+
+
     .plot {
         width: 530px;
         height: 340px;
         grid-area: plot;
+        pointer-events: initial;
 
         .graphPoint {
             pointer-events: initial;
@@ -31,7 +52,7 @@
 
         line {
             stroke: rgb(255, 255, 255);
-            stroke-width: 3;
+            stroke-width: 0.5px;
         }
     }
 
@@ -40,23 +61,39 @@
     }
 
     .plot-menu {
-        margin-left: -45px;
-        padding: 25px;
+        padding: 15px;
+        display: flex !important;
+        flex-direction: column;
 
-        button {
-            pointer-events: initial;
-            margin: 2px;
-            height: 30px;
-            background: none;
-            padding: 4px;
+        hr {
+            border: solid 2px get_color(chromaOrange) !important;
+            margin: 4px !important;
+        }
 
-            object {
-                pointer-events: none;
+
+        .plot-menu-item {
+
+
+            button {
+                pointer-events: initial;
+                margin: 2px;
+                height: 30px;
+                background: none;
+                padding: 4px;
+
+                object {
+                    pointer-events: none;
+                }
+            }
+
+
+            button:hover {
+                background: rgba(0,0,0,0.3);
             }
         }
 
-        button:hover {
-            background: rgba(0,0,0,0.3);
+        .plot-menu-item-end {
+            margin-top: auto;
         }
     }
 

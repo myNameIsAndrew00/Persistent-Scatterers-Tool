@@ -21,6 +21,11 @@ namespace MapWebSite.Controllers
     [Authorize]
     public partial class SettingsController : ApiController
     {
+        /// <summary>
+        /// Use this method to insert a geoserver layer in databse
+        /// </summary>
+        /// <param name="data">An json object which contains: name (dataset name), apiUrl, defaultColorPaletteName, defaultColorPaletteUser </param>
+        /// <returns></returns>
         [HttpPost]
         public HttpResponseMessage UploadGeoserverLayer([FromBody] JObject data)
         {
@@ -31,7 +36,9 @@ namespace MapWebSite.Controllers
                                      datasetName: data["name"].ToObject<string>(),
                                      username: RouteConfig.CurrentUser.Username,
                                      pointsSource: PointsSource.Geoserver,
-                                     apiUrl: string.Empty);
+                                     apiUrl: data["apiUrl"].ToObject<string>(),
+                                     colorPaletteName: data["defaultColorPaletteName"].ToObject<string>(),
+                                     colorPaletteUser: data["defaultColorPaletteUser"].ToObject<string>());
                 
 
             if(insertResult == DatabaseInteractionHandler.CreateDatasetResultCode.Ok)
@@ -48,6 +55,10 @@ namespace MapWebSite.Controllers
                                                                    true))
                 };
             }
+
+            //Log a warning message
+            Core.CoreContainers.LogsRepository.LogWarning($"Failed to insert geoserver layer ( ({ insertResult.ToString()} ) with data provided: {data}", Core.Database.Logs.LogTrigger.Controllers);
+
             return new HttpResponseMessage()
             {
                 StatusCode = System.Net.HttpStatusCode.OK,

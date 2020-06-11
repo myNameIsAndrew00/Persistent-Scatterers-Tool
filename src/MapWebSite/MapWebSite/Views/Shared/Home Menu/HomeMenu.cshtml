@@ -31,6 +31,9 @@
             <div class="bottom">
                 @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
                 {
+                    <button onclick="changeTopMenuVisibility()" class="arrow-icon">
+                        <object type="image/svg+xml" data="~/Resources/resources/icons/map_menu_icon.svg"></object>
+                    </button>
                     <button onclick="requestSettingsPage(@Html.Raw( (int)SettingsController.Page.Account) ,'/Resources/css/settings_points_upload.scss')" class="arrow-icon">
                         <object type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
                     </button>
@@ -107,79 +110,86 @@
 </div>
 
 <div id="top-menu" class="top-menu">
-    <div class="pre-text-area">
-
-        <button id="map_search_button" class="search-button">
-            @Html.SVG("~/Resources/resources/icons/zoom_dataset_icon.svg", new { height = "21px", width = "28px" })
-        </button>
-
-        <div id="map_autocomplete" class="autocomplete autocomplete-hidden">
-            <input id="map_search_text" type="search" placeholder="@Html.Raw(TextDictionary.SCPlaceholder)" />
-            <input id="reset_button" type="button" value="X" />
-            <div id="map_suggestions" class="suggestions">
-            </div>
+    <div class="top-menu-left">        
+        <div class="cursor-position-labels"  id="cursor-position-labels">
+            @Html.SVG("~/Resources/resources/icons/map_cursor_icon.svg", new { height = "21px", width = "28px" })
+          
         </div>
-
-        <div class="customizable-buttons buttons-group-hidden">
-            <button id="map_resize_points_button">
-                @Html.SVG("~/Resources/resources/icons/resize_point_icon.svg", new { height = "22px", width = "28px" })
-            </button>
-
-            <button id="map_criteria_button">
-                @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "20px", width = "28px" })
-            </button>
-        </div>
-
-        <div class="general-buttons">
-            <button id="map_type_button">
-                @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "20px", width = "25px" })
-            </button>
-
-            <button id="points_server_button">
-                @Html.SVG("~/Resources/resources/icons/points_server_icon.svg", new { height = "23px", width = "28px" })
-            </button>
-
-            @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
-            {
-                <button id="notification_button" class="notification-button">
-                    @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "20px", width = "25px" })
-                </button>
-            }
-        </div>
-
     </div>
+    <div id="top-menu-right" class="top-menu-right">
+        <div class="pre-text-area">
 
-    <div class="white-area box">
-        <div class="text-area">
-            @if (RouteConfig.CurrentUser != null)
-            {
-                <div class="top-menu-item">
-                    @TextDictionary.GreetingMessage,
-                    <b>
-                        @RouteConfig.CurrentUser.FirstName
-                    </b>
+            <button id="map_search_button" class="search-button">
+                @Html.SVG("~/Resources/resources/icons/zoom_dataset_icon.svg", new { height = "21px", width = "28px" })
+            </button>
+
+            <div id="map_autocomplete" class="autocomplete autocomplete-hidden">
+                <input id="map_search_text" type="search" placeholder="@Html.Raw(TextDictionary.SCPlaceholder)" />
+                <input id="reset_button" type="button" value="X" />
+                <div id="map_suggestions" class="suggestions">
                 </div>
-            }
-            @Html.Label(TextDictionary.HTMSelectedDataset, new { @class = "top-menu-item" })
-            @Html.Label(TextDictionary.HTMDefaultDataset, new { @class = "top-menu-item current-dataset-text", id = "current-dataset-text" })
+            </div>
+
+            <div class="customizable-buttons buttons-group-hidden">
+                <button id="map_resize_points_button">
+                    @Html.SVG("~/Resources/resources/icons/resize_point_icon.svg", new { height = "22px", width = "28px" })
+                </button>
+
+                <button id="map_criteria_button">
+                    @Html.SVG("~/Resources/resources/icons/eye_icon.svg", new { height = "20px", width = "28px" })
+                </button>
+            </div>
+
+            <div class="general-buttons">
+                <button id="map_type_button">
+                    @Html.SVG("~/Resources/resources/icons/map_icon.svg", new { height = "20px", width = "25px" })
+                </button>
+
+                <button id="points_server_button">
+                    @Html.SVG("~/Resources/resources/icons/points_server_icon.svg", new { height = "23px", width = "28px" })
+                </button>
+
+                @if (!User.IsInRole(UserRoles.Anonymous.GetEnumString()))
+                {
+                    <button id="notification_button" class="notification-button">
+                        @Html.SVG("~/Resources/resources/icons/bell_icon.svg", new { height = "20px", width = "25px" })
+                    </button>
+                }
+            </div>
 
         </div>
 
-        <div class="buttons-area">
-            <button onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
-                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/set_icon.svg"></object>
-            </button>
-            <button onclick="displayPointsLayerPage(true,'GetColorPalettePage')" class="top-menu-item">
-                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/simple_palette_icon.svg"></object>
-            </button>
-            <button class="top-menu-item" disabled="true">
-                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/cluster_icon.svg"></object>
-            </button>
-            <button class="top-menu-item" disabled="true">
-                <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/reload_icon.svg"></object>
-            </button>
+        <div class="white-area box">
+            <div class="text-area">
+                @if (RouteConfig.CurrentUser != null)
+                {
+                    <div class="top-menu-item">
+                        @TextDictionary.GreetingMessage,
+                        <b>
+                            @RouteConfig.CurrentUser.FirstName
+                        </b>
+                    </div>
+                }
+                @Html.Label(TextDictionary.HTMSelectedDataset, new { @class = "top-menu-item" })
+                @Html.Label(TextDictionary.HTMDefaultDataset, new { @class = "top-menu-item current-dataset-text", id = "current-dataset-text" })
+
+            </div>
+
+            <div class="buttons-area">
+                <button onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
+                    <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/set_icon.svg"></object>
+                </button>
+                <button onclick="displayPointsLayerPage(true,'GetColorPalettePage')" class="top-menu-item">
+                    <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/simple_palette_icon.svg"></object>
+                </button>
+                <button class="top-menu-item" disabled="true">
+                    <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/cluster_icon.svg"></object>
+                </button>
+                <button class="top-menu-item" disabled="true">
+                    <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/reload_icon.svg"></object>
+                </button>
+            </div>
         </div>
     </div>
 </div>
-
 @Scripts.RenderFormat("<script src={0} type='module'></script>", "~/scripts/menu")

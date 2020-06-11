@@ -18,6 +18,7 @@ $colors: (
     chromaPurple: #7586ff,
     chromaOrange: #dfba76,
     chromaLightOrange: #ffd689,
+    chromaLightGreen: #c0e6cc,
     chromaWhiteOrange: #fbebdf,
     chromaGreen: #b7cca2,
     chromaBlue: #85b7ca,
@@ -31,7 +32,8 @@ $colors: (
     black: black,
     transparentWhite: rgba(255,255,255,0.7),
     transparentBlack: rgba(0,0,0,0.06),
-    primary: black
+    primary: black,
+    themeGradient: linear-gradient(180deg,#0c1c2b9e, #0c1c2b3b, #F000)
 );
 
 $critical_z_index: 100010;

@@ -29,6 +29,7 @@ export function DisplayProcessing(display) {
     else $('#hub-loading-spinner').addClass('small-loading-spinner-hidden');
 }
 
+
 /**
  * View for map
  */
@@ -48,6 +49,7 @@ var mapView = new ol.View({
  */
 
 //this variable contains the source tiles available to be displayed
+//Types chosen for map must be key names in this object
 const sources = {
     satelitte: new ol.layer.Tile({
         visible: true,
@@ -67,7 +69,15 @@ const sources = {
             wrapX: false,
             noWrap: true,      
         })
-    })    
+    }),
+    google: new ol.layer.Tile({
+        visible: false,
+        source: new ol.source.OSM({
+            crossOrigin: 'anonymous',
+            wrapX: false,
+            noWrap: true,
+        })
+    }),
 }
 
 export function SetMapType(chosenType) {
@@ -88,10 +98,7 @@ export function GoTo(latitude, longitude) {
 export const map = new ol.Map({
     target: 'map',
     renderer: 'webgl', 
-    layers: [
-        sources['hybrid'],
-        sources['satelitte']
-    ],
+    layers: Object.values(sources),
     view: mapView,
     controls: []
 });

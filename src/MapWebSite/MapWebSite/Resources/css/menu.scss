@@ -1,4 +1,5 @@
 ﻿@import 'general/colors.scss';
+@import 'general/dimensions.scss';
 
 $main_menu_width: 600px;
 $main_menu_height: 400px;
@@ -199,7 +200,7 @@ $main_menu_height: 400px;
 
             .bottom {
                 margin-top: 20px;
-                display:flex;
+                display: flex;
                 flex-direction: column;
 
                 button, a {
@@ -383,233 +384,256 @@ $main_menu_height: 400px;
 }
 
 .top-menu {
-    z-index: $suboverflow_z_index;
-    position: fixed;
-    top: 5px;
-    right: 5px;
-    margin-left: -150px;
+    pointer-events: none;
     transition: 0.3s;
-    display: inline-flex;
+    top: 0;
+    position: fixed;
+    width: 100%;
+    background: get_color(themeGradient);
+    display: flex;
     align-items: center;
+    padding: 10px;
+    z-index: $suboverflow_z_index;
 
-    .pre-text-area {
-        display: flex;
-        padding: 10px;
-
-        svg {
-            pointer-events: none;
-        }
-
-        .customizable-buttons, .general-buttons, .search-button {
-            padding: 5px;
-            transition: 0.3s;
-        }
-
-        .customizable-buttons {
-            margin-right: 12px;
-            padding-right: 20px;
-            border-right: solid get_color(white);
-        }
-
-        .search-button {
-            border-right: solid;
-            border-radius: 0;
-            margin-right: 3px;
-        }
-
-        .buttons-group-hidden {
-            visibility: hidden;
+    .top-menu-left {
+        .cursor-position-labels {
             display: flex;
-            width: 0;
-            margin: 0;
-            padding: 0;
-            opacity: 0;
-        }
+            align-items: center;
 
-        .autocomplete-hidden {
-
-            input[type=search], input[type=button], .suggestions {
-                width: 0 !important;
-                padding: 0;
-                opacity: 0;
-                margin: 0;
-            }
-
-            .suggestions {
-                display: none;
-
-                .outer-suggestions-item {
-                    .suggestions-item {
-                        width: 0;
-                        height: 0;
-                    }
-                }
-            }
-        }
-
-        .autocomplete {
-            display: contents;
-            position: relative;
-
-            input[type=search] {
-                background: get_color(transparentBlue);
-                transition: 0.3s;
-                border-radius: 2px;
-                width: 250px;
-                margin: 5px;
-            }
-
-            input[type=button] {
-                background: none;
-                margin-left: -20px;
-                font-variant-caps: all-petite-caps;
-                font-size: 16px;
-                padding: 1px;
-                margin-right: 16px;
-            }
-
-            .suggestions {
-                transition: 0.3s;
-                position: absolute;
-                background: get_color(white);
-                top: 50px;
-                left: 60px;
-                right: 0;
-                width: 250px;
-                margin: 4px;
-
-                .outer-suggestions-item:hover {
-                    background-color: get_color(chromaLightOrange);
-                }
-
-                .outer-suggestions-item {
-                    display: grid;
-                    padding: 3px;
-
-                    .suggestions-item {
-                        padding: 3px;
-                        display: inline-flex;
-                        align-items: center;
-                        text-align: left;
-
-                        img[src=undefined] {
-                            opacity: 0;
-                        }
-
-                        img {
-                            margin: 3px;
-                            height: 14px;
-                            width: 10px;
-                            text-align: center;
-                        }
-
-                        label {
-                            line-height: 12px;
-                            margin: 2px;
-                            padding: 3px;
-                            font-size: 0.7em;
-                            width: 220px;
-                        }
-                    }
-
-                    .info-label {
-                        color: get_color(mediumGray);
-                        font-size: 0.55em;
-                        margin: 0;
-                        padding-left: 25px;
-                        margin-top: -5px;
-                    }
-                }
-            }
-        }
-
-        input[type=search]:focus, input[type=search]:hover {
-            background: get_color(strongTransparentBlue);
-        }
-
-
-        button {
-            padding: 0;
-            background: none;
-            vertical-align: middle;
-
-            svg {
-                .cls-2, .cls-4, .cls-13, .e_cls-1, .z-cls-3, .rs-cls-1, .cls-3-psi, .cls-4-psi {
-                    transition: fill .3s linear;
-                }
-
-                margin: 3px;
-                filter: drop-shadow(3px 1px 3px get_color(strongTransparentBlue));
-            }
-        }
-
-        button:hover {
-            background: none;
-
-            svg {
-                .cls-2, .cls-4, .cls-13, .e_cls-1, .z-cls-3, .rs-cls-1, .cls-3-psi, .cls-4-psi {
-                    fill: get_color(strongTransparentBlue);
-                }
-
-                path, polyline {
-                }
+            .mouse-position {
+                margin: $general_small_padding;
+                color: get_color(light);
+                font-size: small;
             }
         }
     }
 
-    .white-area {
-        display: grid;
-        grid-template-areas: "left right";
-        padding: 10px;
+    .top-menu-right {
+        pointer-events: initial;
+        display: inline-flex;
+        align-items: center;
+        margin-right: 0;
+        margin-left: auto;
 
-        .text-area {
-            display: table-cell;
-            grid-area: left;
-            font-size: 13px;
-            margin: auto 0;
-            vertical-align: middle;
+        .pre-text-area {
+            display: flex;
+            padding: 10px;
 
-            label {
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-                font-weight: 100;
-                margin: 0;
+            svg {
+                pointer-events: none;
             }
 
-            .current-dataset-text {
-                width: 100px;
+            .customizable-buttons, .general-buttons, .search-button {
+                padding: 5px;
+                transition: 0.3s;
+            }
+
+            .customizable-buttons {
+                margin-right: 12px;
+                padding-right: 20px;
+                border-right: solid get_color(white);
+            }
+
+            .search-button {
+                border-right: solid;
+                border-radius: 0;
+                margin-right: 3px;
+            }
+
+            .buttons-group-hidden {
+                visibility: hidden;
+                display: flex;
+                width: 0;
+                margin: 0;
+                padding: 0;
+                opacity: 0;
+            }
+
+            .autocomplete-hidden {
+
+                input[type=search], input[type=button], .suggestions {
+                    width: 0 !important;
+                    padding: 0;
+                    opacity: 0;
+                    margin: 0;
+                }
+
+                .suggestions {
+                    display: none;
+
+                    .outer-suggestions-item {
+                        .suggestions-item {
+                            width: 0;
+                            height: 0;
+                        }
+                    }
+                }
+            }
+
+            .autocomplete {
+                position: relative;
+                display: flex;
+
+                input[type=search] {
+                    background: get_color(transparentBlue);
+                    transition: 0.3s;
+                    border-radius: 2px;
+                    width: 250px;
+                    margin: 5px;
+                }
+
+                input[type=button] {
+                    background: none;
+                    margin-left: -25px;
+                    font-variant-caps: all-petite-caps;
+                    font-size: 16px;
+                    padding: 1px;
+                    margin-right: 16px;
+                }
+
+                .suggestions {
+                    transition: 0.3s;
+                    position: absolute;
+                    background: get_color(white);
+                    top: 35px;
+                    left: 0;
+                    right: 0;
+                    width: 250px;
+                    margin: 4px;
+
+                    .outer-suggestions-item:hover {
+                        background-color: get_color(chromaLightOrange);
+                    }
+
+                    .outer-suggestions-item {
+                        display: grid;
+                        padding: 3px;
+
+                        .suggestions-item {
+                            padding: 3px;
+                            display: inline-flex;
+                            align-items: center;
+                            text-align: left;
+
+                            img[src=undefined] {
+                                opacity: 0;
+                            }
+
+                            img {
+                                margin: 3px;
+                                height: 14px;
+                                width: 10px;
+                                text-align: center;
+                            }
+
+                            label {
+                                line-height: 12px;
+                                margin: 2px;
+                                padding: 3px;
+                                font-size: 0.7em;
+                                width: 220px;
+                            }
+                        }
+
+                        .info-label {
+                            color: get_color(mediumGray);
+                            font-size: 0.55em;
+                            margin: 0;
+                            padding-left: 25px;
+                            margin-top: -5px;
+                        }
+                    }
+                }
+            }
+
+            input[type=search]:focus, input[type=search]:hover {
+                background: get_color(strongTransparentBlue);
+            }
+
+
+            button {
+                padding: 0;
+                background: none;
+                vertical-align: middle;
+
+                svg {
+                    .cls-2, .cls-4, .cls-13, .e_cls-1, .z-cls-3, .rs-cls-1, .cls-3-psi, .cls-4-psi {
+                        transition: fill .3s linear;
+                    }
+
+                    margin: 3px;
+                    filter: drop-shadow(3px 1px 3px get_color(strongTransparentBlue));
+                }
+            }
+
+            button:hover {
+                background: none;
+
+                svg {
+                    .cls-2, .cls-4, .cls-13, .e_cls-1, .z-cls-3, .rs-cls-1, .cls-3-psi, .cls-4-psi {
+                        fill: get_color(strongTransparentBlue);
+                    }
+
+                    path, polyline {
+                    }
+                }
             }
         }
 
-        .buttons-area {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            width: 70px;
-            grid-area: right;
-            justify-content: center;
+        .white-area {
+            display: grid;
+            grid-template-areas: "left right";
+            padding: 10px;
 
-            button {
-                display: inline-flex !important;
+            .text-area {
+                display: table-cell;
+                grid-area: left;
+                font-size: 13px;
+                margin: auto 0;
+                vertical-align: middle;
+
+                label {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    font-weight: 100;
+                    margin: 0;
+                }
+
+                .current-dataset-text {
+                    width: 100px;
+                }
+            }
+
+            .buttons-area {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                width: 70px;
+                grid-area: right;
                 justify-content: center;
-                align-items: center;
-                width: 22px;
-                height: 24px;
-                margin: 1px 1px 1px 2px;
-                cursor: pointer;
-                opacity: 0.7;
-                padding: 0;
-                border-radius: 5px;
-            }
+
+                button {
+                    display: inline-flex !important;
+                    justify-content: center;
+                    align-items: center;
+                    width: 22px;
+                    height: 24px;
+                    margin: 1px 1px 1px 2px;
+                    cursor: pointer;
+                    opacity: 0.7;
+                    padding: 0;
+                    border-radius: 5px;
+                }
 
 
-            button-selected {
-                background: get_color(chromaDarkOrange);
-            }
+                button-selected {
+                    background: get_color(chromaDarkOrange);
+                }
 
-            object {
-                pointer-events: none;
+                object {
+                    pointer-events: none;
+                }
             }
         }
     }

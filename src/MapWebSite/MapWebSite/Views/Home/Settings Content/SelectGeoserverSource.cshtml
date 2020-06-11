@@ -19,14 +19,14 @@
             <div class="inputs">
                 <div class="input-content">
                     @Html.Label(TextDictionary.HMenuSGSUrlInputLabel)
-                    @Html.TextBox("url", null, new { placeholder = @TextDictionary.HMenuSGSUrlInputPlaceholder, @class = "default-input-gray" })
+                    @Html.TextBox("url", null, new { placeholder = @TextDictionary.HMenuSGSUrlInputPlaceholder, @class = "default-input-gray",  onkeyup = "enableGeoserverUploadSubmit()" })
                 </div>
             </div>
 
             <div class="inputs">
                 <div class="input-content">
                     @Html.Label(TextDictionary.HMenuSGSPaletteLabel)
-                    <button class="default-input-gray">@TextDictionary.HMenuSGSSearchPaletteButtonText</button>
+                    <button id="selectDefaultPaletteButton" class="default-input-gray" onclick="openColorPaletteSelectModal()">@TextDictionary.HMenuSGSSearchPaletteButtonText</button>
                 </div>
             </div>
 

@@ -6,14 +6,36 @@
 
 import { PlotDrawer } from '../utilities/Plot/plot.js';
 import { CardsManager } from '../utilities/Card/cards_manager.js';
+import { PopupBuilderInstance } from '../utilities/Popup/popup.js'; 
+import { HtmlToElement } from '../utilities/utils.js';
+
 import { UnselectFeatureOnMap } from '../map/map.js';
 import { TooltipManagerInstance } from '../utilities/Tooltip/tooltip_manager.js';
 import { endpoints } from '../api/api_router.js';
+import { ChangeMenuMode } from '../menu.js';
 
 var cardsManager = new CardsManager('map-container');
-var currentDrawer = null;
+var drawer = new PlotDrawer();
+var mainContext = null;
+
+var card = {
+    context: null,
+    contentId: ''
+}
 
 var currentDisplayedPoint = null;
+
+const constants = {
+    ids: {
+        plot: '#plot',
+        plotContainer: '#popup-plot-container',
+        pointInfo: '#_point-info'
+    },
+    strings: {
+        plotOxLabel: 'Time [days]',       
+        plotOyLabel: 'Deformation [mm]'
+    }
+}
 
 export function DisplayPointInfo() {
     function display() {
@@ -89,7 +111,7 @@ export function SetPointInfoData(point) {
 
 
 export function HidePointInfo(showTopMenu) {
-    if (showTopMenu) $("#top-menu").removeClass('top-menu-hiden');
+    ChangeMenuMode(showTopMenu, { top: true });
 
     $("#point-info").css("opacity", 0);
     $("#point-info").css("width", "40%"); 
@@ -99,8 +121,17 @@ export function HidePointInfo(showTopMenu) {
          UnselectFeatureOnMap(currentDisplayedPoint.Number);
 }
 
-export function AddGraphToExistentPopup() {
+export function AppendToPopupWindow() {
+    card.context.points.push({
+        data: mainContext.points[0].data,
+        color: 'red',
+        hoverColor: 'darkRed'
+    });
 
+    drawer.Draw(card.context,
+        {
+            erasePreviousPlot: false
+        });
 }
 
 export function CreatePopupWindow() {
@@ -108,40 +139,37 @@ export function CreatePopupWindow() {
     const minPlotDimensions = { height: 250, width: 400 };
 
     //use the last drawer created when a point was clicked on map
-    var popupPlotDrawer = currentDrawer;
-
+    var cardOptions = { ...mainContext };
+  
     //when the popup is resized, the plot must be redrawed
-    var cardContentId = cardsManager.Draw(true, drawPlot);
-    var svgPlot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-
-    function initPlot() {
-        svgPlot.id = 'window-plot';
-        svgPlot.classList.add('plot');
-        svgPlot.setAttributeNS(null, 'width', '100%');
-        svgPlot.setAttributeNS(null, 'height', '100%');
-        svgPlot.style.display = 'block';
-    }
+    card.contentId = cardsManager.Draw(true, function () {  
+        drawPlot();
+    });
+     
 
     function drawPlot() {       
-        popupPlotDrawer.SetContainerObject(svgPlot);
-        svgPlot.innerHTML = '';
-        popupPlotDrawer.SetGraphColor('black');
+        function appendContainer() {
+            var divContainer = $('<div></div>');
+            divContainer.attr('id', 'popup-plot-container');
+            divContainer.addClass('popup-plot-container');
+            $(card.contentId).append(divContainer);
+        }
 
-        const height = Math.max(minPlotDimensions.height, $(cardContentId).height());
-        const width = Math.max(minPlotDimensions.width, $(cardContentId).width());
+        appendContainer();
 
-        popupPlotDrawer.SetFontSize(10);
-        popupPlotDrawer.SetOrigin(30, height - 50);
-        popupPlotDrawer.SetLength( width - 155 , height - 80);
+        const height = Math.max(minPlotDimensions.height, $(card.contentId).height());
+        const width = Math.max(minPlotDimensions.width, $(card.contentId).width());
 
-        popupPlotDrawer.DrawReferences();
-        popupPlotDrawer.DrawAxis(true);
-        popupPlotDrawer.RedrawPoints(true);
-        
-        popupPlotDrawer.ResetSetters();
-         
+        cardOptions.graphColor = 'black';
+        cardOptions.length = {
+            oX: width - 155,
+            oY: height - 80
+        };
+        cardOptions.viewBoxPadding = 10;
+        cardOptions.containerID = card.contentId + ' ' + constants.ids.plotContainer;
 
-        $(cardContentId).append(svgPlot);
+        card.context = drawer.CreateContext(cardOptions);
+        drawer.Draw(card.context);                 
     }
 
     function drawText() {
@@ -172,10 +200,9 @@ export function CreatePopupWindow() {
             textContent.append(rows[i].label);
         }
 
-        $(cardContentId).append(textContent);
+        $(card.contentId).append(textContent);
     }
-
-    initPlot();
+     
     //delay for animation
     setTimeout(function () {
         drawPlot();
@@ -184,32 +211,104 @@ export function CreatePopupWindow() {
 
 }
 
+export function ChangePlotType(plotType) {
+    if (drawer == null) return;
+
+    mainContext.plotType = plotType;
+    drawer.Draw(mainContext);
+}
+
+export function DrawRegressionFunction(regressionType) {
+    function buildCoefficientsList(values) {
+        var list = '<ul>';
+        for (var i = 0; i < values.length; i++)
+            list = list + `<li><small>${values[i]}</small></li>`;
+        list = list + '</ul>';
+
+        return list;
+    }
+    drawer.DrawPlotRegression(mainContext, {
+        type: regressionType,
+        hideshow: true,
+        color: 'red',
+        hoverColor: 'orange',
+        clickCallback: function (coefficients, position) {
+            PopupBuilderInstance.Create('#map-container',
+                position,
+                HtmlToElement(buildCoefficientsList(coefficients)),
+                {
+                    preventClosing: true
+                });
+        }
+    });
+}
+
+export function DrawReferenceAxis() {
+
+    drawer.DrawCustomAxis(
+        mainContext,
+        {
+            color: 'orange',
+            value: 0,
+            width: 1,
+            identifier: 'reference',
+            hideshow: true
+        }
+    );
+
+}
+
+
+
+
+
 
 function drawPlot(values, oXLeft, oXRight, oYBottom, oYTop) {
-   
+    var options = {
+        containerID: constants.ids.plot,
+        length: {
+            oX: $(constants.ids.plot).width(),
+            oY: $(constants.ids.plot).height()
+        },
+        originAxesValue: {
+            oX: Math.round(oXLeft),
+            oY: -30 //  Math.round(oYBottom) - 1
+        },
+        endAxesValue: {
+            oX: Math.round(oXRight),
+            oY: 30 //Math.round(oYTop)
+        },
+        labels: {
+            oX: constants.strings.plotOxLabel,
+            oY: constants.strings.plotOyLabel
+        },
+        plotType: 'points',
+        graphColor: 'white', 
+        margin: 40,
+        viewBoxPadding: 40,
+        points: [
+            {
+                data: values,
+                hoverColor: 'orange',
+                dataClickEvent: function (d, i, position) {
+                 
+                    PopupBuilderInstance.Create('#map-container',
+                        position,
+                        HtmlToElement(`<div>${d.X},${d.Y}</div>`),
+                        {
+                            preventClosing: true
+                        });
+                }
+            }
+        ]
+    }
     /*Plot drawer object reset*/
-    currentDrawer = new PlotDrawer('#plot', '#plot-popup', 450, 270,
-        {
-            Left: Math.round(oXLeft),
-            Right: Math.round(oXRight)
-        },
-        {
-            Bottom: Math.round(oYBottom) - 1,
-            Top: Math.round(oYTop)
-        },
-        'Time [days]',
-        'Deformation [mm]');
+    mainContext = drawer.CreateContext(options);
 
-    currentDrawer.AddPoints(values)
-    currentDrawer.DrawPoints();
+    drawer.Draw(mainContext); 
 }
 
-window.changePlotType = function changePlotType(plotType) {
-    if (currentDrawer == null) return;
 
-    currentDrawer.SetPlotType(plotType, true);    
-    currentDrawer.RedrawPoints();
-}
 
 
 

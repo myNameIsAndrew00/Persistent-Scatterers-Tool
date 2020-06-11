@@ -207,6 +207,8 @@ namespace MapWebSite.Controllers
         {
             List<Tuple<T, string>> filters = new List<Tuple<T, string>>();
 
+            if (query.Where(a => a.Key == "filtersCount").FirstOrDefault().Key != "filtersCount") return filters; 
+
             int filtersCount = Convert.ToInt32(query.First(item => item.Key == "filtersCount").Value);
 
             for (int i = 0; i < filtersCount; i++)

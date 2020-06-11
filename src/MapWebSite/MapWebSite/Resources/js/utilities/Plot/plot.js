@@ -3,383 +3,382 @@
  * Handles plots drawing
  * */
 
-function hasAttribute(node, attributeName) {
-    var attribute = node.attributes[attributeName];
-    return (typeof attribute !== 'undefined');
-}
-
-function attrValue(node, attributeName) {
-    return node.target.attributes[attributeName].value;
+const constants = {
+    classes: {
+        svgContainer: 'svg-container',
+        svgContent: 'svg-content-responsive',
+        grid: 'grid'
+    }
 }
 
 /**
  * Use this class to draw a plot*/
 export class PlotDrawer {
-    /**
-     *      
-     * @param {any} containerID The id of the container which contains the plot
-     * @param {any} popupID Id of the popup which can be used to display plot details
-     * @param {any} oXLength The length of oX axis (px)
-     * @param {any} oYLength The length of oY axis (px)
-     * @param {any} oXInterval Interval displayed on the oX
-     * @param {any} oYInterval Interval displayed on the oY
-     * @param {any} oxLabel The label used for oX
-     * @param {any} oyLabel The label used for oY
-     */
-    constructor(containerID, popupID, oXLength, oYLength, oXInterval, oYInterval, oxLabel, oyLabel) {
-        var self = this;
-        this.containerObject = null;
-
-        this.containerID = containerID;
-        this.popupID = popupID;
-
-        this.initialOrigin = this.origin = { oX: 50, oY: 300 };
-        this.initialLength = this.length = { oX: oXLength, oY: oYLength };
-        this.initialOriginAxesValue = this.originAxesValue = { oX: oXInterval.Left, oY: -30 }; //oYInterval.Bottom };
-        this.initialEndAxesValue = this.endAxesValue = { oX: oXInterval.Right, oY: 30 }; //oYInterval.Top };
-        this.initialOxLabel = this.oxLabel = oxLabel;
-        this.initialOyLabel = this.oyLabel = oyLabel;
-        this.initialPlotType = this.plotType = 'line';
-        this.initialCurrentPoints = this.currentPoints = [];
-
-        this.initialGraphColor = this.graphColor = 'white';
-        this.initialFontSize = this.fontSize = 14;
-
-        this.distances = {
-            betweenLabelsAndAxis: {
-                oX: -16,
-                oY: -23
-            },
-            betweenLabels: {
-                oX: 80,
-                oY: 50
-            }
-        }
-
-        //define constants expressions used for drawing
-        this.constants = {
-            plotConstant: function (axis) {
-                return ((self.endAxesValue[axis] - self.initialOriginAxesValue[axis]) / self.length[axis])
-            },
-            labelsCount: function (axis) {
-                if (axis !== 'oX' && axis !== 'oY') axis = 'oX';
-                if (axis === 'oY')
-                    return Math.round((self.origin[axis] ) / self.distances.betweenLabels[axis]);      
-                else return Math.round((self.origin[axis] + self.length[axis]) / self.distances.betweenLabels[axis]);           
-            },
-
-            labelsIntervalLogicalValue: function (axis) {
-                if (axis !== 'oX' && axis !== 'oY') axis = 'oX';            
-                return self.constants.plotConstant(axis) * self.distances.betweenLabels[axis];                
-            }
-        }
-
-        this.DrawAxis();
-        this.DrawReferences();
-      
-
-        function showPopup(popupID, marginLeft, marginTop) {
-            $(popupID).css('left', marginLeft + 'px');
-            $(popupID).css('top', marginTop + 'px');
-            changePopupVisibility(popupID, true);
-        }
-
-        function changePopupVisibility(popupID, isVisible) {
-            isVisible ? $(popupID).removeClass('plot-popup-hidden') : $(popupID).addClass('plot-popup-hidden');
-        }
-
-        function changePopupContent(popupID, rtext) {
-            $(popupID).find('.plot-plopup-text')[0].innerHTML = rtext;
-
-        }
-
-        //set the events for interaction with plot
-
-        $(containerID).click(function (e) {
-
-            if (hasAttribute(e.target, 'graphPoint')) {
-                var data = JSON.parse(attrValue(e, 'graphPoint'));
-                if (data == null) return;
-                changePopupContent(popupID, 'oX: ' + data.oX + ' <br /> oY: ' + data.oY);
-                showPopup(popupID, e.clientX, e.clientY);
-            }
-        });
-
-        $(popupID).find('.plot-popup-close')[0].onclick = function () {
-            changePopupVisibility(popupID, false);
-        };
-    }
 
     /*
     *   Public methods
     */
-    DrawAxis(keepExisting) {
-        this.drawLine({ X: this.origin.oX, Y: this.origin.oY }, true, this.length.oX, '2', null);
-        this.drawLine({ X: this.origin.oX, Y: this.origin.oY }, false, -this.length.oY - 5, '2', null);
 
-        this.DrawVerticalAxis(0, '#ff7f7f');
-        this.DrawAxisLabels(keepExisting);
-    }
-
-    DrawVerticalAxis(value, color) {
-        const oxValue = (value + Math.abs(this.originAxesValue.oX)) / this.constants.plotConstant('oX');
-        this.drawLine({ X: this.origin.oX + oxValue, Y: this.origin.oY }, false, - this.length.oY - 5, '1', [{ key: 'stroke', value: color }]);
-    }
-
-    DrawReferences() {
-
-        function drawReference(axis, _this) {
-            var linesCount = Math.ceil(_this.length[axis] / _this.distances.betweenLabels[axis]) - 1;
-            var origin = { X: _this.origin.oX, Y: _this.origin.oY };
-
-            if (axis === 'oX') origin.Y += 6;
-
-            for (var index = 0; index < linesCount; index++) {
-                if (axis === 'oY') origin.Y -= _this.distances.betweenLabels.oY;
-                else origin.X += _this.distances.betweenLabels.oX;                  
-                
-                _this.drawLine(origin, axis === 'oY', axis == 'oY' ? _this.length.oX - 10 : -12, '0.2', null);
-            }
-        }
-
-     
-        drawReference('oY', this);
-        drawReference('oX', this);
-     
-    }
-
-    AddPoints(points) {
-        this.currentPoints.push(points);
-    }
-
-    DrawPoints(keepExisting) {
-        if(keepExisting != true) this.deleteGraphPoints();
-
-        for (var i = 0; i < this.currentPoints.length; i++)
-        switch (this.plotType) {
-            case 'bars':
-                this.drawBarsPoints(this.currentPoints[ i ]);
-                break;
-            case 'line':
-                this.drawLinePoints(this.currentPoints[ i ]);
-                break;
-
-        }
-    }
-
-    RedrawPoints(keepExisting) {
-        if (this.currentPoints == null) return;
-
-        if (keepExisting) this.DrawPoints(true);
-        else this.DrawPoints();
-    }
-
-    DrawAxisLabels(keepExisting) {
-
-        function drawIntermediateLables(axis, _this) {
-            const labelsCount = _this.constants.labelsCount(axis);
-         
-            for (var i = 1; i < labelsCount - 1; i++)
-                _this.drawText({
-                    X: _this.origin.oX + (axis === 'oX' ? _this.distances.betweenLabels[axis] * i : _this.distances.betweenLabelsAndAxis[axis]),
-                    Y: _this.origin.oY - (axis  === 'oX' ? _this.distances.betweenLabelsAndAxis[axis] : (_this.distances.betweenLabels[axis] * i))
+    CreateContext(options) {
+        /* options = {
+                containerID: constants.ids.plot,
+                length: {
+                    oX: $(constants.ids.plot).width(),
+                    oY: $(constants.ids.plot).height()
                 },
-                    (_this.originAxesValue[axis] + _this.constants.labelsIntervalLogicalValue(axis) * i).toFixed(4),
-                    [{ key: 'label', value: 'axis' }], 0.6);
+                originAxesValue: {
+                    oX: Math.round(oXLeft),
+                    oY: Math.round(oYBottom) - 1
+                },
+                endAxesValue: {
+                    oX: Math.round(oXRight),
+                    oY: Math.round(oYTop)
+                },
+                labels: {
+                    oX: constants.strings.plotOxLabel,
+                    oY: constants.strings.plotOyLabel
+                },
+                plotType: 'points','bar','line',
+                graphColor: 'white',
+                margin: 20,
+                viewBoxPadding: 0,
+                points: [] {
+                    data: [                    //an array of array of pairs {x: ,y:}
+                        { X : 4, Y : 5}
+                    ]
+                    color: 'red',
+                    hoverColor: 'red',
+                    dataClickEvent: callback(d,i, {X:, Y:})
+                }
+            }
+         * */
+        var context = {
+            ...options,
+            plotInitialised: false,
+            customAxis: {},
+            svg: undefined,
+            containerObject: undefined,
+            yScale: undefined,
+            xScale: undefined,
+            plotData: undefined,
+            linearRegressionPlot: undefined,
+            polyRegressionPlot: undefined
+        };
+        if (context.viewBoxPadding === undefined) context.viewBoxPadding = 0;
+
+        this.initContainer(context);
+
+        return context;
+    }
+
+    /*
+     * drawOptions : {
+     *      erasePreviousPlot : false
+     * }
+     * */
+    Draw(context, drawOptions) {
+
+        if (drawOptions === undefined) drawOptions = {};
+
+        if (context.plotData != undefined && drawOptions.erasePreviousPlot != false) context.plotData.selectAll("*").remove();
+
+        if (context.plotInitialised === undefined || context.plotInitialised === false) {
+            this.drawAxis(context);
+            context.plotInitialised = true;
+        }
+
+        context.plotData = context.containerObject.append('g').attr('id', 'plot-data');
+
+        for (var i = 0; i < context.points.length; i++)
+            this.dataPlotDrawer(context, context.points[i])[context.plotType]();
+    }
+
+
+    /* 
+     * drawOptions : {
+     *      color: 'red',                   --mandatory
+     *      identifier: identifier          --mandatory
+     *      hideshow: true,
+     *      value: 5,                       --mandatory
+     *      width: 5                        --mandatory
+     * }
+     * */
+    /**
+     * Use this function to draw custom axis on current displayed plot
+     * @param {any} context context required for drawing
+     * @param {any} drawOptions options to draw the axe
+     */
+    DrawCustomAxis(context, drawOptions) {
+        if (context.customAxis[drawOptions.identifier] !== undefined
+            && context.customAxis[drawOptions.identifier] !== null
+            && drawOptions.hideshow === true) {
+
+            this.eraseSvg(context.customAxis[drawOptions.identifier]);
+            context.customAxis[drawOptions.identifier] = null;
+            return;
+        }
+
+        context.customAxis[drawOptions.identifier] =
+            context.containerObject
+                .append('rect')
+                .attr('width', drawOptions.width)
+                .attr('x', context.xScale(drawOptions.value))
+                .attr('y', 0)
+                .attr('height', context.length.oY)
+                .style('fill', d3.color(drawOptions.color))
+                .style('stroke', d3.color(drawOptions.color));
+
+    }
+
+    /*
+     * regressionOptions : {
+     *      type: 'linear', 'polynomial',
+     *      hideshow: true,
+     *      color: 'red',
+     *      hoverColor: 'red',
+     *      clickCallback: callback(coefficients, position)
+     * }
+     * */
+    /**
+     * Use this function to draw a plot regression on current displayed plot
+     * @param {any} context context required for drawing
+     * @param {any} regressionOptions an objects which contains data about the regression function which will be made
+     */
+    DrawPlotRegression(context, regressionOptions) {
+        var self = this;
+
+        function checkDrawingConditions(plotname) {
+
+            if (context[plotname] !== undefined && context[plotname] !== null && regressionOptions.hideshow === true) {
+                self.eraseSvg(context[plotname]);
+                context[plotname] = null;
+                return false;
+            }
+
+            context[plotname] = context.containerObject.append('g');
+
+            return true;
+        }
+
+        //plotName represents the object (inside context) which will contain the plot
+        //if the regression was never created, it will be created
+        //if the regression exists and hideshow is true, the regression will be hide
+        function drawRegression(plotName, data, addClickEvent) {
+            if (!checkDrawingConditions(plotName))
+                return;
+            const strokeWidth = 2;
+
+            var lineFunction = d3.line()
+                .x(function (s) { return context.xScale(s[0]); })
+                .y(function (s) { return context.yScale(s[1]); })
+
+
+            addClickEvent(
+                context[plotName]
+                    .append("path")
+                    .datum(data)
+                    .attr('fill', 'none')
+                    .attr('stroke', d3.color(regressionOptions.color))
+                    .attr('stroke-width', strokeWidth)
+                    .attr("d", lineFunction)
+                    .style('transition', '0.3s')
+                    .on('mouseover', function (d, i) {
+                        d3.select(this)
+                            .attr('stroke', d3.color(regressionOptions.hoverColor))
+                            .attr('stroke-width', strokeWidth * 2)
+                    })
+                    .on('mouseout', function (d, i) {
+                        d3.select(this)
+                            .attr('stroke', d3.color(regressionOptions.color))
+                            .attr('stroke-width', strokeWidth)
+                    })
+            );
 
         }
 
-        if(keepExisting != true) this.deleteLabels();
-        this.drawText({ X: this.origin.oX - 10, Y: this.origin.oY - this.distances.betweenLabelsAndAxis.oX },
-            this.originAxesValue.oX,
-            [{ key: 'label', value: 'axis' }]);
-        this.drawText({ X: this.origin.oX + this.length.oX, Y: this.origin.oY - this.distances.betweenLabelsAndAxis.oX }, this.endAxesValue.oX,
-            [{ key: 'label', value: 'axis' }]);
-        drawIntermediateLables('oX', this);
-     
-        this.drawText({ X: this.origin.oX + this.distances.betweenLabelsAndAxis.oY, Y: this.origin.oY - this.length.oY + 5 }, this.endAxesValue.oY,
-            [{ key: 'label', value: 'axis' }]);
-        this.drawText({ X: this.origin.oX + this.distances.betweenLabelsAndAxis.oY , Y: this.origin.oY }, this.originAxesValue.oY,
-            [{ key: 'label', value: 'axis' }]);
-        drawIntermediateLables('oY', this);
-
-        this.drawText({ X: this.origin.oX + this.length.oX / 2 - 20, Y: this.origin.oY + 35 }, this.oxLabel, null);
-        this.drawText({ X: this.origin.oX, Y: this.origin.oY - this.length.oY - 10 }, this.oyLabel, null);
-    }
-
-    SetPlotType(plotType, permanent) {
-        this.plotType = plotType;
-        if (permanent) this.initialPlotType = this.plotType;
-    }
-
-    SetContainerObject(containerObject) {
-        this.containerObject = containerObject;
-    }
-
-    SetGraphColor(newColor) {
-        this.graphColor = newColor; 
-    }
-
-    SetFontSize(fontSize) {
-        this.fontSize = fontSize;
-    }
-
-    SetLength(oX, oY) {
-        this.length = { oX: oX, oY: oY };
-    }
-
-    SetOrigin(X, Y) {
-        this.origin = { oX: X, oY: Y };
-    }
-
-    /*Method use to cancel all changes made by setters*/
-    ResetSetters() {
-        this.containerObject = null;
-
-        this.initialFontSize = this.fontSize;
-        this.origin = this.initialOrigin;
-        this.length = this.initialLength;
-        this.plotType = this.initialPlotType;
-        this.graphColor = this.initialGraphColor;
-    }
-
-    Clear() {
-        $(this.containerID).empty();
+        switch (regressionOptions.type) {
+            case 'linear':
+                drawRegression(
+                    'linearRegressionPlot',
+                    d3.regressionLinear()
+                        .x(d => d.X)
+                        .y(d => d.Y)
+                        .domain([context.originAxesValue.oX, context.endAxesValue.oX])(context.points[0].data),
+                    function (builtContext) {
+                        builtContext.on('click', function (d, i) {
+                            regressionOptions.clickCallback(
+                                [d.a, d.b],
+                                { X: this.getBoundingClientRect().left, Y: this.getBoundingClientRect().top });
+                        });
+                    });
+                break;
+            case 'polynomial':
+                drawRegression(
+                    'polyRegressionPlot',
+                    d3.regressionPoly()
+                        .x(d => d.X)
+                        .y(d => d.Y)
+                        .order(3)(context.points[0].data),
+                    function (builtContext) {
+                        builtContext.on('click', function (d, i) {
+                            regressionOptions.clickCallback(
+                                d.coefficients,
+                                { X: this.getBoundingClientRect().left, Y: this.getBoundingClientRect().top }); 
+                        });
+                    });
+                break;
+        }
     }
 
     /*
     *   Private methods 
     */
 
-    drawText(origin, toWrite, optionalAttributes, fontSizeScale = 1) {
-        var text = document.createElementNS('http://www.w3.org/2000/svg', "text");
-        text.textContent = toWrite;
-        text.setAttribute('x', origin.X);
-        text.setAttribute('y', origin.Y);
-        text.setAttribute('fill', this.graphColor);
-        text.setAttribute('font-size', this.fontSize * fontSizeScale);
-
-        if (optionalAttributes !== null)
-            for (var index = 0; index < optionalAttributes.length; index++)
-                text.setAttribute(optionalAttributes[index].key, optionalAttributes[index].value);
-
-        if (this.containerObject != null) this.containerObject.append(text);
-        else $(this.containerID).append(text);
+    eraseSvg(svg) {
+        svg.selectAll("*").remove();
+        svg.remove();
+        svg = null;
     }
 
-    drawBarsPoints(points) {
-        //this is the 'bars' graphType.. cand be changed
+    dataPlotDrawer(context, displayedPoints) {
 
-        var origin = { X: this.origin.oX, Y: this.origin.oY };
-        var width = (this.length.oX / points.length) / 2;
+        const color = d3.color(displayedPoints.color === undefined ? context.graphColor : displayedPoints.color);
+        const hoverColor = d3.color(displayedPoints.hoverColor === undefined ? context.graphColor : displayedPoints.hoverColor);
 
-        for (var index = 0; index < points.length; index++) {
-            origin.X = this.origin.oX + this.transformToXAxisValue(points[index].X);
-            this.drawLine(origin,
-                false,
-                -(this.transformToYAxisValue(points[index].Y)),
-                width,
-                [{ key: 'graphPoint', value: '{ "oY": ' + points[index].Y + ', "oX": ' + points[index].X + '}' },
-                { key: 'class', value: 'graphPoint ' }]);
-        }
-    }
+        function addInteraction(interactionContext) {
+            interactionContext.on('mouseover', function (d, i) {
+                d3.select(this)
+                    .attr('fill', hoverColor)
+                    .attr('stroke', hoverColor)
+            })
+                .on('mouseout', function (d, i) {
+                    d3.select(this)
+                        .attr('fill', color)
+                        .attr('stroke', color)
+                })
+                .on('click', function (d, i) {
 
-    drawLinePoints(points) {
-        points.sort((a, b) => (a.X > b.X) ? 1 : -1);
-        var origin = { X: this.origin.oX, Y: this.origin.oY };
-
-        function drawLine(object) {
-
-            var line = document.createElementNS('http://www.w3.org/2000/svg', "path");
-            var path = 'M' + ' ' + origin.X + ' ' + origin.Y;
-            path = path + 'l' + ' ' + (object.transformToXAxisValue(points[0].X) - object.transformToXAxisValue(object.originAxesValue.oX))
-                + ' ' + -(object.transformToYAxisValue(points[0].Y)) + ' ';
-
-            for (var index = 1; index < points.length; index++) {
-                path = path + 'l' + ' ' + (object.transformToXAxisValue(points[index].X) - object.transformToXAxisValue(points[index - 1].X))
-                    + ' ' + -(object.transformToYAxisValue(points[index].Y) - object.transformToYAxisValue(points[index - 1].Y)) + ' ';
-            }
-            line.setAttributeNS(null, "d", path);
-            line.setAttributeNS(null, "stroke-width", 1);
-            line.setAttributeNS(null, "stroke", object.graphColor);
-            line.setAttributeNS(null, "fill", "none");
-            line.setAttributeNS(null, "graphPoint", null);
-
-            if (object.containerObject != null) object.containerObject.append(line);
-            else $(object.containerID).append(line);
+                    if (displayedPoints.dataClickEvent !== undefined) displayedPoints.dataClickEvent(
+                        d,
+                        i,
+                        { X: this.getBoundingClientRect().left, Y: this.getBoundingClientRect().top });
+                });
         }
 
-        function drawCircles(object) {
-            for (var index = 0; index < points.length; index++) {
-                var radius = Math.min( 8, 20 / Math.sqrt(points.length));
-
-                var circle = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-
-                circle.setAttributeNS(null, 'cx', origin.X + object.transformToXAxisValue(points[index].X));
-                circle.setAttributeNS(null, 'cy', origin.Y - object.transformToYAxisValue(points[index].Y));
-                circle.setAttributeNS(null, "graphPoint", '{ "oY": ' + points[index].Y + ', "oX": ' + points[index].X + '}');
-                circle.setAttributeNS(null, "class", "graphPoint graphPointDot");
-                circle.setAttributeNS(null, 'r', radius);
-
-                if (object.containerObject != null) object.containerObject.append(circle);
-                else $(object.containerID).append(circle);
-            }
+        function bar() {
+            addInteraction(
+                context.plotData
+                    .selectAll("bar")
+                    .data(displayedPoints.data)
+                    .enter()
+                    .append('rect')
+                    .attr('width', context.xScale.range().toString().replace(',', '.'))
+                    .attr('x', function (s) {
+                        return context.xScale(s.X);
+                    })
+                    .attr('y', (s) => context.yScale(s.Y))
+                    .attr('height', (s) => context.length.oY - context.yScale(s.Y))
+                    .attr('fill', color)
+                    .attr('stroke', color)
+            );
         }
 
-        drawLine(this);
-        drawCircles(this);
+        function line() {
+            var lineFunction = d3.line()
+                .x(function (s) { return context.xScale(s.X); })
+                .y(function (s) { return context.yScale(s.Y); })
 
-    }
 
-    drawLine(origin, isHorizontaly, length, width, optionalAttributes) {
-        var newpath = document.createElementNS('http://www.w3.org/2000/svg', "path");
-        this.setAttributes(newpath, width, optionalAttributes);
+            context.plotData
+                .append("path")
+                .datum(displayedPoints.data)
+                .style('fill', 'none')
+                .style('stroke', color)
+                .attr("d", lineFunction);
 
-        newpath.setAttributeNS(null, "d", 'M' + ' ' +
-            origin.X + ' ' +
-            origin.Y + ' ' +
-            (isHorizontaly ? 'h' : 'v') + ' ' +
-            length);
+            points();
+        }
 
-        if (this.containerObject != null) this.containerObject.append(newpath);
-        else $(this.containerID).append(newpath);
+        function points() {
+            addInteraction(
+                context.plotData
+                    .selectAll(".dot")
+                    .data(displayedPoints.data)
+                    .enter().append("circle") // Uses the enter().append() method         
+                    .attr("cx", function (d, i) { return context.xScale(d.X) })
+                    .attr("cy", function (d) { return context.yScale(d.Y) })
+                    .attr("r", 2)
+                    .attr('fill', color)
+                    .attr('stroke', color)
+            );
+        }
 
-    }
-
-    setAttributes(path, strokeWidth, optionalAttributes) {
-        path.setAttributeNS(null, "stroke", this.graphColor);
-        path.setAttributeNS(null, "stroke-width", strokeWidth);
-        path.setAttributeNS(null, "fill", "none");
-
-        if (optionalAttributes !== null)
-            for (var index = 0; index < optionalAttributes.length; index++)
-                path.setAttributeNS(null, optionalAttributes[index].key, optionalAttributes[index].value);
-    }
-
-    transformToXAxisValue(value) {
-        return (value + Math.abs(this.originAxesValue.oX)) * this.length.oX / (this.endAxesValue.oX + Math.abs(this.originAxesValue.oX));
-    }
-
-    transformToYAxisValue(value) {
-        return (value + Math.abs(this.originAxesValue.oY)) * this.length.oY / (this.endAxesValue.oY + Math.abs(this.originAxesValue.oY));
+        return { bar, line, points };
     }
 
 
 
-    deleteGraphPoints() {
-        var nodes = $(this.containerID).children();
-        for (var i = 0; i < nodes.length; i++)
-            if (hasAttribute(nodes[i], 'graphPoint'))
-                nodes[i].remove();
+    drawAxis(context) {
+        //oy axe
+        context.containerObject.append('g')
+            .call(d3.axisLeft(context.yScale));
+
+        //ox axe
+        context.containerObject.append('g')
+            .attr('transform', `translate(0, ${context.length.oY})`)
+            .call(d3.axisBottom(context.xScale));
+
+        //grid
+        context.containerObject.append('g')
+            .attr('class', constants.classes.grid)
+            .call(d3.axisLeft()
+                .scale(context.yScale)
+                .tickSize(-context.length.oX, 0, 0)
+                .tickFormat(''))
+
+        //labels
+        context.svg.append('text')
+            .attr('x', -(context.length.oY / 2) - context.margin)
+            .attr('y', context.margin / 2.4)
+            .attr('font-size', 10)
+            .attr('transform', 'rotate(-90)')
+            .attr('text-anchor', 'middle')
+            .attr('fill', d3.color(context.graphColor))
+            .text(context.labels.oY)
+
+        context.svg.append('text')
+            .attr('x', context.length.oX / 2 + context.margin)
+            .attr('y', 40)
+            .attr('font-size', 10)
+            .attr('fill', d3.color(context.graphColor))
+            .attr('text-anchor', 'middle')
+            .attr('transform', `translate(0, ${context.length.oY}) `)
+            .text(context.labels.oX)
     }
 
-    deleteLabels() {
-        var nodes = $(this.containerID).children();
-        for (var i = 0; i < nodes.length; i++)
-            if (hasAttribute(nodes[i], 'label'))
-                nodes[i].remove();
-    }
+    initContainer(context) {
+        $(context.containerID).empty();
 
+        context.svg = d3.select(context.containerID)
+            .append("div")
+            .classed("svg-container", true)
+            .append("svg")
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", `0 0 ${context.length.oX + context.margin + context.viewBoxPadding} ${context.length.oY + context.margin + context.viewBoxPadding}`)
+            .classed("svg-content-responsive", true)
+
+        context.containerObject = context.svg.append('g')
+            .attr('transform', `translate(${context.margin}, 10 )`);
+
+        context.yScale = d3.scaleLinear()
+            .range([context.length.oY, 0])
+            .domain([context.originAxesValue.oY, context.endAxesValue.oY]);
+        context.xScale = d3.scaleLinear()
+            .range([0, context.length.oX])
+            .domain([context.originAxesValue.oX, context.endAxesValue.oX]);
+
+        context.plotData = undefined;
+    }
 
 }
 

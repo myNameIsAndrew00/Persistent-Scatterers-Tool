@@ -16,10 +16,12 @@ namespace MapWebSite.Repository
 {
     public class SQLUserRepository : SQLBaseRepository, IUserRepository
     {
-        private static class Tables {
+        private static class Tables
+        {
             public static readonly string Users = "Users";
             public static readonly string Datasets = "DataSets";
             public static readonly string UsersAllowedDatasets = "UsersAllowedDatasets";
+            public static readonly string ColorPalettesTable = "ColorPalettes";
         }
 
 
@@ -70,7 +72,7 @@ namespace MapWebSite.Repository
             catch (Exception exception)
             {
                 CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
-               
+
                 return false;
             }
             return true;
@@ -550,7 +552,7 @@ namespace MapWebSite.Repository
             {
                 CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
                 return false;
-            } 
+            }
         }
 
         public int RaiseToGeoserverDataset(int datasetId, int? defaultColorPaletteId, string apiUrl)
@@ -767,8 +769,8 @@ namespace MapWebSite.Repository
                 SqlExecutionInstance.ExecuteScalar(new SqlCommand(queryResult.ToString())
                 {
                     CommandType = CommandType.Text
-                }, 
-                null, 
+                },
+                null,
                 new SqlConnection(this.connectionString)));
         }
 
@@ -795,7 +797,7 @@ namespace MapWebSite.Repository
                                     .AsCount()
                                     .LeftJoin($"{Tables.UsersAllowedDatasets} as UAD", "D.data_set_id", "UAD.dataset_id")
                                     .WhereRaw($"(UAD.user_id = (select top 1 user_id from Users as _U where _U.username  = ?) { (roles.Contains(UserRoles.Administrator) ? "OR 1 = 1" : string.Empty) })", username);
-            
+
             SqlResult queryResult = new SqlServerCompiler().Compile(query);
 
             return Convert.ToInt32(
@@ -806,6 +808,60 @@ namespace MapWebSite.Repository
                 null,
                 new SqlConnection(this.connectionString)));
         }
+
+        public bool RemovePointsDataset(string username, string datasetName)
+        {
+            Query query = new Query(Tables.Datasets)
+                                .AsDelete()
+                                .Where("dataset_name", datasetName)
+                                .Where("user_id", new Query(Tables.Users).Select("id").Where("username", username));
+
+            SqlResult queryResult = new SqlServerCompiler().Compile(query);
+
+            return
+              SqlExecutionInstance.ExecuteScalar(new SqlCommand(queryResult.ToString())
+              {
+                  CommandType = CommandType.Text
+              },
+                                                  null,
+                                                  new SqlConnection(this.connectionString))
+                                    != null;
+        }
+
+        public int GetColorMapID(string username, string colorMapName)
+        {
+            try
+            {
+                Query query = new Query($"{Tables.ColorPalettesTable} as CP")
+                    .Select("color_palette_id")
+                    .Join($"{Tables.Users} as U", "U.user_id", "CP.user_id")
+                    .Where("CP.palette_name", colorMapName)
+                    .Where("U.username", username);
+
+                SqlResult queryResult = new SqlServerCompiler().Compile(query);
+
+                return Convert.ToInt32(
+                    SqlExecutionInstance.ExecuteScalar(new SqlCommand(queryResult.ToString())
+                    {
+                        CommandType = CommandType.Text
+                    },
+                    null,
+                    new SqlConnection(this.connectionString)));
+            }
+            catch (Exception exception)
+            {
+                CoreContainers.LogsRepository.LogError(exception, Core.Database.Logs.LogTrigger.DataAccess);
+                return -1;
+            }
+        }
+
+        public int GetGeoserverDefaultColorPaletteID(int geoserverDatasetId)
+        {
+            //todo: implement
+            throw new NotImplementedException();
+        }
+
+
 
         #region Private
 
@@ -920,34 +976,13 @@ namespace MapWebSite.Repository
                         Name = (string)row["palette_name"],
                         Intervals = new List<Interval>().JSONDeserialize((string)row["palette_serialization"]),
                         StatusMask = (int)row["status_mask"],
-                        MainColorCriteria =  row["main_color_criteria"]?.ToString()
+                        MainColorCriteria = row["main_color_criteria"]?.ToString()
                     }));
 
             return result;
         }
 
-        public bool RemovePointsDataset(string username, string datasetName)
-        {
-            Query query = new Query(Tables.Datasets)
-                                .AsDelete()
-                                .Where("dataset_name", datasetName)
-                                .Where("user_id", new Query(Tables.Users).Select("id").Where("username",username));
-
-            SqlResult queryResult = new SqlServerCompiler().Compile(query);
-
-            return 
-              SqlExecutionInstance.ExecuteScalar(new SqlCommand(queryResult.ToString())
-                                                  {
-                                                      CommandType = CommandType.Text
-                                                  },
-                                                  null,
-                                                  new SqlConnection(this.connectionString)) 
-                                    != null;
-        }
-
-
-
-
+   
 
         #endregion
     }

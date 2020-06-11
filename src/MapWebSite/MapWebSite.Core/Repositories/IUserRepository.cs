@@ -141,6 +141,13 @@ namespace MapWebSite.Core.Database
         int GetGeoserverDatasetID(int datasetId);
 
         /// <summary>
+        /// Returns the id of the palette used default for a geoserver dataset
+        /// </summary>
+        /// <param name="geoserverDatasetId">Id of the geoserver layer</param>
+        /// <returns>Id of the palette which is used by default</returns>
+        int GetGeoserverDefaultColorPaletteID(int geoserverDatasetId);
+
+        /// <summary>
         /// Get the header of a dataset
         /// </summary>
         /// <param name="username">The owner of dataset</param>
@@ -160,6 +167,15 @@ namespace MapWebSite.Core.Database
         IEnumerable<PointsDataSetHeader> GetDataSetsFiltered(string username, bool ignoreUsername, IEnumerable<Tuple<DataSetsFilters, string>> filters, int pageIndex, int itemsPerPage);
 
         int GetDatasetsCount();
+
+        /// <summary>
+        /// Retrive the id of a color palette
+        /// </summary>
+        /// <param name="username">Username which created the palette</param>
+        /// <param name="colorMapName">Name of the color map</param>
+        /// <returns></returns>
+        int GetColorMapID(string username, string colorMapName);
+
         /// <summary>
         /// Provides a method to request color palettes (and their 'creators') using a filter 
         /// </summary>

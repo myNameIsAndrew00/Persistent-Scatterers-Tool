@@ -4,11 +4,22 @@
  *
  * */
 
-import { HidePointInfo, CreatePopupWindow } from './point info/point_info.js';
+import {
+    HidePointInfo,
+    CreatePopupWindow,
+    AppendToPopupWindow,
+    ChangePlotType,
+    DrawRegressionFunction,
+    DrawReferenceAxis
+} from './point info/point_info.js';
 
 
 window.HidePointInfo = HidePointInfo;
 window.CreatePopupWindow = CreatePopupWindow;
+window.AppendToPopupWindow = AppendToPopupWindow;
+window.changePlotType = ChangePlotType;
+window.drawRegressionFunction = DrawRegressionFunction;
+window.drawReferenceAxis = DrawReferenceAxis;
 
 var loadedScripts = [];
 
