@@ -396,6 +396,7 @@
     <Content Include="Resources\js\utilities\utils.js" />
     <Content Include="Resources\resources\background-original.jpg" />
     <Content Include="Resources\resources\background.jpg" />
+    <Content Include="Resources\resources\gifs\HPI_TOOLTIP_PlotWindow.gif" />
     <Content Include="Resources\resources\gifs\HTM_TOOLTIP_ColorCriteria.gif" />
     <Content Include="Resources\resources\gifs\HTM_TOOLTIP_MapType.gif" />
     <Content Include="Resources\resources\gifs\HTM_TOOLTIP_PointsSize.gif" />

@@ -6,6 +6,9 @@
 
 import { PlotDrawer } from '../utilities/Plot/plot.js';
 import { CardsManager } from '../utilities/Card/cards_manager.js';
+import { PopupBuilderInstance } from '../utilities/Popup/popup.js'; 
+import { HtmlToElement } from '../utilities/utils.js';
+
 import { UnselectFeatureOnMap } from '../map/map.js';
 import { TooltipManagerInstance } from '../utilities/Tooltip/tooltip_manager.js';
 import { endpoints } from '../api/api_router.js';
@@ -25,7 +28,8 @@ var currentDisplayedPoint = null;
 const constants = {
     ids: {
         plot: '#plot',
-        plotContainer: '#popup-plot-container'
+        plotContainer: '#popup-plot-container',
+        pointInfo: '#_point-info'
     },
     strings: {
         plotOxLabel: 'Time [days]',       
@@ -120,7 +124,8 @@ export function HidePointInfo(showTopMenu) {
 export function AppendToPopupWindow() {
     card.context.points.push({
         data: mainContext.points[0].data,
-        color: 'red'
+        color: 'red',
+        hoverColor: 'darkRed'
     });
 
     drawer.Draw(card.context,
@@ -214,10 +219,27 @@ export function ChangePlotType(plotType) {
 }
 
 export function DrawRegressionFunction(regressionType) {
+    function buildCoefficientsList(values) {
+        var list = '<ul>';
+        for (var i = 0; i < values.length; i++)
+            list = list + `<li><small>${values[i]}</small></li>`;
+        list = list + '</ul>';
+
+        return list;
+    }
     drawer.DrawPlotRegression(mainContext, {
         type: regressionType,
         hideshow: true,
-        color: 'red'
+        color: 'red',
+        hoverColor: 'orange',
+        clickCallback: function (coefficients, position) {
+            PopupBuilderInstance.Create('#map-container',
+                position,
+                HtmlToElement(buildCoefficientsList(coefficients)),
+                {
+                    preventClosing: true
+                });
+        }
     });
 }
 
@@ -265,7 +287,19 @@ function drawPlot(values, oXLeft, oXRight, oYBottom, oYTop) {
         margin: 40,
         viewBoxPadding: 40,
         points: [
-            { data: values }
+            {
+                data: values,
+                hoverColor: 'orange',
+                dataClickEvent: function (d, i, position) {
+                 
+                    PopupBuilderInstance.Create('#map-container',
+                        position,
+                        HtmlToElement(`<div>${d.X},${d.Y}</div>`),
+                        {
+                            preventClosing: true
+                        });
+                }
+            }
         ]
     }
     /*Plot drawer object reset*/

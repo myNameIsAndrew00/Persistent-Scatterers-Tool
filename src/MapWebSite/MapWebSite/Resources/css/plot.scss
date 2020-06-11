@@ -29,6 +29,7 @@
         width: 530px;
         height: 340px;
         grid-area: plot;
+        pointer-events: initial;
 
         .graphPoint {
             pointer-events: initial;
@@ -65,8 +66,8 @@
         flex-direction: column;
 
         hr {
-            border: solid 2px get_color(chromaOrange)!important;
-            margin: 4px!important;
+            border: solid 2px get_color(chromaOrange) !important;
+            margin: 4px !important;
         }
 
 

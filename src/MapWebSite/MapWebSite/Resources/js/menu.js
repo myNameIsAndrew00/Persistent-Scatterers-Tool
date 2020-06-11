@@ -285,7 +285,7 @@ function displayPopup(buttonId, url, callbackHandler, additionalContent) {
     const buttonWidth = parseInt($('#' + buttonId).width(), 10);
 
     function fillPopup(content) {
-        PopupBuilderInstance.Create('map-container',
+        PopupBuilderInstance.Create('#map-container',
             { X: buttonPosition.left + buttonWidth / 2, Y: buttonPosition.top + 30 },
             content);
 

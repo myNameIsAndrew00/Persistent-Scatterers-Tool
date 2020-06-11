@@ -73,20 +73,31 @@ class PopupManager {
     }
 
     RemoveAll(containerId = '') {
-        $(('#' + containerId)).find('[id^="popup-"]').remove();
+        $((containerId)).find('[id^="popup-"]').remove();
     }
 
-    Create(containerId = '', position, content) {
+    /**
+     * Handle popups creation across application
+     * @param {any} containerId container which will contain the popup
+     * @param {any} position position { X: ,Y:} of popup
+     * @param {any} content content of the popup (must be a DOM element)
+     * @param {any} options optional options
+     * {
+     *      preventClosing : true
+     * }
+     */
+    Create(containerId = '', position, content, options) {
+        if (options === undefined) options = {};
 
         //create the popup, add it inside the container, set the close button handler
         var popupId = 'popup-' + this.popupIdentifier++;
         var popup = new Popup(popupId, position);
         popup.SetCloseButtonHandle(function () {
             popup.Display(false);
-            $(('#' + containerId)).children('#' + popupId).remove();
+            $((containerId)).children('#' + popupId).remove();
         })
 
-        $(('#'+ containerId)).append(popup.container);
+        $((containerId)).append(popup.container);
 
         //display the popup
         setTimeout(() => {
@@ -95,15 +106,16 @@ class PopupManager {
         }, 50);
 
 
+        if (options.preventClosing != true)
         //add a event listener to the window for closing the popup if a click ocured outside popup
-        window.addEventListener('click', function (event) {
-            if (!$(event.target).closest(".popup").length) {
-                popup.Display(false);
-                this.setTimeout(function () {
-                    $(('#' + containerId)).children('#' + popupId).remove();
-                },300);
-            }
-        })
+            window.addEventListener('click', function (event) {
+                if (!$(event.target).closest(".popup").length) {
+                    popup.Display(false);
+                    this.setTimeout(function () {
+                        $((containerId)).children('#' + popupId).remove();
+                    },300);
+                }
+            })
 
         return popupId;
     }

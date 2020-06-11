@@ -27,7 +27,7 @@ var registerInputs = {
     /**
      * Represents the id of the container which will contain popups
      * */
-    popupsContainerId: 'main-content',
+    popupsContainerId: '#main-content',
 
     /**
      * Change the border color of an input

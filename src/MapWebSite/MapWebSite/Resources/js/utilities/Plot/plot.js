@@ -46,7 +46,9 @@ export class PlotDrawer {
                     data: [                    //an array of array of pairs {x: ,y:}
                         { X : 4, Y : 5}
                     ]
-                    color: 'red'
+                    color: 'red',
+                    hoverColor: 'red',
+                    dataClickEvent: callback(d,i, {X:, Y:})
                 }
             }
          * */
@@ -88,7 +90,7 @@ export class PlotDrawer {
         context.plotData = context.containerObject.append('g').attr('id', 'plot-data');
 
         for (var i = 0; i < context.points.length; i++)
-             this.dataPlotDrawer(context)[context.plotType](context.points[i], drawOptions);
+            this.dataPlotDrawer(context, context.points[i])[context.plotType]();
     }
 
 
@@ -113,7 +115,7 @@ export class PlotDrawer {
 
             this.eraseSvg(context.customAxis[drawOptions.identifier]);
             context.customAxis[drawOptions.identifier] = null;
-            return;    
+            return;
         }
 
         context.customAxis[drawOptions.identifier] =
@@ -125,14 +127,16 @@ export class PlotDrawer {
                 .attr('height', context.length.oY)
                 .style('fill', d3.color(drawOptions.color))
                 .style('stroke', d3.color(drawOptions.color));
-        
+
     }
 
     /*
      * regressionOptions : {
      *      type: 'linear', 'polynomial',
      *      hideshow: true,
-     *      color: 'red'
+     *      color: 'red',
+     *      hoverColor: 'red',
+     *      clickCallback: callback(coefficients, position)
      * }
      * */
     /**
@@ -159,21 +163,37 @@ export class PlotDrawer {
         //plotName represents the object (inside context) which will contain the plot
         //if the regression was never created, it will be created
         //if the regression exists and hideshow is true, the regression will be hide
-        function drawRegression(plotName, data) {
+        function drawRegression(plotName, data, addClickEvent) {
             if (!checkDrawingConditions(plotName))
                 return;
+            const strokeWidth = 2;
 
             var lineFunction = d3.line()
                 .x(function (s) { return context.xScale(s[0]); })
                 .y(function (s) { return context.yScale(s[1]); })
 
 
-            context[plotName]
-                .append("path")
-                .datum(data)
-                .style('fill', 'none')
-                .style('stroke', d3.color(regressionOptions.color))
-                .attr("d", lineFunction);
+            addClickEvent(
+                context[plotName]
+                    .append("path")
+                    .datum(data)
+                    .attr('fill', 'none')
+                    .attr('stroke', d3.color(regressionOptions.color))
+                    .attr('stroke-width', strokeWidth)
+                    .attr("d", lineFunction)
+                    .style('transition', '0.3s')
+                    .on('mouseover', function (d, i) {
+                        d3.select(this)
+                            .attr('stroke', d3.color(regressionOptions.hoverColor))
+                            .attr('stroke-width', strokeWidth * 2)
+                    })
+                    .on('mouseout', function (d, i) {
+                        d3.select(this)
+                            .attr('stroke', d3.color(regressionOptions.color))
+                            .attr('stroke-width', strokeWidth)
+                    })
+            );
+
         }
 
         switch (regressionOptions.type) {
@@ -183,7 +203,14 @@ export class PlotDrawer {
                     d3.regressionLinear()
                         .x(d => d.X)
                         .y(d => d.Y)
-                        .domain([context.originAxesValue.oX, context.endAxesValue.oX])(context.points[0].data));
+                        .domain([context.originAxesValue.oX, context.endAxesValue.oX])(context.points[0].data),
+                    function (builtContext) {
+                        builtContext.on('click', function (d, i) {
+                            regressionOptions.clickCallback(
+                                [d.a, d.b],
+                                { X: this.getBoundingClientRect().left, Y: this.getBoundingClientRect().top });
+                        });
+                    });
                 break;
             case 'polynomial':
                 drawRegression(
@@ -191,7 +218,14 @@ export class PlotDrawer {
                     d3.regressionPoly()
                         .x(d => d.X)
                         .y(d => d.Y)
-                        .order(5)(context.points[0].data));
+                        .order(3)(context.points[0].data),
+                    function (builtContext) {
+                        builtContext.on('click', function (d, i) {
+                            regressionOptions.clickCallback(
+                                d.coefficients,
+                                { X: this.getBoundingClientRect().left, Y: this.getBoundingClientRect().top }); 
+                        });
+                    });
                 break;
         }
     }
@@ -200,30 +234,56 @@ export class PlotDrawer {
     *   Private methods 
     */
 
-    eraseSvg(svg) {        
+    eraseSvg(svg) {
         svg.selectAll("*").remove();
         svg.remove();
-        svg = null;      
+        svg = null;
     }
 
-    dataPlotDrawer(context) {
-        function bar(displayedPoints, drawOptions) {
-            context.plotData
-                .selectAll("bar")
-                .data(displayedPoints.data)
-                .enter()
-                .append('rect')
-                .attr('width', context.xScale.range().toString().replace(',', '.'))
-                .attr('x', function (s) {
-                    return context.xScale(s.X);
+    dataPlotDrawer(context, displayedPoints) {
+
+        const color = d3.color(displayedPoints.color === undefined ? context.graphColor : displayedPoints.color);
+        const hoverColor = d3.color(displayedPoints.hoverColor === undefined ? context.graphColor : displayedPoints.hoverColor);
+
+        function addInteraction(interactionContext) {
+            interactionContext.on('mouseover', function (d, i) {
+                d3.select(this)
+                    .attr('fill', hoverColor)
+                    .attr('stroke', hoverColor)
+            })
+                .on('mouseout', function (d, i) {
+                    d3.select(this)
+                        .attr('fill', color)
+                        .attr('stroke', color)
                 })
-                .attr('y', (s) => context.yScale(s.Y))
-                .attr('height', (s) => context.length.oY - context.yScale(s.Y))
-                .style('fill', d3.color(displayedPoints.color === undefined ? context.graphColor : displayedPoints.color ))
-                .style('stroke', d3.color(displayedPoints.color === undefined ? context.graphColor : displayedPoints.color ));
+                .on('click', function (d, i) {
+
+                    if (displayedPoints.dataClickEvent !== undefined) displayedPoints.dataClickEvent(
+                        d,
+                        i,
+                        { X: this.getBoundingClientRect().left, Y: this.getBoundingClientRect().top });
+                });
         }
 
-        function line(displayedPoints, drawOptions) {
+        function bar() {
+            addInteraction(
+                context.plotData
+                    .selectAll("bar")
+                    .data(displayedPoints.data)
+                    .enter()
+                    .append('rect')
+                    .attr('width', context.xScale.range().toString().replace(',', '.'))
+                    .attr('x', function (s) {
+                        return context.xScale(s.X);
+                    })
+                    .attr('y', (s) => context.yScale(s.Y))
+                    .attr('height', (s) => context.length.oY - context.yScale(s.Y))
+                    .attr('fill', color)
+                    .attr('stroke', color)
+            );
+        }
+
+        function line() {
             var lineFunction = d3.line()
                 .x(function (s) { return context.xScale(s.X); })
                 .y(function (s) { return context.yScale(s.Y); })
@@ -233,22 +293,24 @@ export class PlotDrawer {
                 .append("path")
                 .datum(displayedPoints.data)
                 .style('fill', 'none')
-                .style('stroke', d3.color(displayedPoints.color === undefined ? context.graphColor : displayedPoints.color ))
+                .style('stroke', color)
                 .attr("d", lineFunction);
 
-            points(displayedPoints, drawOptions);
+            points();
         }
 
-        function points(displayedPoints, drawOptions) {
-            context.plotData
-                .selectAll(".dot")
-                .data(displayedPoints.data)
-                .enter().append("circle") // Uses the enter().append() method         
-                .attr("cx", function (d, i) { return context.xScale(d.X) })
-                .attr("cy", function (d) { return context.yScale(d.Y) })
-                .attr("r", 2)
-                .style('fill', d3.color(displayedPoints.color === undefined ? context.graphColor : displayedPoints.color ))
-                .style('stroke', d3.color(displayedPoints.color === undefined ? context.graphColor : displayedPoints.color ));
+        function points() {
+            addInteraction(
+                context.plotData
+                    .selectAll(".dot")
+                    .data(displayedPoints.data)
+                    .enter().append("circle") // Uses the enter().append() method         
+                    .attr("cx", function (d, i) { return context.xScale(d.X) })
+                    .attr("cy", function (d) { return context.yScale(d.Y) })
+                    .attr("r", 2)
+                    .attr('fill', color)
+                    .attr('stroke', color)
+            );
         }
 
         return { bar, line, points };
@@ -295,14 +357,14 @@ export class PlotDrawer {
     }
 
     initContainer(context) {
-        $(context.containerID).empty();       
+        $(context.containerID).empty();
 
         context.svg = d3.select(context.containerID)
-            .append("div") 
+            .append("div")
             .classed("svg-container", true)
-            .append("svg") 
+            .append("svg")
             .attr("preserveAspectRatio", "xMinYMin meet")
-            .attr("viewBox", `0 0 ${context.length.oX + context.margin + context.viewBoxPadding} ${context.length.oY + context.margin + context.viewBoxPadding}`) 
+            .attr("viewBox", `0 0 ${context.length.oX + context.margin + context.viewBoxPadding} ${context.length.oY + context.margin + context.viewBoxPadding}`)
             .classed("svg-content-responsive", true)
 
         context.containerObject = context.svg.append('g')
