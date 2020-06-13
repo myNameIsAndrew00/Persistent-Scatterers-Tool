@@ -113,7 +113,7 @@ namespace MapWebSite.Core.Database
         /// <param name="datasetName">The name of the dataset</param>
         /// <returns></returns>
         bool RemovePointsDataset(string username, string datasetName);
-
+       
         /// <summary>
         /// Use this method to update a dataset to be used as a geoserver source
         /// </summary>
