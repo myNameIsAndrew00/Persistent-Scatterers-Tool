@@ -19,6 +19,8 @@ namespace MapWebSite.Tests.Core
         {
             Helper.UTMConverter converter = new Helper.UTMConverter();
             var result = converter.ToLatLong(35, 'T', 632353.875m, 4919262.500m);
+
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]

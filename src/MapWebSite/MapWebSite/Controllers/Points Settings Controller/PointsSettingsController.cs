@@ -29,7 +29,7 @@ namespace MapWebSite.Controllers
         {
             try
             {
-                DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+                DomainInstance databaseInteractionHandler = new DomainInstance();
 
                 return View("~/Views/Home/Points Settings Content/ChosePalette.cshtml",
                     new ChosePaletteViewModel(databaseInteractionHandler.GetColorPaletes(
@@ -52,7 +52,7 @@ namespace MapWebSite.Controllers
         {
             try
             {
-                DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+                DomainInstance databaseInteractionHandler = new DomainInstance();
                 return View("~/Views/Home/Points Settings Content/ChoseDataset.cshtml",
                     new ChoseDatasetViewModel(databaseInteractionHandler.GetDataSets(
                         RouteConfig.CurrentUser?.Username,
@@ -97,9 +97,9 @@ namespace MapWebSite.Controllers
         [System.Web.Http.HttpGet]
         public HttpResponseMessage ValidateGeoserverStyle(string datasetName, string datasetUsername, string paletteName, string paletteUsername)
         {
-            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+            DomainInstance databaseInteractionHandler = new DomainInstance();
 
-            bool validationResult = databaseInteractionHandler.ValidateOrSetPaletteToGeoserverLayer(datasetName, datasetUsername, paletteName, paletteUsername);
+            bool validationResult = databaseInteractionHandler.ValidateGeoserverLayer(datasetName, datasetUsername, paletteName, paletteUsername);
 
             var response = new HttpResponseMessage();
             response.StatusCode = validationResult ? System.Net.HttpStatusCode.OK : System.Net.HttpStatusCode.Conflict;
@@ -110,7 +110,7 @@ namespace MapWebSite.Controllers
         [System.Web.Http.HttpGet]
         public HttpResponseMessage GetColorPalette(string username, string paletteName)
         {
-            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+            DomainInstance databaseInteractionHandler = new DomainInstance();
             string serializedColorPalete = databaseInteractionHandler.GetColorPaletteSerialization(username, paletteName);
 
             var response = new HttpResponseMessage();
@@ -123,7 +123,7 @@ namespace MapWebSite.Controllers
         [System.Web.Http.HttpGet]
         public HttpResponseMessage GetColorPaletteList(int pageIndex)
         {
-            var databaseInteractionHandler = new DatabaseInteractionHandler();
+            var databaseInteractionHandler = new DomainInstance();
             var response = new HttpResponseMessage();
 
 
@@ -144,7 +144,7 @@ namespace MapWebSite.Controllers
         {
             if (itemsPerPage == -1) itemsPerPage = ChoseDatasetViewModel.DataPointsPerPage;
 
-            var databaseInteractionHandler = new DatabaseInteractionHandler();
+            var databaseInteractionHandler = new DomainInstance();
             var response = new HttpResponseMessage();
 
             bool isAnonymous = User.IsInRole(UserRoles.Anonymous.GetEnumString());
@@ -182,7 +182,7 @@ namespace MapWebSite.Controllers
         [System.Web.Http.HttpGet]
         public HttpResponseMessage GetDatasetLimits(string username, string datasetName)
         {
-            var databaseInteractionHandler = new DatabaseInteractionHandler();
+            var databaseInteractionHandler = new DomainInstance();
             var response = new HttpResponseMessage();
 
 

@@ -7,7 +7,7 @@
 import { CassandraPointsSectionsContainer } from './points sources/cassandra_container.js';
 import { GeoserverPointsSectionsContainer } from './points sources/geoserver_container.js';
 import { map } from './map.js';
-import { ChangeContextualMenuVisibility, Ids } from '../menu.js';
+import { ChangeContextualMenuVisibility, Ids } from '../navigation.js';
 
 const sources = {
     cassandra: 'cassandra',

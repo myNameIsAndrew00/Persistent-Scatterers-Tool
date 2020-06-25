@@ -31,7 +31,7 @@ namespace MapWebSite.Controllers
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return RedirectToAction("Index");
 
-            DatabaseInteractionHandler databseHandler = new DatabaseInteractionHandler();
+            DomainInstance databseHandler = new DomainInstance();
             if (databseHandler.GetUser(username, false) == null)
                 return RedirectToAction("Index", new { LoginErrorMessage = TextDictionary.LLoginWrongUsernameOrPasswordMessage });
 
@@ -168,7 +168,7 @@ namespace MapWebSite.Controllers
             var response = new HttpResponseMessage();
             response.Content = null;
 
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
 
             if (handler.GetUser(username, false) != null)
             {
@@ -215,7 +215,7 @@ namespace MapWebSite.Controllers
                 return setContentType(response);
             }
 
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
             if (handler.GetUser(email, true) != null)
             {
                 response.Content = new StringContent(new RegisterValidationResult()

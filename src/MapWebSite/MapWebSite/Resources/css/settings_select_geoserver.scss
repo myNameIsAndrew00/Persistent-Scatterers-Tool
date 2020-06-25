@@ -5,85 +5,84 @@ $paletteListWidth: 500px;
 $paletteListHeight: 300px;
 
 .select-geoserver-source-container {
-    position: absolute;
-    margin: 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
-    .select-geoserver-source-content {
-        display: grid;
-        grid-template-areas: "left right";
-        grid-template-columns: 45% 55%;
+    .content-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        
+        .form-group{
+            margin: 15px;
+        }
 
-        .content-left {
-            grid-area: left;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+        input, button {
+            margin: 0;
+        }
+        
+        .inputs {
+            padding: 10px;
 
-            .inputs {
-                padding: 10px;
+            .input-content {
+                label {
+                    min-width: 100px;
+                }
 
-                .input-content {
-                    label {
-                        min-width: 100px;
-                    }
+                input {
+                    width: 200px;
+                }
 
-                    input {
-                        width: 200px;
-                    }
+                .suggestions-container {
+                    position: absolute;
+                    background: get_color(lightGray);
+                    width: 300px;
+                    height: 130px;
+                    overflow-y: auto;
 
-                    .suggestions-container {
-                        position: absolute;
-                        background: get_color(lightGray);
-                        width: 300px;
-                        height: 130px;
-                        overflow-y: auto;
+                    .suggestion-item {
+                        display: flex;
+                        align-items: center;
+                        padding: 10px;
 
-                        .suggestion-item {
-                            display: flex;
-                            align-items: center;
-                            padding: 10px;
+                        button {
+                            padding: 0px 9px 2px 9px;
+                        }
 
-                            button {
-                                padding: 0px 9px 2px 9px;
-                            }
-
-                            tbody {
-                                tr, td {
-                                    width: 22px;
-                                    height: 4px;
-                                    margin: 0;
-                                    padding: 0;
-                                    border: solid #e3e3e3 1px;
-                                }
+                        tbody {
+                            tr, td {
+                                width: 22px;
+                                height: 4px;
+                                margin: 0;
+                                padding: 0;
+                                border: solid #e3e3e3 1px;
                             }
                         }
                     }
                 }
             }
-
-            button {
-                text-align: center;
-                align-self: center;
-                width: 200px;
-            }
-
-            .finish-button {
-                margin-top: $general_big_margin;
-            }
-
-            small {
-                margin-bottom: $general_big_margin;
-            }
         }
 
-        .gliph {
-            grid-area: right;
+        button {
+            text-align: center;
+            align-self: center;
+            width: 200px;
+        }
+
+        .finish-button {
+            margin-top: $general_big_margin;
+        }
+
+        small {
+            margin-bottom: $general_big_margin;
+        }
+    }
+
+    .gliph {
+        svg {
+            margin: 96px;
         }
     }
 }
+
 
 .message-overlay {
     .palette-list-container {
@@ -102,7 +101,7 @@ $paletteListHeight: 300px;
             padding: $general_large_padding;
             border-left: solid $general_large_padding get_color(chromaOrange);
             transition: 0.3s;
- 
+
             label {
                 pointer-events: none;
             }

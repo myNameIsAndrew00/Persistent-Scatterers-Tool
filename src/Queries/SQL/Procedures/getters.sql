@@ -96,11 +96,15 @@ begin
 		   DS.minimum_std_dev,
 		   DS.maximum_std_dev,
 		   DS.source_name,
+		   GDS.geoserver_api_url,
 		   U.username
 	from DataSets as DS
 		inner join Users as U
 		on DS.user_id = U.user_id 
+			left join GeoserverDataSets as GDS
+			on DS.data_set_id = GDS.data_set_id
 	where (DS.dataset_name = @dataset_name and U.username = @username) or DS.data_set_id = @dataset_id
+
 
 end
 

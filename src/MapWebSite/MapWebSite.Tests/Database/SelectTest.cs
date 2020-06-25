@@ -29,7 +29,7 @@ namespace MapWebSite.Tests.Database
         [TestMethod]
         public void SelectUser()
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
 
             //            bool response = handler.ValidateUser("woofwoofa", "andrei1234");
 

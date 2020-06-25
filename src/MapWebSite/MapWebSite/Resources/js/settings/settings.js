@@ -4,7 +4,7 @@
  * 
  * */
 
-import { ExpandMainMenu, ChangeMenuMode } from '../menu.js';
+import { ExpandMainMenu, ChangeMenuMode } from '../navigation.js';
 
 export const constants = {
     id: {

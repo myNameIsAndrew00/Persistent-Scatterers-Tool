@@ -923,7 +923,7 @@ namespace MapWebSite.Repository
             if (rows.Count == 0) return null;
             var resultRow = rows[0];
 
-            return new PointsDataSetHeader()
+            var header = new PointsDataSetHeader()
             {
                 Username = (string)resultRow["username"],
                 Name = (string)resultRow["dataset_name"],
@@ -943,7 +943,15 @@ namespace MapWebSite.Repository
                 PointsSource = (PointsSource)Enum.Parse(typeof(PointsSource), (string)resultRow["source_name"])
             };
 
+            if (!(resultRow["geoserver_api_url"] is DBNull))
+                header.OptionalData = new GeoserverOptionalData()
+                {
+                    ServerUrl = resultRow["geoserver_api_url"].ToString()
+                };
+
+            return header;
         }
+
         private IEnumerable<PointsDataSetHeader> parseDataPointsDataset(DataRowCollection rows)
         {
             List<PointsDataSetHeader> result = new List<PointsDataSetHeader>();

@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("MapWebSite.Tests")]
 namespace MapWebSite.Domain
 {
     using Region = Tuple<int, int, int>;
 
     using PointsZonePair = Tuple<IEnumerable<PointBase>, string>;
    
+  
     /// <summary>
     /// A cache which manages the points.
     /// Cache flow:

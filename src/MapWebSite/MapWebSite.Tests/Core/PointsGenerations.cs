@@ -20,8 +20,8 @@ namespace MapWebSite.Tests
             IDataPointsSource pointsSource = new TxtDataPointsSource();
             IDataPointsRegionsSource regionSource = new PowerOfTwoRegionsSource();
 
-            (pointsSource as TxtDataPointsSource).HeaderFile = @"P:\Projects\Licence\Main\git\docs\Data points\Constanta\header.txt";
-            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"P:\Projects\Licence\Main\git\docs\Data points\Constanta\displacements.txt";
+            (pointsSource as TxtDataPointsSource).HeaderFile = @"E:\temp\header.txt";
+            (pointsSource as TxtDataPointsSource).DisplacementsFile = @"E:\temp\displacements.txt";
             (pointsSource as TxtDataPointsSource).LatitudeZone = 'T';
             (pointsSource as TxtDataPointsSource).Zone = 35;
             PointsDataSet dataset = pointsSource.CreateDataSet("Test", CoordinateSystem.UTM).First();
@@ -30,9 +30,9 @@ namespace MapWebSite.Tests
 
             IEnumerable<PointType> points = PointType.GetPoints(dataset);
            
-          //  IDataPointsZoomLevelsSource zoomGenerator = new SquareMeanPZGenerator();
+            IDataPointsZoomLevelsSource zoomGenerator = new SquareMeanPZGenerator();
 
-          //   PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
+            PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
 
             Assert.IsNotNull(dataset);
             Assert.IsNotNull(points);

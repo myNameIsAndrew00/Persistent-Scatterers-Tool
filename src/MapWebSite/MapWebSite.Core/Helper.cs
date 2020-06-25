@@ -103,6 +103,22 @@ namespace MapWebSite.Core
         }
 
         /// <summary>
+        /// Use this method to obtain the source address from an url
+        /// </summary>
+        /// <param name="url">Url in format: 'http://source/more/more/more</param>
+        /// <returns>A string with http://source</returns>
+        public static string GetSourceFromUrl(string url)
+        {
+            if (url == null) return null;
+
+            var urlParts = url.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (urlParts.Length < 2) return url;
+
+            return urlParts[0] + "//" + urlParts[1];
+        }
+
+        /// <summary>
         /// This class provide a method to convert geographic coordinates
         /// </summary>
         public class UTMConverter

@@ -137,8 +137,8 @@
 </div>
 
 <script>
-    getScript('#settings-layer', '/Resources/js/settings/color_picker_color_list.js');
-    getScript('#settings-layer', '/Resources/js/settings/settings_color_picker.js');
+    getScript('#settings-layer', '@Url.Content("~/Resources/js/settings/color_picker_color_list.js")' );
+    getScript('#settings-layer',  '@Url.Content("~/Resources/js/settings/settings_color_picker.js")' );
 
     if (window.resetColorList !== undefined) resetColorList();
 </script>

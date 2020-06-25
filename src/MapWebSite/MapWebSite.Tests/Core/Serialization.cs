@@ -31,7 +31,7 @@ namespace MapWebSite.Tests.Core
 
             string data = field.GetEnumString();
 
-            Assert.Equals(data, "Anonymous");
+            Assert.AreEqual(data, "Anonymous");
         }
     }
 }

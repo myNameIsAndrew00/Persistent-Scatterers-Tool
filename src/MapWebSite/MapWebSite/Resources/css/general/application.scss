@@ -18,3 +18,9 @@
         font-size: 0.9em;
     }
 }
+
+.container-centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}

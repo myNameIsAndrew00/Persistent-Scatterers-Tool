@@ -1,5 +1,6 @@
 ﻿using MapWebSite.Core.Database;
 using MapWebSite.Core.DataPoints;
+using MapWebSite.Domain.ViewModel;
 using MapWebSite.Model;
 using MapWebSite.Repository;
 using System;
@@ -24,18 +25,9 @@ namespace MapWebSite.Domain
     /// <summary>
     /// Provides methods for interacting with the databases
     /// </summary>
-    public class DatabaseInteractionHandler
+    public class DomainInstance
     { 
-        /// <summary>
-        /// An enum which handles codes for CreateDataset function
-        /// </summary>
-        public enum CreateDatasetResultCode
-        {
-            Ok,
-            GeoserverError,
-            DatasetError,
-            BadPaletteError
-        }
+      
 
         private readonly IUserRepository userRepository;
 
@@ -52,18 +44,18 @@ namespace MapWebSite.Domain
         
 
         /// <summary>
-        /// Use this method to initialise the any database connections
+        /// Use this method to initialise any database connections
         /// </summary>
         public static void Initialise()
         {
             CassandraDataPointsRepository.Initialise();
         }
 
-        public DatabaseInteractionHandler()
+        public DomainInstance()
         {
             userRepository = CoreContainers.UsersRepository;
             dataPointsRepository = CoreContainers.DataPointsRepository;
-            dataPointsRegionSource = new PowerOfTwoRegionsSource();
+            dataPointsRegionSource = CoreContainers.DataPointsRegionSource;
         }
 
         /// <summary>
@@ -75,14 +67,11 @@ namespace MapWebSite.Domain
         public CreateDatasetResultCode CreateDataSet(string datasetName, 
                                                      string username, 
                                                      PointsSource pointsSource, 
-                                                     string apiUrl = null, 
+                                                     string serviceUrl = null, 
                                                      string colorPaletteUser = null, 
                                                      string colorPaletteName = null)
         {
-            /** error strings: 
-             * Dataset - caused by dataset insertions
-             * Geoserver - caused by geoserver 
-             **/
+        
 
             int datasetId = this.userRepository.CreateUserPointsDataset(username, datasetName, pointsSource);
 
@@ -93,11 +82,14 @@ namespace MapWebSite.Domain
                     LayerName = datasetName,
                     SingleLayer = true
                 };
-
-                GeoserverClient client = geoserverClient(null, null, null);
+                string serverUrl = Helper.GetSourceFromUrl(serviceUrl);
+                GeoserverClient client = geoserverClient(serverUrl, null, null);
 
                 if (client.Get<Layer>(new ModulesFactory().CreateLayerModule(builder)) == null)
+                {
+                    CoreContainers.LogsRepository.LogWarning($"Failed to get {datasetName} from Geoserver: {Helper.GetSourceFromUrl(serverUrl)}.");
                     return CreateDatasetResultCode.GeoserverError;
+                }
 
                 //if dataset already exists in database
                 if (datasetId == -1) datasetId = this.userRepository.GetDatasetID(username, datasetName);
@@ -107,7 +99,7 @@ namespace MapWebSite.Domain
 
                 datasetId = this.userRepository.RaiseToGeoserverDataset(datasetId,
                     defaultColorPaletteId, 
-                    apiUrl);
+                    serviceUrl);
             }
 
             return datasetId != -1 ? CreateDatasetResultCode.Ok : CreateDatasetResultCode.DatasetError;
@@ -119,7 +111,7 @@ namespace MapWebSite.Domain
             return this.userRepository.UpdateDatasetStatus(datasetName, status, username);
         }
 
-       
+        
 
         /// <summary>
         /// Returns data points regions which are inside a specific area of screen for a zoom level. 
@@ -133,7 +125,7 @@ namespace MapWebSite.Domain
         /// <param name="cachedRegions">A list of regions keys which are cached on browser</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        public void RequestCassandraPointsRegions(Pair topLeftCorner,
+        public void RequestDomainPointsRegions(Pair topLeftCorner,
                                                      Pair bottomRightCorner,
                                                      int zoomLevel,
                                                      string username,
@@ -252,13 +244,13 @@ namespace MapWebSite.Domain
         }
 
         /// <summary>
-        /// Use this method to associate a style with a layer in geoserver or to validat
+        /// Use this method to associate a style with a layer in geoserver or to validate a layer 
         /// </summary>
         /// <param name="datasetId"></param>
         /// <param name="paletteName"></param>
         /// <param name="paletteUsername"></param>
         /// <returns></returns>
-        public bool ValidateOrSetPaletteToGeoserverLayer(string datasetName, string datasetUsername, string paletteName, string paletteUsername)
+        public bool ValidateGeoserverLayer(string datasetName, string datasetUsername, string paletteName, string paletteUsername)
         {
             /**
              * Steps: 1. check if palette is already asociated. If yes, return true 
@@ -277,19 +269,30 @@ namespace MapWebSite.Domain
                
                 if (geoserverId == -1) return false;
 
-                var userPalettes = userRepository.GetGeoserverColorMaps(geoserverId);
+                var datasetHeader = userRepository.GetDatasetHeader(datasetId);             
+                var geoserverPalettes = userRepository.GetGeoserverColorMaps(geoserverId);
 
-                var selectedPalette = userPalettes.Where(p => p.Item1 == paletteUsername && p.Item2.Name == paletteName).FirstOrDefault();
+                var selectedPalette = geoserverPalettes.Where(p => p.Item1 == paletteUsername && p.Item2.Name == paletteName).FirstOrDefault();
                 if (selectedPalette != null) return true;
+                selectedPalette = getUserColorMap(paletteUsername, paletteName);
 
-                GeoserverClient client = geoserverClient(null, null, null);
+                string serverUrl = Helper.GetSourceFromUrl((datasetHeader.OptionalData as GeoserverOptionalData).ServerUrl);
+                
+                GeoserverClient client = geoserverClient(
+                                    serverUrl, 
+                                    null, 
+                                    null);
+
+                if (!insertGeoserverStyle(client, selectedPalette.Item1, selectedPalette.Item2))
+                    CoreContainers.LogsRepository.LogWarning($"Failed to associate palette {selectedPalette.Item2.Name} with the dataset found at {serverUrl}");
+
                 ModulesFactory modulesFactory = new ModulesFactory();
 
                 LayersBuilder builder = new LayersBuilder();
                 builder.LayerName = userRepository.GetDatasetHeader(datasetId).Name;      
                 builder.SingleLayer = true;
 
-                builder.Styles = userPalettes.Select(p => p.Item1 + '_' + p.Item2.Name).ToList();
+                builder.Styles = geoserverPalettes.Select(p => p.Item1 + '_' + p.Item2.Name).ToList();
                 builder.Styles.Add(paletteUsername + '_' + paletteName);
 
                 return client.Put(modulesFactory.CreateLayerModule(builder)) ?
@@ -311,17 +314,13 @@ namespace MapWebSite.Domain
 
         public bool InsertColorPalette(string username, ColorMap colorMap)
         {
-            GeoserverClient client = geoserverClient(null, null, null);
-
-            StylesBuilder stylesBuilder = 
-                new StylesBuilder(username + '_' + colorMap.Name, colorMap.Name);
-
-            foreach (var intervalRule in colorMap.GetRules())
-                stylesBuilder.AddRule(intervalRule);
-
-            if (!client.Post(new ModulesFactory().CreateStylesModule(stylesBuilder)))
-                return false;
-
+            if(!insertGeoserverStyle(
+                    geoserverClient(null, null, null), 
+                    username, 
+                    colorMap)
+                )
+                CoreContainers.LogsRepository.LogWarning($"Failed to load palette {colorMap.Name} (loaded by {username}) into default Geoserver server", Core.Database.Logs.LogTrigger.Domain);
+     
             return userRepository.CreateColorMap(username, colorMap);
         }
 
@@ -389,5 +388,30 @@ namespace MapWebSite.Domain
             return useEmail ? this.userRepository.GetUserByEmail(username) : this.userRepository.GetUser(username);
         }
 
+
+        #region Private
+
+        private bool insertGeoserverStyle(GeoserverClient client, string username, ColorMap colorMap)
+        {      
+
+            StylesBuilder stylesBuilder =
+                new StylesBuilder(username + '_' + colorMap.Name, colorMap.Name);
+
+            foreach (var intervalRule in colorMap.GetRules())
+                stylesBuilder.AddRule(intervalRule);
+            
+            return client.Post(new ModulesFactory().CreateStylesModule(stylesBuilder));            
+        }
+
+        private Tuple<string, ColorMap> getUserColorMap(string username, string paletteName)
+        {
+            return userRepository.GetColorMapsFiltered(new List<Tuple<ColorMapFilters, string>> {
+                                                                new Tuple<ColorMapFilters, string>(ColorMapFilters.Username, username),
+                                                                new Tuple<ColorMapFilters, string>(ColorMapFilters.ColorMapName, paletteName) },
+                                                                0,
+                                                                1).FirstOrDefault();
+        }
+
+        #endregion
     }
 }

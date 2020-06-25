@@ -24,7 +24,7 @@ namespace MapWebSite.Controllers
         [HttpGet]
         public HttpResponseMessage GetUsers(int pageIndex, int itemsPerPage)
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
             IEnumerable<User> users = handler.GetUsers(null, pageIndex, itemsPerPage);
             
             var response = new HttpResponseMessage();
@@ -37,7 +37,7 @@ namespace MapWebSite.Controllers
         [HttpGet]
         public HttpResponseMessage GetUserDatasets(string username, int pageIndex, int itemsPerPage)
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
             var datasets = handler.GetDataSets(username, false, null, pageIndex, itemsPerPage)?.Select(dataset => new
             {
                 dataset.Name,
@@ -58,7 +58,7 @@ namespace MapWebSite.Controllers
         [HttpGet]
         public HttpResponseMessage GetUserAssociatedDatasetsCount(string username)
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
 
             var datasetsCount = new { count = handler.GetUsersAssociatedDatasetsCount(username) };
 
@@ -77,7 +77,7 @@ namespace MapWebSite.Controllers
         [HttpPost]        
         public HttpResponseMessage AddDatasetToUser([FromBody] JObject data)
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
 
             return handler.ChangeUserAssociatedDataset(
                         data["username"].ToString(),
@@ -93,7 +93,7 @@ namespace MapWebSite.Controllers
         [HttpPost]
         public HttpResponseMessage RemoveDatasetFromUser([FromBody] JObject data)
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
            
             return handler.ChangeUserAssociatedDataset(
                         data["username"].ToString(),

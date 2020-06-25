@@ -13,6 +13,7 @@ namespace MapWebSite.Model
         Cassandra
     }
 
+
     /// <summary>
     /// Model used for the header of points data set
     /// </summary>
@@ -49,6 +50,8 @@ namespace MapWebSite.Model
         public decimal? MinimumDeformationRate { get; set; }
 
         public decimal? MaximumDeformationRate { get; set; }
+
+        public PointsDatasetOptionalData OptionalData { get; set; }
     }
 
     /// <summary>

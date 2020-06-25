@@ -13,12 +13,12 @@ import { DisplayProcessing, PointsProcessedNotificationHandler } from '../map.js
 export class GeoserverPointsSectionsContainer {
 
     constructor(map) {
-        this.map = map; 
+        this.map = map;
         this.pointsLayer = null;
     }
 
     LoadPoints() {
-        
+
     }
 
     UpdatePointsLayer() {
@@ -26,18 +26,21 @@ export class GeoserverPointsSectionsContainer {
 
         var self = this;
 
-        Router.Get(endpoints.PointsSettingsApi.ValidateGeoserverStyle,
-            {
-                datasetName: SelectedDataset.name,
-                datasetUsername: SelectedDataset.user,
-                paletteName: ColorPalette.name,
-                paletteUsername: ColorPalette.user
-            },
-            function (response) {
-                self.initPointslayer();
-                self.InitialiseMapInteraction();
-            });
-         
+        if (ColorPalette.isUnitialised())
+            self.initPointslayer('');
+        else
+            Router.Get(endpoints.PointsSettingsApi.ValidateGeoserverStyle,
+                {
+                    datasetName: SelectedDataset.name,
+                    datasetUsername: SelectedDataset.user,
+                    paletteName: ColorPalette.name,
+                    paletteUsername: ColorPalette.user
+                },
+                function (response) {
+                    self.initPointslayer(ColorPalette.user + '_' + ColorPalette.name);
+                    self.InitialiseMapInteraction();
+                });
+
     }
 
     InitialiseMapInteraction() {
@@ -52,7 +55,7 @@ export class GeoserverPointsSectionsContainer {
     }
 
     RemoveLayers() {
-        if(this.pointsLayer != null)
+        if (this.pointsLayer != null)
             this.map.removeLayer(this.pointsLayer);
 
         this.pointsLayer = null;
@@ -134,19 +137,21 @@ export class GeoserverPointsSectionsContainer {
         DisplayPointInfo();
     }
 
-    initPointslayer() {
+    async initPointslayer(style) {
+        const datasetData = await SelectedDataset.GetInnerData();
+
         this.pointsLayer = new ol.layer.Tile({
             visible: true,
             source: new ol.source.TileWMS({
-                url: 'http://localhost:8080/geoserver/wms',
+                url: datasetData.OptionalData.ServerUrl,
                 params: {
                     'FORMAT': 'image/png',
                     'VERSION': '1.1.1',
                     tiled: true,
-                    "LAYERS": SelectedDataset.name,
+                    "LAYERS": datasetData.Name,
                     "exceptions": 'application/vnd.ogc.se_inimage',
                     tilesOrigin: 26.744917 + "," + 43.1027705,
-                    'STYLES': ColorPalette.user + '_' + ColorPalette.name,
+                    'STYLES': style,
                 }
             })
         });

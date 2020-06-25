@@ -18,7 +18,7 @@ namespace MapWebSite.Controllers
         [HttpGet]
         public HttpResponseMessage GetDatasets(int pageIndex, int itemsPerPage)
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
             var datasets = handler.GetDataSets(string.Empty, true, null, pageIndex, itemsPerPage)?.Select(dataset => new
             {
                 dataset.Name,

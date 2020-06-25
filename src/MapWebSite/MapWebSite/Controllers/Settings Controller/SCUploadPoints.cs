@@ -31,7 +31,7 @@ namespace MapWebSite.Controllers
         [HttpPost]
         public HttpResponseMessage UploadFileChunk()
         {
-            var databaseInteractionHandler = new DatabaseInteractionHandler();
+            var databaseInteractionHandler = new DomainInstance();
 
             string directoryName = $"{ConfigurationManager.AppSettings["PointsDatasetsCheckpointFolder"]}\\{RouteConfig.CurrentUser.Username}";
             if (!Directory.Exists(directoryName))           
@@ -119,7 +119,7 @@ namespace MapWebSite.Controllers
             Core.CoreContainers.LogsRepository.LogInfo($"Merged chunks for file {directoryName}\\{fileName} uploaded by {RouteConfig.CurrentUser.UserName}", Core.Database.Logs.LogTrigger.Controllers);
 
             //TODO: handle an error if any problems are encountered
-            new DatabaseInteractionHandler().UpdateDatasetStatus(fileName,
+            new DomainInstance().UpdateDatasetStatus(fileName,
                                                 DatasetStatus.Uploaded,
                                                 RouteConfig.CurrentUser.Username);
 

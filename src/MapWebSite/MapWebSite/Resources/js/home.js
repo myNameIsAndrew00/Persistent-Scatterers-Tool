@@ -26,16 +26,18 @@ var loadedScripts = [];
 /**
  * Core method which loads javascript if it is not already loaded
  * */
-window.getScript = function getScript(node, scriptServerPath) {
-    if (loadedScripts[scriptServerPath] === true) return;
+window.getScript = function getScript(node, scriptServerPath, reload) {
+    if (loadedScripts[scriptServerPath] === true && !(reload === true)) return;
 
     loadedScripts[scriptServerPath] = true;
 
-    var script = document.createElement('script');
-    script.src = scriptServerPath;
-    script.type = 'module';
+    import(scriptServerPath)
+        .then(module => {            
+            if (module.PageInitialiser !== undefined) module.PageInitialiser();
 
-    $(node).append(script);
+            console.log(`${node} module loaded`);
+        });
+ 
 }
 
 
@@ -48,6 +50,9 @@ export var ColorPalette = {
     },
     name: null,
     user: null,
+    isUnitialised: function () {
+        return this.name == null || this.user == null || this.name == '' || this.user == '';
+    },
     intervals: [
         {
             Color: '#33ff00',

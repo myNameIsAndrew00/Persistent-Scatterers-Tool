@@ -1,7 +1,30 @@
 ﻿@{
     Layout = null;
 }
+    <div class="jumbotron" style="background:white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 container-centered">
+                    <h1>@TextDictionary.HMenuSGSTitleText</h1>
+                    <small>@TextDictionary.HMenuSGSDescriptionText</small>
 
-<div class="gliph">
-    @Html.SVG("~/Resources/resources/icons/select_geoserver_style_gliph.svg", new { height = "460px", width = "650px" })
-</div>
+                    <div class="form-group row">
+                        @Html.Label(@TextDictionary.HMenuSGSNameInputLabel, new { @class = "col-sm-3" })
+                        @Html.TextBox("name", null, new { placeholder = @TextDictionary.HMenuSGSNameInputPlaceholder, @class = "col-sm-5 default-input-gray", onkeyup = "enableGeoserverUploadSubmit()" })
+
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-3"></div>
+                        <button id="geoserverSelectFinishButton" onclick="uploadSelectedGeoserverLayer()" class="col-sm-5 finish-button" disabled>@TextDictionary.HMenuSGSUploadButton</button>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="gliph">
+                        @Html.SVG("~/Resources/resources/icons/select_geoserver_style_gliph.svg", new { height = "460px", width = "650px" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

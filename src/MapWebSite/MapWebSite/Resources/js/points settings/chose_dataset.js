@@ -25,12 +25,36 @@ const defrateLimitRightLabelId = '#defrate_limit_right';
 
 /** Use this class to model a dataset of points inside the table*/
 class PointsDataset {
+    innerData = null;
+    innerDataRequest = null;
 
     constructor(username, datasetName) {
+        var self = this;
+
         this.user = username;
         this.name = datasetName;
 
         this.identifier = this.setIdentifier();
+
+        this.innerDataRequest = Router.Get(endpoints.PointsSettingsApi.GetDatasetLimits,
+            {
+                username,
+                datasetName
+            },
+            function (response) {
+                self.innerData = response;
+                console.log(response); 
+            },
+            function () {
+                self.innerData = {};
+            }
+        );  
+    }
+
+    async GetInnerData() { 
+        await this.innerDataRequest;
+
+        return this.innerData;
     }
 
     setIdentifier() {
@@ -46,13 +70,16 @@ class PointsDataset {
 
     ///use this method to display dataset details inside ps_right menu 
     displayDatasetLimits(username, datasetName) {
+        var self = this;
         Router.Get(endpoints.PointsSettingsApi.GetDatasetLimits,
             {
                 username,
                 datasetName
             },
             function (response) {
-                //todo: process the response here
+                self.innerData = response;
+
+                console.log(response);
                 $(infoSectionId).removeClass('ps_right-hidden');
                 $(settingsLayerContainerClass).addClass('points-settings-layer-container-palette-content-expand');
             }

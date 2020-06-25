@@ -29,6 +29,9 @@ namespace MapWebSite.Tests.Service
 
             var x = source.GetRegionIndexes(longitude: 28.597728655515253600863950727m, latitude: 44.304150309297175136564201538m, zoomLevel:20);
             var y = source.GetRegionIndexes(-90, -180, 1);
+
+            Assert.Equals(x, new Tuple<int, int>(266197, 607584));
+            Assert.Equals(y, new Tuple<int, int>(1, 0));
         }
 
     }

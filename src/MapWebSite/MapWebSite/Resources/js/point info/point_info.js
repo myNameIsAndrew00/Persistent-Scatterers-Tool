@@ -12,7 +12,7 @@ import { HtmlToElement } from '../utilities/utils.js';
 import { UnselectFeatureOnMap } from '../map/map.js';
 import { TooltipManagerInstance } from '../utilities/Tooltip/tooltip_manager.js';
 import { endpoints } from '../api/api_router.js';
-import { ChangeMenuMode } from '../menu.js';
+import { ChangeMenuMode } from '../navigation.js';
 
 var cardsManager = new CardsManager('map-container');
 var drawer = new PlotDrawer();

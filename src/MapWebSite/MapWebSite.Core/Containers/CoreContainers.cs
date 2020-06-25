@@ -1,4 +1,5 @@
 ﻿using MapWebSite.Core.Database;
+using MapWebSite.Core.DataPoints;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,6 +27,10 @@ namespace MapWebSite.Core
         /// </summary>
         public static IDataPointsRepository DataPointsRepository { get; set; }
         
+        /// <summary>
+        /// Represents the main region source used to provide points or details about the region generation method
+        /// </summary>
+        public static IDataPointsRegionsSource DataPointsRegionSource { get; set; }
 
     }
 

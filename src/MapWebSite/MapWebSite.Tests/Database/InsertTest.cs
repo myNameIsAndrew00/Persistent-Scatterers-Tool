@@ -17,11 +17,12 @@ namespace MapWebSite.Tests.Database
     public class InsertTest
     {
         [TestMethod]
+        [Obsolete("User insertion is not made anymore by domain")]
         public void InsertUser()
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
 
-         //   bool response = handler.RegisterUser("test45", "andrei", "andrei", "woofwoof");
+            //bool response = handler.U("test45", "andrei", "andrei", "woofwoof");
 
             Assert.IsTrue(true);
 
@@ -56,17 +57,20 @@ namespace MapWebSite.Tests.Database
 
             
 
-            PointsDataSet dataset = pointsSource.CreateDataSet("Test", CoordinateSystem.UTM).First();
-             
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                PointsDataSet dataset = pointsSource.CreateDataSet("Test", CoordinateSystem.UTM).First();
 
-            IDataPointsZoomLevelsSource zoomGenerator = new SquareMeanPZGenerator();
 
-            PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
+                IDataPointsZoomLevelsSource zoomGenerator = new SquareMeanPZGenerator();
 
-            CassandraDataPointsRepository repository = CassandraDataPointsRepository.Instance;
-            Task<bool> result = repository.InsertPointsDataset(dataset);
+                PointsDataSet[] set = zoomGenerator.CreateDataSetsZoomSets(dataset, 3, 19);
 
-            result.Wait();
+            });
+            //CassandraDataPointsRepository repository = CassandraDataPointsRepository.Instance;
+            //Task<bool> result = repository.InsertPointsDataset(dataset);
+
+            //result.Wait();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace MapWebSite.Hubs
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(datasetName)) return;
 
-            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+            DomainInstance databaseInteractionHandler = new DomainInstance();
 
             Action<IEnumerable<PointBase>, string> callback = (pointsData, regionKey) =>
              {
@@ -41,7 +41,7 @@ namespace MapWebSite.Hubs
             try
             {
 
-                databaseInteractionHandler.RequestCassandraPointsRegions(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
+                databaseInteractionHandler.RequestDomainPointsRegions(new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
                                           new Tuple<decimal, decimal>(latitudeTo, longitudeTo),
                                           zoomLevel,
                                           username,

@@ -29,19 +29,19 @@ namespace MapWebSite.Controllers
         [HttpPost]
         public HttpResponseMessage UploadGeoserverLayer([FromBody] JObject data)
         {
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
 
 
             var insertResult = handler.CreateDataSet(
                                      datasetName: data["name"].ToObject<string>(),
                                      username: RouteConfig.CurrentUser.Username,
                                      pointsSource: PointsSource.Geoserver,
-                                     apiUrl: data["apiUrl"].ToObject<string>(),
+                                     serviceUrl: data["apiUrl"].ToObject<string>(),
                                      colorPaletteName: data["defaultColorPaletteName"].ToObject<string>(),
                                      colorPaletteUser: data["defaultColorPaletteUser"].ToObject<string>());
                 
 
-            if(insertResult == DatabaseInteractionHandler.CreateDatasetResultCode.Ok)
+            if(insertResult == Domain.ViewModel.CreateDatasetResultCode.Ok)
             {
                 handler.UpdateDatasetStatus(data["name"].ToObject<string>(),
                                             DatasetStatus.Generated,
@@ -63,10 +63,10 @@ namespace MapWebSite.Controllers
             {
                 StatusCode = System.Net.HttpStatusCode.OK,
                 Content = new StringContent(MessageBoxBuilder.Create(
-                    insertResult == DatabaseInteractionHandler.CreateDatasetResultCode.GeoserverError ? 
+                    insertResult == Domain.ViewModel.CreateDatasetResultCode.GeoserverError ? 
                         TextDictionary.OverlayCDGeoserverFailTitle :
                         TextDictionary.OverlayCDFailTitle,
-                    insertResult == DatabaseInteractionHandler.CreateDatasetResultCode.GeoserverError ? 
+                    insertResult == Domain.ViewModel.CreateDatasetResultCode.GeoserverError ? 
                         string.Format(TextDictionary.OverlayCDGeoserverFailText, data["name"].ToObject<string>()) :
                         TextDictionary.OverlayCDFailText))
             };

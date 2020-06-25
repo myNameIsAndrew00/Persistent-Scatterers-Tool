@@ -42,10 +42,10 @@ namespace MapWebSite.Controllers
                     return View((string)"Settings Content/SelectGeoserverSource");
                 case SettingsController.Page.ManageUsers:
                     return View((string)"Settings Content/ManageUsers", 
-                        new Tuple<int,int>(new DatabaseInteractionHandler().GetUsersCount(), 10));
+                        new Tuple<int,int>(new DomainInstance().GetUsersCount(), 10));
                 case SettingsController.Page.ManageDatasets:
                     return View((string)"Settings Content/ManageDatasets",
-                        new Tuple<int,int>(new DatabaseInteractionHandler().GetUsersAssociatedDatasetsCount(null),10));
+                        new Tuple<int,int>(new DomainInstance().GetUsersAssociatedDatasetsCount(null),10));
                 default:
                     return View((string)"Settings Content/ColorPicker");
             }
@@ -76,7 +76,7 @@ namespace MapWebSite.Controllers
                                              string datasetName,
                                              PointsSource pointsSource)
         {
-            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+            DomainInstance databaseInteractionHandler = new DomainInstance();
 
             //*zoomLevel is not required anymore
             var point = databaseInteractionHandler.RequestPointDetails(datasetName,
@@ -107,7 +107,7 @@ namespace MapWebSite.Controllers
                                      string username,
                                      string datasetName)
         {
-            DatabaseInteractionHandler databaseInteractionHandler = new DatabaseInteractionHandler();
+            DomainInstance databaseInteractionHandler = new DomainInstance();
             var keys = databaseInteractionHandler.RequestPointsRegionsKeys(
                                       new Tuple<decimal, decimal>(latitudeFrom, longitudeFrom),
                                       new Tuple<decimal, decimal>(latitudeTo, longitudeTo),

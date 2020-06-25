@@ -31,6 +31,8 @@ namespace MapWebSite.Tests.Core
             };
 
             string value = layersBuilder.ToXml();
+
+            Assert.IsNotNull(value);
         }
 
         [TestMethod]
@@ -122,13 +124,14 @@ namespace MapWebSite.Tests.Core
 
             string result = builder.ToXml();
 
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]
         public void ColorMapStyle() {
             ColorMap colorMap = new ColorMap()
             {
-                Name = "rada",
+                Name = "checking",
                 Intervals = new List<Interval>()
                 {
                     new Interval()
@@ -147,7 +150,7 @@ namespace MapWebSite.Tests.Core
             };
 
 
-            StylesBuilder builder = new StylesBuilder("colormap", "colormap");
+            StylesBuilder builder = new StylesBuilder("colormap51", "colormap51");
 
             foreach (var rule in colorMap.GetRules())
                 builder.AddRule(rule);
@@ -155,25 +158,26 @@ namespace MapWebSite.Tests.Core
             ModulesFactory modulesFactory = new ModulesFactory();
 
 
-            //    GeoserverClient geoserverClient = new GeoserverClient("http://localhost:8080", "admin", "geoserver");
+           GeoserverClient geoserverClient = new GeoserverClient("http://localhost:8080", "admin", "geoserver");
 
-            var str = builder.ToXml();
-        //    var result = geoserverClient.CreateRequest(modulesFactory.CreateStylesModule(builder)).Result;
+         
+           var result = geoserverClient.Post(modulesFactory.CreateStylesModule(builder));
 
+            Assert.IsTrue(result);
         }
 
         [TestMethod]
         public void GeoserverServiceTest()
         {
-            StylesBuilder builder = new StylesBuilder("style", "titlestyle");
+            StylesBuilder builder = new StylesBuilder("teststyle22", "teststyle22");
 
             builder.AddRule(new Rule
             {
                 Abstract = "abstract",
                 MaxScaleDenominator = 10,
                 MinScaleDenominator = 10,
-                Name = "Rulename",
-                Title = "Ruletitle",
+                Name = "another",
+                Title = "another",
                 Filter = new Filter
                 {
                     FilterItems = new List<Filter.FilterItem>()
@@ -223,8 +227,9 @@ namespace MapWebSite.Tests.Core
 
             GeoserverClient geoserverClient = new GeoserverClient("http://localhost:8080", "admin", "geoserver");
 
-
             var result = geoserverClient.PostAsync(modulesFactory.CreateStylesModule(builder)).Result;
+
+            Assert.IsTrue(result);
         }
 
         [TestMethod]

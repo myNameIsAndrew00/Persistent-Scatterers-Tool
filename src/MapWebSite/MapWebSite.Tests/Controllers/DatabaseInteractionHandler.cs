@@ -14,18 +14,18 @@ namespace MapWebSite.Tests.Controllers
         [TestMethod]
         public void ValidateOrSetPaletteToGeoserverLayerTest()
         {
-            Domain.DatabaseInteractionHandler handler = 
-                new Domain.DatabaseInteractionHandler();
+            Domain.DomainInstance handler = 
+                new Domain.DomainInstance();
 
 
-            bool result = handler.ValidateOrSetPaletteToGeoserverLayer(
+            bool result = handler.ValidateGeoserverLayer(
                 "",
                 "",
                 "dem",
                 "woofwoof123"
                 );
 
-            Assert.IsTrue(result);
+            Assert.IsFalse(result);
         }
     }
 }

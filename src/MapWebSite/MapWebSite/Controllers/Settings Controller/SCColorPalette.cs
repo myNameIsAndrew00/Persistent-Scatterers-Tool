@@ -19,7 +19,7 @@ namespace MapWebSite.Controllers
         [HttpPost]
         public HttpResponseMessage SaveColorsPalette(ColorMap colorMap)
         { 
-            DatabaseInteractionHandler handler = new DatabaseInteractionHandler();
+            DomainInstance handler = new DomainInstance();
             bool success = handler.InsertColorPalette(RouteConfig.CurrentUser.Username, colorMap);
           
 
