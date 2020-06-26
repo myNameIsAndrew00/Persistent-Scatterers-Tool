@@ -1,0 +1,60 @@
+*** GUIDE INSTALARE ***
+***   06/11/2020    ***
+
+Tooluri si aplicatii necesare:
+	*Pentru aplicatia web
+		1.MS SqlServer, 
+ 		2.IIS
+		3.Cassandra
+		4.Java (JRE)
+		5.Php 2.7 (necesar pentru rularea cqlsh)
+	*Pentru wmts
+		6.Geoserver
+		7.PostgreSQL
+
+*Pasii ce trebuie urmati pentru configurarea completa a aplicatiei web:
+2.Se copiaza fisierele aplicatiei web si se adauga aplicatia in IIS. 
+  		Configureaza web.config (fisierul se afla in root-ul folderului cu aplicatia)
+		*Comentariile din setari / numele cheilor sunt sugestive.
+		
+		Nodurile ce trebui configurate sunt in interiorul <appConfig> si <connectionStrings>
+		<appConfig>
+			
+			1.webpages:Version - default (trebuie ignorat)
+			2.webpages:Enable - default (trebuie ignorat)
+			3.ClientValidationEnabled - default (trebuie ignorat)
+			4.UnobtrusiveJavaScriptEnabled - default (trebuie ignorat)
+			
+			5.CassandraServer - reprezinta IP-ul masinii pe care ruleaza cassandra. Portul este cel default utilizat de Cassandra.
+			6.CasssandraKeypsace - reprezinta keyspace-ul in care se lucreaza (in cadrul cassandra). 
+						Acest nume este ales in momentul rularii query-urilor pentru crearea bazei de date Cassandra (VEZI PASUL 4)
+			7.GeoserverApiUrl - (ATENTIE: in viitor va fi deprecated) reprezinta IP-ul masinii pe care ruleaza GEOSERVER si portul utilizat de GEOSERVER pentru preluarea datelor
+						In viitoarele versiuni, nu va mai fi necesar deoarece in momentul configurarii datelor, serverul va fi precizat.
+			8.GeoserverUser - userul necesar pentru a utiliza geoserver. Atentie: furnizorul (geoserver) trebuie sa contina acest user
+			9.GeoserverPassword - parola userului de mai sus
+
+			10.DataPointsSourceFileName - default (preferabil sa nu fie modificat) nume ce este utilizat in comunicarea cu serviciul de parsare (si incarcare in cassandra) a fisierelor (cu 'puncte') uploadate 
+
+			11.PointsDatasetsCheckpointFolder - path-ul catre folderul utilizat pentru uploadarea fisierelor (cu 'puncte')
+						
+			12.ApiKey - cheia utilizata pentru utilizarea serviciului de email. Daca se modifica mecanismul in care functioneaza emailul, acesta intrare poate fi ignorata.
+			
+			13.EmailAddress - emailul utilizat pentru trimiterea de emailuri
+			14.EmailDisplayName - numele utilizat pentru trimiterea de emailuri
+		<connectionStrings>
+			1.PersistantScatterersDatabase - connection stringul utilizat pentru serverul MSSQL (instalat la pasul 3)
+			2.PostgreSQLDatabase - connection stringul utilizat pentru serverul PostgreSQL (instalat pe o masina diferita, nu apare in acest 'how to')
+
+3.Se ruleaza query-urile pentru baza de date SqlServer.
+  *Acestea trebuie rulate in ordinea urmatoare:
+	-> database.sql -> types.sql -> tables.sql -> getters.sql -> inserts.sql -> update.sql
+    
+  *Trebuie oferite permisiuni de read,write userului 'iis' pentru baza de date SqlServer 
+   (numele acestuia se ia din IIS si este default IIS APPPOOL\[Nume aplicatie in IIS] (ex: IIS APPPOOL\PSTool daca numele aplicatiei in IIS a fost adaugat PSTool)
+
+4.Ruleaza query-urile pentru baza de date Cassandra. 
+  Pentru acest lucru se foloseste utilitarul cqlsh (cassandra query language shell). Utilitarul se afla in folderul bin din folderul in care este instalat cassandra.
+   *Acestea trebuie rulate in ordinea urmatoare:
+	keyspace.cql -> userdefinedtypes.cql -> tables.cql
+
+5.Ready to go.
