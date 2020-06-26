@@ -4,11 +4,11 @@
  *
  * */
 
-import { ChangeSpinnerVisibility, DisplayPage } from './settings/settings.js';
+import { ChangeSpinnerVisibility, DisplayPage, constants } from './settings/settings.js';
 import { UpdateChosePaletteLayout } from './points settings/chose_palette.js';
-import { UpdateSelectedDatasetLayout } from './points settings/chose_dataset.js';
+import { UpdateSelectedDatasetLayout, SelectedDataset } from './points settings/chose_dataset.js';
 import { RefreshSelectCriteriaPopup } from './points settings/chose_criteria.js';
-import { RefreshSelectPointsSourcePopup } from './map/chose_points_source.js';
+import { RefreshSelectPointsSourcePopup, PointsSectionsContainer } from './map/chose_points_source.js';
 import { InitialiseSlider } from './points settings/chose_points_size.js';
 import { LoadSuggestions } from './map/points_search.js';
 import { RefreshSelectMapTypePopup } from './map/chose_map_type.js';
@@ -17,6 +17,7 @@ import { PopupBuilderInstance } from './utilities/Popup/popup.js';
 import { TooltipManagerInstance } from './utilities/Tooltip/tooltip_manager.js';
 import { HtmlToElement } from './utilities/utils.js';
 import { map } from './map/map.js';
+import { ColorPalette } from './home.js'; 
 
 /**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE DOWN-LEFT MENU******************/
 /*************************************************************************************************/
@@ -31,7 +32,8 @@ export const Ids = {
         search: '.search-button'       
     },
     labels : {
-        mousePosition: 'cursor-position-labels'
+        mousePosition: 'cursor-position-labels',
+        currentDatasetText: '#current-dataset-text'
     },
     controls: {
         mainSelectMenuIcon: '#main-select-menu-icon',
@@ -246,6 +248,15 @@ function requestCss(cssServerPath) {
 
 /**************FUNCTIONS BELOW ARE USED TO ADD INTERACTION TO THE TOP-RIGHT MENU******************/
 /*****************************************************************************************/
+
+window.resetDisplayedPointsData = function resetDisplayedPointsData() {
+    ColorPalette.reset();
+    SelectedDataset.Reset(); 
+
+    if (PointsSectionsContainer != null) PointsSectionsContainer.RemoveLayers();
+
+    $(Ids.labels.currentDatasetText).text('N/A');
+}
 
 /*functions used for points setting overlay*/
 window.displayPointsLayerPage = async function displayPointsLayerPage(display, requestMethodName, callback) {

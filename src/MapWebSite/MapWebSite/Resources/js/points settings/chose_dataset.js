@@ -36,6 +36,8 @@ class PointsDataset {
 
         this.identifier = this.setIdentifier();
 
+        if (this.user == null || this.name == null) return;
+
         this.innerDataRequest = Router.Get(endpoints.PointsSettingsApi.GetDatasetLimits,
             {
                 username,
@@ -52,9 +54,18 @@ class PointsDataset {
     }
 
     async GetInnerData() { 
+        if (this.innerDataResult == null) return;
+
         await this.innerDataRequest;
 
         return this.innerData;
+    }
+
+    Reset() {
+        this.user = null;
+        this.name = null;
+        this.innerData == null;
+        this.innerDataRequest = null;
     }
 
     setIdentifier() {
@@ -90,7 +101,6 @@ class PointsDataset {
 var SelectedDataset = new PointsDataset(null,null);
 
 export { SelectedDataset };
-
 
 function changeSelectedRowOnMenu(id, visible) {
     var paletteRow = $(settingsLayerContainerId).find('[id=\'' + id + '\']')[0];

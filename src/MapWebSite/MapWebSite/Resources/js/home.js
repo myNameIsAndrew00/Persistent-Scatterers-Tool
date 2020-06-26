@@ -53,6 +53,10 @@ export var ColorPalette = {
     isUnitialised: function () {
         return this.name == null || this.user == null || this.name == '' || this.user == '';
     },
+    reset: function () {
+        this.name = null,
+        this.user = null
+    },
     intervals: [
         {
             Color: '#33ff00',
