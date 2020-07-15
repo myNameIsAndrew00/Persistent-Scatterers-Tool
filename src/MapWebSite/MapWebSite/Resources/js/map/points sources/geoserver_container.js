@@ -4,7 +4,7 @@
  * Points source is Geoserver, sources details is PostgreSQL.
  * */
 
-import { DisplayPointInfo, SetPointInfoData } from '../../point info/point_info.js';
+import { DisplayPointInfo, SetPointInfoData, SetPointDetailsInfo } from '../../point info/point_info.js';
 import { SelectedDataset } from '../../points settings/chose_dataset.js';
 import { ColorPalette } from '../../home.js';
 import { Router, endpoints } from '../../api/api_router.js';
@@ -134,6 +134,7 @@ export class GeoserverPointsSectionsContainer {
             }
         )
 
+        SetPointDetailsInfo(null);
         DisplayPointInfo();
     }
 

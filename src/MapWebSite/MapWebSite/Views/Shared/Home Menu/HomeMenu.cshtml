@@ -6,7 +6,7 @@
 
 @{
     @*LINE BELLOW IS FOR FIXING: fix the bug with the id counter.. main-menu-icon-0 must be followed by main-menu-icon-1, and not main-menu-icon-2 (bug can be caused by role restrictions)*@
-    int sectionsCount = 0;
+int sectionsCount = 0;
 }
 
 @*Summary: partial view used for Menu.
@@ -34,7 +34,7 @@
                     <button onclick="changeTopMenuVisibility()" class="arrow-icon">
                         <object type="image/svg+xml" data="~/Resources/resources/icons/map_menu_icon.svg"></object>
                     </button>
-                    <button onclick="requestSettingsPage(@Html.Raw( (int)SettingsController.Page.Account) ,'/Resources/css/settings_points_upload.scss')" class="arrow-icon">
+                    <button onclick="requestSettingsPage(@Html.Raw((int)SettingsController.Page.Account) ,'/Resources/css/settings_points_upload.scss')" class="arrow-icon">
                         <object type="image/svg+xml" data="~/Resources/resources/icons/settings_icon.svg"></object>
                     </button>
                 }
@@ -124,7 +124,7 @@
                 @Html.SVG("~/Resources/resources/icons/zoom_dataset_icon.svg", new { height = "21px", width = "28px" })
             </button>
 
-            <div id="map_autocomplete" class="autocomplete autocomplete-hidden">
+            <div id="map_autocomplete" class="autocomplete">
                 <input id="map_search_text" type="search" placeholder="@Html.Raw(TextDictionary.SCPlaceholder)" />
                 <input id="reset_button" type="button" value="X" />
                 <div id="map_suggestions" class="suggestions">
@@ -177,16 +177,16 @@
             </div>
 
             <div class="buttons-area">
-                <button onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
+                <button id="select_points_dataset_button" onclick="displayPointsLayerPage(true,'GetChoseDatasetPage')" class="top-menu-item">
                     <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/set_icon.svg"></object>
                 </button>
-                <button onclick="displayPointsLayerPage(true,'GetColorPalettePage')" class="top-menu-item">
+                <button id="select_color_palette_button" onclick="displayPointsLayerPage(true,'GetColorPalettePage')" class="top-menu-item" @Html.Raw(User.IsInRole(UserRoles.Anonymous.ToString()) ? "disabled" : "")>
                     <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/simple_palette_icon.svg"></object>
                 </button>
-                <button class="top-menu-item" disabled="true">
+                <button id="display_clusters_button" class="top-menu-item" disabled="true">
                     <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/cluster_icon.svg"></object>
                 </button>
-                <button onclick="resetDisplayedPointsData()" class="top-menu-item">
+                <button id="reset_displayed_points_button" onclick="resetDisplayedPointsData()" class="top-menu-item">
                     <object width="15px" height="13px" type="image/svg+xml" data="~/Resources/resources/icons/reload_icon.svg"></object>
                 </button>
             </div>

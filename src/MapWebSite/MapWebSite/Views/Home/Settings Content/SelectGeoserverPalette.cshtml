@@ -5,18 +5,18 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 container-centered">
-                    <h1>@TextDictionary.HMenuSGSTitleText</h1>
-                    <small>@TextDictionary.HMenuSGSDescriptionText</small>
+                    <h1>@TextDictionary.HMenuSGPTitleText</h1>
+                    <small>@TextDictionary.HMenuSGPDescriptionText</small>
 
-                    <div class="form-group row">
-                        @Html.Label(@TextDictionary.HMenuSGSNameInputLabel, new { @class = "col-sm-3" })
-                        @Html.TextBox("name", null, new { placeholder = @TextDictionary.HMenuSGSNameInputPlaceholder, @class = "col-sm-5 default-input-gray", onkeyup = "enableGeoserverUploadSubmit()" })
+                    <div style="margin-top: 40px" class="form-group row">
+                        @Html.Label(@TextDictionary.HMenuSGPNameInputLabel, new { @class = "col-sm-3" })
+                        @Html.TextBox("name", null, new { placeholder = @TextDictionary.HMenuSGPNameInputPlaceholder, @class = "col-sm-5 default-input-gray", onkeyup = "enableGeoserverUploadSubmit()" })
 
                     </div>
 
-                    <div class="form-group row">
+                    <div  class="form-group row">
                         <div class="col-sm-3"></div>
-                        <button id="geoserverSelectFinishButton" onclick="uploadSelectedGeoserverLayer()" class="col-sm-5 finish-button" disabled>@TextDictionary.HMenuSGSUploadButton</button>
+                        <button id="geoserverSelectFinishButton" onclick="uploadSelectedGeoserverLayer()" class="col-sm-5 finish-button" disabled>@TextDictionary.HMenuSGPUploadButton</button>
 
                     </div>
                 </div>

@@ -550,4 +550,31 @@
   <data name="CMTGoogle" xml:space="preserve">
     <value>Google map</value>
   </data>
+  <data name="HMenuSGPDescriptionText" xml:space="preserve">
+    <value>Use a style from Geoserver WMTS. Warning: application will not track the changes of the style, if exists.</value>
+  </data>
+  <data name="HMenuSGPNameInputLabel" xml:space="preserve">
+    <value>Style name</value>
+  </data>
+  <data name="HMenuSGPNameInputPlaceholder" xml:space="preserve">
+    <value>Enter style name here...</value>
+  </data>
+  <data name="HMenuSGPTitleText" xml:space="preserve">
+    <value>Select a palette from Geoserver</value>
+  </data>
+  <data name="HMenuSGPUploadButton" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="HTM_TOOLTIP_ClustersView" xml:space="preserve">
+    <value>This feature is still unavailable. </value>
+  </data>
+  <data name="HTM_TOOLTIP_DisableDataset" xml:space="preserve">
+    <value>Click this button to reset displayed dataset</value>
+  </data>
+  <data name="HTM_TOOLTIP_SelectDataSet" xml:space="preserve">
+    <value>Chose the dataset which you want to visualise. Displayed datasets are chosen based on points source</value>
+  </data>
+  <data name="HTM_TOOLTIP_SelectPalette" xml:space="preserve">
+    <value>Chose the color palette which you want to use. The palette may be redundant for some data sets</value>
+  </data>
 </root>

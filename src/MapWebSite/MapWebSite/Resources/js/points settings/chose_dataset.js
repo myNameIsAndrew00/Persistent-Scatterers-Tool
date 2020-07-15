@@ -5,21 +5,27 @@
  * */
 
 import { Router, endpoints } from '../api/api_router.js';
-import { UpdatePointsLayer } from '../map/map.js';
+import { UpdatePointsLayer, ZoomOut } from '../map/map.js';
 import { CurrentSource } from '../map/chose_points_source.js';
+ 
 
 const settingsLayerContainerId = '#points-settings-layer-container-content';
 const settingsLayerContainerClass = '.points-settings-layer-container-palette-content';
 const currentDatasetTextId = '#current-dataset-text';
+ 
 
-//labels ids
-const infoSectionId = '#ps_right';
-const heightLimitLeftLabelId = '#height_limit_left';
-const heightLimitRightLabelId = '#height_limit_right';
-const stddevLimitLeftLabelId = '#stddev_limit_left';
-const stddevLimitRightLabelId = '#stddev_limit_right';
-const defrateLimitLeftLabelId = '#defrate_limit_left';
-const defrateLimitRightLabelId = '#defrate_limit_right';
+const constants = {
+    Ids: {
+        infoSection : '#ps_right',
+        heightLimitLeftLabelId : '#ps_right #height_limit_left',
+        heightLimitRightLabelId : '#ps_right #height_limit_right',
+        stddevLimitLeftLabelId : '#ps_right #stddev_limit_left',
+        stddevLimitRightLabelId : '#ps_right #stddev_limit_right',
+        defrateLimitLeftLabelId : '#ps_right #defrate_limit_left',
+        defrateLimitRightLabelId : '#ps_right #defrate_limit_right'
+    }
+}
+
 
 /** Dataset request to fill the table **/
 
@@ -53,9 +59,7 @@ class PointsDataset {
         );  
     }
 
-    async GetInnerData() { 
-        if (this.innerDataResult == null) return;
-
+    async GetInnerData() {  
         await this.innerDataRequest;
 
         return this.innerData;
@@ -68,20 +72,19 @@ class PointsDataset {
         this.innerDataRequest = null;
     }
 
-    setIdentifier() {
-        if (this.user === null || this.name === null) return 0;
-
-        let id = 'user_dataset_' + this.user + '_' + this.name + '_id';
-        return $(settingsLayerContainerId).find('[id=\'' + id + '\']')[0].value;
-    }
-
-    setDatasetLimits() {
-             
-    }
-
     ///use this method to display dataset details inside ps_right menu 
-    displayDatasetLimits(username, datasetName) {
+    DisplayDatasetLimits(username, datasetName) {
         var self = this;
+
+        function fillWithInfo(data) {
+            $(constants.Ids.heightLimitLeftLabelId).text(data.MinimumHeight);
+            $(constants.Ids.heightLimitRightLabelId).text(data.MaximumHeight);
+            $(constants.Ids.defrateLimitLeftLabelId).text(data.MinimumDeformationRate);
+            $(constants.Ids.defrateLimitRightLabelId).text(data.MaximumDeformationRate);
+            $(constants.Ids.stddevLimitLeftLabelId).text(data.MinimumStdDev);
+            $(constants.Ids.stddevLimitRightLabelId).text(data.MaximumStdDev);
+        }
+
         Router.Get(endpoints.PointsSettingsApi.GetDatasetLimits,
             {
                 username,
@@ -90,12 +93,23 @@ class PointsDataset {
             function (response) {
                 self.innerData = response;
 
-                console.log(response);
-                $(infoSectionId).removeClass('ps_right-hidden');
+                fillWithInfo(response);
+                $(constants.Ids.infoSection).removeClass('ps_right-hidden');
                 $(settingsLayerContainerClass).addClass('points-settings-layer-container-palette-content-expand');
             }
-        );  
+        );
     }
+
+
+    /* private functions region */
+
+    setIdentifier() {
+        if (this.user === null || this.name === null) return 0;
+
+        let id = 'user_dataset_' + this.user + '_' + this.name + '_id';
+        return $(settingsLayerContainerId).find('[id=\'' + id + '\']')[0].value;
+    }
+
 }
 
 var SelectedDataset = new PointsDataset(null,null);
@@ -126,10 +140,14 @@ window.useDataset = function useDataset(username, datasetName) {
     $(currentDatasetTextId).text(datasetName);
 
     UpdatePointsLayer();
+    ZoomOut();
 }
 
 
-
+window.hidePointDetails = function () {
+    $(settingsLayerContainerClass).removeClass('points-settings-layer-container-palette-content-expand');
+    $(constants.Ids.infoSection).addClass('ps_right-hidden');
+}
 
 
 
@@ -166,7 +184,7 @@ function fillTable(datasets, table) {
         previewButton.innerText = $('#_preview-dataset-button-text').val();
         previewButton.classList.add('preview');
         previewButton.onclick = function () {
-            SelectedDataset.displayDatasetLimits(username, datasetName);
+            SelectedDataset.DisplayDatasetLimits(username, datasetName);
         };
         previewButton.disabled = !isValid;
 

@@ -3,6 +3,7 @@ using MapWebSite.Core;
 using MapWebSite.Domain;
 using MapWebSite.Domain.ViewModel;
 using MapWebSite.Model;
+using MapWebSite.Attributes;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
@@ -17,7 +18,7 @@ using MapWebSite.Core.Database;
 
 namespace MapWebSite.Controllers
 {
-
+   
     /// <summary>
     /// Use this ApiController to return pages for the points settings layer and to interact with it
     /// </summary> 
@@ -25,6 +26,7 @@ namespace MapWebSite.Controllers
     public class PointsSettingsController : Controller
     {
         [System.Web.Mvc.HttpGet]
+        [AuthorizeRoles(UserRoles.Administrator, UserRoles.Normal, UserRoles.SuperAdministrator)]
         public ActionResult GetColorPalettePage()
         {
             try

@@ -34,7 +34,7 @@ namespace MapWebSite.Model
     public enum UserRoles
     {
         [EnumString("Anonymous")]
-        Anonymous,
+        Anonymous ,
         [EnumString("Normal")]
         Normal,
         [EnumString("Administrator")]

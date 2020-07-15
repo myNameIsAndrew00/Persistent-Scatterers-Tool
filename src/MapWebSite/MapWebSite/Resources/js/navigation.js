@@ -473,3 +473,62 @@ TooltipManagerInstance.Register({
     cursorSide: 'left',
     displayOverlay: true
 });
+
+
+TooltipManagerInstance.Register({
+    containerId: 'select_points_dataset_button',
+    delay: 2000,
+    useRouter: true,
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
+        tooltipId: 6
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});
+
+
+TooltipManagerInstance.Register({
+    containerId: 'select_color_palette_button',
+    delay: 2000,
+    useRouter: true,
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
+        tooltipId: 7
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});
+
+
+TooltipManagerInstance.Register({
+    containerId: 'display_clusters_button',
+    delay: 2000,
+    useRouter: true,
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
+        tooltipId: 9
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});
+
+
+TooltipManagerInstance.Register({
+    containerId: 'reset_displayed_points_button',
+    delay: 2000,
+    useRouter: true,
+    routerData:
+    {
+        endpoint: endpoints.Miscellaneous.GetGifTooltip,
+        tooltipId: 8
+    },
+    cursorSide: 'left',
+    displayOverlay: true
+});
+
+
+

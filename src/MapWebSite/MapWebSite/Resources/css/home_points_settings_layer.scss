@@ -204,6 +204,20 @@
             padding: 11px;
             opacity: 1;
 
+            .ps_right_hide_button {
+                background: none;
+                margin-top: 0px;
+                width: 10px;
+                height: 15px;
+                padding: 0px;
+                float: right;           
+            
+                object{
+                    pointer-events: none;
+                }
+
+            }
+
             p {
                 color: black;
                 font-family: Calibri;

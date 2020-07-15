@@ -33,12 +33,21 @@ export function DisplayProcessing(display) {
 /**
  * View for map
  */
-var mapView = new ol.View({
+
+/*map constants*/ 
+const mapParameters = {
     center: ol.proj.fromLonLat([28.652880, 44.177269], 'EPSG:3857'),
-    extent: ol.proj.transformExtent(maxExtent, 'EPSG:4326', 'EPSG:3857'),
-    zoom: 10,
     minZoom: 3,
-    maxZoom: 20
+    maxZoom: 20,
+    initialZoom: 10
+}
+
+var mapView = new ol.View({
+    center: mapParameters.center,
+    extent: ol.proj.transformExtent(maxExtent, 'EPSG:4326', 'EPSG:3857'),
+    zoom: mapParameters.initialZoom,
+    minZoom: mapParameters.minZoom,
+    maxZoom: mapParameters.maxZoom
 })
 
 
@@ -90,9 +99,17 @@ export function GoTo(latitude, longitude) {
     map.getView().animate({
         center: new ol.proj.fromLonLat([longitude, latitude], 'EPSG:3857'),
         duration: 1000,
-        zoom: 18
+        zoom: mapParameters.maxZoom - 2
     });
 
+}
+
+export function ZoomOut() {
+    map.getView().animate({
+        center: mapParameters.center,
+        zoom: mapParameters.minZoom,
+        duration: 1000
+    })
 }
 
 export const map = new ol.Map({

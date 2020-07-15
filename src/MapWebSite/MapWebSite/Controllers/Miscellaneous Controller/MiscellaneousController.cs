@@ -28,7 +28,15 @@ namespace MapWebSite.Controllers
             [EnumString("HTM_TOOLTIP_PointsSource")]
             PointsSource,
             [EnumString("HPI_TOOLTIP_PlotWindow")]
-            PlotWindow
+            PlotWindow,
+            [EnumString("HTM_TOOLTIP_SelectDataSet")]
+            SelectDataSet,
+            [EnumString("HTM_TOOLTIP_SelectPalette")]
+            SelectPalette,
+            [EnumString("HTM_TOOLTIP_DisableDataset")]
+            DisableDataset,
+            [EnumString("HTM_TOOLTIP_ClustersView")]
+            ClustersView
         }
 
         [HttpGet]

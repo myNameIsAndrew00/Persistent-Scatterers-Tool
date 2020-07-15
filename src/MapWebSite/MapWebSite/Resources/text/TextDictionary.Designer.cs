@@ -360,6 +360,51 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use a style from Geoserver WMTS. Warning: application will not track the changes of the style, if exists..
+        /// </summary>
+        public static string HMenuSGPDescriptionText {
+            get {
+                return ResourceManager.GetString("HMenuSGPDescriptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Style name.
+        /// </summary>
+        public static string HMenuSGPNameInputLabel {
+            get {
+                return ResourceManager.GetString("HMenuSGPNameInputLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter style name here....
+        /// </summary>
+        public static string HMenuSGPNameInputPlaceholder {
+            get {
+                return ResourceManager.GetString("HMenuSGPNameInputPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a palette from Geoserver.
+        /// </summary>
+        public static string HMenuSGPTitleText {
+            get {
+                return ResourceManager.GetString("HMenuSGPTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload.
+        /// </summary>
+        public static string HMenuSGPUploadButton {
+            get {
+                return ResourceManager.GetString("HMenuSGPUploadButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use a layer from Geoserver WMTS as a points source. Enter the layer name, service url and the color palette which must be used for styling the layer..
         /// </summary>
         public static string HMenuSGSDescriptionText {
@@ -758,11 +803,29 @@ namespace MapWebSite.Resources.text {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This feature is still unavailable. .
+        /// </summary>
+        public static string HTM_TOOLTIP_ClustersView {
+            get {
+                return ResourceManager.GetString("HTM_TOOLTIP_ClustersView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chose the criterium of points color visualisation.
         /// </summary>
         public static string HTM_TOOLTIP_ColorCriteria {
             get {
                 return ResourceManager.GetString("HTM_TOOLTIP_ColorCriteria", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click this button to reset displayed dataset.
+        /// </summary>
+        public static string HTM_TOOLTIP_DisableDataset {
+            get {
+                return ResourceManager.GetString("HTM_TOOLTIP_DisableDataset", resourceCulture);
             }
         }
         
@@ -799,6 +862,24 @@ namespace MapWebSite.Resources.text {
         public static string HTM_TOOLTIP_Search {
             get {
                 return ResourceManager.GetString("HTM_TOOLTIP_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chose the dataset which you want to visualise. Displayed datasets are chosen based on points source.
+        /// </summary>
+        public static string HTM_TOOLTIP_SelectDataSet {
+            get {
+                return ResourceManager.GetString("HTM_TOOLTIP_SelectDataSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chose the color palette which you want to use. The palette may be redundant for some data sets.
+        /// </summary>
+        public static string HTM_TOOLTIP_SelectPalette {
+            get {
+                return ResourceManager.GetString("HTM_TOOLTIP_SelectPalette", resourceCulture);
             }
         }
         

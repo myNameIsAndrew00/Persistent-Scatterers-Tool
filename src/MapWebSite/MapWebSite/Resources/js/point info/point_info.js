@@ -37,6 +37,35 @@ const constants = {
     }
 }
 
+/**
+ * Use this function to set the displayed information fields
+ * @param {any} parameters  fields which must be set
+ */
+export function SetPointDetailsInfo(parameters) {
+    var pointLayer = $('#_point-info');
+
+    if (parameters == null || parameters === undefined)
+        parameters = {
+            number: 'N/A',
+            longitude: 'N/A',
+            latitude: 'N/A',
+            height: 'N/A',
+            deformation: 'N/A',
+            standarddeviation: 'N/A',
+            estimatedheight: 'N/A',
+            estimateddeformation: 'N/A',
+        }
+
+    pointLayer.find("#ID").html(parameters.number);
+    pointLayer.find("#longitude").html(parameters.longitude);
+    pointLayer.find("#latitude").html(parameters.latitude);
+    pointLayer.find("#height").html(parameters.height);
+    pointLayer.find("#def_rate").html(parameters.deformation);
+    pointLayer.find("#std_dev").html(parameters.standarddeviation);
+    pointLayer.find("#est_height").html(parameters.estimatedheight);
+    pointLayer.find("#est_def_rate").html(parameters.estimateddeformation);
+}
+
 export function DisplayPointInfo() {
     function display() {
         document.getElementById("point-info").style = "";   
@@ -95,14 +124,16 @@ export function SetPointInfoData(point) {
     }
     currentDisplayedPoint = point;
 
-    pointLayer.find("#ID").html(currentDisplayedPoint.Number);
-    pointLayer.find("#longitude").html(currentDisplayedPoint.Longitude);
-    pointLayer.find("#latitude").html(currentDisplayedPoint.Latitude);
-    pointLayer.find("#height").html(currentDisplayedPoint.Height);
-    pointLayer.find("#def_rate").html(currentDisplayedPoint.DeformationRate);
-    pointLayer.find("#std_dev").html(currentDisplayedPoint.StandardDeviation);
-    pointLayer.find("#est_height").html(currentDisplayedPoint.EstimatedHeight);
-    pointLayer.find("#est_def_rate").html(currentDisplayedPoint.EstimatedDeformationRate);
+    SetPointDetailsInfo({
+        number: currentDisplayedPoint.Number,
+        longitude: currentDisplayedPoint.Longitude,
+        latitude: currentDisplayedPoint.Latitude,
+        height: currentDisplayedPoint.Height,
+        deformation: currentDisplayedPoint.DeformationRate,
+        standarddeviation: currentDisplayedPoint.StandardDeviation,
+        estimatedheight: currentDisplayedPoint.EstimatedHeight,
+        estimateddeformation: currentDisplayedPoint.EstimatedDeformationRate,
+    }); 
 }
 
 
@@ -112,6 +143,8 @@ export function SetPointInfoData(point) {
 
 export function HidePointInfo(showTopMenu) {
     ChangeMenuMode(showTopMenu, { top: true });
+
+    SetPointDetailsInfo(null);
 
     $("#point-info").css("opacity", 0);
     $("#point-info").css("width", "40%"); 
